@@ -4,7 +4,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { UserCircleIcon, Notification02Icon, ShieldKeyIcon, Logout01Icon, CheckmarkCircle02Icon, TrendingUpIcon } from "@hugeicons/core-free-icons";
 import { mockUser } from "@/lib/mock";
 
-const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" } });
+const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
 const G = ({ children, className = "", style = {} }: any) => (
   <div className={`rounded-2xl ${className}`} style={{

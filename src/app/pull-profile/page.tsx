@@ -5,7 +5,7 @@ import { ArrowRight01Icon, TrendingUpIcon, AiSparklesIcon, Activity01Icon, UserC
 import Link from "next/link";
 import { mockUser, mockDimensions } from "@/lib/mock";
 
-const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" } });
+const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
 const G = ({ children, className = "", style = {} }: any) => (
   <div className={`rounded-2xl ${className}`} style={{

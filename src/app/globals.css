@@ -59,3 +59,8 @@ body {
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
+
+/* Mobile-only bottom nav — always hidden on desktop regardless of Tailwind */
+@media (min-width: 768px) {
+  nav.mobile-bottom-nav { display: none !important; }
+}

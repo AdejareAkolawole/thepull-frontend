@@ -5,7 +5,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { UserAdd01Icon, SearchIcon, FilterIcon, ArrowRight01Icon, TrendingUpIcon } from "@hugeicons/core-free-icons";
 import { mockPeople } from "@/lib/mock";
 
-const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" } });
+const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
 const compatColor = (c: string) => c === "high" ? "#34d399" : c === "medium" ? "#fbbf24" : "#f87171";
 

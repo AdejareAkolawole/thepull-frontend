@@ -68,7 +68,7 @@ export default function TopNav() {
       </header>
 
       {/* Mobile bottom bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50"
+      <nav className="mobile-bottom-nav md:hidden fixed bottom-0 left-0 right-0 z-50"
         style={{
           background: "rgba(255,255,255,0.96)",
           backdropFilter: "blur(20px)",
