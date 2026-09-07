@@ -92,19 +92,19 @@ export default function JourneyPage() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,7fr) minmax(0,5fr)", gap: 12 }}>
         {/* Timeline */}
-        <motion.div {...f(0.1)} className="md:col-span-7">
+        <motion.div {...f(0.1)}>
           <G className="p-5 h-full">
             <p className="text-[13px] font-bold mb-5" style={{ color: "var(--text-primary)" }}>Milestones</p>
             <div className="relative">
-              <div className="absolute left-[18px] top-0 bottom-0 w-px" style={{ background: "rgba(255,255,255,0.07)" }} />
+              <div className="absolute left-[18px] top-0 bottom-0 w-px" style={{ background: "rgba(0,0,0,0.07)" }} />
               <div className="space-y-4">
                 {milestones.map((m, i) => (
                   <motion.div key={m.label} {...f(0.12 + i * 0.04)} className="flex items-start gap-4">
                     <div className="flex-shrink-0 z-10 w-9 flex justify-center">
                       <HugeiconsIcon icon={m.done ? CheckmarkCircle02Icon : AddCircleIcon} size={20}
-                        style={{ color: m.done ? "#34d399" : "rgba(255,255,255,0.15)" }} />
+                        style={{ color: m.done ? "#34d399" : "rgba(0,0,0,0.15)" }} />
                     </div>
                     <div className="flex-1 pb-1">
                       <p className="text-sm font-semibold" style={{ color: m.done ? "var(--text-primary)" : "var(--text-muted)" }}>{m.label}</p>
@@ -126,7 +126,7 @@ export default function JourneyPage() {
         </motion.div>
 
         {/* Right column */}
-        <div className="md:col-span-5 flex flex-col gap-3">
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {/* Steps */}
           <motion.div {...f(0.14)}>
             <G className="p-5">
@@ -136,9 +136,9 @@ export default function JourneyPage() {
                   <div key={s.label} className="flex items-center gap-3">
                     <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold"
                       style={{
-                        background: s.done ? "rgba(224,80,96,0.15)" : "rgba(255,255,255,0.04)",
+                        background: s.done ? "rgba(224,80,96,0.15)" : "rgba(0,0,0,0.04)",
                         color: s.done ? "var(--brand)" : "var(--text-muted)",
-                        border: `1px solid ${s.done ? "rgba(224,80,96,0.25)" : "rgba(255,255,255,0.08)"}`,
+                        border: `1px solid ${s.done ? "rgba(224,80,96,0.25)" : "rgba(0,0,0,0.08)"}`,
                       }}>
                       {i + 1}
                     </div>

@@ -22,54 +22,61 @@ export default function TopNav() {
   const path = usePathname();
   return (
     <>
-      {/* Desktop pill nav */}
-      <header className="hidden md:flex sticky top-0 z-50 w-full justify-center pt-4 pb-2"
-        style={{ pointerEvents: "none" }}>
-        <nav className="flex items-center gap-0.5 p-1.5 rounded-2xl"
-          style={{
-            background: "rgba(255,255,255,0.88)",
-            backdropFilter: "blur(20px)",
-            border: "1px solid rgba(0,0,0,0.08)",
-            boxShadow: "0 2px 24px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.8) inset",
-            pointerEvents: "auto",
-          }}>
-          {navItems.map(({ href, icon: Icon, label }) => {
-            const active = path === href || (href !== "/dashboard" && path.startsWith(href));
-            return (
-              <Link key={href} href={href} title={label}
-                className="relative flex items-center justify-center rounded-xl transition-all duration-200 group"
-                style={{
-                  background: active ? "linear-gradient(135deg, #7c2232, #c0404f)" : "transparent",
-                  boxShadow: active ? "0 2px 12px rgba(192,64,79,0.3), inset 0 1px 0 rgba(255,255,255,0.2)" : "none",
-                  padding: active ? "0 14px" : "0",
-                  height: 38,
-                  minWidth: 38,
-                  gap: active ? 6 : 0,
-                }}>
-                <HugeiconsIcon icon={Icon} size={16}
-                  style={{ color: active ? "#fff" : "rgba(15,10,20,0.4)", flexShrink: 0, transition: "color 0.2s" }} />
-                {active && (
-                  <span className="text-[12px] font-semibold text-white whitespace-nowrap">{label}</span>
-                )}
-                {!active && (
-                  <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-semibold px-2 py-0.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10"
-                    style={{ background: "#0f0a14", color: "white" }}>
-                    {label}
-                  </span>
-                )}
-              </Link>
-            );
-          })}
-        </nav>
+      {/* Desktop — full width sticky bar */}
+      <header className="hidden md:block sticky top-0 z-50 w-full"
+        style={{
+          background: "rgba(255,255,255,0.9)",
+          backdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(0,0,0,0.07)",
+          boxShadow: "0 1px 12px rgba(0,0,0,0.05)",
+        }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", height: 56 }}>
+          {/* Logo */}
+          <span style={{ fontSize: 15, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.02em", marginRight: 32, flexShrink: 0 }}>
+            THE<span style={{ color: "#c0404f" }}>PULL</span>
+          </span>
+
+          {/* Nav links */}
+          <nav style={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
+            {navItems.map(({ href, icon: Icon, label }) => {
+              const active = path === href || (href !== "/dashboard" && path.startsWith(href));
+              return (
+                <Link key={href} href={href}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 6,
+                    padding: "6px 12px", borderRadius: 10,
+                    fontSize: 13, fontWeight: active ? 700 : 500,
+                    color: active ? "#c0404f" : "rgba(15,10,20,0.5)",
+                    background: active ? "rgba(192,64,79,0.08)" : "transparent",
+                    textDecoration: "none",
+                    transition: "all 0.15s",
+                  }}>
+                  <HugeiconsIcon icon={Icon} size={15} />
+                  {label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Profile chip */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 10, background: "linear-gradient(135deg, #7c2232, #c0404f)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "white" }}>
+              AA
+            </div>
+          </div>
+        </div>
       </header>
 
       {/* Mobile bottom bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around px-1"
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50"
         style={{
-          background: "rgba(255,255,255,0.95)",
+          background: "rgba(255,255,255,0.96)",
           backdropFilter: "blur(20px)",
           borderTop: "1px solid rgba(0,0,0,0.07)",
           boxShadow: "0 -4px 24px rgba(0,0,0,0.06)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-around",
           paddingTop: 8,
           paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)",
         }}>
@@ -77,17 +84,11 @@ export default function TopNav() {
           const active = path === href || (href !== "/dashboard" && path.startsWith(href));
           return (
             <Link key={href} href={href}
-              className="flex flex-col items-center gap-0.5 transition-all"
-              style={{ minWidth: 40, opacity: active ? 1 : 0.4 }}>
-              <div className="w-10 h-7 flex items-center justify-center rounded-lg transition-all"
-                style={{ background: active ? "rgba(192,64,79,0.1)" : "transparent" }}>
-                <HugeiconsIcon icon={Icon} size={19}
-                  style={{ color: active ? "var(--brand)" : "rgba(15,10,20,0.5)" }} />
+              style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, minWidth: 40, textDecoration: "none", opacity: active ? 1 : 0.4 }}>
+              <div style={{ width: 40, height: 28, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 10, background: active ? "rgba(192,64,79,0.1)" : "transparent" }}>
+                <HugeiconsIcon icon={Icon} size={19} style={{ color: active ? "#c0404f" : "rgba(15,10,20,0.5)" }} />
               </div>
-              <span className="text-[9px] font-semibold"
-                style={{ color: active ? "var(--brand)" : "rgba(15,10,20,0.35)" }}>
-                {label}
-              </span>
+              <span style={{ fontSize: 9, fontWeight: 600, color: active ? "#c0404f" : "rgba(15,10,20,0.4)" }}>{label}</span>
             </Link>
           );
         })}

@@ -101,7 +101,7 @@ export default function JournalPage() {
             <div className="flex flex-col h-full rounded-2xl p-5 cursor-pointer transition-all hover:scale-[1.01]"
               style={{
                 background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)",
               }}>
               {/* Top row */}
               <div className="flex items-center justify-between mb-3">
@@ -121,7 +121,7 @@ export default function JournalPage() {
                 <div className="flex flex-wrap gap-1">
                   {e.tags.map(t => (
                     <span key={t} className="text-[9px] font-semibold px-2 py-0.5 rounded-full"
-                      style={{ background: "rgba(0,0,0,0.04)", color: "var(--text-muted)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                      style={{ background: "rgba(0,0,0,0.04)", color: "var(--text-muted)", border: "1px solid rgba(0,0,0,0.07)" }}>
                       {t}
                     </span>
                   ))}

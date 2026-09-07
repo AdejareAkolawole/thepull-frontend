@@ -15,7 +15,7 @@ const G = ({ children, className = "", style = {} }: any) => (
 
 const Toggle = ({ on }: { on: boolean }) => (
   <div className="w-10 h-6 rounded-full relative cursor-pointer transition-all flex-shrink-0"
-    style={{ background: on ? "linear-gradient(135deg, #7c2232, #c0404f)" : "rgba(255,255,255,0.1)" }}>
+    style={{ background: on ? "linear-gradient(135deg, #7c2232, #c0404f)" : "rgba(0,0,0,0.12)" }}>
     <div className="absolute w-4 h-4 rounded-full bg-white top-1 transition-all shadow-sm"
       style={{ left: on ? "calc(100% - 20px)" : 4 }} />
   </div>
@@ -59,9 +59,9 @@ export default function SettingsPage() {
         <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>Manage your account and preferences</p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,4fr) minmax(0,8fr)", gap: 12 }}>
         {/* Profile card */}
-        <motion.div {...f(0.06)} className="md:col-span-4">
+        <motion.div {...f(0.06)}>
           <G className="p-6 flex flex-col items-center text-center h-full">
             {/* Avatar */}
             <div className="relative mb-4">
@@ -70,7 +70,7 @@ export default function SettingsPage() {
                 {mockUser.initials}
               </div>
               <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
-                style={{ background: "#34d399", border: "2px solid #07070f" }}>
+                style={{ background: "#34d399", border: "2px solid white" }}>
                 <div className="w-2 h-2 rounded-full bg-white" />
               </div>
             </div>
@@ -98,7 +98,7 @@ export default function SettingsPage() {
 
             {/* Score ring small */}
             <div className="flex items-center gap-3 mt-5 p-3 rounded-xl w-full"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              style={{ background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.06)" }}>
               <HugeiconsIcon icon={TrendingUpIcon} size={14} style={{ color: "#34d399" }} />
               <div className="flex-1 text-left">
                 <p className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>Score rising</p>
@@ -120,7 +120,7 @@ export default function SettingsPage() {
         </motion.div>
 
         {/* Settings sections */}
-        <div className="md:col-span-8 space-y-3">
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {sections.map((s, si) => (
             <motion.div key={s.label} {...f(0.1 + si * 0.06)}>
               <G className="p-5">
@@ -134,7 +134,7 @@ export default function SettingsPage() {
                 <div>
                   {s.fields.map((field, fi) => (
                     <div key={field.label} className="flex items-center justify-between py-3"
-                      style={{ borderBottom: fi < s.fields.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
+                      style={{ borderBottom: fi < s.fields.length - 1 ? "1px solid rgba(0,0,0,0.06)" : "none" }}>
                       <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{field.label}</span>
                       {field.type === "toggle" ? (
                         <Toggle on={field.value === "On"} />

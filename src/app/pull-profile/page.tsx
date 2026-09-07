@@ -116,9 +116,9 @@ export default function PullProfilePage() {
       </motion.div>
 
       {/* Content */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,5fr) minmax(0,7fr)", gap: 12 }}>
         {/* Dimensions */}
-        <motion.div {...f(0.08)} className="md:col-span-5">
+        <motion.div {...f(0.08)}>
           <G className="p-5 h-full">
             <p className="text-[13px] font-bold mb-4" style={{ color: "var(--text-primary)" }}>Intelligence Dimensions</p>
             <div className="space-y-4">
@@ -144,7 +144,7 @@ export default function PullProfilePage() {
           </G>
         </motion.div>
 
-        <div className="md:col-span-7 flex flex-col gap-3">
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {/* Traits */}
           <motion.div {...f(0.12)}>
             <G className="p-5">
