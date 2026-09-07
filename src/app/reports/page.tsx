@@ -5,11 +5,10 @@ import { Analytics01Icon, ArrowRight01Icon, Download02Icon, EyeIcon, AiSparklesI
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
-const G = ({ children, className = "", style = {} }: any) => (
-  <div className={`rounded-2xl ${className}`} style={{
-    background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
-    boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style,
-  }}>{children}</div>
+const Card = ({ children, style = {} }: any) => (
+  <div style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", borderRadius: 16, boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style }}>
+    {children}
+  </div>
 );
 
 const reports = [
@@ -21,104 +20,96 @@ const reports = [
 
 export default function ReportsPage() {
   return (
-    <div className="space-y-4 py-2">
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {/* Header */}
-      <motion.div {...f(0)} className="flex items-end justify-between">
+      <motion.div {...f(0)} style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <div>
-          <p className="text-[10px] tracking-[0.2em] uppercase mb-1" style={{ color: "var(--text-muted)" }}>Intelligence</p>
-          <h1 className="font-display text-3xl md:text-4xl font-semibold" style={{ color: "var(--text-primary)" }}>Reports</h1>
-          <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>Deep relationship intelligence analyses</p>
+          <p style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 4 }}>Intelligence</p>
+          <h1 className="font-display" style={{ fontSize: 36, fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.1 }}>Reports</h1>
+          <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>Deep relationship intelligence analyses</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
-          style={{ background: "linear-gradient(135deg, #7c2232, #c0404f)", boxShadow: "0 4px 16px rgba(192,64,79,0.3)" }}>
+        <button style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 18px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", boxShadow: "0 4px 16px rgba(192,64,79,0.3)", border: "none", cursor: "pointer" }}>
           <HugeiconsIcon icon={AiSparklesIcon} size={14} /> Generate Report
         </button>
       </motion.div>
 
       {/* Stats */}
-      <motion.div {...f(0.05)} className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <motion.div {...f(0.05)} style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
         {[
-          { label: "Total Reports", value: "4", icon: Analytics01Icon, accent: "#e05060", glow: "rgba(224,80,96,0.15)" },
+          { label: "Total Reports", value: "4", icon: Analytics01Icon, accent: "#e05060", glow: "rgba(224,80,96,0.12)" },
           { label: "People Analysed", value: "3", icon: UserGroupIcon, accent: "#60a5fa", glow: "rgba(96,165,250,0.12)" },
           { label: "Avg Score", value: "73", icon: TrendingUpIcon, accent: "#34d399", glow: "rgba(52,211,153,0.12)" },
           { label: "This Month", value: "2", icon: Calendar03Icon, accent: "#a78bfa", glow: "rgba(167,139,250,0.12)" },
-        ].map((s) => (
-          <G key={s.label} className="p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: s.glow, border: `1px solid ${s.accent}25` }}>
+        ].map(s => (
+          <Card key={s.label} style={{ padding: 16, display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: s.glow, border: `1px solid ${s.accent}30` }}>
               <HugeiconsIcon icon={s.icon} size={17} style={{ color: s.accent }} />
             </div>
             <div>
-              <p className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>{s.value}</p>
-              <p className="text-xs" style={{ color: "var(--text-muted)" }}>{s.label}</p>
+              <p style={{ fontSize: 24, fontWeight: 800, color: "var(--text-primary)" }}>{s.value}</p>
+              <p style={{ fontSize: 11, color: "var(--text-muted)" }}>{s.label}</p>
             </div>
-          </G>
+          </Card>
         ))}
       </motion.div>
 
       {/* Reports list */}
       <motion.div {...f(0.1)}>
-        <G className="overflow-hidden">
-          <div className="px-5 py-4 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
-            <p className="text-[13px] font-bold" style={{ color: "var(--text-primary)" }}>All Reports</p>
-            <span className="text-xs" style={{ color: "var(--text-muted)" }}>{reports.length} reports</span>
+        <Card>
+          <div style={{ padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>All Reports</p>
+            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{reports.length} reports</span>
           </div>
           <div>
             {reports.map((r, i) => (
-              <motion.div key={r.id} {...f(0.12 + i * 0.05)}
-                className="flex items-center gap-4 px-5 py-4 cursor-pointer transition-all hover:bg-black/[0.02]"
-                style={{ borderBottom: i < reports.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
+              <motion.div key={r.id} {...f(0.12 + i * 0.05)} style={{
+                display: "flex", alignItems: "center", gap: 16, padding: "16px 20px", cursor: "pointer",
+                borderBottom: i < reports.length - 1 ? "1px solid rgba(0,0,0,0.06)" : "none",
+              }}>
                 {/* Icon */}
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: `${r.accent}15`, border: `1px solid ${r.accent}25` }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: `${r.accent}15`, border: `1px solid ${r.accent}25` }}>
                   <HugeiconsIcon icon={Analytics01Icon} size={17} style={{ color: r.accent }} />
                 </div>
                 {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>{r.title}</p>
-                  <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ background: `${r.accent}15`, color: r.accent }}>{r.type}</span>
-                    <span className="text-xs" style={{ color: "var(--text-muted)" }}>{r.date}</span>
-                    <span className="text-xs" style={{ color: "var(--text-muted)" }}>· {r.pages} pages</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>{r.title}</p>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4, flexWrap: "wrap" }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: `${r.accent}15`, color: r.accent }}>{r.type}</span>
+                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{r.date}</span>
+                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>· {r.pages} pages</span>
                   </div>
                 </div>
                 {/* Score */}
-                <div className="text-right flex-shrink-0 hidden sm:block">
-                  <p className="text-xl font-bold" style={{ color: r.accent }}>{r.score}</p>
-                  <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>score</p>
+                <div style={{ textAlign: "right", flexShrink: 0 }}>
+                  <p style={{ fontSize: 20, fontWeight: 800, color: r.accent }}>{r.score}</p>
+                  <p style={{ fontSize: 10, color: "var(--text-muted)" }}>score</p>
                 </div>
                 {/* Actions */}
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <button className="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:bg-white/10"
-                    style={{ color: "var(--text-muted)", border: "1px solid rgba(0,0,0,0.07)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                  <button style={{ width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", border: "1px solid rgba(0,0,0,0.07)", background: "transparent", cursor: "pointer" }}>
                     <HugeiconsIcon icon={EyeIcon} size={13} />
                   </button>
-                  <button className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
-                    style={{ color: r.accent, border: `1px solid ${r.accent}30`, background: `${r.accent}10` }}>
+                  <button style={{ width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: r.accent, border: `1px solid ${r.accent}30`, background: `${r.accent}10`, cursor: "pointer" }}>
                     <HugeiconsIcon icon={Download02Icon} size={13} />
                   </button>
                 </div>
               </motion.div>
             ))}
           </div>
-        </G>
+        </Card>
       </motion.div>
 
       {/* CTA banner */}
       <motion.div {...f(0.3)}>
-        <div className="rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative overflow-hidden"
-          style={{ background: "linear-gradient(135deg, #1a0810 0%, #2d0f1a 50%, #0f0820 100%)", border: "1px solid rgba(192,64,79,0.25)", boxShadow: "0 0 60px rgba(192,64,79,0.1)" }}>
-          <div className="absolute -top-12 -left-12 w-48 h-48 rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(192,64,79,0.25), transparent)", filter: "blur(30px)" }} />
-          <div className="relative">
-            <p className="text-base font-bold text-white mb-1">Ready to generate a new report?</p>
-            <p className="text-sm max-w-md leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
+        <div style={{ borderRadius: 16, padding: "28px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24, position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #3d0e1a 0%, #6b1c2b 50%, #a03040 100%)", border: "1px solid rgba(192,64,79,0.25)", boxShadow: "0 8px 40px rgba(61,14,26,0.2)" }}>
+          <div style={{ position: "absolute", top: -48, left: -48, width: 192, height: 192, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.25), transparent)", filter: "blur(30px)" }} />
+          <div style={{ position: "relative" }}>
+            <p style={{ fontSize: 15, fontWeight: 700, color: "white", marginBottom: 6 }}>Ready to generate a new report?</p>
+            <p style={{ fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.45)", maxWidth: 380 }}>
               Select a person from your vault to generate a deep relationship intelligence report powered by your full profile.
             </p>
           </div>
-          <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold flex-shrink-0 relative transition-all hover:opacity-90"
-            style={{ background: "linear-gradient(135deg, #7c2232, #c0404f)", color: "white", boxShadow: "0 4px 16px rgba(192,64,79,0.3)" }}>
+          <button style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08))", border: "1px solid rgba(255,255,255,0.2)", cursor: "pointer", flexShrink: 0, position: "relative" }}>
             Get started <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
           </button>
         </div>

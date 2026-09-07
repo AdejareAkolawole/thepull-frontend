@@ -6,11 +6,10 @@ import { Add01Icon, Calendar03Icon, AiSparklesIcon, BookOpen01Icon, Search01Icon
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
-const G = ({ children, className = "", style = {} }: any) => (
-  <div className={`rounded-2xl ${className}`} style={{
-    background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
-    boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style,
-  }}>{children}</div>
+const Card = ({ children, style = {} }: any) => (
+  <div style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", borderRadius: 16, boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style }}>
+    {children}
+  </div>
 );
 
 const entries = [
@@ -27,106 +26,102 @@ export default function JournalPage() {
   const totalWords = entries.reduce((a, e) => a + e.words, 0);
 
   return (
-    <div className="space-y-4 py-2">
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {/* Header */}
-      <motion.div {...f(0)} className="flex items-end justify-between">
+      <motion.div {...f(0)} style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <div>
-          <p className="text-[10px] tracking-[0.2em] uppercase mb-1" style={{ color: "var(--text-muted)" }}>Self-reflection</p>
-          <h1 className="font-display text-3xl md:text-4xl font-semibold" style={{ color: "var(--text-primary)" }}>Journal</h1>
-          <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>Reflect on your relationships and growth</p>
+          <p style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 4 }}>Self-reflection</p>
+          <h1 className="font-display" style={{ fontSize: 36, fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.1 }}>Journal</h1>
+          <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>Reflect on your relationships and growth</p>
         </div>
-        <button onClick={() => setComposing(v => !v)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90"
-          style={{
-            background: composing ? "rgba(255,255,255,0.08)" : "linear-gradient(135deg, #7c2232, #c0404f)",
-            color: "white",
-            boxShadow: composing ? "none" : "0 4px 16px rgba(192,64,79,0.3)",
-            border: composing ? "1px solid rgba(255,255,255,0.12)" : "none",
-          }}>
+        <button onClick={() => setComposing(v => !v)} style={{
+          display: "flex", alignItems: "center", gap: 8, padding: "10px 18px", borderRadius: 12,
+          fontSize: 13, fontWeight: 700, cursor: "pointer",
+          background: composing ? "rgba(0,0,0,0.04)" : "linear-gradient(135deg, #7c2232, #c0404f)",
+          color: composing ? "var(--text-secondary)" : "white",
+          boxShadow: composing ? "none" : "0 4px 16px rgba(192,64,79,0.3)",
+          border: composing ? "1px solid rgba(0,0,0,0.08)" : "none",
+        }}>
           <HugeiconsIcon icon={composing ? BookOpen01Icon : Add01Icon} size={14} />
           {composing ? "Cancel" : "New Entry"}
         </button>
       </motion.div>
 
       {/* Stats */}
-      <motion.div {...f(0.04)} className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <motion.div {...f(0.04)} style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
         {[
           { label: "Total Entries", value: entries.length, accent: "#e05060" },
           { label: "This Month", value: 3, accent: "#60a5fa" },
           { label: "Avg Words", value: Math.round(totalWords / entries.length), accent: "#a78bfa" },
           { label: "Streak", value: "12d", accent: "#fbbf24" },
-        ].map((s) => (
-          <G key={s.label} className="p-4">
-            <p className="text-2xl font-bold" style={{ color: s.accent }}>{s.value}</p>
-            <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>{s.label}</p>
-          </G>
+        ].map(s => (
+          <Card key={s.label} style={{ padding: 16 }}>
+            <p style={{ fontSize: 24, fontWeight: 800, color: s.accent }}>{s.value}</p>
+            <p style={{ fontSize: 11, marginTop: 2, color: "var(--text-muted)" }}>{s.label}</p>
+          </Card>
         ))}
       </motion.div>
 
       {/* Search */}
       <motion.div {...f(0.06)}>
-        <G className="flex items-center gap-2.5 px-4 py-3">
-          <HugeiconsIcon icon={Search01Icon} size={14} style={{ color: "var(--text-muted)" }} />
-          <input placeholder="Search journal entries…" className="flex-1 text-sm bg-transparent outline-none" style={{ color: "var(--text-primary)" }} />
-        </G>
+        <Card style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px" }}>
+          <HugeiconsIcon icon={Search01Icon} size={14} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
+          <input placeholder="Search journal entries…" style={{ flex: 1, fontSize: 13, background: "transparent", border: "none", outline: "none", color: "var(--text-primary)" }} />
+        </Card>
       </motion.div>
 
       {/* Compose */}
       {composing && (
         <motion.div {...f(0)}>
-          <G className="p-5">
-            <input placeholder="What's the title of this entry?" className="w-full text-lg font-bold bg-transparent outline-none mb-3 border-b pb-3"
-              style={{ color: "var(--text-primary)", borderColor: "rgba(255,255,255,0.07)" }} />
+          <Card style={{ padding: 20 }}>
+            <input placeholder="What's the title of this entry?" style={{ display: "block", width: "100%", fontSize: 17, fontWeight: 700, background: "transparent", border: "none", borderBottom: "1px solid rgba(0,0,0,0.08)", outline: "none", paddingBottom: 12, marginBottom: 12, color: "var(--text-primary)" }} />
             <textarea placeholder="Write what's on your mind — your relationships, patterns, growth, moments…"
-              rows={6} className="w-full text-sm bg-transparent outline-none resize-none leading-relaxed"
-              style={{ color: "var(--text-secondary)" }} />
-            <div className="flex items-center justify-between mt-4 pt-4" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-              <p className="text-xs flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
+              rows={6} style={{ display: "block", width: "100%", fontSize: 13, background: "transparent", border: "none", outline: "none", resize: "none", lineHeight: 1.7, color: "var(--text-secondary)" }} />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 16, paddingTop: 16, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+              <p style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--text-muted)" }}>
                 <HugeiconsIcon icon={AiSparklesIcon} size={12} style={{ color: "var(--brand)" }} />
                 The Pull will analyse patterns in your entry
               </p>
-              <button className="px-5 py-2 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
-                style={{ background: "linear-gradient(135deg, #7c2232, #c0404f)" }}>
+              <button style={{ padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", border: "none", cursor: "pointer" }}>
                 Save Entry
               </button>
             </div>
-          </G>
+          </Card>
         </motion.div>
       )}
 
       {/* Entries grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
         {entries.map((e, i) => (
           <motion.div key={e.id} {...f(0.08 + i * 0.04)}>
-            <div className="flex flex-col h-full rounded-2xl p-5 cursor-pointer transition-all hover:scale-[1.01]"
-              style={{
-                background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)",
-              }}>
+            <div style={{
+              display: "flex", flexDirection: "column", height: "100%",
+              borderRadius: 16, padding: 20, cursor: "pointer",
+              background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)",
+            }}>
               {/* Top row */}
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full"
-                  style={{ background: `${e.moodAccent}15`, color: e.moodAccent, border: `1px solid ${e.moodAccent}25` }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                <span style={{ fontSize: 10, fontWeight: 700, padding: "4px 10px", borderRadius: 99, background: `${e.moodAccent}18`, color: e.moodAccent, border: `1px solid ${e.moodAccent}30` }}>
                   {e.mood}
                 </span>
-                <span className="flex items-center gap-1 text-[10px]" style={{ color: "var(--text-muted)" }}>
+                <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: "var(--text-muted)" }}>
                   <HugeiconsIcon icon={Calendar03Icon} size={10} /> {e.date}
                 </span>
               </div>
               {/* Content */}
-              <p className="text-sm font-bold mb-2" style={{ color: "var(--text-primary)" }}>{e.title}</p>
-              <p className="text-[11px] leading-relaxed line-clamp-3 flex-1 mb-4" style={{ color: "var(--text-muted)" }}>{e.preview}</p>
+              <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", marginBottom: 8 }}>{e.title}</p>
+              <p style={{ fontSize: 11, lineHeight: 1.6, color: "var(--text-muted)", flex: 1, marginBottom: 16, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" as const, overflow: "hidden" }}>{e.preview}</p>
               {/* Footer */}
-              <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-                <div className="flex flex-wrap gap-1">
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 12, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
                   {e.tags.map(t => (
-                    <span key={t} className="text-[9px] font-semibold px-2 py-0.5 rounded-full"
-                      style={{ background: "rgba(0,0,0,0.04)", color: "var(--text-muted)", border: "1px solid rgba(0,0,0,0.07)" }}>
+                    <span key={t} style={{ fontSize: 9, fontWeight: 600, padding: "2px 8px", borderRadius: 99, background: "rgba(0,0,0,0.04)", color: "var(--text-muted)", border: "1px solid rgba(0,0,0,0.07)" }}>
                       {t}
                     </span>
                   ))}
                 </div>
-                <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>{e.words}w</span>
+                <span style={{ fontSize: 10, color: "var(--text-muted)" }}>{e.words}w</span>
               </div>
             </div>
           </motion.div>

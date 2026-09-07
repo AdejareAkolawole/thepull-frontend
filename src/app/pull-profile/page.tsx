@@ -7,11 +7,10 @@ import { mockUser, mockDimensions } from "@/lib/mock";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
-const G = ({ children, className = "", style = {} }: any) => (
-  <div className={`rounded-2xl ${className}`} style={{
-    background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
-    boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style,
-  }}>{children}</div>
+const Card = ({ children, style = {} }: any) => (
+  <div style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", borderRadius: 16, boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style }}>
+    {children}
+  </div>
 );
 
 const traits = [
@@ -32,22 +31,20 @@ function AreaChart({ data }: { data: number[] }) {
     const y = h - ((v - min) / (max - min || 1)) * (h - 12) - 6;
     return `${x},${y}`;
   });
-  const area = `0,${h} ${pts.join(" ")} ${w},${h}`;
   return (
     <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: h }} preserveAspectRatio="none">
       <defs>
         <linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#e05060" stopOpacity="0.25" />
+          <stop offset="0%" stopColor="#e05060" stopOpacity="0.2" />
           <stop offset="100%" stopColor="#e05060" stopOpacity="0" />
         </linearGradient>
       </defs>
-      <polygon points={area} fill="url(#ag)" />
+      <polygon points={`0,${h} ${pts.join(" ")} ${w},${h}`} fill="url(#ag)" />
       <polyline points={pts.join(" ")} fill="none" stroke="#e05060" strokeWidth="2" strokeLinejoin="round" />
       {data.map((_, i) => {
         const x = (i / (data.length - 1)) * w;
         const y = h - ((data[i] - min) / (max - min || 1)) * (h - 12) - 6;
-        return <circle key={i} cx={x} cy={y} r={i === data.length - 1 ? 4 : 2.5}
-          fill={i === data.length - 1 ? "#e05060" : "rgba(224,80,96,0.5)"} />;
+        return <circle key={i} cx={x} cy={y} r={i === data.length - 1 ? 4 : 2.5} fill={i === data.length - 1 ? "#e05060" : "rgba(224,80,96,0.5)"} />;
       })}
     </svg>
   );
@@ -55,60 +52,52 @@ function AreaChart({ data }: { data: number[] }) {
 
 export default function PullProfilePage() {
   return (
-    <div className="space-y-3 py-2">
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {/* Hero */}
-      <motion.div {...f(0)} className="relative rounded-2xl overflow-hidden" style={{ minHeight: 220 }}>
-        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #1a0810 0%, #2d0f1a 40%, #0f0820 80%, #07070f 100%)" }} />
-        <div className="absolute -top-16 -left-16 w-80 h-80 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(192,64,79,0.3), transparent)", filter: "blur(40px)" }} />
-        <div className="absolute top-10 right-20 w-48 h-48 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(80,40,120,0.2), transparent)", filter: "blur(30px)" }} />
-        <div className="relative z-10 p-6 md:p-10 flex flex-col md:flex-row md:items-center gap-6">
-          <div className="flex-1">
-            <p className="text-[10px] tracking-[0.25em] uppercase mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>Pull Profile</p>
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-xl font-bold text-white flex-shrink-0"
-                style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", backdropFilter: "blur(8px)" }}>
+      <motion.div {...f(0)} style={{ borderRadius: 20, position: "relative", overflow: "hidden", minHeight: 220 }}>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #3d0e1a 0%, #6b1c2b 45%, #a03040 100%)" }} />
+        <div style={{ position: "absolute", top: -64, left: -64, width: 320, height: 320, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.3), transparent)", filter: "blur(40px)" }} />
+        <div style={{ position: "relative", zIndex: 1, padding: "32px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 32, flexWrap: "wrap" }}>
+          <div>
+            <p style={{ fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 16 }}>Pull Profile</p>
+            <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
+              <div style={{ width: 60, height: 60, borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 800, color: "white", flexShrink: 0, background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)" }}>
                 {mockUser.initials}
               </div>
               <div>
-                <h1 className="font-display text-3xl md:text-4xl font-semibold text-white">{mockUser.name}</h1>
-                <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.5)" }}>{mockUser.archetype}</p>
+                <h1 className="font-display" style={{ fontSize: 36, fontWeight: 600, color: "white", lineHeight: 1.1 }}>{mockUser.name}</h1>
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", marginTop: 2 }}>{mockUser.archetype}</p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <span className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full"
-                style={{ background: "rgba(52,211,153,0.12)", color: "#34d399", border: "1px solid rgba(52,211,153,0.2)" }}>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 600, padding: "5px 12px", borderRadius: 99, background: "rgba(52,211,153,0.12)", color: "#34d399", border: "1px solid rgba(52,211,153,0.2)" }}>
                 <HugeiconsIcon icon={TrendingUpIcon} size={11} /> Rising trajectory
               </span>
-              <span className="text-xs px-3 py-1.5 rounded-full" style={{ background: "rgba(0,0,0,0.06)", color: "rgba(255,255,255,0.5)", border: "1px solid rgba(0,0,0,0.07)" }}>
+              <span style={{ fontSize: 11, padding: "5px 12px", borderRadius: 99, background: "rgba(0,0,0,0.08)", color: "rgba(255,255,255,0.5)", border: "1px solid rgba(0,0,0,0.1)" }}>
                 Top 18% of users
               </span>
             </div>
           </div>
           {/* Score ring */}
-          <div className="flex flex-col items-center gap-3">
-            <div className="relative w-36 h-36">
-              <svg viewBox="0 0 144 144" style={{ width: "100%", height: "100%" }}>
-                <circle cx="72" cy="72" r="60" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="6" />
-                <circle cx="72" cy="72" r="60" fill="none" strokeWidth="6"
-                  stroke="url(#profileGrad)" strokeLinecap="round"
-                  strokeDasharray={`${(74/100)*376.99} 376.99`} transform="rotate(-90 72 72)" />
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+            <div style={{ position: "relative", width: 140, height: 140 }}>
+              <svg viewBox="0 0 140 140" style={{ width: 140, height: 140 }}>
+                <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="6" />
+                <circle cx="70" cy="70" r="58" fill="none" stroke="url(#pg)" strokeWidth="6"
+                  strokeLinecap="round" strokeDasharray={`${(74 / 100) * 364.4} 364.4`}
+                  transform="rotate(-90 70 70)" />
                 <defs>
-                  <linearGradient id="profileGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#7c2232" />
-                    <stop offset="100%" stopColor="#e05060" />
+                  <linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#7c2232" /><stop offset="100%" stopColor="#e05060" />
                   </linearGradient>
                 </defs>
               </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-4xl font-bold text-white">{mockUser.pull_score}</span>
-                <span className="text-[9px] tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.4)" }}>Pull Score</span>
+              <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ fontSize: 36, fontWeight: 800, color: "white" }}>{mockUser.pull_score}</span>
+                <span style={{ fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)" }}>Pull Score</span>
               </div>
             </div>
-            <Link href="/coach"
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:opacity-90"
-              style={{ background: "rgba(255,255,255,0.1)", color: "white", border: "1px solid rgba(255,255,255,0.15)", backdropFilter: "blur(8px)" }}>
+            <Link href="/coach" style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 16px", borderRadius: 10, fontSize: 12, fontWeight: 600, color: "white", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", textDecoration: "none" }}>
               <HugeiconsIcon icon={AiSparklesIcon} size={12} /> Ask about my profile
             </Link>
           </div>
@@ -119,98 +108,87 @@ export default function PullProfilePage() {
       <div style={{ display: "grid", gridTemplateColumns: "minmax(0,5fr) minmax(0,7fr)", gap: 12 }}>
         {/* Dimensions */}
         <motion.div {...f(0.08)}>
-          <G className="p-5 h-full">
-            <p className="text-[13px] font-bold mb-4" style={{ color: "var(--text-primary)" }}>Intelligence Dimensions</p>
-            <div className="space-y-4">
+          <Card style={{ padding: 20, height: "100%" }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", marginBottom: 16 }}>Intelligence Dimensions</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {mockDimensions.map((d, i) => (
                 <div key={d.label}>
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>{d.label}</span>
-                    <span className="text-xs font-bold tabular-nums" style={{ color: "var(--text-primary)" }}>{d.score}</span>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                    <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>{d.label}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>{d.score}</span>
                   </div>
-                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(0,0,0,0.06)" }}>
-                    <motion.div className="h-full rounded-full"
-                      style={{ background: `linear-gradient(90deg, #7c2232, #e05060)` }}
+                  <div style={{ height: 6, borderRadius: 99, overflow: "hidden", background: "rgba(0,0,0,0.06)" }}>
+                    <motion.div style={{ height: "100%", borderRadius: 99, background: "linear-gradient(90deg, #7c2232, #e05060)" }}
                       initial={{ width: 0 }} animate={{ width: `${d.score}%` }}
                       transition={{ duration: 1, delay: 0.2 + i * 0.08 }} />
                   </div>
                 </div>
               ))}
             </div>
-            <div className="mt-5 pt-4 flex items-center justify-between" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-              <p className="text-xs" style={{ color: "var(--text-muted)" }}>Overall average</p>
-              <p className="text-xl font-bold" style={{ color: "var(--brand)" }}>73.6</p>
+            <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(0,0,0,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: 12, color: "var(--text-muted)" }}>Overall average</span>
+              <span style={{ fontSize: 22, fontWeight: 800, color: "var(--brand)" }}>73.6</span>
             </div>
-          </G>
+          </Card>
         </motion.div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {/* Traits */}
           <motion.div {...f(0.12)}>
-            <G className="p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(224,80,96,0.12)" }}>
+            <Card style={{ padding: 20 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(224,80,96,0.1)" }}>
                   <HugeiconsIcon icon={UserCircleIcon} size={14} style={{ color: "var(--brand)" }} />
                 </div>
-                <p className="text-[13px] font-bold" style={{ color: "var(--text-primary)" }}>Core Traits</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>Core Traits</p>
               </div>
-              <div className="space-y-2.5">
-                {traits.map((t) => (
-                  <div key={t} className="flex items-start gap-3">
-                    <div className="w-1 h-1 rounded-full mt-2 flex-shrink-0" style={{ background: "var(--brand)" }} />
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>{t}</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {traits.map(t => (
+                  <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <div style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--brand)", flexShrink: 0, marginTop: 7 }} />
+                    <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5 }}>{t}</p>
                   </div>
                 ))}
               </div>
-            </G>
+            </Card>
           </motion.div>
 
           {/* Score chart */}
           <motion.div {...f(0.16)}>
-            <G className="p-5">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(224,80,96,0.12)" }}>
+            <Card style={{ padding: 20 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(224,80,96,0.1)" }}>
                     <HugeiconsIcon icon={Activity01Icon} size={14} style={{ color: "var(--brand)" }} />
                   </div>
-                  <p className="text-[13px] font-bold" style={{ color: "var(--text-primary)" }}>Score History</p>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>Score History</p>
                 </div>
-                <span className="text-xs font-bold px-2.5 py-1 rounded-full"
-                  style={{ background: "rgba(52,211,153,0.1)", color: "#34d399", border: "1px solid rgba(52,211,153,0.2)" }}>
-                  +6 this month
-                </span>
+                <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 99, background: "rgba(52,211,153,0.1)", color: "#34d399", border: "1px solid rgba(52,211,153,0.2)" }}>+6 this month</span>
               </div>
-              <div className="flex justify-between text-[10px] mb-2 px-0.5" style={{ color: "var(--text-muted)" }}>
-                <span>30 days ago</span>
-                <span>Today</span>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--text-muted)", marginBottom: 8 }}>
+                <span>30 days ago</span><span>Today</span>
               </div>
               <AreaChart data={history} />
-              <div className="flex justify-between mt-2 text-[11px]" style={{ color: "var(--text-muted)" }}>
-                <span>68</span>
-                <span className="font-bold" style={{ color: "var(--text-primary)" }}>74</span>
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 11, color: "var(--text-muted)" }}>
+                <span>68</span><span style={{ fontWeight: 700, color: "var(--text-primary)" }}>74</span>
               </div>
-            </G>
+            </Card>
           </motion.div>
 
           {/* CTA */}
           <motion.div {...f(0.2)}>
-            <div className="rounded-2xl p-4 flex items-center justify-between relative overflow-hidden"
-              style={{ background: "linear-gradient(135deg, #1a0810, #2d0f1a)", border: "1px solid rgba(192,64,79,0.25)", boxShadow: "0 0 40px rgba(192,64,79,0.1)" }}>
-              <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full"
-                style={{ background: "radial-gradient(circle, rgba(192,64,79,0.25), transparent)", filter: "blur(16px)" }} />
-              <div className="flex items-center gap-3 relative">
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "rgba(224,80,96,0.2)", border: "1px solid rgba(224,80,96,0.3)" }}>
+            <div style={{ borderRadius: 16, padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #3d0e1a, #6b1c2b)", border: "1px solid rgba(192,64,79,0.25)" }}>
+              <div style={{ position: "absolute", top: -24, right: -24, width: 80, height: 80, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.3), transparent)", filter: "blur(16px)" }} />
+              <div style={{ display: "flex", alignItems: "center", gap: 12, position: "relative" }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: "rgba(224,80,96,0.2)", border: "1px solid rgba(224,80,96,0.3)" }}>
                   <HugeiconsIcon icon={Target01Icon} size={16} style={{ color: "var(--brand)" }} />
                 </div>
                 <div>
-                  <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>Complete Emotional Landscape</p>
-                  <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Next assessment unlocks new insights</p>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: "white" }}>Complete Emotional Landscape</p>
+                  <p style={{ fontSize: 11, marginTop: 2, color: "rgba(255,255,255,0.4)" }}>Next assessment unlocks new insights</p>
                 </div>
               </div>
-              <Link href="/journey"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold flex-shrink-0 ml-3 relative transition-all hover:opacity-90"
-                style={{ background: "linear-gradient(135deg, #7c2232, #c0404f)", color: "white" }}>
+              <Link href="/journey" style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", textDecoration: "none", flexShrink: 0, marginLeft: 16, position: "relative" }}>
                 Start <HugeiconsIcon icon={ArrowRight01Icon} size={11} />
               </Link>
             </div>

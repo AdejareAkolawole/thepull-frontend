@@ -22,14 +22,14 @@ export default function TopNav() {
   const path = usePathname();
   return (
     <>
-      {/* Desktop — full width sticky bar */}
-      <header className="hidden md:block sticky top-0 z-50 w-full"
-        style={{
-          background: "rgba(255,255,255,0.9)",
-          backdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(0,0,0,0.07)",
-          boxShadow: "0 1px 12px rgba(0,0,0,0.05)",
-        }}>
+      {/* Desktop sticky top bar — hidden on mobile via CSS */}
+      <header style={{
+        position: "sticky", top: 0, zIndex: 50, width: "100%",
+        background: "rgba(255,255,255,0.92)",
+        backdropFilter: "blur(16px)",
+        borderBottom: "1px solid rgba(0,0,0,0.07)",
+        boxShadow: "0 1px 12px rgba(0,0,0,0.05)",
+      }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", height: 56 }}>
           {/* Logo */}
           <span style={{ fontSize: 15, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.02em", marginRight: 32, flexShrink: 0 }}>
@@ -67,19 +67,19 @@ export default function TopNav() {
         </div>
       </header>
 
-      {/* Mobile bottom bar */}
-      <nav className="mobile-bottom-nav md:hidden fixed bottom-0 left-0 right-0 z-50"
-        style={{
-          background: "rgba(255,255,255,0.96)",
-          backdropFilter: "blur(20px)",
-          borderTop: "1px solid rgba(0,0,0,0.07)",
-          boxShadow: "0 -4px 24px rgba(0,0,0,0.06)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-around",
-          paddingTop: 8,
-          paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)",
-        }}>
+      {/* Mobile bottom bar — hidden on desktop via globals.css .desktop-hide-mobile-nav */}
+      <nav className="desktop-hide-mobile-nav" style={{
+        position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
+        background: "rgba(255,255,255,0.96)",
+        backdropFilter: "blur(20px)",
+        borderTop: "1px solid rgba(0,0,0,0.07)",
+        boxShadow: "0 -4px 24px rgba(0,0,0,0.06)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-around",
+        paddingTop: 8,
+        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)",
+      }}>
         {navItems.map(({ href, icon: Icon, label }) => {
           const active = path === href || (href !== "/dashboard" && path.startsWith(href));
           return (
@@ -93,6 +93,13 @@ export default function TopNav() {
           );
         })}
       </nav>
+
+      {/* Inline style to hide mobile nav on desktop — most reliable approach */}
+      <style>{`
+        @media (min-width: 768px) {
+          .desktop-hide-mobile-nav { display: none !important; }
+        }
+      `}</style>
     </>
   );
 }
