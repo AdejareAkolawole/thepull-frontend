@@ -33,7 +33,7 @@ export default function VaultPage() {
       </motion.div>
 
       {/* Cards grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+      <div data-cols="3">
         {mockPeople.map((p, i) => {
           const cc = compatColor(p.compatibility);
           return (

@@ -84,7 +84,7 @@ export default function JourneyPage() {
       </motion.div>
 
       {/* Content grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,7fr) minmax(0,5fr)", gap: 12 }}>
+      <div data-cols="journey">
         {/* Timeline */}
         <motion.div {...f(0.1)}>
           <Card style={{ padding: 20, height: "100%" }}>

@@ -48,7 +48,7 @@ export default function JournalPage() {
       </motion.div>
 
       {/* Stats */}
-      <motion.div {...f(0.04)} style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+      <motion.div {...f(0.04)} data-cols="4">
         {[
           { label: "Total Entries", value: entries.length, accent: "#e05060" },
           { label: "This Month", value: 3, accent: "#60a5fa" },
@@ -91,7 +91,7 @@ export default function JournalPage() {
       )}
 
       {/* Entries grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+      <div data-cols="3">
         {entries.map((e, i) => (
           <motion.div key={e.id} {...f(0.08 + i * 0.04)}>
             <div style={{

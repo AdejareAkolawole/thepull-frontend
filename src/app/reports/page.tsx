@@ -34,7 +34,7 @@ export default function ReportsPage() {
       </motion.div>
 
       {/* Stats */}
-      <motion.div {...f(0.05)} style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+      <motion.div {...f(0.05)} data-cols="4">
         {[
           { label: "Total Reports", value: "4", icon: Analytics01Icon, accent: "#e05060", glow: "rgba(224,80,96,0.12)" },
           { label: "People Analysed", value: "3", icon: UserGroupIcon, accent: "#60a5fa", glow: "rgba(96,165,250,0.12)" },

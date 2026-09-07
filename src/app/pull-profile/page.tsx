@@ -105,7 +105,7 @@ export default function PullProfilePage() {
       </motion.div>
 
       {/* Content */}
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,5fr) minmax(0,7fr)", gap: 12 }}>
+      <div data-cols="2-hero">
         {/* Dimensions */}
         <motion.div {...f(0.08)}>
           <Card style={{ padding: 20, height: "100%" }}>

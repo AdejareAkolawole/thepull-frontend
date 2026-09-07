@@ -56,7 +56,7 @@ export default function SettingsPage() {
         <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>Manage your account and preferences</p>
       </motion.div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 12 }}>
+      <div data-cols="sidebar">
         {/* Profile card */}
         <motion.div {...f(0.06)}>
           <Card style={{ padding: 24, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", height: "100%" }}>
