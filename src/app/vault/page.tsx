@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { UserAdd01Icon, SearchIcon, Filter01Icon, ArrowRight01Icon, TrendingUpIcon } from "@hugeicons/core-free-icons";
+import { UserAdd01Icon, SearchIcon, FilterIcon, ArrowRight01Icon, TrendingUpIcon } from "@hugeicons/core-free-icons";
 import { mockPeople } from "@/lib/mock";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" } });
@@ -27,7 +27,7 @@ export default function VaultPage() {
           </div>
           <button className="w-10 h-10 rounded-xl flex items-center justify-center"
             style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-            <HugeiconsIcon icon={Filter01Icon} size={15} style={{ color: "var(--text-muted)" }} />
+            <HugeiconsIcon icon={FilterIcon} size={15} style={{ color: "var(--text-muted)" }} />
           </button>
           <Link href="/vault/add"
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:opacity-90"
