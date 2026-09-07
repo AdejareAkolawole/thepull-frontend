@@ -11,15 +11,17 @@ const suggestions = [
   "Explain my relationship patterns to me",
 ];
 
-const initMessages = [
+type Message = { id: string; role: "assistant" | "user"; text: string };
+
+const initMessages: Message[] = [
   {
-    id: "1", role: "assistant" as const,
+    id: "1", role: "assistant",
     text: "Hey Adejare — I'm The Pull, your personal relationship intelligence coach. I have full context on your profile, your assessments, and your vault.\n\nWhat's on your mind today?",
   },
 ];
 
 export default function CoachPage() {
-  const [messages, setMessages] = useState(initMessages);
+  const [messages, setMessages] = useState<Message[]>(initMessages);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);

@@ -2,115 +2,116 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { UserAdd01Icon, ArrowRight01Icon, Search01Icon, FilterAddIcon, Analytics01Icon, UserGroupIcon } from "@hugeicons/core-free-icons";
+import { UserAdd01Icon, SearchIcon, Filter01Icon, ArrowRight01Icon, TrendingUpIcon } from "@hugeicons/core-free-icons";
 import { mockPeople } from "@/lib/mock";
 
-const f = (d = 0) => ({ initial: { opacity: 0, y: 12 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.45, delay: d, ease: [0.22, 1, 0.36, 1] } });
+const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" } });
 
-const allPeople = [
-  ...mockPeople,
-  { id: "4", name: "Aisha", initials: "A", relation: "Sister", score: 95, compatibility: "high" as const },
-  { id: "5", name: "Marcus", initials: "M", relation: "Mentor", score: 82, compatibility: "high" as const },
-  { id: "6", name: "Riley", initials: "R", relation: "Colleague", score: 61, compatibility: "medium" as const },
-];
+const compatColor = (c: string) => c === "high" ? "#34d399" : c === "medium" ? "#fbbf24" : "#f87171";
 
 export default function VaultPage() {
   return (
     <div className="space-y-4 py-2">
-      <motion.div {...f(0)} className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl md:text-2xl font-bold" style={{ color: "var(--text-primary)" }}>My Vault</h1>
-          <p className="text-sm mt-0.5" style={{ color: "var(--text-muted)" }}>People you're tracking</p>
+      {/* Header */}
+      <motion.div {...f(0)} className="flex flex-col sm:flex-row sm:items-end gap-4">
+        <div className="flex-1">
+          <p className="text-[10px] tracking-[0.2em] uppercase mb-1" style={{ color: "var(--text-muted)" }}>Your Vault</p>
+          <h1 className="font-display text-3xl md:text-4xl font-semibold" style={{ color: "var(--text-primary)" }}>People</h1>
+          <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>{mockPeople.length} connections being tracked</p>
         </div>
-        <Link href="/vault/add"
-          className="flex items-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-xl text-sm font-bold text-white"
-          style={{ background: "var(--brand)" }}>
-          <HugeiconsIcon icon={UserAdd01Icon} size={15} />
-          <span className="hidden sm:inline">Add Person</span>
-          <span className="sm:hidden">Add</span>
-        </Link>
-      </motion.div>
-
-      {/* Stats */}
-      <motion.div {...f(0.05)} className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { label: "Total People", value: allPeople.length, icon: UserGroupIcon, color: "#7c2232", bg: "#fdf2f4" },
-          { label: "High Match", value: allPeople.filter(p => p.compatibility === "high").length, icon: Analytics01Icon, color: "#22c55e", bg: "#f0fdf4" },
-          { label: "Medium Match", value: allPeople.filter(p => p.compatibility === "medium").length, icon: Analytics01Icon, color: "#f59e0b", bg: "#fffbeb" },
-          { label: "Reports", value: 3, icon: Analytics01Icon, color: "#3b82f6", bg: "#eff6ff" },
-        ].map((s) => (
-          <div key={s.label} className="rounded-2xl p-4 flex items-center gap-3"
-            style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: s.bg }}>
-              <HugeiconsIcon icon={s.icon} size={16} style={{ color: s.color }} />
-            </div>
-            <div>
-              <p className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>{s.value}</p>
-              <p className="text-xs" style={{ color: "var(--text-muted)" }}>{s.label}</p>
-            </div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl flex-1 sm:flex-none sm:w-48"
+            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <HugeiconsIcon icon={SearchIcon} size={14} style={{ color: "var(--text-muted)" }} />
+            <span className="text-sm" style={{ color: "var(--text-muted)" }}>Search…</span>
           </div>
-        ))}
-      </motion.div>
-
-      {/* Search */}
-      <motion.div {...f(0.08)} className="flex items-center gap-3">
-        <div className="flex-1 flex items-center gap-2 px-4 py-2.5 rounded-xl"
-          style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-          <HugeiconsIcon icon={Search01Icon} size={15} style={{ color: "var(--text-muted)" }} />
-          <input placeholder="Search people…" className="flex-1 text-sm bg-transparent outline-none" style={{ color: "var(--text-primary)" }} />
+          <button className="w-10 h-10 rounded-xl flex items-center justify-center"
+            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <HugeiconsIcon icon={Filter01Icon} size={15} style={{ color: "var(--text-muted)" }} />
+          </button>
+          <Link href="/vault/add"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:opacity-90"
+            style={{ background: "linear-gradient(135deg, #7c2232, #c0404f)", color: "white", boxShadow: "0 4px 16px rgba(192,64,79,0.3)" }}>
+            <HugeiconsIcon icon={UserAdd01Icon} size={14} /> Add person
+          </Link>
         </div>
-        <button className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium"
-          style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text-secondary)" }}>
-          <HugeiconsIcon icon={FilterAddIcon} size={15} />
-          <span className="hidden sm:inline">Filter</span>
-        </button>
       </motion.div>
 
-      {/* People grid — 1 col mobile, 2 col tablet, 3 col desktop */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {allPeople.map((p, i) => {
-          const cc = p.compatibility === "high" ? "#22c55e" : p.compatibility === "medium" ? "#f59e0b" : "#ef4444";
-          const cb = p.compatibility === "high" ? "#f0fdf4" : p.compatibility === "medium" ? "#fffbeb" : "#fff1f2";
+      {/* Cards grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {mockPeople.map((p, i) => {
+          const cc = compatColor(p.compatibility);
           return (
-            <motion.div key={p.id} {...f(0.1 + i * 0.04)}>
+            <motion.div key={p.id} {...f(0.05 + i * 0.04)}>
               <Link href={`/vault/${p.id}`}
-                className="group flex sm:block items-center gap-4 rounded-2xl p-4 md:p-5 transition-all hover:shadow-md"
-                style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-                <div className="flex items-start justify-between mb-0 sm:mb-4">
-                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center text-lg md:text-xl font-bold text-white flex-shrink-0"
-                    style={{ background: "linear-gradient(135deg, #7c2232, #b03040)" }}>
+                className="group flex flex-col h-full rounded-2xl p-5 transition-all hover:scale-[1.01]"
+                style={{
+                  background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+                  backdropFilter: "blur(12px)", boxShadow: "0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)",
+                }}>
+                {/* Top */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-lg font-bold text-white flex-shrink-0"
+                    style={{ background: "linear-gradient(135deg, #7c2232, #a02d3d)", boxShadow: "0 4px 12px rgba(124,34,50,0.4)" }}>
                     {p.initials}
                   </div>
-                  <span className="hidden sm:inline text-[11px] font-bold px-2.5 py-1 rounded-full capitalize"
-                    style={{ background: cb, color: cc }}>{p.compatibility}</span>
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full"
+                    style={{ background: `${cc}15`, color: cc, border: `1px solid ${cc}30` }}>
+                    <div className="w-1 h-1 rounded-full" style={{ background: cc }} />
+                    {p.compatibility}
+                  </div>
                 </div>
-                <div className="flex-1 sm:flex-none">
-                  <div className="flex items-center justify-between sm:block">
-                    <div>
-                      <p className="text-base font-bold" style={{ color: "var(--text-primary)" }}>{p.name}</p>
-                      <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>{p.relation}</p>
-                    </div>
-                    <span className="sm:hidden text-[11px] font-bold px-2 py-0.5 rounded-full capitalize"
-                      style={{ background: cb, color: cc }}>{p.score}</span>
+
+                {/* Info */}
+                <div className="flex-1">
+                  <p className="text-sm font-bold mb-0.5" style={{ color: "var(--text-primary)" }}>{p.name}</p>
+                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>{p.relation}</p>
+                </div>
+
+                {/* Score bar */}
+                <div className="mt-4">
+                  <div className="flex justify-between text-[10px] mb-1.5">
+                    <span style={{ color: "var(--text-muted)" }}>Pull compatibility</span>
+                    <span className="font-bold" style={{ color: "var(--text-primary)" }}>{p.score}</span>
                   </div>
-                  <div className="mt-3 hidden sm:block">
-                    <div className="flex justify-between text-xs mb-1.5">
-                      <span style={{ color: "var(--text-muted)" }}>Compatibility</span>
-                      <span className="font-bold" style={{ color: "var(--text-primary)" }}>{p.score}</span>
-                    </div>
-                    <div className="h-1.5 rounded-full" style={{ background: "var(--bg)" }}>
-                      <div className="h-full rounded-full" style={{ background: cc, width: `${p.score}%` }} />
-                    </div>
+                  <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                    <motion.div className="h-full rounded-full transition-all"
+                      style={{ background: `linear-gradient(90deg, ${cc}80, ${cc})`, width: `${p.score}%` }}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${p.score}%` }}
+                      transition={{ duration: 1, delay: 0.3 + i * 0.06 }} />
                   </div>
-                  <div className="mt-3 hidden sm:flex items-center justify-between">
-                    <span className="text-xs" style={{ color: "var(--text-muted)" }}>View report</span>
-                    <HugeiconsIcon icon={ArrowRight01Icon} size={14} className="opacity-30 group-hover:opacity-70 transition-opacity" style={{ color: "var(--brand)" }} />
+                </div>
+
+                {/* Footer */}
+                <div className="flex items-center justify-between mt-4 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+                  <div className="flex items-center gap-1 text-[10px]" style={{ color: "var(--text-muted)" }}>
+                    <HugeiconsIcon icon={TrendingUpIcon} size={10} /> Updated recently
+                  </div>
+                  <div className="flex items-center gap-1 text-[10px] font-semibold" style={{ color: "var(--brand)" }}>
+                    View <HugeiconsIcon icon={ArrowRight01Icon} size={10} />
                   </div>
                 </div>
               </Link>
             </motion.div>
           );
         })}
+
+        {/* Add card */}
+        <motion.div {...f(0.05 + mockPeople.length * 0.04)}>
+          <Link href="/vault/add"
+            className="flex flex-col items-center justify-center gap-3 h-full min-h-[200px] rounded-2xl border-2 border-dashed transition-all hover:border-brand hover:bg-white/5"
+            style={{ borderColor: "rgba(255,255,255,0.1)", color: "var(--text-muted)" }}>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+              style={{ background: "rgba(224,80,96,0.08)", border: "1px solid rgba(224,80,96,0.15)" }}>
+              <HugeiconsIcon icon={UserAdd01Icon} size={20} style={{ color: "var(--brand)" }} />
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-semibold" style={{ color: "var(--text-secondary)" }}>Add person</p>
+              <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Track a new connection</p>
+            </div>
+          </Link>
+        </motion.div>
       </div>
     </div>
   );
