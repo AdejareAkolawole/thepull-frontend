@@ -8,8 +8,8 @@ const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y
 
 const G = ({ children, className = "", style = {} }: any) => (
   <div className={`rounded-2xl ${className}`} style={{
-    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-    backdropFilter: "blur(12px)", boxShadow: "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)", ...style,
+    background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
+    boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style,
   }}>{children}</div>
 );
 

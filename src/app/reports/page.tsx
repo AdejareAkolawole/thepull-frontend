@@ -7,8 +7,8 @@ const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y
 
 const G = ({ children, className = "", style = {} }: any) => (
   <div className={`rounded-2xl ${className}`} style={{
-    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-    backdropFilter: "blur(12px)", boxShadow: "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)", ...style,
+    background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
+    boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style,
   }}>{children}</div>
 );
 
@@ -59,14 +59,14 @@ export default function ReportsPage() {
       {/* Reports list */}
       <motion.div {...f(0.1)}>
         <G className="overflow-hidden">
-          <div className="px-5 py-4 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+          <div className="px-5 py-4 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
             <p className="text-[13px] font-bold" style={{ color: "var(--text-primary)" }}>All Reports</p>
             <span className="text-xs" style={{ color: "var(--text-muted)" }}>{reports.length} reports</span>
           </div>
           <div>
             {reports.map((r, i) => (
               <motion.div key={r.id} {...f(0.12 + i * 0.05)}
-                className="flex items-center gap-4 px-5 py-4 cursor-pointer transition-all hover:bg-white/5"
+                className="flex items-center gap-4 px-5 py-4 cursor-pointer transition-all hover:bg-black/[0.02]"
                 style={{ borderBottom: i < reports.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
                 {/* Icon */}
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -91,7 +91,7 @@ export default function ReportsPage() {
                 {/* Actions */}
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <button className="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:bg-white/10"
-                    style={{ color: "var(--text-muted)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                    style={{ color: "var(--text-muted)", border: "1px solid rgba(0,0,0,0.07)" }}>
                     <HugeiconsIcon icon={EyeIcon} size={13} />
                   </button>
                   <button className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"

@@ -9,8 +9,8 @@ const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y
 
 const G = ({ children, className = "", style = {} }: any) => (
   <div className={`rounded-2xl ${className}`} style={{
-    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-    backdropFilter: "blur(12px)", boxShadow: "0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)", ...style,
+    background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
+    boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style,
   }}>{children}</div>
 );
 
@@ -81,7 +81,7 @@ export default function PullProfilePage() {
                 style={{ background: "rgba(52,211,153,0.12)", color: "#34d399", border: "1px solid rgba(52,211,153,0.2)" }}>
                 <HugeiconsIcon icon={TrendingUpIcon} size={11} /> Rising trajectory
               </span>
-              <span className="text-xs px-3 py-1.5 rounded-full" style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.5)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <span className="text-xs px-3 py-1.5 rounded-full" style={{ background: "rgba(0,0,0,0.06)", color: "rgba(255,255,255,0.5)", border: "1px solid rgba(0,0,0,0.07)" }}>
                 Top 18% of users
               </span>
             </div>
@@ -128,7 +128,7 @@ export default function PullProfilePage() {
                     <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>{d.label}</span>
                     <span className="text-xs font-bold tabular-nums" style={{ color: "var(--text-primary)" }}>{d.score}</span>
                   </div>
-                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(0,0,0,0.06)" }}>
                     <motion.div className="h-full rounded-full"
                       style={{ background: `linear-gradient(90deg, #7c2232, #e05060)` }}
                       initial={{ width: 0 }} animate={{ width: `${d.score}%` }}
@@ -137,7 +137,7 @@ export default function PullProfilePage() {
                 </div>
               ))}
             </div>
-            <div className="mt-5 pt-4 flex items-center justify-between" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+            <div className="mt-5 pt-4 flex items-center justify-between" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
               <p className="text-xs" style={{ color: "var(--text-muted)" }}>Overall average</p>
               <p className="text-xl font-bold" style={{ color: "var(--brand)" }}>73.6</p>
             </div>

@@ -21,12 +21,12 @@ export default function VaultPage() {
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl flex-1 sm:flex-none sm:w-48"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)" }}>
             <HugeiconsIcon icon={SearchIcon} size={14} style={{ color: "var(--text-muted)" }} />
             <span className="text-sm" style={{ color: "var(--text-muted)" }}>Search…</span>
           </div>
           <button className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)" }}>
             <HugeiconsIcon icon={FilterIcon} size={15} style={{ color: "var(--text-muted)" }} />
           </button>
           <Link href="/vault/add"
@@ -46,8 +46,8 @@ export default function VaultPage() {
               <Link href={`/vault/${p.id}`}
                 className="group flex flex-col h-full rounded-2xl p-5 transition-all hover:scale-[1.01]"
                 style={{
-                  background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-                  backdropFilter: "blur(12px)", boxShadow: "0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)",
+                  background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)",
                 }}>
                 {/* Top */}
                 <div className="flex items-start justify-between mb-4">
@@ -74,7 +74,7 @@ export default function VaultPage() {
                     <span style={{ color: "var(--text-muted)" }}>Pull compatibility</span>
                     <span className="font-bold" style={{ color: "var(--text-primary)" }}>{p.score}</span>
                   </div>
-                  <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                  <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(0,0,0,0.06)" }}>
                     <motion.div className="h-full rounded-full transition-all"
                       style={{ background: `linear-gradient(90deg, ${cc}80, ${cc})`, width: `${p.score}%` }}
                       initial={{ width: 0 }}
@@ -84,7 +84,7 @@ export default function VaultPage() {
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between mt-4 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+                <div className="flex items-center justify-between mt-4 pt-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
                   <div className="flex items-center gap-1 text-[10px]" style={{ color: "var(--text-muted)" }}>
                     <HugeiconsIcon icon={TrendingUpIcon} size={10} /> Updated recently
                   </div>
@@ -100,8 +100,8 @@ export default function VaultPage() {
         {/* Add card */}
         <motion.div {...f(0.05 + mockPeople.length * 0.04)}>
           <Link href="/vault/add"
-            className="flex flex-col items-center justify-center gap-3 h-full min-h-[200px] rounded-2xl border-2 border-dashed transition-all hover:border-brand hover:bg-white/5"
-            style={{ borderColor: "rgba(255,255,255,0.1)", color: "var(--text-muted)" }}>
+            className="flex flex-col items-center justify-center gap-3 h-full min-h-[200px] rounded-2xl border-2 border-dashed transition-all hover:border-brand hover:bg-black/[0.02]"
+            style={{ borderColor: "rgba(0,0,0,0.12)", color: "var(--text-muted)" }}>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
               style={{ background: "rgba(224,80,96,0.08)", border: "1px solid rgba(224,80,96,0.15)" }}>
               <HugeiconsIcon icon={UserAdd01Icon} size={20} style={{ color: "var(--brand)" }} />

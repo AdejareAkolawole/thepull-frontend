@@ -8,8 +8,8 @@ const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y
 
 const G = ({ children, className = "", style = {} }: any) => (
   <div className={`rounded-2xl ${className}`} style={{
-    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-    backdropFilter: "blur(12px)", boxShadow: "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)", ...style,
+    background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
+    boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style,
   }}>{children}</div>
 );
 
@@ -80,7 +80,7 @@ export default function JournalPage() {
             <textarea placeholder="Write what's on your mind — your relationships, patterns, growth, moments…"
               rows={6} className="w-full text-sm bg-transparent outline-none resize-none leading-relaxed"
               style={{ color: "var(--text-secondary)" }} />
-            <div className="flex items-center justify-between mt-4 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+            <div className="flex items-center justify-between mt-4 pt-4" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
               <p className="text-xs flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
                 <HugeiconsIcon icon={AiSparklesIcon} size={12} style={{ color: "var(--brand)" }} />
                 The Pull will analyse patterns in your entry
@@ -100,8 +100,8 @@ export default function JournalPage() {
           <motion.div key={e.id} {...f(0.08 + i * 0.04)}>
             <div className="flex flex-col h-full rounded-2xl p-5 cursor-pointer transition-all hover:scale-[1.01]"
               style={{
-                background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-                backdropFilter: "blur(12px)", boxShadow: "0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)",
+                background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)",
               }}>
               {/* Top row */}
               <div className="flex items-center justify-between mb-3">
@@ -117,11 +117,11 @@ export default function JournalPage() {
               <p className="text-sm font-bold mb-2" style={{ color: "var(--text-primary)" }}>{e.title}</p>
               <p className="text-[11px] leading-relaxed line-clamp-3 flex-1 mb-4" style={{ color: "var(--text-muted)" }}>{e.preview}</p>
               {/* Footer */}
-              <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+              <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
                 <div className="flex flex-wrap gap-1">
                   {e.tags.map(t => (
                     <span key={t} className="text-[9px] font-semibold px-2 py-0.5 rounded-full"
-                      style={{ background: "rgba(255,255,255,0.05)", color: "var(--text-muted)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                      style={{ background: "rgba(0,0,0,0.04)", color: "var(--text-muted)", border: "1px solid rgba(255,255,255,0.07)" }}>
                       {t}
                     </span>
                   ))}

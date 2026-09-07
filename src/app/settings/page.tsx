@@ -8,8 +8,8 @@ const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y
 
 const G = ({ children, className = "", style = {} }: any) => (
   <div className={`rounded-2xl ${className}`} style={{
-    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-    backdropFilter: "blur(12px)", boxShadow: "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)", ...style,
+    background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
+    boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style,
   }}>{children}</div>
 );
 
@@ -82,7 +82,7 @@ export default function SettingsPage() {
               <HugeiconsIcon icon={CheckmarkCircle02Icon} size={11} /> Premium Member
             </span>
 
-            <div className="w-full mt-5 pt-5 space-y-3" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+            <div className="w-full mt-5 pt-5 space-y-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
               {[
                 { label: "Pull Score", value: mockUser.pull_score, color: "var(--brand)" },
                 { label: "Member since", value: "Sep 2026", color: "var(--text-primary)" },
@@ -111,7 +111,7 @@ export default function SettingsPage() {
                 style={{ background: "linear-gradient(135deg, #7c2232, #c0404f)", boxShadow: "0 4px 12px rgba(192,64,79,0.25)" }}>
                 Upgrade Plan
               </button>
-              <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5"
+              <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-black/[0.02]"
                 style={{ border: "1px solid rgba(248,113,113,0.25)", color: "#f87171" }}>
                 <HugeiconsIcon icon={Logout01Icon} size={14} /> Sign Out
               </button>
