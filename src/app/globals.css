@@ -144,7 +144,14 @@ body {
   .dash-hero-inner { padding: 24px 20px !important; }
 
   /* Dashboard hero heading size */
-  .dash-hero h2 { font-size: 32px !important; }
+  .dash-hero h2 { font-size: 26px !important; }
+
+  /* Hide floating cards on mobile — they overflow the hero */
+  .dash-hero-cards { display: none !important; }
+
+  /* Stat cards — 2×2 grid on mobile */
+  .dash-main { grid-template-columns: 1fr 1fr !important; }
+  .dash-ai-panel { display: none !important; }
 
   /* Vault — hide search+filter on mobile to keep header clean */
   .vault-search-bar, .vault-filter-btn { display: none !important; }
