@@ -58,9 +58,9 @@ export default function TopNav() {
       }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", height: 56 }}>
           {/* Logo */}
-          <span style={{ fontSize: 15, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.02em", marginRight: 32, flexShrink: 0 }}>
-            THE<span style={{ color: "#c0404f" }}>PULL</span>
-          </span>
+          <Link href="/dashboard" style={{ marginRight: 32, flexShrink: 0, display: "flex", alignItems: "center", textDecoration: "none" }}>
+            <img src="/logo.jpg" alt="THEPULL" style={{ height: 28, width: "auto", display: "block" }} />
+          </Link>
 
           {/* Nav links — hidden on mobile */}
           <nav className="desktop-nav-links" style={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
