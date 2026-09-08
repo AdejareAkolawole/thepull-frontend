@@ -9,6 +9,7 @@ import {
   EyeIcon, FireIcon, Target01Icon, LockIcon,
   ArrowRight01Icon, HeartIcon, Message02Icon,
   ShieldIcon, Activity01Icon, CheckmarkCircle01Icon,
+  Add01Icon, Time01Icon,
 } from "@hugeicons/core-free-icons";
 import { mockUser, mockAchievements, mockIdentityVector } from "@/lib/mock";
 
@@ -157,6 +158,156 @@ export default function PullProfilePage() {
             </button>
           </div>
         </motion.div>
+      </div>
+
+      {/* ── HOW YOUR PULL SCORE WAS BUILT ── */}
+      <div style={{ maxWidth: 600, margin: "32px auto 0", padding: "0 24px" }}>
+        <motion.div {...f(0.1)} style={{ background: CREAM, borderRadius: 24, overflow: "hidden", boxShadow: "0 4px 24px rgba(45,26,20,0.08)", marginBottom: 16 }}>
+          <div style={{ padding: "20px 28px", borderBottom: `1px solid rgba(45,26,20,0.09)` }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+              <HugeiconsIcon icon={ArrowRight01Icon} size={12} style={{ color: MID }} />
+              <span style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: MID, fontWeight: 700 }}>How Your Pull Score Was Built</span>
+            </div>
+            <p style={{ fontSize: 11, color: MID, lineHeight: 1.65 }}>
+              SUM(engine_score × weight × confidence) / SUM(weight × confidence) — one contribution per engine (multi-row engines aggregated by mean); score null when numeric-model coverage &lt; 0.5
+            </p>
+          </div>
+
+          {[
+            { label: "How You Connect",       confidence: 74, level: "likely",   evidence: 25, score: 5.5, weight: 15 },
+            { label: "How You Communicate",   confidence: 47, level: "possible", evidence: 25, score: 3.2, weight: 10 },
+            { label: "Your Foundation",       confidence: 67, level: "likely",   evidence: 25, score: 3.1, weight: 15 },
+            { label: "How You Handle Tension",confidence: 34, level: "possible", evidence: 25, score: 2.1, weight: 10 },
+            { label: "What You Value",        confidence: 26, level: "possible", evidence: 25, score: 1.3, weight: 10 },
+            { label: "Your Personality",      confidence: 29, level: "possible", evidence: 4,  score: 0.5, weight: 15 },
+            { label: "Your Emotional Rhythm", confidence: 40, level: "possible", evidence: 25, score: 0.0, weight: 10 },
+          ].map((row, i, arr) => (
+            <div key={row.label} style={{ padding: "18px 28px", borderBottom: i < arr.length - 1 ? `1px solid rgba(45,26,20,0.07)` : "none" }}>
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
+                <div>
+                  <p style={{ fontSize: 15, fontWeight: 500, color: DARK, marginBottom: 5 }}>{row.label}</p>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ fontSize: 11, color: MID }}>{row.confidence}% confidence</span>
+                    <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: row.level === "likely" ? "rgba(37,99,235,0.1)" : "rgba(217,119,6,0.1)", color: row.level === "likely" ? "#2563eb" : "#d97706" }}>{row.level}</span>
+                    <span style={{ fontSize: 11, color: MID }}>{row.evidence} evidence</span>
+                  </div>
+                </div>
+                <div style={{ textAlign: "right" as const, flexShrink: 0 }}>
+                  <p style={{ fontSize: 22, fontWeight: 700, color: DARK, lineHeight: 1 }}>{row.score.toFixed(1)}</p>
+                  <p style={{ fontSize: 10, color: MID, marginTop: 3 }}>weight {row.weight}%</p>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <div style={{ padding: "20px 28px", borderTop: `1px solid rgba(45,26,20,0.1)` }}>
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+              <div>
+                <p style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: MID, fontWeight: 700, marginBottom: 4 }}>Your Pull Score</p>
+                <p style={{ fontSize: 11, color: MID, marginBottom: 12 }}>The sum of every layer's contribution</p>
+                <p style={{ fontSize: 11, color: MID }}>
+                  Coverage: <strong style={{ color: DARK }}>complete</strong> · 47% of available weight · 40% of 85%
+                </p>
+              </div>
+              <p style={{ fontSize: 52, fontWeight: 800, color: DARK, lineHeight: 1, letterSpacing: "-0.04em" }}>{mockUser.pull_score}</p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Identity Story */}
+        <motion.div {...f(0.15)} style={{ background: CREAM, borderRadius: 24, padding: "24px 28px", marginBottom: 16, boxShadow: "0 4px 24px rgba(45,26,20,0.08)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18 }}>
+            <HugeiconsIcon icon={AiSparklesIcon} size={13} style={{ color: MID }} />
+            <span style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: MID, fontWeight: 700 }}>Your Identity Story</span>
+          </div>
+          <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: `rgba(45,26,20,0.07)`, border: `1px solid rgba(45,26,20,0.1)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <HugeiconsIcon icon={AiSparklesIcon} size={18} style={{ color: MID }} />
+            </div>
+            <div>
+              <p style={{ fontSize: 16, fontWeight: 600, color: DARK, marginBottom: 6 }}>Still emerging...</p>
+              <p style={{ fontSize: 13, color: MID, lineHeight: 1.7 }}>
+                As you complete more of your intelligence journey, The Pull will reveal the archetype you are becoming — and the story behind it.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Insight sections */}
+        {[
+          {
+            icon: AiSparklesIcon,
+            heading: "Here's what The Pull is noticing",
+            sub: "The Pull doesn't say something because the day changed. It speaks only when your experiences have earned it. This is separate from your Pull Score.",
+            cardTitle: "The Pull is still getting to know you",
+            cardBody: "There isn't enough here yet for The Pull to say something meaningful — and it won't pretend otherwise. Share a real experience and the pattern-finding begins.",
+            actions: [
+              { label: "Tell The Pull what happened", icon: Add01Icon, primary: true },
+              { label: "Ask The Pull", icon: Message02Icon, primary: false },
+            ],
+          },
+          {
+            icon: CheckmarkCircle01Icon,
+            heading: "What The Pull Is Learning",
+            sub: "The Pull gets smarter about you as your experiences accumulate. This is separate from your Pull Score — your score describes your current measured intelligence; this shows what The Pull is learning from your experiences over time.",
+            cardTitle: "The Pull is still getting to know you",
+            cardBody: "As you use The Pull and share real experiences, patterns will begin to emerge here. The more you bring, the more The Pull notices.",
+            actions: [
+              { label: "Ask The Pull something", icon: Message02Icon, primary: false },
+            ],
+          },
+          {
+            icon: Activity01Icon,
+            heading: "What's Changing",
+            sub: "The Pull doesn't just store what it learned — it watches how your evidence shifts over time. This is change in evidence, not a new score, and it's separate from your Pull Score.",
+            cardTitle: "Your Pull is still gathering enough experience",
+            cardBody: "To see how you're changing, The Pull needs a meaningful run of experiences to compare across time. It won't claim a change until the evidence can honestly support one.",
+            actions: [
+              { label: "Tell The Pull what happened", icon: Add01Icon, primary: false },
+            ],
+          },
+          {
+            icon: Time01Icon,
+            heading: "Since you last checked in",
+            sub: "Since you last checked in. The Pull only shows changes here when its understanding actually moved — never just to give you something to read.",
+            cardTitle: null,
+            cardBody: null,
+            actions: [],
+          },
+        ].map((section, i) => (
+          <motion.div key={section.heading} {...f(0.18 + i * 0.05)} style={{ marginBottom: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 8, paddingLeft: 4 }}>
+              <HugeiconsIcon icon={section.icon} size={12} style={{ color: MID }} />
+              <p style={{ fontSize: 11, fontWeight: 700, color: MID }}>{section.heading}</p>
+            </div>
+            <p style={{ fontSize: 12, color: MID, lineHeight: 1.65, marginBottom: section.cardTitle ? 12 : 0, paddingLeft: 4 }}>{section.sub}</p>
+
+            {section.cardTitle && (
+              <div style={{ background: "linear-gradient(150deg,#1c0a10 0%,#2a1018 100%)", borderRadius: 20, padding: "36px 28px", textAlign: "center" as const }}>
+                <div style={{ width: 44, height: 44, borderRadius: 14, background: "rgba(245,240,232,0.08)", border: "1px solid rgba(245,240,232,0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
+                  <HugeiconsIcon icon={section.icon} size={20} style={{ color: "rgba(245,240,232,0.6)" }} />
+                </div>
+                <p style={{ fontSize: 20, fontWeight: 600, color: CREAM, marginBottom: 12, fontFamily: "Georgia, serif" }}>{section.cardTitle}</p>
+                <p style={{ fontSize: 13, color: "rgba(245,240,232,0.45)", lineHeight: 1.7, marginBottom: 24, maxWidth: 380, margin: "0 auto 24px" }}>{section.cardBody}</p>
+                <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" as const }}>
+                  {section.actions.map(a => (
+                    <button key={a.label} style={{
+                      display: "inline-flex", alignItems: "center", gap: 7,
+                      padding: "10px 20px", borderRadius: 99,
+                      fontSize: 13, fontWeight: 600, cursor: "pointer",
+                      background: a.primary ? "rgba(245,240,232,0.12)" : "transparent",
+                      border: "1px solid rgba(245,240,232,0.2)",
+                      color: "rgba(245,240,232,0.8)",
+                    }}>
+                      <HugeiconsIcon icon={a.icon} size={13} />
+                      {a.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        ))}
       </div>
 
     </div>
