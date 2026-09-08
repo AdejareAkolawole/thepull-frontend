@@ -121,16 +121,16 @@ export default function DashboardClient() {
       <div className="dash-row-1" style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 12 }}>
 
         {/* Hero */}
-        <motion.div {...fade(0)} className="rounded-2xl relative overflow-hidden" style={{ minHeight: 240, background: "linear-gradient(140deg, #3d0e1a 0%, #6b1c2b 45%, #a03040 100%)" }}>
+        <motion.div {...fade(0)} className="rounded-2xl relative overflow-hidden" style={{ minHeight: 180, background: "linear-gradient(140deg, #3d0e1a 0%, #6b1c2b 45%, #a03040 100%)" }}>
           <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 60% at 10% 20%, rgba(255,255,255,0.05) 0%, transparent 60%)" }} />
-          <div className="dash-hero-inner" style={{ position: "relative", padding: "36px 40px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div className="dash-hero-inner" style={{ position: "relative", padding: "24px 30px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 16 }}>
-                <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ade80" }} />
-                <span style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)", fontWeight: 600 }}>Relationship Intelligence</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 12 }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#4ade80" }} />
+                <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)", fontWeight: 600 }}>Relationship Intelligence</span>
               </div>
-              <h1 className="font-display" style={{ fontSize: 46, lineHeight: 1.06, fontWeight: 300, color: "rgba(255,255,255,0.8)", marginBottom: 2 }}>{greeting},</h1>
-              <h1 className="font-display" style={{ fontSize: 46, lineHeight: 1.06, fontWeight: 600, color: "#fff", marginBottom: 14 }}>{mockUser.name}.</h1>
+              <h1 className="font-display" style={{ fontSize: 34, lineHeight: 1.06, fontWeight: 300, color: "rgba(255,255,255,0.8)", marginBottom: 2 }}>{greeting},</h1>
+              <h1 className="font-display" style={{ fontSize: 34, lineHeight: 1.06, fontWeight: 600, color: "#fff", marginBottom: 10 }}>{mockUser.name}.</h1>
               <p style={{ fontSize: 13, color: "rgba(255,255,255,0.48)", lineHeight: 1.6, maxWidth: 340 }}>
                 3 new insights ready. Your intelligence profile has evolved since your last visit.
               </p>
@@ -156,7 +156,7 @@ export default function DashboardClient() {
         {/* Archetype card — matches screenshot exactly */}
         <motion.div {...fade(0.06)}>
           <div style={{
-            borderRadius: 22, padding: "24px 24px 20px",
+            borderRadius: 22, padding: "18px 18px 16px",
             background: "linear-gradient(160deg, #1c0810 0%, #2d1020 60%, #1c0810 100%)",
             height: "100%", display: "flex", flexDirection: "column",
           }}>
@@ -174,19 +174,19 @@ export default function DashboardClient() {
             </div>
 
             {/* Name + desc */}
-            <p style={{ fontSize: 26, fontWeight: 700, color: "#fff", lineHeight: 1.15, marginBottom: 8, letterSpacing: "-0.02em" }}>{mockUser.archetype}</p>
+            <p style={{ fontSize: 21, fontWeight: 700, color: "#fff", lineHeight: 1.15, marginBottom: 6, letterSpacing: "-0.02em" }}>{mockUser.archetype}</p>
             <p style={{ fontSize: 12, color: "rgba(255,255,255,0.32)", lineHeight: 1.6, marginBottom: 16 }}>We currently believe your strongest identity is rooted in logic, pattern recognition, and ...</p>
 
             {/* Confidence / Version */}
             <div style={{ display: "flex", borderTop: "1px solid rgba(255,255,255,0.07)", borderBottom: "1px solid rgba(255,255,255,0.07)", paddingTop: 14, paddingBottom: 14, marginBottom: 16 }}>
               <div style={{ flex: 1 }}>
                 <p style={{ fontSize: 8, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)", marginBottom: 5 }}>Confidence</p>
-                <p style={{ fontSize: 30, fontWeight: 700, color: "#c0404f", lineHeight: 1 }}>{mockUser.archetype_confidence}%</p>
+                <p style={{ fontSize: 24, fontWeight: 700, color: "#c0404f", lineHeight: 1 }}>{mockUser.archetype_confidence}%</p>
               </div>
               <div style={{ width: 1, background: "rgba(255,255,255,0.07)", margin: "0 20px" }} />
               <div style={{ flex: 1 }}>
                 <p style={{ fontSize: 8, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)", marginBottom: 5 }}>Version</p>
-                <p style={{ fontSize: 30, fontWeight: 700, color: "#c0404f", lineHeight: 1 }}>V10.0</p>
+                <p style={{ fontSize: 24, fontWeight: 700, color: "#c0404f", lineHeight: 1 }}>V10.0</p>
               </div>
             </div>
 
@@ -312,35 +312,6 @@ export default function DashboardClient() {
           </motion.div>
         </div>
       </div>
-
-      {/* ROW 3: Quick Actions full width */}
-      <motion.div {...fade(0.25)}>
-        <Card style={{ padding: 16 }}>
-          <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", marginBottom: 10 }}>Quick Actions</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 7, marginBottom: 8 }}>
-            {[
-              { label: "AI Coach", href: "/coach", icon: AiInnovation01Icon, color: "#2563eb", bg: "rgba(37,99,235,0.07)" },
-              { label: "Reports", href: "/reports", icon: PresentationLineChart01Icon, color: "#7c3aed", bg: "rgba(124,58,237,0.07)" },
-              { label: "Journey", href: "/journey", icon: Target01Icon, color: "#d97706", bg: "rgba(217,119,6,0.07)" },
-              { label: "Journal", href: "/journal", icon: FlashIcon, color: "#c0404f", bg: "rgba(192,64,79,0.07)" },
-            ].map(a => (
-              <Link key={a.label} href={a.href} style={{ display: "flex", flexDirection: "column" as const, alignItems: "flex-start", gap: 8, padding: 12, borderRadius: 12, background: a.bg, textDecoration: "none", border: "1px solid rgba(0,0,0,0.04)" }}>
-                <div style={{ width: 26, height: 26, borderRadius: 7, background: `${a.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <HugeiconsIcon icon={a.icon} size={13} style={{ color: a.color }} />
-                </div>
-                <span style={{ fontSize: 11, fontWeight: 700, color: a.color }}>{a.label}</span>
-              </Link>
-            ))}
-          </div>
-          <div style={{ padding: "10px 12px", borderRadius: 12, background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.05)", display: "flex", alignItems: "flex-start", gap: 9 }}>
-            <HugeiconsIcon icon={Calendar03Icon} size={13} style={{ color: "var(--text-muted)", flexShrink: 0, marginTop: 1 }} />
-            <div>
-              <p style={{ fontSize: 11, fontWeight: 700, color: "var(--text-primary)" }}>Today's focus</p>
-              <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2, lineHeight: 1.4 }}>Complete your Emotional Landscape assessment</p>
-            </div>
-          </div>
-        </Card>
-      </motion.div>
 
       {/* ══ WHO AM I ══ */}
       <motion.div {...fade(0.3)} style={{ paddingTop: 24 }}>
@@ -475,6 +446,37 @@ export default function DashboardClient() {
           </div>
         </div>
       </motion.div>
+
+            {/* ROW 3: Quick Actions full width */}
+      <motion.div {...fade(0.25)}>
+        <Card style={{ padding: 16 }}>
+          <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", marginBottom: 10 }}>Quick Actions</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 7, marginBottom: 8 }}>
+            {[
+              { label: "AI Coach", href: "/coach", icon: AiInnovation01Icon, color: "#2563eb", bg: "rgba(37,99,235,0.07)" },
+              { label: "Reports", href: "/reports", icon: PresentationLineChart01Icon, color: "#7c3aed", bg: "rgba(124,58,237,0.07)" },
+              { label: "Journey", href: "/journey", icon: Target01Icon, color: "#d97706", bg: "rgba(217,119,6,0.07)" },
+              { label: "Journal", href: "/journal", icon: FlashIcon, color: "#c0404f", bg: "rgba(192,64,79,0.07)" },
+            ].map(a => (
+              <Link key={a.label} href={a.href} style={{ display: "flex", flexDirection: "column" as const, alignItems: "flex-start", gap: 8, padding: 12, borderRadius: 12, background: a.bg, textDecoration: "none", border: "1px solid rgba(0,0,0,0.04)" }}>
+                <div style={{ width: 26, height: 26, borderRadius: 7, background: `${a.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <HugeiconsIcon icon={a.icon} size={13} style={{ color: a.color }} />
+                </div>
+                <span style={{ fontSize: 11, fontWeight: 700, color: a.color }}>{a.label}</span>
+              </Link>
+            ))}
+          </div>
+          <div style={{ padding: "10px 12px", borderRadius: 12, background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.05)", display: "flex", alignItems: "flex-start", gap: 9 }}>
+            <HugeiconsIcon icon={Calendar03Icon} size={13} style={{ color: "var(--text-muted)", flexShrink: 0, marginTop: 1 }} />
+            <div>
+              <p style={{ fontSize: 11, fontWeight: 700, color: "var(--text-primary)" }}>Today's focus</p>
+              <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2, lineHeight: 1.4 }}>Complete your Emotional Landscape assessment</p>
+            </div>
+          </div>
+        </Card>
+      </motion.div>
+
+
 
       <style>{`
         @media (max-width: 767px) {
