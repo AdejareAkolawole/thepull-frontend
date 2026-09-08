@@ -1,119 +1,173 @@
 "use client";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Analytics01Icon, ArrowRight01Icon, Download02Icon, EyeIcon, AiSparklesIcon, Calendar03Icon, UserGroupIcon, TrendingUpIcon } from "@hugeicons/core-free-icons";
+import {
+  ScaleIcon, AiSparklesIcon, SentIcon,
+  ArrowRight01Icon, CheckmarkCircle01Icon,
+} from "@hugeicons/core-free-icons";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
-const Card = ({ children, style = {} }: any) => (
-  <div style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", borderRadius: 16, boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style }}>
-    {children}
-  </div>
-);
+const WINE  = "#3d0e1a";
+const WINE2 = "#c0404f";
+const CREAM = "#f5f0e8";
+const DARK  = "#2d1a14";
+const MID   = "#7c5c50";
+const GOLD  = "#c9a84c";
 
-const reports = [
-  { id: "1", title: "Jordan — Relationship Report", date: "Sep 5, 2026", type: "Relationship", score: 88, pages: 12, accent: "#e05060" },
-  { id: "2", title: "Mara — Compatibility Analysis", date: "Sep 3, 2026", type: "Compatibility", score: 71, pages: 8, accent: "#60a5fa" },
-  { id: "3", title: "Theo — Communication Pattern", date: "Aug 28, 2026", type: "Communication", score: 56, pages: 10, accent: "#fbbf24" },
-  { id: "4", title: "September Intelligence Summary", date: "Sep 1, 2026", type: "Monthly", score: 74, pages: 20, accent: "#a78bfa" },
-];
+export default function RealityCheckPage() {
+  const [what, setWhat]     = useState("");
+  const [means, setMeans]   = useState("");
+  const [action, setAction] = useState("");
+  const [ran, setRan]       = useState(false);
 
-export default function ReportsPage() {
+  const canRun = what.trim().length > 0;
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    <div style={{ maxWidth: 640, margin: "0 auto", display: "flex", flexDirection: "column", gap: 0 }}>
+
       {/* Header */}
-      <motion.div {...f(0)} className="page-header-row" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-        <div>
-          <p style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 4 }}>Intelligence</p>
-          <h1 className="font-display" style={{ fontSize: 36, fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.1 }}>Reality Check</h1>
-          <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>Deep relationship intelligence analyses</p>
+      <motion.div {...f(0)} style={{ marginBottom: 32 }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(61,14,26,0.07)", border: "1px solid rgba(61,14,26,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <HugeiconsIcon icon={ScaleIcon} size={18} style={{ color: MID }} />
+          </div>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: DARK, letterSpacing: "-0.03em", lineHeight: 1 }}>Reality Check</h1>
         </div>
-        <button style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 18px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", boxShadow: "0 4px 16px rgba(192,64,79,0.3)", border: "none", cursor: "pointer" }}>
-          <HugeiconsIcon icon={AiSparklesIcon} size={14} /> Generate Report
-        </button>
+        <p style={{ fontSize: 14, color: MID, lineHeight: 1.7, maxWidth: 500 }}>
+          A focused first read: where your view of yourself and your own patterns may be pulling differently. One discrepancy at a time — stated honestly, with the confidence The Pull actually has.
+        </p>
       </motion.div>
 
-      {/* Stats */}
-      <motion.div {...f(0.05)} data-cols="4">
-        {[
-          { label: "Total Reports", value: "4", icon: Analytics01Icon, accent: "#e05060", glow: "rgba(224,80,96,0.12)" },
-          { label: "Insights Generated", value: "18", icon: UserGroupIcon, accent: "#60a5fa", glow: "rgba(96,165,250,0.12)" },
-          { label: "Avg Score", value: "73", icon: TrendingUpIcon, accent: "#34d399", glow: "rgba(52,211,153,0.12)" },
-          { label: "This Month", value: "2", icon: Calendar03Icon, accent: "#a78bfa", glow: "rgba(167,139,250,0.12)" },
-        ].map(s => (
-          <Card key={s.label} style={{ padding: 16, display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: s.glow, border: `1px solid ${s.accent}30` }}>
-              <HugeiconsIcon icon={s.icon} size={17} style={{ color: s.accent }} />
-            </div>
-            <div>
-              <p style={{ fontSize: 24, fontWeight: 800, color: "var(--text-primary)" }}>{s.value}</p>
-              <p style={{ fontSize: 11, color: "var(--text-muted)" }}>{s.label}</p>
-            </div>
-          </Card>
-        ))}
-      </motion.div>
+      {/* Form card */}
+      <motion.div {...f(0.08)} style={{
+        background: "linear-gradient(160deg,#1a0910 0%,#26101a 65%,#1e0c14 100%)",
+        borderRadius: 24,
+        border: "1px solid rgba(245,240,232,0.07)",
+        boxShadow: "0 12px 48px rgba(0,0,0,0.3), inset 0 1px 0 rgba(245,240,232,0.07)",
+        overflow: "hidden",
+        marginBottom: 16,
+      }}>
 
-      {/* Reports list */}
-      <motion.div {...f(0.1)}>
-        <Card>
-          <div style={{ padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>All Reports</p>
-            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{reports.length} reports</span>
+        {/* Q1 */}
+        <div style={{ padding: "28px 28px 24px", borderBottom: "1px solid rgba(245,240,232,0.07)" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 14 }}>
+            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(245,240,232,0.5)" }}>What happened?</p>
+            <span style={{ fontSize: 10, color: "rgba(245,240,232,0.25)" }}>· required</span>
           </div>
-          <div>
-            {reports.map((r, i) => (
-              <motion.div key={r.id} {...f(0.12 + i * 0.05)} style={{
-                display: "flex", alignItems: "center", gap: 16, padding: "16px 20px", cursor: "pointer",
-                borderBottom: i < reports.length - 1 ? "1px solid rgba(0,0,0,0.06)" : "none",
-              }}>
-                {/* Icon */}
-                <div style={{ width: 44, height: 44, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: `${r.accent}15`, border: `1px solid ${r.accent}25` }}>
-                  <HugeiconsIcon icon={Analytics01Icon} size={17} style={{ color: r.accent }} />
-                </div>
-                {/* Info */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>{r.title}</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4, flexWrap: "wrap" }}>
-                    <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: `${r.accent}15`, color: r.accent }}>{r.type}</span>
-                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{r.date}</span>
-                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>· {r.pages} pages</span>
-                  </div>
-                </div>
-                {/* Score */}
-                <div style={{ textAlign: "right", flexShrink: 0 }}>
-                  <p style={{ fontSize: 20, fontWeight: 800, color: r.accent }}>{r.score}</p>
-                  <p style={{ fontSize: 10, color: "var(--text-muted)" }}>score</p>
-                </div>
-                {/* Actions */}
-                <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-                  <button style={{ width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", border: "1px solid rgba(0,0,0,0.07)", background: "transparent", cursor: "pointer" }}>
-                    <HugeiconsIcon icon={EyeIcon} size={13} />
-                  </button>
-                  <button style={{ width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: r.accent, border: `1px solid ${r.accent}30`, background: `${r.accent}10`, cursor: "pointer" }}>
-                    <HugeiconsIcon icon={Download02Icon} size={13} />
-                  </button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </Card>
-      </motion.div>
+          <textarea
+            value={what}
+            onChange={e => setWhat(e.target.value)}
+            placeholder="The situation that's on your mind — what actually went on."
+            rows={4}
+            style={{
+              width: "100%", resize: "none", background: "rgba(245,240,232,0.04)",
+              border: "1px solid rgba(245,240,232,0.1)", borderRadius: 14,
+              padding: "14px 16px", fontSize: 14, color: "rgba(245,240,232,0.82)",
+              lineHeight: 1.65, outline: "none", fontFamily: "inherit",
+              transition: "border-color 0.15s",
+            }}
+            onFocus={e => (e.target.style.borderColor = "rgba(192,64,79,0.4)")}
+            onBlur={e => (e.target.style.borderColor = "rgba(245,240,232,0.1)")}
+          />
+        </div>
 
-      {/* CTA banner */}
-      <motion.div {...f(0.3)}>
-        <div className="cta-banner" style={{ borderRadius: 16, padding: "28px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24, position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #3d0e1a 0%, #6b1c2b 50%, #a03040 100%)", border: "1px solid rgba(192,64,79,0.25)", boxShadow: "0 8px 40px rgba(61,14,26,0.2)" }}>
-          <div style={{ position: "absolute", top: -48, left: -48, width: 192, height: 192, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.25), transparent)", filter: "blur(30px)" }} />
-          <div style={{ position: "relative" }}>
-            <p style={{ fontSize: 15, fontWeight: 700, color: "white", marginBottom: 6 }}>Ready to generate a new report?</p>
-            <p style={{ fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.45)", maxWidth: 380 }}>
-              Generate a new intelligence report powered by your full profile, dimensions, and behavioural data.
-            </p>
+        {/* Q2 */}
+        <div style={{ padding: "24px 28px", borderBottom: "1px solid rgba(245,240,232,0.07)" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 14 }}>
+            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(245,240,232,0.5)" }}>What are you thinking it means?</p>
+            <span style={{ fontSize: 10, color: "rgba(245,240,232,0.2)" }}>· optional</span>
           </div>
-          <button className="cta-banner-btn" style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08))", border: "1px solid rgba(255,255,255,0.2)", cursor: "pointer", flexShrink: 0, position: "relative" }}>
-            Get started <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
+          <textarea
+            value={means}
+            onChange={e => setMeans(e.target.value)}
+            placeholder="Optional — the interpretation you're adding to the facts."
+            rows={3}
+            style={{
+              width: "100%", resize: "none", background: "rgba(245,240,232,0.04)",
+              border: "1px solid rgba(245,240,232,0.1)", borderRadius: 14,
+              padding: "14px 16px", fontSize: 14, color: "rgba(245,240,232,0.82)",
+              lineHeight: 1.65, outline: "none", fontFamily: "inherit",
+              transition: "border-color 0.15s",
+            }}
+            onFocus={e => (e.target.style.borderColor = "rgba(192,64,79,0.4)")}
+            onBlur={e => (e.target.style.borderColor = "rgba(245,240,232,0.1)")}
+          />
+        </div>
+
+        {/* Q3 */}
+        <div style={{ padding: "24px 28px 28px", borderBottom: "1px solid rgba(245,240,232,0.07)" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 14 }}>
+            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(245,240,232,0.5)" }}>What are you considering doing?</p>
+            <span style={{ fontSize: 10, color: "rgba(245,240,232,0.2)" }}>· optional</span>
+          </div>
+          <textarea
+            value={action}
+            onChange={e => setAction(e.target.value)}
+            placeholder="Optional — the action you're weighing."
+            rows={3}
+            style={{
+              width: "100%", resize: "none", background: "rgba(245,240,232,0.04)",
+              border: "1px solid rgba(245,240,232,0.1)", borderRadius: 14,
+              padding: "14px 16px", fontSize: 14, color: "rgba(245,240,232,0.82)",
+              lineHeight: 1.65, outline: "none", fontFamily: "inherit",
+              transition: "border-color 0.15s",
+            }}
+            onFocus={e => (e.target.style.borderColor = "rgba(192,64,79,0.4)")}
+            onBlur={e => (e.target.style.borderColor = "rgba(245,240,232,0.1)")}
+          />
+        </div>
+
+        {/* Footer row */}
+        <div style={{ padding: "20px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" as const }}>
+          <p style={{ fontSize: 12, color: "rgba(245,240,232,0.25)", fontStyle: "italic", lineHeight: 1.5, maxWidth: 300 }}>
+            The Pull reasons from the intelligence it has actually built about you.
+          </p>
+          <button
+            disabled={!canRun}
+            onClick={() => setRan(true)}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 9,
+              padding: "12px 24px", borderRadius: 99,
+              fontSize: 13, fontWeight: 700, cursor: canRun ? "pointer" : "not-allowed",
+              background: canRun ? "linear-gradient(135deg,#7c2232,#c0404f)" : "rgba(245,240,232,0.08)",
+              border: "none",
+              color: canRun ? "#fff" : "rgba(245,240,232,0.25)",
+              boxShadow: canRun ? "0 4px 20px rgba(192,64,79,0.35)" : "none",
+              transition: "all 0.2s",
+            }}>
+            <HugeiconsIcon icon={SentIcon} size={13} />
+            Run Reality Check
           </button>
         </div>
       </motion.div>
+
+      {/* Result placeholder */}
+      {ran && (
+        <motion.div {...f(0)} style={{
+          background: CREAM, borderRadius: 20, padding: "24px 28px",
+          border: "1px solid rgba(45,26,20,0.1)",
+          boxShadow: "0 4px 24px rgba(45,26,20,0.08)",
+          marginBottom: 16,
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+            <HugeiconsIcon icon={CheckmarkCircle01Icon} size={14} style={{ color: WINE2 }} />
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: WINE2 }}>Reality Check complete</p>
+          </div>
+          <p style={{ fontSize: 14, color: MID, lineHeight: 1.75 }}>
+            The Pull has read your situation against your intelligence profile. A full read requires more signal — keep sharing moments and patterns will sharpen over time.
+          </p>
+        </motion.div>
+      )}
+
+      {/* Footer note */}
+      <motion.div {...f(0.2)}>
+        <p style={{ fontSize: 12, color: MID, textAlign: "center" as const, fontStyle: "italic", opacity: 0.6, marginTop: 8 }}>
+          Reality Check reads your intelligence — it never changes your Pull Score.
+        </p>
+      </motion.div>
+
     </div>
   );
 }
