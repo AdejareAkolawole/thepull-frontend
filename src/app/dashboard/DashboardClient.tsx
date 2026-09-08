@@ -156,7 +156,7 @@ export default function DashboardClient() {
         <motion.div {...fade(0.06)}>
           <div style={{
             height: "100%", borderRadius: 20, overflow: "hidden",
-            background: "linear-gradient(160deg, #0d0306 0%, #1e0609 40%, #2d0b14 100%)",
+            background: "linear-gradient(160deg, #050102 0%, #0d0306 40%, #160508 100%)",
             border: "1px solid rgba(192,64,79,0.2)",
             display: "flex", flexDirection: "column",
             position: "relative",
