@@ -68,15 +68,17 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
 
 /* ─── SIDEBAR ─────────────────────────────────────────────── */
-/* Hidden on mobile + tablet; visible on desktop */
 .app-sidebar { display: none !important; }
 
 @media (min-width: 1024px) {
   .app-sidebar { display: flex !important; }
-  /* offset main content so it doesn't hide behind the sidebar */
-  .with-sidebar { margin-left: var(--sidebar-w) !important; }
-  /* hide the desktop top-nav links — sidebar handles navigation */
   .desktop-nav-links { display: none !important; }
+
+  /* expanded (default) */
+  .with-sidebar { margin-left: 236px !important; transition: margin-left 0.25s cubic-bezier(0.4,0,0.2,1); }
+
+  /* collapsed — .sidebar-collapsed is toggled on <html> by Sidebar.tsx */
+  .sidebar-collapsed .with-sidebar { margin-left: 64px !important; }
 }
 
 /* ─── MOBILE BOTTOM NAV ───────────────────────────────────── */
