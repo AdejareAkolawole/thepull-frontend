@@ -184,7 +184,7 @@ export default function DashboardClient() {
             {/* Top row */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
               <div>
-                <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(192,64,79,0.65)", fontWeight: 700, marginBottom: 10 }}>Primary Archetype</p>
+                <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.7)", fontWeight: 700, marginBottom: 10 }}>Primary Archetype</p>
                 <div style={{ display: "inline-flex", alignItems: "center", padding: "4px 12px", borderRadius: 99, background: "rgba(192,64,79,0.15)", border: "1px solid rgba(192,64,79,0.3)" }}>
                   <span style={{ fontSize: 10, fontWeight: 700, color: "#c0404f" }}>Emerging Identity</span>
                 </div>
