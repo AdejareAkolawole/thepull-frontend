@@ -180,6 +180,14 @@ export default function UpgradePage() {
                 <p style={{ fontSize: 12, color: "rgba(245,240,232,0.4)", lineHeight: 1.6 }}>
                   Lock in <span style={{ color: "rgba(201,168,76,0.9)", fontWeight: 600 }}>$19.99/month</span> for life · Regular $24.99/month
                 </p>
+                <p style={{ fontSize: 12, color: "rgba(245,240,232,0.55)", lineHeight: 1.7, marginTop: 10 }}>
+                  Join the first 500 members of The Pull and lock in{" "}
+                  <span style={{ color: "rgba(201,168,76,0.9)", fontWeight: 600 }}>Understand Me at $19.99/month</span>{" "}
+                  for as long as you remain subscribed.
+                </p>
+                <p style={{ fontSize: 11, color: "rgba(245,240,232,0.28)", lineHeight: 1.6, marginTop: 8 }}>
+                  Regular price: $24.99/month. Founding Members also receive 7-day early access to Living Mastery when it launches.
+                </p>
               </div>
               {/* Price badge */}
               <div style={{ textAlign: "right" as const, flexShrink: 0 }}>
