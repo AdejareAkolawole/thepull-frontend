@@ -53,8 +53,11 @@ export default function TopNav() {
       {/* Desktop sticky top bar — hidden on mobile */}
       <header className="desktop-nav-links" style={{
         position: "sticky", top: 0, zIndex: 50, width: "100%",
-        background: "transparent",
-        padding: "14px 32px",
+        background: "rgba(245,244,247,0.92)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        borderBottom: "1px solid rgba(15,10,20,0.06)",
+        padding: "10px 32px",
       }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
 
