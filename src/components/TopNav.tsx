@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Home01Icon, VaultIcon, AiBrain01Icon, Message02Icon, Analytics01Icon,
@@ -20,6 +21,24 @@ const navItems = [
 
 export default function TopNav() {
   const path = usePathname();
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      // Hide when scrolling down past 60px, show when scrolling up
+      if (y > lastY.current && y > 60) {
+        setHidden(true);
+      } else if (y < lastY.current) {
+        setHidden(false);
+      }
+      lastY.current = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
       {/* Desktop sticky top bar — hidden on mobile via CSS */}
@@ -79,6 +98,8 @@ export default function TopNav() {
         justifyContent: "space-around",
         paddingTop: 8,
         paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)",
+        transform: hidden ? "translateY(100%)" : "translateY(0)",
+        transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
       }}>
         {navItems.map(({ href, icon: Icon, label }) => {
           const active = path === href || (href !== "/dashboard" && path.startsWith(href));
