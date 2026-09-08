@@ -240,7 +240,7 @@ export default function DashboardClient() {
 
       {/* ══ WHO AM I ══ */}
       <motion.div {...fade(0.3)} style={{ paddingTop: 24 }}>
-        <div style={{ marginBottom: 20 }}>
+        <div style={{ marginBottom: 20, textAlign: "center" as const }}>
           <p style={{ fontSize: 9, letterSpacing: "0.24em", textTransform: "uppercase" as const, color: "var(--text-muted)", fontWeight: 700, marginBottom: 6 }}>Your Living Identity</p>
           <h2 style={{ fontSize: 36, fontWeight: 400, color: "#3d0e1a", letterSpacing: "-0.02em", lineHeight: 1 }}>Who Am I?</h2>
         </div>
