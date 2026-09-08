@@ -272,7 +272,7 @@ export default function UpgradePage() {
           borderRadius: 24, padding: "36px 32px",
           display: "flex", flexDirection: "column", gap: 0,
         }}>
-          <p style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: T3, fontWeight: 700, marginBottom: 20 }}>Free</p>
+          <p style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: WINE2, fontWeight: 800, marginBottom: 20 }}>Learn Me</p>
           <div style={{ display: "flex", alignItems: "flex-end", gap: 5, marginBottom: 20 }}>
             <span style={{ fontSize: 64, fontWeight: 800, color: T1, lineHeight: 1, letterSpacing: "-0.04em" }}>$0</span>
             <span style={{ fontSize: 14, color: T3, paddingBottom: 8 }}>forever</span>
