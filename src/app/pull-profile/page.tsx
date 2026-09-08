@@ -72,7 +72,7 @@ export default function PullProfilePage() {
 
       {/* ── SCORE CARD (cream, centred) ── */}
       <div style={{ background: "linear-gradient(180deg,#faf7f2 0%,#fff 100%)", padding: "48px 24px 32px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <motion.div {...f(0)} style={{ width: "100%", maxWidth: 600 }}>
+        <motion.div {...f(0)} style={{ width: "100%", maxWidth: 900 }}>
           <div style={{ background: CREAM, borderRadius: 28, overflow: "hidden", boxShadow: "0 12px 60px rgba(45,26,20,0.10)" }}>
             {/* Score header */}
             <div className="profile-score-pad" style={{ textAlign: "center", padding: "48px 44px 0" }}>
@@ -161,7 +161,7 @@ export default function PullProfilePage() {
       </div>
 
       {/* ── HOW YOUR PULL SCORE WAS BUILT ── */}
-      <div style={{ maxWidth: 600, margin: "32px auto 0", padding: "0 24px" }}>
+      <div style={{ maxWidth: 900, margin: "32px auto 0", padding: "0 24px" }}>
         <motion.div {...f(0.1)} style={{ background: CREAM, borderRadius: 24, overflow: "hidden", boxShadow: "0 4px 24px rgba(45,26,20,0.08)", marginBottom: 16 }}>
           <div style={{ padding: "20px 28px", borderBottom: `1px solid rgba(45,26,20,0.09)` }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
