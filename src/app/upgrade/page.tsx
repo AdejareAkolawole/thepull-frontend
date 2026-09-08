@@ -34,7 +34,7 @@ const FREE_FEATURES = [
 ];
 
 const PREMIUM_FEATURES = [
-  "Everything in LEARN ME",
+  "Everything in Free",
   "Deeper Intelligence Access",
   "Full Living Intelligence History",
   "Advanced Change Tracking",
@@ -93,8 +93,8 @@ export default function UpgradePage() {
             borderRadius: 24, padding: "36px 32px 32px",
             display: "flex", flexDirection: "column", gap: 0,
           }}>
-            <p style={{ fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(245,240,232,0.3)", fontWeight: 700, marginBottom: 10 }}>Learn Me</p>
-            <h2 style={{ fontSize: 36, fontWeight: 800, color: CREAM, marginBottom: 6, letterSpacing: "-0.02em" }}>LEARN ME</h2>
+            <p style={{ fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(245,240,232,0.3)", fontWeight: 700, marginBottom: 10 }}>Free</p>
+            <h2 style={{ fontSize: 36, fontWeight: 800, color: CREAM, marginBottom: 6, letterSpacing: "-0.02em" }}>Free</h2>
             <p style={{ fontSize: 14, color: GOLD, fontStyle: "italic", marginBottom: 2 }}>Start understanding yourself.</p>
             <p style={{ fontSize: 13, color: "rgba(245,240,232,0.35)", fontStyle: "italic", marginBottom: 28 }}>The Pull starts learning you.</p>
 
@@ -155,7 +155,7 @@ export default function UpgradePage() {
                   {billing === "monthly" ? "$24.99/MONTH" : "$249.99/YEAR"}
                 </p>
                 <h2 style={{ fontSize: 32, fontWeight: 800, color: CREAM, marginBottom: 6, letterSpacing: "-0.02em" }}>
-                  UNDERSTAND ME{billing === "annual" ? " · Annual" : ""}
+                  Pro{billing === "annual" ? " · Annual" : ""}
                 </h2>
                 <p style={{ fontSize: 14, color: GOLD, fontStyle: "italic", marginBottom: 2 }}>Understand yourself more deeply.</p>
                 <p style={{ fontSize: 13, color: "rgba(245,240,232,0.35)", fontStyle: "italic", marginBottom: 24 }}>Your Pull understands you.</p>
@@ -206,7 +206,7 @@ export default function UpgradePage() {
                   boxShadow: "0 8px 32px rgba(201,168,76,0.2)",
                 }}>
                   <HugeiconsIcon icon={AiSparklesIcon} size={16} />
-                  START UNDERSTAND ME{billing === "annual" ? " · ANNUAL" : ""}
+                  START PRO{billing === "annual" ? " · ANNUAL" : ""}
                 </button>
               </div>
             </motion.div>
@@ -255,7 +255,7 @@ export default function UpgradePage() {
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" as const }}>
             <button style={{ display: "inline-flex", alignItems: "center", gap: 9, padding: "15px 32px", borderRadius: 16, background: `linear-gradient(135deg,${GOLD},rgba(201,168,76,0.8))`, border: "none", color: WINE, fontSize: 14, fontWeight: 800, cursor: "pointer", boxShadow: "0 8px 32px rgba(201,168,76,0.2)", letterSpacing: "0.03em" }}>
               <HugeiconsIcon icon={AiSparklesIcon} size={15} />
-              START UNDERSTAND ME
+              START PRO
             </button>
             <Link href="/pull-profile" style={{ display: "inline-flex", alignItems: "center", gap: 9, padding: "15px 28px", borderRadius: 16, background: "rgba(245,240,232,0.05)", border: "1px solid rgba(245,240,232,0.1)", color: "rgba(245,240,232,0.45)", fontSize: 14, fontWeight: 600, cursor: "pointer", textDecoration: "none" }}>
               View My Profile

@@ -99,30 +99,30 @@ export default function TopNav() {
         </div>
       </header>
 
-      {/* Mobile bottom bar — hidden on desktop via globals.css .desktop-hide-mobile-nav */}
+      {/* Mobile bottom bar — pill-shaped floating nav */}
       <nav className="desktop-hide-mobile-nav" style={{
-        position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
-        background: "rgba(255,255,255,0.96)",
-        backdropFilter: "blur(20px)",
-        borderTop: "1px solid rgba(0,0,0,0.07)",
-        boxShadow: "0 -4px 24px rgba(0,0,0,0.06)",
+        position: "fixed", bottom: "calc(env(safe-area-inset-bottom, 0px) + 16px)",
+        left: "50%", transform: hidden ? "translateX(-50%) translateY(calc(100% + 32px))" : "translateX(-50%) translateY(0)",
+        zIndex: 50,
+        background: "rgba(15,10,20,0.88)",
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        border: "1px solid rgba(255,255,255,0.1)",
+        boxShadow: "0 8px 40px rgba(0,0,0,0.35), 0 0 0 0.5px rgba(255,255,255,0.06)",
+        borderRadius: 99,
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-around",
-        paddingTop: 8,
-        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)",
-        transform: hidden ? "translateY(100%)" : "translateY(0)",
-        transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        gap: 2,
+        padding: "6px 8px",
+        transition: "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
       }}>
         {navItems.map(({ href, icon: Icon, label }) => {
           const active = path === href || (href !== "/dashboard" && path.startsWith(href));
           return (
             <Link key={href} href={href}
-              style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, minWidth: 40, textDecoration: "none", opacity: active ? 1 : 0.4 }}>
-              <div style={{ width: 40, height: 28, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 10, background: active ? "rgba(192,64,79,0.1)" : "transparent" }}>
-                <HugeiconsIcon icon={Icon} size={19} style={{ color: active ? "#c0404f" : "rgba(15,10,20,0.5)" }} />
-              </div>
-              <span style={{ fontSize: 9, fontWeight: 600, color: active ? "#c0404f" : "rgba(15,10,20,0.4)" }}>{label}</span>
+              style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, textDecoration: "none", padding: "6px 14px", borderRadius: 99, background: active ? "rgba(192,64,79,0.18)" : "transparent", transition: "background 0.15s" }}>
+              <HugeiconsIcon icon={Icon} size={18} style={{ color: active ? "#c0404f" : "rgba(255,255,255,0.45)" }} />
+              <span style={{ fontSize: 9, fontWeight: 600, color: active ? "#c0404f" : "rgba(255,255,255,0.35)", letterSpacing: "0.02em" }}>{label}</span>
             </Link>
           );
         })}
