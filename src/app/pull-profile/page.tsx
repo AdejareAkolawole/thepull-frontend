@@ -67,7 +67,7 @@ export default function PullProfilePage() {
                 <HugeiconsIcon icon={TrendingUpIcon} size={11} /> Rising trajectory
               </span>
               <span style={{ fontSize: 11, padding: "5px 12px", borderRadius: 99, background: "rgba(0,0,0,0.08)", color: "rgba(255,255,255,0.5)", border: "1px solid rgba(0,0,0,0.1)" }}>
-                Top 18% of users
+                12-day streak
               </span>
             </div>
           </div>

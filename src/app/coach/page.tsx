@@ -15,7 +15,7 @@ type Message = { id: string; role: "assistant" | "user"; text: string };
 
 const initMessages: Message[] = [{
   id: "1", role: "assistant",
-  text: "Hey Adejare — I'm The Pull, your personal relationship intelligence coach. I have full context on your profile, your assessments, and your vault.\n\nWhat's on your mind today?",
+  text: "Hey Adejare — I'm The Pull, your personal intelligence coach. I have full context on your profile, your assessments, and your dimensions.\n\nWhat's on your mind today?",
 }];
 
 export default function CoachPage() {
@@ -118,7 +118,7 @@ export default function CoachPage() {
               <HugeiconsIcon icon={AiInnovation01Icon} size={18} style={{ color: "white" }} />
             </div>
             <p style={{ fontSize: 13, fontWeight: 700, color: "white", marginBottom: 6 }}>Ask The Pull</p>
-            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>Your personal relationship intelligence coach, trained on your profile.</p>
+            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>Your personal intelligence coach, trained on your full profile and dimensions.</p>
           </div>
 
           <div style={{ borderRadius: 16, padding: 16, background: "var(--surface)", border: "1px solid rgba(0,0,0,0.07)" }}>
@@ -134,7 +134,7 @@ export default function CoachPage() {
 
           <div style={{ borderRadius: 16, padding: 16, background: "var(--surface)", border: "1px solid rgba(0,0,0,0.07)" }}>
             <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", marginBottom: 10 }}>Context loaded</p>
-            {["Pull Profile · 74", "5 dimensions mapped", "Vault · 3 people", "12-day streak"].map(item => (
+            {["Pull Profile · 74", "5 dimensions mapped", "847 data signals", "12-day streak"].map(item => (
               <div key={item} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11, color: "var(--text-muted)", marginBottom: 6 }}>
                 <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e", flexShrink: 0 }} />{item}
               </div>

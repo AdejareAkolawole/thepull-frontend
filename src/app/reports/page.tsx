@@ -37,7 +37,7 @@ export default function ReportsPage() {
       <motion.div {...f(0.05)} data-cols="4">
         {[
           { label: "Total Reports", value: "4", icon: Analytics01Icon, accent: "#e05060", glow: "rgba(224,80,96,0.12)" },
-          { label: "People Analysed", value: "3", icon: UserGroupIcon, accent: "#60a5fa", glow: "rgba(96,165,250,0.12)" },
+          { label: "Insights Generated", value: "18", icon: UserGroupIcon, accent: "#60a5fa", glow: "rgba(96,165,250,0.12)" },
           { label: "Avg Score", value: "73", icon: TrendingUpIcon, accent: "#34d399", glow: "rgba(52,211,153,0.12)" },
           { label: "This Month", value: "2", icon: Calendar03Icon, accent: "#a78bfa", glow: "rgba(167,139,250,0.12)" },
         ].map(s => (
@@ -106,7 +106,7 @@ export default function ReportsPage() {
           <div style={{ position: "relative" }}>
             <p style={{ fontSize: 15, fontWeight: 700, color: "white", marginBottom: 6 }}>Ready to generate a new report?</p>
             <p style={{ fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.45)", maxWidth: 380 }}>
-              Select a person from your vault to generate a deep relationship intelligence report powered by your full profile.
+              Generate a new intelligence report powered by your full profile, dimensions, and behavioural data.
             </p>
           </div>
           <button className="cta-banner-btn" style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08))", border: "1px solid rgba(255,255,255,0.2)", cursor: "pointer", flexShrink: 0, position: "relative" }}>

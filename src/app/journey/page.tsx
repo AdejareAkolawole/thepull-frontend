@@ -15,9 +15,9 @@ const Card = ({ children, style = {} }: any) => (
 const milestones = [
   { label: "Joined THEPULL", date: "Sep 1, 2026", done: true },
   { label: "Completed first assessment", date: "Sep 2, 2026", done: true },
-  { label: "Added first person to vault", date: "Sep 3, 2026", done: true },
-  { label: "First AI Coach session", date: "Sep 4, 2026", done: true },
-  { label: "Generated first relationship report", date: "Sep 5, 2026", done: true },
+  { label: "First AI Coach session", date: "Sep 3, 2026", done: true },
+  { label: "Generated first intelligence report", date: "Sep 4, 2026", done: true },
+  { label: "Reached 5 mapped dimensions", date: "Sep 5, 2026", done: true },
   { label: "Complete Emotional Landscape assessment", date: "Upcoming", done: false },
   { label: "Reach Pull Score 80+", date: "Upcoming", done: false },
   { label: "30-day insight streak", date: "Upcoming", done: false },

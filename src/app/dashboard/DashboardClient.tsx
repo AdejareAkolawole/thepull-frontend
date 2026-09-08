@@ -192,7 +192,7 @@ export default function DashboardClient() {
               <Sparkline data={scoreHistory} />
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: "auto", paddingTop: 12, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-              {[{ label: "Percentile", value: "Top 18%" }, { label: "Streak", value: "12d" }, { label: "Domains", value: "5/8" }].map(s => (
+              {[{ label: "Streak", value: "12d" }, { label: "Domains", value: "5/8" }, { label: "Signals", value: "847" }].map(s => (
                 <div key={s.label} style={{ textAlign: "center" as const }}>
                   <p style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)" }}>{s.value}</p>
                   <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 1 }}>{s.label}</p>
