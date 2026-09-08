@@ -3,364 +3,288 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  TrendingUpIcon, ArrowRight01Icon, AiSparklesIcon,
-  AiInnovation01Icon, Activity01Icon,
-  FlashIcon, PresentationLineChart01Icon, Calendar03Icon, Target01Icon,
-  AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, CheckmarkCircle01Icon, LockIcon,
+  ArrowRight01Icon, AiSparklesIcon, AiInnovation01Icon, Activity01Icon,
+  FlashIcon, PresentationLineChart01Icon, Target01Icon,
+  AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, LockIcon,
 } from "@hugeicons/core-free-icons";
 import { mockUser, mockDimensions, mockInsights, mockAchievements, mockIdentityVector } from "@/lib/mock";
 
-const achievementIconMap: Record<string, any> = {
-  brain: AiBrain01Icon,
-  eye: EyeIcon,
-  chart: Analytics01Icon,
-  star: FavouriteIcon,
-  fire: FireIcon,
-  target: Target01Icon,
-};
+// ─── Design tokens ──────────────────────────────────────────────────────────
+const WINE   = "#3d0e1a";
+const WINE2  = "#6b1c2b";
+const WINE3  = "#c0404f";
+const CREAM  = "#f5f0e8";
+const CREAM2 = "#ede7da";
+const BLACK  = "#0f0a14";
+const GREY   = "rgba(15,10,20,0.45)";
 
-const fade = (delay = 0) => ({
-  initial: { opacity: 0, y: 16 },
+const fade = (d = 0) => ({
+  initial: { opacity: 0, y: 18 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, delay, ease: "easeOut" as const },
+  transition: { duration: 0.55, delay: d, ease: "easeOut" as const },
 });
 
-const Card = ({ children, className = "", style = {} }: any) => (
-  <div className={`rounded-2xl ${className}`} style={{
-    background: "#ffffff",
-    border: "1px solid rgba(0,0,0,0.07)",
-    boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)",
-    ...style,
-  }}>
-    {children}
-  </div>
-);
+const achievementIconMap: Record<string, any> = {
+  brain: AiBrain01Icon, eye: EyeIcon, chart: Analytics01Icon,
+  star: FavouriteIcon, fire: FireIcon, target: Target01Icon,
+};
 
+// ─── Radar chart ─────────────────────────────────────────────────────────────
 function RadarChart({ dimensions }: { dimensions: typeof mockDimensions }) {
-  const cx = 110, cy = 110, r = 78;
-  const n = dimensions.length;
+  const cx = 100, cy = 100, r = 70, n = dimensions.length;
   const pts = dimensions.map((d, i) => {
-    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
-    const pct = d.score / 100;
+    const a = (i / n) * Math.PI * 2 - Math.PI / 2;
     return {
-      x: cx + Math.cos(angle) * r * pct,
-      y: cy + Math.sin(angle) * r * pct,
-      lx: cx + Math.cos(angle) * (r + 18),
-      ly: cy + Math.sin(angle) * (r + 18),
+      x: cx + Math.cos(a) * r * (d.score / 100),
+      y: cy + Math.sin(a) * r * (d.score / 100),
+      lx: cx + Math.cos(a) * (r + 16),
+      ly: cy + Math.sin(a) * (r + 16),
       label: d.label.split(" ")[0],
     };
   });
-  const polygon = pts.map(p => `${p.x},${p.y}`).join(" ");
-  const rings = [0.25, 0.5, 0.75, 1].map(pct =>
+  const rings = [0.33, 0.66, 1].map(pct =>
     dimensions.map((_, i) => {
-      const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
-      return `${cx + Math.cos(angle) * r * pct},${cy + Math.sin(angle) * r * pct}`;
+      const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+      return `${cx + Math.cos(a) * r * pct},${cy + Math.sin(a) * r * pct}`;
     }).join(" ")
   );
   return (
-    <svg viewBox="0 0 220 220" style={{ width: "100%", maxWidth: 220 }}>
-      {rings.map((p, i) => <polygon key={i} points={p} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="1" />)}
-      {dimensions.map((_, i) => {
-        const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
-        return <line key={i} x1={cx} y1={cy} x2={cx + Math.cos(angle) * r} y2={cy + Math.sin(angle) * r} stroke="rgba(0,0,0,0.06)" strokeWidth="1" />;
-      })}
+    <svg viewBox="0 0 200 200" style={{ width: "100%", maxWidth: 200 }}>
       <defs>
-        <linearGradient id="radarFill" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="rgba(124,34,50,0.12)" />
-          <stop offset="100%" stopColor="rgba(192,64,79,0.08)" />
+        <linearGradient id="rFill" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor={WINE} stopOpacity="0.25" />
+          <stop offset="100%" stopColor={WINE3} stopOpacity="0.1" />
         </linearGradient>
       </defs>
-      <polygon points={polygon} fill="url(#radarFill)" stroke="#c0404f" strokeWidth="1.5" strokeLinejoin="round" />
-      {pts.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r="3.5" fill="#c0404f" stroke="rgba(192,64,79,0.2)" strokeWidth="5" />)}
+      {rings.map((p, i) => <polygon key={i} points={p} fill="none" stroke="rgba(15,10,20,0.08)" strokeWidth="1" />)}
+      {dimensions.map((_, i) => {
+        const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+        return <line key={i} x1={cx} y1={cy} x2={cx + Math.cos(a) * r} y2={cy + Math.sin(a) * r} stroke="rgba(15,10,20,0.07)" strokeWidth="1" />;
+      })}
+      <polygon points={pts.map(p => `${p.x},${p.y}`).join(" ")} fill="url(#rFill)" stroke={WINE3} strokeWidth="1.5" strokeLinejoin="round" />
+      {pts.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r="3" fill={WINE3} />)}
       {pts.map((p, i) => (
         <text key={i} x={p.lx} y={p.ly} textAnchor="middle" dominantBaseline="middle"
-          style={{ fontSize: 7.5, fill: "rgba(15,10,20,0.4)", fontFamily: "Inter,sans-serif" }}>
-          {p.label}
-        </text>
+          style={{ fontSize: 7, fill: GREY, fontFamily: "Inter,sans-serif" }}>{p.label}</text>
       ))}
-      <text x={cx} y={cy - 7} textAnchor="middle" style={{ fontSize: 20, fontWeight: 700, fill: "#0f0a14", fontFamily: "Inter,sans-serif" }}>74</text>
-      <text x={cx} y={cy + 10} textAnchor="middle" style={{ fontSize: 7, fill: "rgba(15,10,20,0.35)", fontFamily: "Inter,sans-serif", letterSpacing: 2 }}>PULL SCORE</text>
+      <text x={cx} y={cy - 8} textAnchor="middle" style={{ fontSize: 22, fontWeight: 800, fill: BLACK, fontFamily: "Inter,sans-serif" }}>74</text>
+      <text x={cx} y={cy + 10} textAnchor="middle" style={{ fontSize: 6.5, fill: GREY, fontFamily: "Inter,sans-serif", letterSpacing: 2 }}>PULL SCORE</text>
     </svg>
   );
 }
-
-function Sparkline({ data, color = "#c0404f" }: { data: number[]; color?: string }) {
-  const w = 100, h = 32;
-  const min = Math.min(...data), max = Math.max(...data);
-  const pts = data.map((v, i) => {
-    const x = (i / (data.length - 1)) * w;
-    const y = h - ((v - min) / (max - min || 1)) * (h - 4) - 2;
-    return `${x},${y}`;
-  });
-  const area = `${pts.join(" ")} ${w},${h} 0,${h}`;
-  return (
-    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: h }}>
-      <defs>
-        <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.12" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <polygon points={area} fill="url(#sg)" />
-      <polyline points={pts.join(" ")} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-const scoreHistory = [68, 70, 69, 71, 72, 71, 73, 74];
 
 export default function DashboardClient() {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
 
-      {/* ROW 1: Hero + Score */}
-      <div className="dash-row-1" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 12 }}>
+      {/* ── HERO ──────────────────────────────────────────────────────────── */}
+      <motion.div {...fade(0)}>
+        <div style={{
+          borderRadius: 20, overflow: "hidden", position: "relative",
+          background: `linear-gradient(135deg, ${WINE} 0%, ${WINE2} 60%, #a03040 100%)`,
+          padding: "48px 52px",
+        }}>
+          {/* Subtle circle decoration */}
+          <div style={{ position: "absolute", right: -60, top: -60, width: 320, height: 320, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.07)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", right: -20, top: -20, width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.05)", pointerEvents: "none" }} />
 
-        {/* Hero */}
-        <motion.div {...fade(0)} className="rounded-2xl relative overflow-hidden" style={{ minHeight: 240, background: "linear-gradient(140deg, #3d0e1a 0%, #6b1c2b 45%, #a03040 100%)" }}>
-          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 60% at 10% 20%, rgba(255,255,255,0.05) 0%, transparent 60%)" }} />
-          <div className="dash-hero-inner" style={{ position: "relative", padding: "36px 40px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 16 }}>
-                <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ade80" }} />
-                <span style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)", fontWeight: 600 }}>Relationship Intelligence</span>
-              </div>
-              <h1 className="font-display" style={{ fontSize: 46, lineHeight: 1.06, fontWeight: 300, color: "rgba(255,255,255,0.8)", marginBottom: 2 }}>{greeting},</h1>
-              <h1 className="font-display" style={{ fontSize: 46, lineHeight: 1.06, fontWeight: 600, color: "#fff", marginBottom: 14 }}>{mockUser.name}.</h1>
-              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.48)", lineHeight: 1.6, maxWidth: 340 }}>
-                3 new insights ready. Your intelligence profile has evolved since your last visit.
+          <div style={{ position: "relative", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 40, flexWrap: "wrap" as const }}>
+            <div style={{ flex: 1, minWidth: 260 }}>
+              <p style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.5)", marginBottom: 20, fontWeight: 600 }}>Personal Intelligence</p>
+              <h1 style={{ fontSize: 52, lineHeight: 1.05, fontWeight: 300, color: "rgba(255,255,255,0.75)", marginBottom: 0 }}>{greeting},</h1>
+              <h1 style={{ fontSize: 52, lineHeight: 1.05, fontWeight: 700, color: "#ffffff", marginBottom: 20 }}>{mockUser.name}.</h1>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.5)", lineHeight: 1.7, maxWidth: 400, marginBottom: 32 }}>
+                3 new insights are ready. Your intelligence profile has evolved since your last visit.
               </p>
-              <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
-                <Link href="/pull-profile" style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 18px", borderRadius: 12, background: "rgba(255,255,255,0.95)", color: "#7c2232", fontSize: 12, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 16px rgba(0,0,0,0.2)" }}>
-                  View Full Profile <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
+              <div style={{ display: "flex", gap: 10 }}>
+                <Link href="/pull-profile" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 22px", borderRadius: 12, background: "#ffffff", color: WINE, fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+                  View Pull Profile <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
                 </Link>
-                <Link href="/coach" style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 18px", borderRadius: 12, background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 600, textDecoration: "none", border: "1px solid rgba(255,255,255,0.15)" }}>
-                  <HugeiconsIcon icon={AiInnovation01Icon} size={12} /> Ask The Pull
+                <Link href="/coach" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 22px", borderRadius: 12, background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 600, textDecoration: "none", border: "1px solid rgba(255,255,255,0.15)" }}>
+                  <HugeiconsIcon icon={AiInnovation01Icon} size={13} /> Ask The Pull
                 </Link>
               </div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 24, flexWrap: "wrap" as const }}>
-              {[{ label: "Analytical", color: "#c0404f" }, { label: "Empathetic", color: "#60a5fa" }, { label: "Strategic", color: "#a78bfa" }].map(t => (
-                <span key={t.label} style={{ fontSize: 10, fontWeight: 700, padding: "4px 12px", borderRadius: 99, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.6)", letterSpacing: "0.05em" }}>
-                  {t.label}
-                </span>
+            {/* Archetype badge */}
+            <div style={{ background: "rgba(0,0,0,0.25)", borderRadius: 16, padding: "20px 24px", border: "1px solid rgba(255,255,255,0.1)", minWidth: 200 }}>
+              <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.7)", marginBottom: 10 }}>Primary Archetype</p>
+              <p style={{ fontSize: 20, fontWeight: 700, color: "white", lineHeight: 1.2, marginBottom: 6 }}>{mockUser.archetype}</p>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 11, color: WINE3, fontWeight: 700 }}>{mockUser.archetype_confidence}% confidence</span>
+                <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "inline-block" }} />
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>{mockUser.archetype_version}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ── ROW 2: Intelligence map + Insights ──────────────────────────── */}
+      <div className="dash-row-2" style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: 14 }}>
+
+        {/* Intelligence map */}
+        <motion.div {...fade(0.07)}>
+          <div style={{ borderRadius: 20, padding: "24px", background: CREAM, border: `1px solid ${CREAM2}`, height: "100%" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+              <div>
+                <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: GREY, marginBottom: 4 }}>Intelligence Map</p>
+                <p style={{ fontSize: 16, fontWeight: 700, color: BLACK }}>5 Dimensions</p>
+              </div>
+              <Link href="/pull-profile" style={{ fontSize: 11, fontWeight: 700, color: WINE3, textDecoration: "none", display: "flex", alignItems: "center", gap: 3 }}>
+                Full view <HugeiconsIcon icon={ArrowRight01Icon} size={11} />
+              </Link>
+            </div>
+            <RadarChart dimensions={mockDimensions} />
+            <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+              {mockDimensions.map(d => (
+                <div key={d.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: 11, color: GREY }}>{d.label.split(" ")[0]}</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: BLACK }}>{d.score}</span>
+                </div>
               ))}
             </div>
           </div>
         </motion.div>
 
-        {/* Archetype card */}
-        <motion.div {...fade(0.06)}>
-          <div style={{
-            height: "100%", borderRadius: 20, overflow: "hidden",
-            background: "linear-gradient(160deg, #050102 0%, #0d0306 40%, #160508 100%)",
-            border: "1px solid rgba(192,64,79,0.2)",
-            display: "flex", flexDirection: "column",
-            position: "relative",
-          }}>
-            {/* Glow orb */}
-            <div style={{ position: "absolute", top: -40, right: -40, width: 180, height: 180, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.18), transparent 70%)", pointerEvents: "none" }} />
-
-            {/* Top section */}
-            <div style={{ padding: "22px 22px 18px", position: "relative" }}>
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 18 }}>
-                <div>
-                  <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.65)", marginBottom: 5 }}>Primary Archetype</p>
-                  <span style={{ fontSize: 9, fontWeight: 700, padding: "3px 8px", borderRadius: 99, background: "rgba(192,64,79,0.15)", color: "rgba(192,64,79,0.9)", border: "1px solid rgba(192,64,79,0.25)" }}>
-                    {mockUser.archetype_stage}
-                  </span>
-                </div>
-                <div style={{ width: 38, height: 38, borderRadius: 12, border: "1.5px solid rgba(192,64,79,0.4)", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(192,64,79,0.08)" }}>
-                  <HugeiconsIcon icon={AiBrain01Icon} size={18} style={{ color: "#c0404f" }} />
-                </div>
-              </div>
-              <p style={{ fontSize: 22, fontWeight: 700, color: "white", lineHeight: 1.15, marginBottom: 6 }}>{mockUser.archetype}</p>
-              <p style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", lineHeight: 1.55 }}>
-                {mockUser.archetype_tagline.slice(0, 90)}…
-              </p>
-            </div>
-
-            {/* Confidence + Version */}
-            <div style={{ margin: "0 22px", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-              <div style={{ padding: "12px 0" }}>
-                <p style={{ fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.22)", marginBottom: 4 }}>Confidence</p>
-                <p style={{ fontSize: 26, fontWeight: 800, color: "#c0404f" }}>{mockUser.archetype_confidence}%</p>
-              </div>
-              <div style={{ padding: "12px 0 12px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
-                <p style={{ fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.22)", marginBottom: 4 }}>Version</p>
-                <p style={{ fontSize: 26, fontWeight: 800, color: "#c0404f" }}>{mockUser.archetype_version}</p>
-              </div>
-            </div>
-
-            {/* Identity vector mini bars */}
-            <div style={{ padding: "14px 22px", flex: 1 }}>
-              <p style={{ fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.2)", marginBottom: 10 }}>Identity Vector</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                {mockIdentityVector.slice(0, 4).map((v, i) => (
-                  <div key={v.label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ fontSize: 9, color: i === 0 ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.35)", minWidth: 110, fontWeight: i === 0 ? 700 : 400 }}>{v.label}</span>
-                    <div style={{ flex: 1, height: 2, borderRadius: 99, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
-                      <motion.div
-                        style={{ height: "100%", borderRadius: 99, background: v.color, opacity: i === 0 ? 1 : 0.5 }}
-                        initial={{ width: 0 }} animate={{ width: `${v.pct}%` }}
-                        transition={{ duration: 1, delay: 0.2 + i * 0.08 }}
-                      />
-                    </div>
-                    <span style={{ fontSize: 9, color: i === 0 ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.3)", minWidth: 26, textAlign: "right" as const }}>{v.pct}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Footer link */}
-            <div style={{ padding: "0 22px 18px" }}>
-              <Link href="/pull-profile" style={{
-                display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-                padding: "9px 0", borderRadius: 10, fontSize: 11, fontWeight: 700,
-                color: "rgba(255,255,255,0.55)", background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.08)", textDecoration: "none",
-              }}>
-                View Full Profile <HugeiconsIcon icon={ArrowRight01Icon} size={11} />
-              </Link>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* ROW 2: Radar + Insights + Side column */}
-      <div className="dash-row-2" style={{ display: "grid", gridTemplateColumns: "220px 1fr 210px", gap: 12 }}>
-
-        <motion.div {...fade(0.09)}>
-          <Card style={{ padding: 16, height: "100%" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+        {/* Living Intelligence */}
+        <motion.div {...fade(0.11)}>
+          <div style={{ borderRadius: 20, padding: "28px", background: "#ffffff", border: "1px solid rgba(15,10,20,0.08)", height: "100%" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
               <div>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>Intelligence Map</p>
-                <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 1 }}>5 dimensions</p>
+                <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: GREY, marginBottom: 4 }}>Updated now</p>
+                <p style={{ fontSize: 18, fontWeight: 700, color: BLACK }}>Living Intelligence</p>
               </div>
-              <Link href="/pull-profile" style={{ fontSize: 10, fontWeight: 700, color: "var(--brand)", textDecoration: "none" }}>Full view →</Link>
-            </div>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <RadarChart dimensions={mockDimensions} />
-            </div>
-          </Card>
-        </motion.div>
-
-        <motion.div {...fade(0.12)}>
-          <Card style={{ padding: 16, height: "100%" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-              <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>Living Intelligence</p>
-              <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 99, background: "rgba(192,64,79,0.07)", color: "var(--brand)", border: "1px solid rgba(192,64,79,0.12)", letterSpacing: "0.08em" }}>
-                <HugeiconsIcon icon={AiSparklesIcon} size={9} /> LIVE
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 9, fontWeight: 800, padding: "4px 10px", borderRadius: 99, background: "rgba(192,64,79,0.07)", color: WINE3, border: `1px solid rgba(192,64,79,0.15)`, letterSpacing: "0.1em" }}>
+                <span style={{ width: 5, height: 5, borderRadius: "50%", background: WINE3, display: "inline-block" }} /> LIVE
               </span>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {mockInsights.map(ins => {
-                const cfg = ins.type === "observation"
-                  ? { col: "#2563eb", bg: "rgba(37,99,235,0.06)", icon: Activity01Icon }
-                  : ins.type === "pattern"
-                  ? { col: "#c0404f", bg: "rgba(192,64,79,0.06)", icon: PresentationLineChart01Icon }
-                  : { col: "#d97706", bg: "rgba(217,119,6,0.06)", icon: FlashIcon };
+            <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+              {mockInsights.map((ins, i) => {
+                const typeColor = ins.type === "observation" ? BLACK : ins.type === "pattern" ? WINE3 : "#c9a84c";
                 return (
-                  <div key={ins.id} style={{ display: "flex", gap: 10, padding: "10px 12px", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", cursor: "pointer" }}>
-                    <div style={{ width: 28, height: 28, borderRadius: 8, background: cfg.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <HugeiconsIcon icon={cfg.icon} size={13} style={{ color: cfg.col }} />
+                  <div key={ins.id} style={{ display: "flex", gap: 16, padding: "18px 0", borderBottom: i < mockInsights.length - 1 ? "1px solid rgba(15,10,20,0.06)" : "none", cursor: "pointer" }}>
+                    <div style={{ paddingTop: 3, flexShrink: 0 }}>
+                      <span style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: typeColor }}>{ins.type}</span>
                     </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
-                        <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: cfg.col }}>{ins.type}</span>
-                        <span style={{ fontSize: 9, color: "var(--text-muted)" }}>{ins.timestamp}</span>
-                      </div>
-                      <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.35, marginBottom: 3 }}>{ins.title}</p>
-                      <p style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const }}>{ins.body}</p>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: 14, fontWeight: 600, color: BLACK, lineHeight: 1.4, marginBottom: 4 }}>{ins.title}</p>
+                      <p style={{ fontSize: 12, color: GREY, lineHeight: 1.6 }}>{ins.body}</p>
                     </div>
+                    <span style={{ fontSize: 10, color: GREY, flexShrink: 0, paddingTop: 3 }}>{ins.timestamp}</span>
                   </div>
                 );
               })}
             </div>
-          </Card>
+          </div>
         </motion.div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <motion.div {...fade(0.15)} style={{ flex: 1 }}>
-            <Card style={{ padding: 16, height: "100%", overflow: "hidden" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>Achievements</p>
-                <span style={{ fontSize: 10, color: "var(--text-muted)" }}>{mockAchievements.filter(a => a.done).length}/{mockAchievements.length} unlocked</span>
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7 }}>
-                {mockAchievements.map(a => (
-                  <div key={a.label} style={{
-                    borderRadius: 12, padding: "10px 10px 8px",
-                    background: a.done ? `${a.color}0f` : "rgba(0,0,0,0.03)",
-                    border: `1px solid ${a.done ? `${a.color}25` : "rgba(0,0,0,0.07)"}`,
-                    opacity: a.done ? 1 : 0.5,
-                    position: "relative", overflow: "hidden",
-                  }}>
-                    <div style={{ marginBottom: 6, display: "flex", alignItems: "center" }}>
-                      {a.done
-                        ? <HugeiconsIcon icon={achievementIconMap[a.iconKey]} size={18} style={{ color: a.color }} />
-                        : <HugeiconsIcon icon={LockIcon} size={16} style={{ color: "rgba(0,0,0,0.25)" }} />
-                      }
-                    </div>
-                    <p style={{ fontSize: 10, fontWeight: 700, color: a.done ? a.color : "var(--text-muted)", lineHeight: 1.2 }}>{a.label}</p>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </motion.div>
-          <motion.div {...fade(0.19)}>
-            <div className="rounded-2xl" style={{ padding: 16, background: "linear-gradient(140deg, #3d0e1a, #6b1c2b)", boxShadow: "0 4px 20px rgba(61,14,26,0.22)" }}>
-              <div style={{ width: 30, height: 30, borderRadius: 9, background: "rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
-                <HugeiconsIcon icon={AiInnovation01Icon} size={14} style={{ color: "white" }} />
-              </div>
-              <p style={{ fontSize: 12, fontWeight: 700, color: "white", marginBottom: 4 }}>Ask The Pull</p>
-              <p style={{ fontSize: 10, color: "rgba(255,255,255,0.42)", lineHeight: 1.5, marginBottom: 12 }}>Your AI coach is ready with full profile context.</p>
-              <Link href="/coach" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 5, padding: "8px 0", borderRadius: 10, background: "rgba(255,255,255,0.14)", color: "white", fontSize: 11, fontWeight: 700, textDecoration: "none", border: "1px solid rgba(255,255,255,0.12)" }}>
-                Start session <HugeiconsIcon icon={ArrowRight01Icon} size={10} />
-              </Link>
-            </div>
-          </motion.div>
-        </div>
       </div>
 
-      {/* ROW 3: Quick Actions full width */}
-      <motion.div {...fade(0.25)}>
-        <Card style={{ padding: 16 }}>
-          <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", marginBottom: 10 }}>Quick Actions</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 7, marginBottom: 8 }}>
-            {[
-              { label: "AI Coach", href: "/coach", icon: AiInnovation01Icon, color: "#2563eb", bg: "rgba(37,99,235,0.07)" },
-              { label: "Reports", href: "/reports", icon: PresentationLineChart01Icon, color: "#7c3aed", bg: "rgba(124,58,237,0.07)" },
-              { label: "Journey", href: "/journey", icon: Target01Icon, color: "#d97706", bg: "rgba(217,119,6,0.07)" },
-              { label: "Journal", href: "/journal", icon: FlashIcon, color: "#c0404f", bg: "rgba(192,64,79,0.07)" },
-            ].map(a => (
-              <Link key={a.label} href={a.href} style={{ display: "flex", flexDirection: "column" as const, alignItems: "flex-start", gap: 8, padding: 12, borderRadius: 12, background: a.bg, textDecoration: "none", border: "1px solid rgba(0,0,0,0.04)" }}>
-                <div style={{ width: 26, height: 26, borderRadius: 7, background: `${a.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <HugeiconsIcon icon={a.icon} size={13} style={{ color: a.color }} />
+      {/* ── ROW 3: Identity vector + Achievements + Ask The Pull ────────── */}
+      <div className="dash-row-3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 280px", gap: 14 }}>
+
+        {/* Identity vector */}
+        <motion.div {...fade(0.15)}>
+          <div style={{ borderRadius: 20, padding: "28px", background: CREAM, border: `1px solid ${CREAM2}`, height: "100%" }}>
+            <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: GREY, marginBottom: 6 }}>Identity Vector</p>
+            <p style={{ fontSize: 18, fontWeight: 700, color: BLACK, marginBottom: 24 }}>Behavioural Alignment</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              {mockIdentityVector.map((v, i) => (
+                <div key={v.label}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                    <span style={{ fontSize: 12, fontWeight: i === 0 ? 700 : 400, color: i === 0 ? BLACK : GREY }}>{v.label}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: i === 0 ? WINE3 : GREY }}>{v.pct}%</span>
+                  </div>
+                  <div style={{ height: 3, borderRadius: 99, background: "rgba(15,10,20,0.07)", overflow: "hidden" }}>
+                    <motion.div
+                      style={{ height: "100%", borderRadius: 99, background: i === 0 ? `linear-gradient(90deg, ${WINE}, ${WINE3})` : "rgba(15,10,20,0.18)" }}
+                      initial={{ width: 0 }} animate={{ width: `${v.pct}%` }}
+                      transition={{ duration: 1, delay: 0.3 + i * 0.07 }}
+                    />
+                  </div>
                 </div>
-                <span style={{ fontSize: 11, fontWeight: 700, color: a.color }}>{a.label}</span>
-              </Link>
-            ))}
-          </div>
-          <div style={{ padding: "10px 12px", borderRadius: 12, background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.05)", display: "flex", alignItems: "flex-start", gap: 9 }}>
-            <HugeiconsIcon icon={Calendar03Icon} size={13} style={{ color: "var(--text-muted)", flexShrink: 0, marginTop: 1 }} />
-            <div>
-              <p style={{ fontSize: 11, fontWeight: 700, color: "var(--text-primary)" }}>Today's focus</p>
-              <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2, lineHeight: 1.4 }}>Complete your Emotional Landscape assessment</p>
+              ))}
             </div>
           </div>
-        </Card>
-      </motion.div>
+        </motion.div>
+
+        {/* Achievements */}
+        <motion.div {...fade(0.19)}>
+          <div style={{ borderRadius: 20, padding: "28px", background: "#ffffff", border: "1px solid rgba(15,10,20,0.08)", height: "100%" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+              <div>
+                <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: GREY, marginBottom: 4 }}>Progress</p>
+                <p style={{ fontSize: 18, fontWeight: 700, color: BLACK }}>Achievements</p>
+              </div>
+              <span style={{ fontSize: 11, color: GREY }}>{mockAchievements.filter(a => a.done).length}/{mockAchievements.length}</span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {mockAchievements.map(a => (
+                <div key={a.label} style={{ display: "flex", alignItems: "center", gap: 12, opacity: a.done ? 1 : 0.4 }}>
+                  <div style={{ width: 32, height: 32, borderRadius: 10, background: a.done ? `${a.color}12` : "rgba(15,10,20,0.04)", border: `1px solid ${a.done ? `${a.color}30` : "rgba(15,10,20,0.07)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    {a.done
+                      ? <HugeiconsIcon icon={achievementIconMap[a.iconKey]} size={14} style={{ color: a.color }} />
+                      : <HugeiconsIcon icon={LockIcon} size={12} style={{ color: GREY }} />
+                    }
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontSize: 12, fontWeight: 600, color: BLACK, lineHeight: 1.2 }}>{a.label}</p>
+                    <p style={{ fontSize: 10, color: GREY, marginTop: 1 }}>{a.desc}</p>
+                  </div>
+                  {a.done && <span style={{ width: 6, height: 6, borderRadius: "50%", background: a.color, flexShrink: 0 }} />}
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Ask The Pull + Quick nav */}
+        <motion.div {...fade(0.23)} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {/* Ask The Pull */}
+          <div style={{
+            borderRadius: 20, padding: "28px", flex: 1,
+            background: `linear-gradient(160deg, ${WINE} 0%, ${WINE2} 100%)`,
+            position: "relative", overflow: "hidden",
+          }}>
+            <div style={{ position: "absolute", bottom: -40, right: -40, width: 160, height: 160, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.07)", pointerEvents: "none" }} />
+            <div style={{ position: "relative" }}>
+              <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)", marginBottom: 6 }}>Your Coach</p>
+              <p style={{ fontSize: 20, fontWeight: 700, color: "white", lineHeight: 1.2, marginBottom: 10 }}>Ask The Pull</p>
+              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.65, marginBottom: 24 }}>
+                Your AI coach is ready — trained on your full profile, dimensions, and patterns.
+              </p>
+              <Link href="/coach" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 20px", borderRadius: 12, background: "white", color: WINE, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>
+                Start session <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick nav */}
+          <div style={{ borderRadius: 20, padding: "20px", background: CREAM, border: `1px solid ${CREAM2}` }}>
+            <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: GREY, marginBottom: 14 }}>Quick Access</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {[
+                { label: "Reality Check", href: "/reports", icon: PresentationLineChart01Icon },
+                { label: "Journey", href: "/journey", icon: Target01Icon },
+                { label: "Journal", href: "/journal", icon: FlashIcon },
+              ].map(a => (
+                <Link key={a.label} href={a.href} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 10, textDecoration: "none", color: BLACK, fontSize: 13, fontWeight: 500 }}>
+                  <HugeiconsIcon icon={a.icon} size={14} style={{ color: GREY }} />
+                  {a.label}
+                  <HugeiconsIcon icon={ArrowRight01Icon} size={11} style={{ color: GREY, marginLeft: "auto" }} />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </div>
 
       <style>{`
-        @media (max-width: 767px) {
-          .dash-row-1, .dash-row-2 {
-            grid-template-columns: 1fr !important;
-          }
-          .dash-hero-inner { padding: 24px 20px !important; }
+        @media (max-width: 900px) {
+          .dash-row-2 { grid-template-columns: 1fr !important; }
+          .dash-row-3 { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>
