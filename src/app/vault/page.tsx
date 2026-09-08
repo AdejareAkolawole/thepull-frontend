@@ -19,14 +19,14 @@ export default function VaultPage() {
           <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>{mockPeople.length} connections being tracked</p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderRadius: 12, background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", width: 180 }}>
+          <div className="vault-search-bar" style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderRadius: 12, background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", width: 180 }}>
             <HugeiconsIcon icon={SearchIcon} size={14} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
             <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Search…</span>
           </div>
-          <button style={{ width: 40, height: 40, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", cursor: "pointer" }}>
+          <button className="vault-filter-btn" style={{ width: 40, height: 40, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", cursor: "pointer" }}>
             <HugeiconsIcon icon={FilterIcon} size={15} style={{ color: "var(--text-muted)" }} />
           </button>
-          <Link href="/vault/add" style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 16px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", boxShadow: "0 4px 16px rgba(192,64,79,0.3)", textDecoration: "none" }}>
+          <Link href="/vault/add" style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 16px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", boxShadow: "0 4px 16px rgba(192,64,79,0.3)", textDecoration: "none", whiteSpace: "nowrap" }}>
             <HugeiconsIcon icon={UserAdd01Icon} size={14} /> Add person
           </Link>
         </div>

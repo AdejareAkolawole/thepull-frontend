@@ -83,12 +83,16 @@ body {
   main { padding: 16px 16px 90px !important; }
 
   [data-cols="3"],
-  [data-cols="4"],
   [data-cols="2-hero"],
   [data-cols="sidebar"],
   [data-cols="journey"],
   [data-cols="vault"] {
     grid-template-columns: 1fr !important;
+  }
+
+  /* 4-col stat grids → 2×2 on mobile (much better for small tiles) */
+  [data-cols="4"] {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 
   /* Hero section inner padding — reduce on mobile */
@@ -110,8 +114,8 @@ body {
   }
   .dash-hero-inner { padding: 24px 20px !important; }
 
-  /* Vault hero padding */
-  .vault-hero-inner { padding: 24px 20px !important; }
+  /* Vault — hide search+filter on mobile to keep header clean */
+  .vault-search-bar, .vault-filter-btn { display: none !important; }
 
   /* H1 size — a bit smaller on mobile */
   h1.mobile-h1 { font-size: 28px !important; }
