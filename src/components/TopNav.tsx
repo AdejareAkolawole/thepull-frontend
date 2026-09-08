@@ -58,8 +58,12 @@ export default function TopNav() {
       }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", height: 56 }}>
           {/* Logo */}
-          <Link href="/dashboard" style={{ marginRight: 32, flexShrink: 0, display: "flex", alignItems: "center", textDecoration: "none" }}>
-            <img src="/logo.jpg" alt="THEPULL" style={{ height: 28, width: "auto", display: "block" }} />
+          <Link href="/dashboard" style={{ marginRight: 32, flexShrink: 0, display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+            <img src="/logo.jpg" alt="THEPULL" style={{ height: 32, width: "auto", display: "block" }} />
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <span style={{ fontSize: 12, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.01em", lineHeight: 1.1 }}>mypullscore</span>
+              <span style={{ fontSize: 9, color: "rgba(15,10,20,0.4)", letterSpacing: "0.01em", lineHeight: 1.3 }}>Personal intelligence that grows you.</span>
+            </div>
           </Link>
 
           {/* Nav links — hidden on mobile */}
