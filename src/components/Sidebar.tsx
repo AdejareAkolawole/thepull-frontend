@@ -69,7 +69,7 @@ export default function Sidebar() {
               <img src="/logo.jpg" alt="ThePull" style={{ height: 28, width: "auto", borderRadius: 0, background: "none", flexShrink: 0 }} />
               <div style={{ overflow: "hidden" }}>
                 <p style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>MyPullScore</p>
-                <p style={{ fontSize: 9, color: "var(--text-muted)", whiteSpace: "nowrap", marginTop: 1 }}>Personal intelligence</p>
+                <p style={{ fontSize: 8.5, color: "var(--text-muted)", whiteSpace: "nowrap", marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", maxWidth: 148 }}>Personal intelligence that grows with you.</p>
               </div>
             </Link>
             <button onClick={() => setOpen(false)} style={toggleBtn}>

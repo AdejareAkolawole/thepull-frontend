@@ -20,6 +20,15 @@ const f = (d = 0) => ({
   transition: { duration: 0.5, delay: d, ease: "easeOut" as const },
 });
 
+const KNOW_ME_FEATURES = [
+  "Everything in Pro",
+  "What The Pull Knows About You",
+  "Deepest longitudinal intelligence",
+  "Deep Synthesis — how your intelligence reinforces & where it diverges",
+  "How Your Understanding Is Evolving",
+  "Priority Feature Access",
+];
+
 const FREE_FEATURES = [
   "Your Pull Score",
   "Your Pull Archetype",
@@ -254,6 +263,86 @@ export default function UpgradePage() {
           </div>
         </motion.div>
       </div>
+
+      {/* ── KNOW ME CARD ──────────────────────────────────────── */}
+      <motion.div {...f(0.25)} style={{ maxWidth: 840, margin: "16px auto 0", padding: "0 24px" }}>
+        <div style={{
+          position: "relative", overflow: "hidden", borderRadius: 24,
+          background: "linear-gradient(150deg,#0d0608 0%,#1a0c12 50%,#120608 100%)",
+          border: "1px solid rgba(201,168,76,0.14)",
+          boxShadow: "0 16px 56px rgba(0,0,0,0.28), inset 0 1px 0 rgba(201,168,76,0.08)",
+          padding: "36px 36px 32px",
+          display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40,
+        }}>
+          {/* Glow blobs */}
+          <div style={{ position: "absolute", top: -80, left: "30%", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 70%)", filter: "blur(30px)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: -60, right: "10%", width: 200, height: 200, borderRadius: "50%", background: "radial-gradient(circle,rgba(192,64,79,0.06) 0%,transparent 70%)", filter: "blur(20px)", pointerEvents: "none" }} />
+
+          {/* LEFT: info */}
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
+              <span style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.3em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.7)" }}>Know Me</span>
+            </div>
+            <h3 style={{ fontSize: 32, fontWeight: 800, color: "#fff", letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 6 }}>KNOW ME</h3>
+            <p style={{ fontSize: 13, fontWeight: 600, color: "rgba(201,168,76,0.8)", marginBottom: 6 }}>Know yourself at the deepest level.</p>
+            <p style={{ fontSize: 12, color: "rgba(245,240,232,0.3)", fontStyle: "italic", marginBottom: 16 }}>Your Pull understands how you are evolving.</p>
+            <p style={{ fontSize: 13, color: "rgba(245,240,232,0.5)", lineHeight: 1.75, marginBottom: 24 }}>
+              KNOW ME turns everything The Pull has learned into the deepest personal intelligence — cross-engine synthesis, full historical depth, and pattern confidence analysis, so you can act with the full weight of your own evidence behind you.
+            </p>
+
+            {/* Pricing */}
+            <div style={{ display: "flex", alignItems: "flex-end", gap: 16, marginBottom: 14 }}>
+              <div style={{ display: "flex", alignItems: "flex-end", gap: 4 }}>
+                <span style={{ fontSize: 40, fontWeight: 800, color: "#fff", lineHeight: 1, letterSpacing: "-0.03em" }}>$69</span>
+                <span style={{ fontSize: 13, color: "rgba(245,240,232,0.35)", paddingBottom: 5 }}>.99/month</span>
+              </div>
+              <div style={{ width: 1, height: 28, background: "rgba(245,240,232,0.1)" }} />
+              <div style={{ display: "flex", alignItems: "flex-end", gap: 4 }}>
+                <span style={{ fontSize: 28, fontWeight: 700, color: "rgba(245,240,232,0.5)", lineHeight: 1, letterSpacing: "-0.02em" }}>$699</span>
+                <span style={{ fontSize: 12, color: "rgba(245,240,232,0.25)", paddingBottom: 4 }}>/year</span>
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" as const }}>
+              {["$58.25/month billed annually", "Save $140.88 vs monthly"].map(tag => (
+                <span key={tag} style={{ fontSize: 10, fontWeight: 700, padding: "4px 12px", borderRadius: 99, background: "rgba(22,163,74,0.12)", border: "1px solid rgba(22,163,74,0.25)", color: "#4ade80" }}>{tag}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT: features + CTAs */}
+          <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column" as const }}>
+            <p style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.26em", textTransform: "uppercase" as const, color: "rgba(245,240,232,0.3)", marginBottom: 20 }}>What&apos;s Included</p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px 20px", flex: 1, marginBottom: 24 }}>
+              {KNOW_ME_FEATURES.map(feat => (
+                <div key={feat} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                  <HugeiconsIcon icon={AiSparklesIcon} size={11} style={{ color: "rgba(201,168,76,0.6)", flexShrink: 0, marginTop: 3 }} />
+                  <span style={{ fontSize: 12, color: "rgba(245,240,232,0.65)", lineHeight: 1.55 }}>{feat}</span>
+                </div>
+              ))}
+            </div>
+            <p style={{ fontSize: 11, color: "rgba(245,240,232,0.2)", fontStyle: "italic", marginBottom: 16 }}>The deepest understanding for those who want it all.</p>
+            <div style={{ display: "flex", flexDirection: "column" as const, gap: 10 }}>
+              {["Monthly", "Annual"].map(period => (
+                <button key={period} style={{
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
+                  padding: "14px", borderRadius: 14,
+                  background: period === "Monthly"
+                    ? "linear-gradient(135deg,#b8922a,#c9a84c,#e2c36a)"
+                    : "linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.25))",
+                  border: period === "Annual" ? "1px solid rgba(201,168,76,0.25)" : "none",
+                  color: period === "Monthly" ? "#1a0a10" : "rgba(201,168,76,0.85)",
+                  fontSize: 13, fontWeight: 800, cursor: "pointer",
+                  boxShadow: period === "Monthly" ? "0 4px 24px rgba(201,168,76,0.25)" : "none",
+                  letterSpacing: "0.01em",
+                }}>
+                  <HugeiconsIcon icon={AiSparklesIcon} size={13} />
+                  START KNOW ME · {period}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
 
       {/* TRUST */}
       <motion.div {...f(0.3)} style={{ textAlign: "center", marginTop: 24 }}>
