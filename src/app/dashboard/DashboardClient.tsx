@@ -5,9 +5,27 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowRight01Icon, AiBrain01Icon, Analytics01Icon, FavouriteIcon,
   FireIcon, Target01Icon, EyeIcon, LockIcon, ArrowUpRight01Icon,
-  FlashIcon, Message02Icon, AiInnovation01Icon,
+  FlashIcon, Message02Icon, AiInnovation01Icon, HeartIcon, ShieldIcon,
+  Activity01Icon, AiSparklesIcon, Share01Icon,
 } from "@hugeicons/core-free-icons";
 import { mockUser, mockInsights, mockAchievements, mockIdentityVector, mockDimensions } from "@/lib/mock";
+
+const relationshipDimensions = [
+  { label: "How You Love", sub: "ATTACHMENT", icon: HeartIcon },
+  { label: "How You Communicate", sub: "COMMUNICATION STYLE", icon: Message02Icon },
+  { label: "How You Handle Conflict", sub: "CONFLICT STYLE", icon: Activity01Icon },
+  { label: "How You Build Trust", sub: "RELATIONSHIP CONSTITUTION", icon: ShieldIcon },
+  { label: "What You Value", sub: "LOVE STYLE", icon: Target01Icon },
+];
+
+const forces = [
+  { label: "Attraction", sub: "What draws you toward someone", value: "31.22" },
+  { label: "Compatibility", sub: "How your self-intelligence aligns with others", value: "Early alignment", valueSmall: true },
+  { label: "Communication", sub: "How you express and listen", value: "68.04" },
+  { label: "Conflict", sub: "How you navigate friction", value: "63.34" },
+  { label: "Attachment", sub: "How you bond and trust", value: "48.8" },
+  { label: "Growth", sub: "How complete your intelligence foundation is", value: "47%", badge: "FOUNDATION ESTABLISHED" },
+];
 
 const WINE  = "#3d0e1a";
 const WINE2 = "#c0404f";
@@ -377,6 +395,126 @@ export default function DashboardClient() {
         ))}
       </div>
 
+      {/* ── DIVIDER ── */}
+      <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "16px 0 4px" }}>
+        <div style={{ flex: 1, height: 1, background: BD }} />
+        <p style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: T3, fontWeight: 700 }}>Your Living Identity</p>
+        <div style={{ flex: 1, height: 1, background: BD }} />
+      </div>
+
+      {/* ── WHO AM I heading ── */}
+      <motion.div {...fade(0.44)} style={{ textAlign: "center", padding: "8px 0 4px" }}>
+        <h2 style={{ fontSize: 48, fontWeight: 800, color: T1, letterSpacing: "-0.03em", lineHeight: 1 }}>Who Am I?</h2>
+      </motion.div>
+
+      {/* ── Archetype Current Lens ── */}
+      <motion.div {...fade(0.46)}>
+        <div style={{ borderRadius: 20, padding: "28px 32px", background: `linear-gradient(145deg, #0d0306 0%, #1a0508 50%, #0d0306 100%)`, border: "1px solid rgba(192,64,79,0.15)", display: "flex", alignItems: "center", gap: 24 }}>
+          <div style={{ width: 68, height: 68, borderRadius: 18, border: "2px solid rgba(96,165,250,0.5)", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(96,165,250,0.08)", flexShrink: 0 }}>
+            <HugeiconsIcon icon={ShieldIcon} size={30} style={{ color: "#60a5fa" }} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+              <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(201,168,76,0.8)" }}>Your Current Lens</p>
+              <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: "rgba(192,64,79,0.15)", color: "rgba(192,64,79,0.9)", border: "1px solid rgba(192,64,79,0.25)" }}>{mockUser.archetype_stage}</span>
+            </div>
+            <p style={{ fontSize: 26, fontWeight: 700, color: "white", lineHeight: 1.1, marginBottom: 4 }}>{mockUser.archetype}</p>
+            <p style={{ fontSize: 12, color: "rgba(192,64,79,0.6)", fontStyle: "italic" }}>Steady presence is the strongest love.</p>
+          </div>
+          <Link href="/pull-profile" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 18px", borderRadius: 11, background: WINE2, color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none", flexShrink: 0 }}>
+            Full Profile <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
+          </Link>
+        </div>
+      </motion.div>
+
+      {/* ── Story ── */}
+      <motion.div {...fade(0.48)}>
+        <div style={{ borderRadius: 20, padding: "28px 32px", background: `linear-gradient(140deg, ${WINE} 0%, #6b1c2b 45%, #8c2535 100%)`, border: "1px solid rgba(255,255,255,0.08)" }}>
+          <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,200,200,0.7)", marginBottom: 12 }}>A Glimpse Of Your Story</p>
+          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.75)", lineHeight: 1.75, marginBottom: 20 }}>
+            {mockUser.archetype_tagline} Your identity is built on the quiet strength of dependability, where your primary mission is to ensure that the ground remains solid beneath your feet. You carry a deep sense of responsibility, acting as an anchor in an unpredictable world.
+          </p>
+          <div style={{ display: "flex", gap: 10 }}>
+            <Link href="/reports" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 12, fontSize: 12, fontWeight: 700, color: "white", background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", textDecoration: "none" }}>
+              Open Living Report <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
+            </Link>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ── Relationship Style 3-col grid ── */}
+      <motion.div {...fade(0.5)}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+          <HugeiconsIcon icon={HeartIcon} size={13} style={{ color: WINE2 }} />
+          <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: T3, fontWeight: 700 }}>Your Relationship Style</p>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }} className="dash-rel">
+          {relationshipDimensions.slice(0, 5).map((d, i) => (
+            <motion.div key={d.label} {...fade(0.52 + i * 0.04)}>
+              <div style={{ borderRadius: 16, padding: "20px", background: `linear-gradient(140deg, ${WINE} 0%, #6b1c2b 45%, #8c2535 100%)`, border: "1px solid rgba(255,255,255,0.08)", height: "100%" }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(192,64,79,0.15)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+                  <HugeiconsIcon icon={d.icon} size={16} style={{ color: WINE2 }} />
+                </div>
+                <p style={{ fontSize: 13, fontWeight: 700, color: "white", marginBottom: 2 }}>{d.label}</p>
+                <p style={{ fontSize: 8, letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)", marginBottom: 10 }}>{d.sub}</p>
+                <p style={{ fontSize: 11, color: "rgba(255,200,200,0.7)", fontStyle: "italic" }}>Still being discovered</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* ── Identity Vector ── */}
+      <motion.div {...fade(0.56)}>
+        <div style={{ borderRadius: 20, padding: "24px 28px", background: `linear-gradient(145deg, #1a0508 0%, #2d0b14 100%)`, border: "1px solid rgba(192,64,79,0.15)" }}>
+          <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", marginBottom: 16 }}>Identity Vector — Behavioural Alignment</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+            {mockIdentityVector.map((v, i) => (
+              <div key={v.label} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ fontSize: 11, color: i === 0 ? "white" : "rgba(255,255,255,0.45)", fontWeight: i === 0 ? 700 : 400, minWidth: 150, flexShrink: 0 }}>{v.label}</span>
+                <div style={{ flex: 1, height: 3, borderRadius: 99, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+                  <motion.div style={{ height: "100%", borderRadius: 99, background: i === 0 ? `linear-gradient(90deg,#7c2232,${v.color})` : v.color, opacity: i === 0 ? 1 : 0.5 }}
+                    initial={{ width: 0 }} animate={{ width: `${v.pct}%` }} transition={{ duration: 1, delay: 0.5 + i * 0.07 }} />
+                </div>
+                <span style={{ fontSize: 11, fontWeight: 700, color: i === 0 ? "white" : "rgba(255,255,255,0.35)", minWidth: 36, textAlign: "right" as const }}>{v.pct}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ── Coverage Progress ── */}
+      <motion.div {...fade(0.58)}>
+        <div style={{ borderRadius: 20, padding: "24px 28px", background: `linear-gradient(145deg, #1a0508 0%, #2d0b14 100%)`, border: "1px solid rgba(192,64,79,0.15)" }}>
+          <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(192,64,79,0.6)", marginBottom: 20 }}>Identity Coverage Progress</p>
+          {[
+            { label: "Core Dimensions", gathered: 7, total: 7, color: "#22c55e" },
+            { label: "Deeper Dimensions", gathered: 4, total: 5, color: WINE2 },
+            { label: "Coming Soon", gathered: 0, total: 3, color: "rgba(255,255,255,0.2)", note: "3 new domains" },
+          ].map((row, i) => (
+            <div key={row.label} style={{ marginBottom: i < 2 ? 18 : 0 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                <p style={{ fontSize: 13, fontWeight: 700, color: "white" }}>{row.label}</p>
+                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>{row.note ?? `${row.gathered} / ${row.total} gathered`}</p>
+              </div>
+              <div style={{ height: 6, borderRadius: 99, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+                <motion.div style={{ height: "100%", borderRadius: 99, background: row.color }}
+                  initial={{ width: 0 }} animate={{ width: row.total > 0 ? `${(row.gathered / row.total) * 100}%` : "0%" }}
+                  transition={{ duration: 1, delay: 0.4 + i * 0.1 }} />
+              </div>
+            </div>
+          ))}
+          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", cursor: "pointer", marginTop: 20 }}>
+            <HugeiconsIcon icon={LockIcon} size={14} style={{ color: "rgba(255,255,255,0.4)" }} />
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: 13, fontWeight: 600, color: "white" }}>Unlock deeper understanding with Premium</p>
+              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", marginTop: 2 }}>Expand your identity through deeper dimensions.</p>
+            </div>
+            <HugeiconsIcon icon={ArrowRight01Icon} size={13} style={{ color: "rgba(255,255,255,0.35)", flexShrink: 0 }} />
+          </div>
+        </div>
+      </motion.div>
+
       <style>{`
         @media (max-width: 1100px) {
           .dash-main  { grid-template-columns: 1fr 1fr 280px !important; }
@@ -386,6 +524,7 @@ export default function DashboardClient() {
           .dash-main   { grid-template-columns: 1fr 1fr !important; }
           .dash-main > *:nth-child(4) { grid-column: 1 / -1; }
           .dash-people { grid-template-columns: 1fr !important; }
+          .dash-rel    { grid-template-columns: 1fr 1fr !important; }
         }
       `}</style>
     </div>
