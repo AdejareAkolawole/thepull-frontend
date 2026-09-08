@@ -28,60 +28,39 @@ const achievementIconMap: Record<string, any> = {
   star: FavouriteIcon, fire: FireIcon, target: Target01Icon,
 };
 
-// ── Brain SVG — clean, large, visible ───────────────────────────────────────
-function BrainIllu({ color = "white", size = 160 }: { color?: string; size?: number }) {
+// ── Stacked cards illustration — matches the reference screenshot exactly ────
+function StackedCards({ color = "white", size = 160 }: { color?: string; size?: number }) {
+  // 3 cards stacked with rotation offsets, like the reference
+  const a = color === "white" ? "rgba(255,255,255," : "rgba(15,10,20,";
   return (
     <svg width={size} height={size} viewBox="0 0 160 160" fill="none" style={{ flexShrink: 0 }}>
-      <g opacity="0.22" stroke={color} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M80 135 C46 135 20 110 20 82 C20 62 30 46 48 38 C53 30 64 26 76 30 L80 32" strokeWidth="4.5"/>
-        <path d="M80 135 C114 135 140 110 140 82 C140 62 130 46 112 38 C107 30 96 26 84 30 L80 32" strokeWidth="4.5"/>
-        <line x1="80" y1="30" x2="80" y2="135" strokeWidth="3"/>
-        <path d="M34 80 Q57 68 80 72 Q103 68 126 80" strokeWidth="2.5"/>
-        <path d="M26 95 Q53 83 80 87 Q107 83 134 95" strokeWidth="2"/>
-        <circle cx="52" cy="50" r="6" fill={color} stroke="none"/>
-        <circle cx="108" cy="50" r="6" fill={color} stroke="none"/>
-        <circle cx="36" cy="78" r="5" fill={color} stroke="none"/>
-        <circle cx="124" cy="78" r="5" fill={color} stroke="none"/>
-        <circle cx="44" cy="104" r="5" fill={color} stroke="none"/>
-        <circle cx="116" cy="104" r="5" fill={color} stroke="none"/>
-        <circle cx="80" cy="28" r="6" fill={color} stroke="none"/>
-        <line x1="52" y1="50" x2="36" y2="78" strokeWidth="2"/>
-        <line x1="36" y1="78" x2="44" y2="104" strokeWidth="2"/>
-        <line x1="108" y1="50" x2="124" y2="78" strokeWidth="2"/>
-        <line x1="124" y1="78" x2="116" y2="104" strokeWidth="2"/>
-        <line x1="52" y1="50" x2="80" y2="28" strokeWidth="1.5"/>
-        <line x1="108" y1="50" x2="80" y2="28" strokeWidth="1.5"/>
+      {/* back card — most rotated */}
+      <g transform="rotate(-12, 80, 80)">
+        <rect x="42" y="28" width="90" height="112" rx="10" fill={`${a}0.12)`} />
+        <rect x="54" y="52" width="66" height="5" rx="2.5" fill={`${a}0.2)`} />
+        <rect x="54" y="64" width="50" height="5" rx="2.5" fill={`${a}0.15)`} />
+        <rect x="54" y="76" width="58" height="5" rx="2.5" fill={`${a}0.15)`} />
       </g>
-    </svg>
-  );
-}
-
-function RadarIllu({ color = BLACK, size = 140 }: { color?: string; size?: number }) {
-  const cx=70,cy=70,r=54,n=5;
-  const ring=(p:number)=>Array.from({length:n},(_,i)=>{const a=(i/n)*Math.PI*2-Math.PI/2;return `${cx+Math.cos(a)*r*p},${cy+Math.sin(a)*r*p}`;}).join(" ");
-  const vals=[0.88,0.6,0.82,0.52,0.74];
-  const pts=Array.from({length:n},(_,i)=>{const a=(i/n)*Math.PI*2-Math.PI/2;return `${cx+Math.cos(a)*r*vals[i]},${cy+Math.sin(a)*r*vals[i]}`;}).join(" ");
-  return (
-    <svg width={size} height={size} viewBox="0 0 140 140" fill="none" style={{ flexShrink: 0 }}>
-      <g opacity="0.2" stroke={color}>
-        {[0.35,0.65,1].map((p,i)=><polygon key={i} points={ring(p)} strokeWidth="1.5" fill="none"/>)}
-        {Array.from({length:n},(_,i)=>{const a=(i/n)*Math.PI*2-Math.PI/2;return <line key={i} x1={cx} y1={cy} x2={cx+Math.cos(a)*r} y2={cy+Math.sin(a)*r} strokeWidth="1"/>;  })}
-        <polygon points={pts} fill={color} fillOpacity="0.2" strokeWidth="2"/>
-        {Array.from({length:n},(_,i)=>{const a=(i/n)*Math.PI*2-Math.PI/2;return <circle key={i} cx={cx+Math.cos(a)*r*vals[i]} cy={cy+Math.sin(a)*r*vals[i]} r="4.5" fill={color} stroke="none"/>;  })}
+      {/* mid card */}
+      <g transform="rotate(-5, 80, 80)">
+        <rect x="38" y="26" width="90" height="112" rx="10" fill={`${a}0.15)`} />
+        <rect x="50" y="50" width="66" height="5" rx="2.5" fill={`${a}0.22)`} />
+        <rect x="50" y="62" width="50" height="5" rx="2.5" fill={`${a}0.16)`} />
+        <rect x="50" y="74" width="58" height="5" rx="2.5" fill={`${a}0.16)`} />
       </g>
-    </svg>
-  );
-}
-
-function NeuralIllu({ color = "white", size = 140 }: { color?: string; size?: number }) {
-  const nodes=[[70,18],[38,48],[70,48],[102,48],[22,84],[54,84],[86,84],[118,84],[38,118],[102,118]];
-  const edges=[[0,1],[0,2],[0,3],[1,4],[1,5],[2,5],[2,6],[3,6],[3,7],[4,8],[5,8],[6,9],[7,9],[1,2],[2,3]];
-  return (
-    <svg width={size} height={size} viewBox="0 0 140 140" fill="none" style={{ flexShrink: 0 }}>
-      <g opacity="0.2" stroke={color} fill={color}>
-        {edges.map(([a,b],i)=><line key={i} x1={nodes[a][0]} y1={nodes[a][1]} x2={nodes[b][0]} y2={nodes[b][1]} strokeWidth="1.5"/>)}
-        {nodes.map(([x,y],i)=><circle key={i} cx={x} cy={y} r={i===0?7:i<4?5:4}/>)}
-      </g>
+      {/* front card */}
+      <rect x="34" y="24" width="90" height="112" rx="10" fill={`${a}0.2)`} />
+      <rect x="34" y="24" width="90" height="112" rx="10" stroke={`${a}0.25)`} strokeWidth="1" fill="none"/>
+      {/* header bar */}
+      <rect x="34" y="24" width="90" height="28" rx="10" fill={`${a}0.12)`} />
+      <rect x="34" y="38" width="90" height="14" fill={`${a}0.08)`} />
+      {/* content lines */}
+      <rect x="46" y="64" width="66" height="5" rx="2.5" fill={`${a}0.25)`} />
+      <rect x="46" y="76" width="50" height="5" rx="2.5" fill={`${a}0.18)`} />
+      <rect x="46" y="88" width="58" height="5" rx="2.5" fill={`${a}0.18)`} />
+      <rect x="46" y="100" width="42" height="5" rx="2.5" fill={`${a}0.14)`} />
+      {/* small avatar circle top-right of front card */}
+      <circle cx="108" cy="38" r="8" fill={`${a}0.22)`} />
     </svg>
   );
 }
@@ -147,7 +126,7 @@ export default function DashboardClient() {
         descColor="rgba(255,255,255,0.48)"
         btn1={{ text: "View Pull Profile", href: "/pull-profile", bg: "#fff", color: WINE }}
         btn2={{ text: "Ask The Pull", href: "/coach", bg: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.8)", border: "1px solid rgba(255,255,255,0.2)" }}
-        illu={<BrainIllu color="white" size={160} />}
+        illu={<StackedCards color="white" size={160} />}
       />
 
       {/* ROW 2 — Archetype + Intelligence Map */}
@@ -164,7 +143,7 @@ export default function DashboardClient() {
           descColor="rgba(255,255,255,0.32)"
           btn1={{ text: "Full Profile", href: "/pull-profile", bg: WINE3, color: "#fff" }}
           btn2={{ text: "Identity Vector", href: "/pull-profile", bg: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.5)", border: "1px solid rgba(255,255,255,0.1)" }}
-          illu={<NeuralIllu color="white" size={130} />}
+          illu={<StackedCards color="white" size={130} />}
         />
         <Card
           delay={0.11}
@@ -178,7 +157,7 @@ export default function DashboardClient() {
           descColor={GREY}
           btn1={{ text: "View Dimensions", href: "/pull-profile", bg: BLACK, color: "#fff" }}
           btn2={{ text: "Reality Check →", href: "/reports", bg: "transparent", color: GREY, border: `1px solid ${CREAM2}` }}
-          illu={<RadarIllu color={BLACK} size={130} />}
+          illu={<StackedCards color={BLACK} size={130} />}
         />
       </div>
 
@@ -229,7 +208,7 @@ export default function DashboardClient() {
           descColor="rgba(255,255,255,0.4)"
           btn1={{ text: "Start session", href: "/coach", bg: "#fff", color: WINE }}
           btn2={{ text: "View insights", href: "/reports", bg: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.15)" }}
-          illu={<BrainIllu color="white" size={130} />}
+          illu={<StackedCards color="white" size={130} />}
         />
         <Card
           delay={0.25}
@@ -278,7 +257,7 @@ export default function DashboardClient() {
               </div>
             ))}
           </div>
-          <NeuralIllu color="white" size={130} />
+          <StackedCards color="white" size={130} />
         </div>
       </motion.div>
 
