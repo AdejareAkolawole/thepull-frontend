@@ -4,7 +4,7 @@ import { useEffect } from "react";
 export default function UpgradeLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const prev = document.body.style.background;
-    document.body.style.background = "#0a0807";
+    document.body.style.background = "#ffffff";
     return () => { document.body.style.background = prev; };
   }, []);
 
