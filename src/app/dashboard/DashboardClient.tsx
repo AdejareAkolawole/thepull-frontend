@@ -152,94 +152,83 @@ export default function DashboardClient() {
           </div>
         </motion.div>
 
-        {/* Score card */}
+        {/* Archetype card */}
         <motion.div {...fade(0.06)}>
-          <Card style={{ padding: 20, height: "100%", display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-              <div>
-                <p style={{ fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "var(--text-muted)", marginBottom: 3 }}>Your Archetype</p>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "var(--brand)" }}>{mockUser.archetype}</p>
-              </div>
-              <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 700, padding: "4px 10px", borderRadius: 99, background: "rgba(22,163,74,0.08)", color: "#16a34a", border: "1px solid rgba(22,163,74,0.15)" }}>
-                <HugeiconsIcon icon={TrendingUpIcon} size={10} /> Rising
-              </span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-              <div>
-                <p className="font-display" style={{ fontSize: 72, lineHeight: 1, fontWeight: 700, color: "var(--text-primary)" }}>{mockUser.pull_score}</p>
-                <p style={{ fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "var(--text-muted)", marginTop: 3 }}>Pull Score</p>
-              </div>
-              <div style={{ position: "relative", width: 76, height: 76 }}>
-                <svg viewBox="0 0 76 76" style={{ width: 76, height: 76 }}>
-                  <circle cx="38" cy="38" r="30" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="5" />
-                  <circle cx="38" cy="38" r="30" fill="none" stroke="url(#sg2)" strokeWidth="5"
-                    strokeLinecap="round" strokeDasharray={`${(74/100)*188.5} 188.5`} transform="rotate(-90 38 38)" />
-                  <defs>
-                    <linearGradient id="sg2" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#7c2232" /><stop offset="100%" stopColor="#c0404f" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)" }}>74%</span>
+          <div style={{
+            height: "100%", borderRadius: 20, overflow: "hidden",
+            background: "linear-gradient(160deg, #0d0306 0%, #1e0609 40%, #2d0b14 100%)",
+            border: "1px solid rgba(192,64,79,0.2)",
+            display: "flex", flexDirection: "column",
+            position: "relative",
+          }}>
+            {/* Glow orb */}
+            <div style={{ position: "absolute", top: -40, right: -40, width: 180, height: 180, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.18), transparent 70%)", pointerEvents: "none" }} />
+
+            {/* Top section */}
+            <div style={{ padding: "22px 22px 18px", position: "relative" }}>
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 18 }}>
+                <div>
+                  <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.65)", marginBottom: 5 }}>Primary Archetype</p>
+                  <span style={{ fontSize: 9, fontWeight: 700, padding: "3px 8px", borderRadius: 99, background: "rgba(192,64,79,0.15)", color: "rgba(192,64,79,0.9)", border: "1px solid rgba(192,64,79,0.25)" }}>
+                    {mockUser.archetype_stage}
+                  </span>
+                </div>
+                <div style={{ width: 38, height: 38, borderRadius: 12, border: "1.5px solid rgba(192,64,79,0.4)", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(192,64,79,0.08)" }}>
+                  <HugeiconsIcon icon={AiBrain01Icon} size={18} style={{ color: "#c0404f" }} />
                 </div>
               </div>
+              <p style={{ fontSize: 22, fontWeight: 700, color: "white", lineHeight: 1.15, marginBottom: 6 }}>{mockUser.archetype}</p>
+              <p style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", lineHeight: 1.55 }}>
+                {mockUser.archetype_tagline.slice(0, 90)}…
+              </p>
             </div>
-            <div style={{ marginBottom: 8 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--text-muted)", marginBottom: 5 }}>
-                <span>30-day trend</span><span style={{ color: "#16a34a", fontWeight: 700 }}>+6 pts</span>
+
+            {/* Confidence + Version */}
+            <div style={{ margin: "0 22px", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+              <div style={{ padding: "12px 0" }}>
+                <p style={{ fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.22)", marginBottom: 4 }}>Confidence</p>
+                <p style={{ fontSize: 26, fontWeight: 800, color: "#c0404f" }}>{mockUser.archetype_confidence}%</p>
               </div>
-              <Sparkline data={scoreHistory} />
+              <div style={{ padding: "12px 0 12px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
+                <p style={{ fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.22)", marginBottom: 4 }}>Version</p>
+                <p style={{ fontSize: 26, fontWeight: 800, color: "#c0404f" }}>{mockUser.archetype_version}</p>
+              </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: "auto", paddingTop: 12, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-              {[{ label: "Streak", value: "12d" }, { label: "Domains", value: "5/8" }, { label: "Signals", value: "847" }].map(s => (
-                <div key={s.label} style={{ textAlign: "center" as const }}>
-                  <p style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)" }}>{s.value}</p>
-                  <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 1 }}>{s.label}</p>
-                </div>
-              ))}
+
+            {/* Identity vector mini bars */}
+            <div style={{ padding: "14px 22px", flex: 1 }}>
+              <p style={{ fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.2)", marginBottom: 10 }}>Identity Vector</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                {mockIdentityVector.slice(0, 4).map((v, i) => (
+                  <div key={v.label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ fontSize: 9, color: i === 0 ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.35)", minWidth: 110, fontWeight: i === 0 ? 700 : 400 }}>{v.label}</span>
+                    <div style={{ flex: 1, height: 2, borderRadius: 99, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+                      <motion.div
+                        style={{ height: "100%", borderRadius: 99, background: v.color, opacity: i === 0 ? 1 : 0.5 }}
+                        initial={{ width: 0 }} animate={{ width: `${v.pct}%` }}
+                        transition={{ duration: 1, delay: 0.2 + i * 0.08 }}
+                      />
+                    </div>
+                    <span style={{ fontSize: 9, color: i === 0 ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.3)", minWidth: 26, textAlign: "right" as const }}>{v.pct}%</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </Card>
+
+            {/* Footer link */}
+            <div style={{ padding: "0 22px 18px" }}>
+              <Link href="/pull-profile" style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                padding: "9px 0", borderRadius: 10, fontSize: 11, fontWeight: 700,
+                color: "rgba(255,255,255,0.55)", background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.08)", textDecoration: "none",
+              }}>
+                View Full Profile <HugeiconsIcon icon={ArrowRight01Icon} size={11} />
+              </Link>
+            </div>
+          </div>
         </motion.div>
       </div>
-
-      {/* Archetype Banner */}
-      <motion.div {...fade(0.08)}>
-        <div style={{
-          borderRadius: 20, padding: "20px 24px",
-          background: "linear-gradient(145deg, #1a0508 0%, #2d0b14 100%)",
-          border: "1px solid rgba(192,64,79,0.2)",
-          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20,
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div style={{ width: 48, height: 48, borderRadius: 14, border: "1.5px solid rgba(192,64,79,0.4)", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(192,64,79,0.08)", flexShrink: 0 }}>
-              <HugeiconsIcon icon={AiBrain01Icon} size={22} style={{ color: "#c0404f" }} />
-            </div>
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.7)" }}>Primary Archetype</p>
-                <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 7px", borderRadius: 99, background: "rgba(192,64,79,0.15)", color: "rgba(192,64,79,0.9)", border: "1px solid rgba(192,64,79,0.25)" }}>{mockUser.archetype_stage}</span>
-              </div>
-              <p style={{ fontSize: 18, fontWeight: 700, color: "white", lineHeight: 1.1 }}>{mockUser.archetype}</p>
-              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", marginTop: 3 }}>{mockUser.archetype_tagline.slice(0, 80)}…</p>
-            </div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 20, flexShrink: 0 }}>
-            <div style={{ textAlign: "center" }}>
-              <p style={{ fontSize: 22, fontWeight: 800, color: "#c0404f" }}>{mockUser.archetype_confidence}%</p>
-              <p style={{ fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)" }}>Confidence</p>
-            </div>
-            <div style={{ width: 1, height: 32, background: "rgba(255,255,255,0.08)" }} />
-            <div style={{ textAlign: "center" }}>
-              <p style={{ fontSize: 22, fontWeight: 800, color: "#c0404f" }}>{mockUser.archetype_version}</p>
-              <p style={{ fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)" }}>Version</p>
-            </div>
-            <Link href="/pull-profile" style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", textDecoration: "none" }}>
-              Full Profile <HugeiconsIcon icon={ArrowRight01Icon} size={11} />
-            </Link>
-          </div>
-        </div>
-      </motion.div>
 
       {/* ROW 2: Radar + Insights + Side column */}
       <div className="dash-row-2" style={{ display: "grid", gridTemplateColumns: "220px 1fr 210px", gap: 12 }}>
