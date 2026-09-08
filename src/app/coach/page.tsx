@@ -1,8 +1,10 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { DeliveredSentIcon, AiInnovation01Icon, AiSparklesIcon, Attachment01Icon } from "@hugeicons/core-free-icons";
+import { DeliveredSentIcon, AiSparklesIcon } from "@hugeicons/core-free-icons";
+import { sendCoachMessage, getDashboard, isLoggedIn } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 const suggestions = [
   "Why do I struggle to open up in new relationships?",
@@ -13,31 +15,47 @@ const suggestions = [
 
 type Message = { id: string; role: "assistant" | "user"; text: string };
 
-const initMessages: Message[] = [{
-  id: "1", role: "assistant",
-  text: "Hey Adejare — I'm The Pull, your personal intelligence coach. I have full context on your profile, your assessments, and your dimensions.\n\nWhat's on your mind today?",
-}];
-
 export default function CoachPage() {
-  const [messages, setMessages] = useState<Message[]>(initMessages);
+  const router = useRouter();
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
+  const [name, setName] = useState("there");
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isLoggedIn()) { router.push("/login"); return; }
+    getDashboard().then(res => {
+      const n = (res.profile as Record<string, unknown>)?.display_name as string || res.user.email.split("@")[0];
+      setName(n);
+      setMessages([{
+        id: "1", role: "assistant",
+        text: `Hey ${n} — I'm The Pull, your personal intelligence coach. I have full context on your profile, your assessments, and your dimensions.\n\nWhat's on your mind today?`,
+      }]);
+    }).catch(() => {
+      setMessages([{
+        id: "1", role: "assistant",
+        text: "Hey — I'm The Pull, your personal intelligence coach.\n\nWhat's on your mind today?",
+      }]);
+    });
+  }, [router]);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, typing]);
 
-  const send = (text: string) => {
-    if (!text.trim()) return;
-    setMessages(m => [...m, { id: Date.now().toString(), role: "user", text }]);
+  const send = async (text: string) => {
+    if (!text.trim() || typing) return;
+    const userMsg: Message = { id: Date.now().toString(), role: "user", text };
+    setMessages(m => [...m, userMsg]);
     setInput("");
     setTyping(true);
-    setTimeout(() => {
+    try {
+      const res = await sendCoachMessage(text);
+      setMessages(m => [...m, { id: (Date.now() + 1).toString(), role: "assistant", text: res.response }]);
+    } catch {
+      setMessages(m => [...m, { id: (Date.now() + 1).toString(), role: "assistant", text: "Something went wrong. Please try again." }]);
+    } finally {
       setTyping(false);
-      setMessages(m => [...m, {
-        id: (Date.now() + 1).toString(), role: "assistant",
-        text: "Based on your profile and the patterns I've observed across your assessments, this connects to your tendency toward analytical processing before emotional disclosure. Your Emotional Intelligence score of 81 shows strong empathy, but your self-awareness dimension (69) suggests there's room to explore this dynamic more deeply.\n\nWould you like me to walk you through a specific pattern I've noticed?",
-      }]);
-    }, 1800);
+    }
   };
 
   const bubble = (m: Message) => ({
@@ -85,11 +103,10 @@ export default function CoachPage() {
               <div style={{ width: 28, height: 28, borderRadius: 8, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #7c2232, #b03040)" }}>
                 <HugeiconsIcon icon={AiSparklesIcon} size={12} style={{ color: "white" }} />
               </div>
-              <div style={{ padding: "10px 14px", borderRadius: 16, display: "flex", gap: 6, alignItems: "center", background: "var(--bg)", border: "1px solid rgba(0,0,0,0.07)" }}>
-                {[0, 0.15, 0.3].map(d => (
-                  <motion.span key={d} style={{ width: 6, height: 6, borderRadius: "50%", display: "block", background: "var(--text-muted)" }}
-                    animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
-                    transition={{ duration: 0.8, delay: d, repeat: Infinity }} />
+              <div style={{ padding: "10px 16px", borderRadius: 16, border: "1px solid rgba(0,0,0,0.07)", display: "flex", gap: 4, alignItems: "center" }}>
+                {[0, 1, 2].map(i => (
+                  <motion.div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: "#c0404f" }}
+                    animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }} />
                 ))}
               </div>
             </div>
@@ -97,14 +114,27 @@ export default function CoachPage() {
           <div ref={bottomRef} />
         </div>
 
-        <div style={{ display: "flex", alignItems: "flex-end", gap: 8, padding: "10px 14px", borderRadius: 12, background: "var(--surface)", border: "1px solid rgba(0,0,0,0.07)" }}>
-          <textarea value={input} onChange={e => setInput(e.target.value)}
+        {/* Suggestions */}
+        {messages.length <= 1 && (
+          <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 8, marginBottom: 4 }}>
+            {suggestions.map(s => (
+              <button key={s} onClick={() => send(s)} style={{ flexShrink: 0, padding: "8px 14px", borderRadius: 99, border: "1px solid rgba(192,64,79,0.2)", background: "rgba(192,64,79,0.05)", color: "var(--text-secondary)", fontSize: 12, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}>
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div style={{ display: "flex", gap: 8 }}>
+          <input
+            value={input} onChange={e => setInput(e.target.value)}
             onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); } }}
-            placeholder="Ask The Pull anything…" rows={1}
-            style={{ flex: 1, resize: "none", fontSize: 13, background: "transparent", border: "none", outline: "none", lineHeight: 1.6, color: "var(--text-primary)", maxHeight: 80 }} />
-          <button onClick={() => send(input)} disabled={!input.trim()}
-            style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: "var(--brand)", border: "none", cursor: "pointer", opacity: input.trim() ? 1 : 0.3 }}>
-            <HugeiconsIcon icon={DeliveredSentIcon} size={16} style={{ color: "white" }} />
+            placeholder="Ask The Pull anything…"
+            style={{ flex: 1, padding: "12px 16px", borderRadius: 14, border: "1px solid rgba(0,0,0,0.1)", background: "var(--surface)", fontSize: 14, outline: "none", color: "var(--text-primary)" }}
+          />
+          <button onClick={() => send(input)} disabled={!input.trim() || typing}
+            style={{ width: 44, height: 44, borderRadius: 12, background: input.trim() && !typing ? "linear-gradient(135deg, #7c2232, #b03040)" : "rgba(0,0,0,0.06)", border: "none", cursor: input.trim() && !typing ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <HugeiconsIcon icon={DeliveredSentIcon} size={16} style={{ color: input.trim() && !typing ? "white" : "rgba(0,0,0,0.25)" }} />
           </button>
         </div>
       </div>
@@ -112,102 +142,66 @@ export default function CoachPage() {
       {/* Desktop layout */}
       <div className="coach-desktop">
         {/* Sidebar */}
-        <div style={{ width: 256, flexShrink: 0, display: "flex", flexDirection: "column", gap: 12, overflowY: "auto" }}>
-          <div style={{ borderRadius: 16, padding: 20, background: "linear-gradient(135deg, #6b1c2b, #8c2535)", boxShadow: "0 4px 20px rgba(108,28,43,0.2)" }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12, background: "rgba(255,255,255,0.12)" }}>
-              <HugeiconsIcon icon={AiInnovation01Icon} size={18} style={{ color: "white" }} />
+        <div style={{ width: 260, flexShrink: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ borderRadius: 18, padding: "20px 18px", background: "linear-gradient(140deg, #3d0e1a, #6b1c2b)", boxShadow: "0 4px 20px rgba(61,14,26,0.22)" }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
+              <HugeiconsIcon icon={AiSparklesIcon} size={18} style={{ color: "white" }} />
             </div>
-            <p style={{ fontSize: 13, fontWeight: 700, color: "white", marginBottom: 6 }}>Ask The Pull</p>
-            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>Your personal intelligence coach, trained on your full profile and dimensions.</p>
+            <p style={{ fontSize: 16, fontWeight: 700, color: "white", marginBottom: 6 }}>The Pull</p>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>Your personal intelligence coach with full context on your profile and dimensions.</p>
           </div>
-
-          <div style={{ borderRadius: 16, padding: 16, background: "var(--surface)", border: "1px solid rgba(0,0,0,0.07)" }}>
-            <p style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", marginBottom: 12 }}>Try asking</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {suggestions.map(s => (
-                <button key={s} onClick={() => send(s)} style={{ textAlign: "left", fontSize: 11, padding: "10px 12px", borderRadius: 10, cursor: "pointer", color: "var(--text-secondary)", border: "1px solid rgba(0,0,0,0.07)", background: "transparent" }}>
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div style={{ borderRadius: 16, padding: 16, background: "var(--surface)", border: "1px solid rgba(0,0,0,0.07)" }}>
-            <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", marginBottom: 10 }}>Context loaded</p>
-            {["Pull Profile · 74", "5 dimensions mapped", "847 data signals", "12-day streak"].map(item => (
-              <div key={item} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11, color: "var(--text-muted)", marginBottom: 6 }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e", flexShrink: 0 }} />{item}
-              </div>
+          <div style={{ background: "var(--surface)", borderRadius: 18, padding: "18px", border: "1px solid rgba(0,0,0,0.07)" }}>
+            <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 12 }}>Suggested Questions</p>
+            {suggestions.map(s => (
+              <button key={s} onClick={() => send(s)}
+                style={{ width: "100%", textAlign: "left", padding: "9px 12px", borderRadius: 10, border: "1px solid rgba(192,64,79,0.15)", background: "rgba(192,64,79,0.04)", color: "var(--text-secondary)", fontSize: 12, fontWeight: 500, cursor: "pointer", marginBottom: 8, lineHeight: 1.5 }}>
+                {s}
+              </button>
             ))}
           </div>
         </div>
 
-        {/* Chat panel */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", borderRadius: 16, overflow: "hidden", background: "var(--surface)", border: "1px solid rgba(0,0,0,0.07)" }}>
-          {/* Header */}
-          <div style={{ padding: "14px 20px", display: "flex", alignItems: "center", gap: 12, borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #7c2232, #b03040)" }}>
-              <HugeiconsIcon icon={AiSparklesIcon} size={16} style={{ color: "white" }} />
-            </div>
-            <div>
-              <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>The Pull</p>
-              <p style={{ fontSize: 11, color: "var(--text-muted)" }}>Ask The Pull</p>
-            </div>
-            <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#22c55e" }}>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e" }} /> Online
-            </div>
-          </div>
-
-          {/* Messages */}
-          <div style={{ flex: 1, overflowY: "auto", padding: 20, display: "flex", flexDirection: "column", gap: 16 }}>
-            <AnimatePresence>
-              {messages.map(m => (
-                <motion.div key={m.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
-                  style={{ display: "flex", gap: 12, flexDirection: m.role === "user" ? "row-reverse" : "row" }}>
-                  {m.role === "assistant" && (
-                    <div style={{ width: 32, height: 32, borderRadius: 10, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #7c2232, #b03040)" }}>
-                      <HugeiconsIcon icon={AiSparklesIcon} size={14} style={{ color: "white" }} />
-                    </div>
-                  )}
-                  <div style={{ maxWidth: "75%", padding: "12px 16px", borderRadius: 16, fontSize: 13, lineHeight: 1.65, whiteSpace: "pre-line", ...bubble(m) }}>{m.text}</div>
-                  {m.role === "user" && (
-                    <div style={{ width: 32, height: 32, borderRadius: 10, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "white", background: "linear-gradient(135deg, #4a5568, #2d3748)" }}>AA</div>
-                  )}
-                </motion.div>
-              ))}
-            </AnimatePresence>
+        {/* Chat area */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+          <div style={{ flex: 1, overflowY: "auto", borderRadius: 18, padding: 24, display: "flex", flexDirection: "column", gap: 20, marginBottom: 12, background: "var(--surface)", border: "1px solid rgba(0,0,0,0.07)" }}>
+            {messages.map(m => (
+              <div key={m.id} style={{ display: "flex", gap: 12, flexDirection: m.role === "user" ? "row-reverse" : "row", alignItems: "flex-start" }}>
+                {m.role === "assistant" && (
+                  <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #7c2232, #b03040)" }}>
+                    <HugeiconsIcon icon={AiSparklesIcon} size={15} style={{ color: "white" }} />
+                  </div>
+                )}
+                <div style={{ maxWidth: "72%", padding: "12px 18px", borderRadius: 18, fontSize: 14, lineHeight: 1.7, whiteSpace: "pre-line", ...bubble(m) }}>{m.text}</div>
+              </div>
+            ))}
             {typing && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} style={{ display: "flex", gap: 12 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 10, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #7c2232, #b03040)" }}>
-                  <HugeiconsIcon icon={AiSparklesIcon} size={14} style={{ color: "white" }} />
+              <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #7c2232, #b03040)" }}>
+                  <HugeiconsIcon icon={AiSparklesIcon} size={15} style={{ color: "white" }} />
                 </div>
-                <div style={{ padding: "12px 16px", borderRadius: 16, display: "flex", gap: 6, alignItems: "center", background: "var(--bg)", border: "1px solid rgba(0,0,0,0.07)" }}>
-                  {[0, 0.15, 0.3].map(d => (
-                    <motion.span key={d} style={{ width: 6, height: 6, borderRadius: "50%", display: "block", background: "var(--text-muted)" }}
-                      animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
-                      transition={{ duration: 0.8, delay: d, repeat: Infinity }} />
+                <div style={{ padding: "12px 18px", borderRadius: 18, border: "1px solid rgba(0,0,0,0.07)", display: "flex", gap: 5, alignItems: "center" }}>
+                  {[0, 1, 2].map(i => (
+                    <motion.div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: "#c0404f" }}
+                      animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }} />
                   ))}
                 </div>
-              </motion.div>
+              </div>
             )}
             <div ref={bottomRef} />
           </div>
 
-          {/* Input */}
-          <div style={{ padding: 16, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 12, padding: "10px 16px", borderRadius: 12, background: "var(--bg)", border: "1px solid rgba(0,0,0,0.07)" }}>
-              <button style={{ color: "var(--text-muted)", background: "none", border: "none", cursor: "pointer", paddingBottom: 2 }}>
-                <HugeiconsIcon icon={Attachment01Icon} size={18} />
-              </button>
-              <textarea value={input} onChange={e => setInput(e.target.value)}
-                onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); } }}
-                placeholder="Ask The Pull anything about your relationships or intelligence…" rows={1}
-                style={{ flex: 1, resize: "none", fontSize: 13, background: "transparent", border: "none", outline: "none", lineHeight: 1.6, color: "var(--text-primary)", maxHeight: 120 }} />
-              <button onClick={() => send(input)} disabled={!input.trim()}
-                style={{ width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: "var(--brand)", border: "none", cursor: "pointer", opacity: input.trim() ? 1 : 0.3 }}>
-                <HugeiconsIcon icon={DeliveredSentIcon} size={14} style={{ color: "white" }} />
-              </button>
-            </div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <input
+              value={input} onChange={e => setInput(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); } }}
+              placeholder="Ask The Pull anything about your intelligence…"
+              style={{ flex: 1, padding: "14px 18px", borderRadius: 14, border: "1px solid rgba(0,0,0,0.1)", background: "var(--surface)", fontSize: 14, outline: "none", color: "var(--text-primary)" }}
+            />
+            <button onClick={() => send(input)} disabled={!input.trim() || typing}
+              style={{ padding: "0 22px", borderRadius: 14, background: input.trim() && !typing ? "linear-gradient(135deg, #7c2232, #b03040)" : "rgba(0,0,0,0.06)", border: "none", cursor: input.trim() && !typing ? "pointer" : "default", display: "flex", alignItems: "center", gap: 8, color: input.trim() && !typing ? "white" : "rgba(0,0,0,0.25)", fontSize: 13, fontWeight: 700, flexShrink: 0 }}>
+              <HugeiconsIcon icon={DeliveredSentIcon} size={16} />
+              Send
+            </button>
           </div>
         </div>
       </div>

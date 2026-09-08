@@ -125,6 +125,8 @@ export default function DashboardClient() {
     archetype_confidence: number;
     archetype_strengths: string[] | null;
     archetype_blind_spots: string[] | null;
+    archetype_identity_vector: Record<string, unknown> | null;
+    archetype_primary_signals: Array<{ label: string; pct: number }> | null;
     pull_score: number | null;
     identity_summary: string | null;
     identity_state: string | null;
@@ -150,6 +152,8 @@ export default function DashboardClient() {
         archetype_confidence: arch?.confidence != null ? Math.round((arch.confidence as number) * 100) : (res.behavioural_confidence as number) ?? 0,
         archetype_strengths: (arch?.strengths as string[]) ?? null,
         archetype_blind_spots: (arch?.blind_spots as string[]) ?? null,
+        archetype_identity_vector: (arch?.composition as Record<string, unknown>) ?? null,
+        archetype_primary_signals: (arch?.primary_signals as Array<{ label: string; pct: number }>) ?? null,
         pull_score: res.pull_score as number | null,
         identity_summary: (narrative?.narrative as string) ?? null,
         identity_state: (narrative?.identity_state as string) ?? null,
@@ -271,12 +275,18 @@ export default function DashboardClient() {
             {/* Identity Vector */}
             <p style={{ fontSize: 8, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)", fontWeight: 700, marginBottom: 12 }}>Identity Vector</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-              {[
-                { label: "Analytical Connector", pct: 72, color: "#c0404f" },
-                { label: "Explorer", pct: 58, color: "#60a5fa" },
-                { label: "Builder", pct: 51, color: "#f59e0b" },
-                { label: "Visionary", pct: 47, color: "#a78bfa" },
-              ].map(v => (
+              {(dash?.archetype_primary_signals && dash.archetype_primary_signals.length > 0
+                ? dash.archetype_primary_signals.slice(0, 4)
+                : [
+                    { label: "Analytical Connector", pct: 72 },
+                    { label: "Explorer", pct: 58 },
+                    { label: "Builder", pct: 51 },
+                    { label: "Visionary", pct: 47 },
+                  ]
+              ).map((v, i) => {
+                const colors = ["#c0404f", "#60a5fa", "#f59e0b", "#a78bfa"];
+                return { ...v, color: colors[i % colors.length] };
+              }).map(v => (
                 <div key={v.label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.65)", width: 130, flexShrink: 0 }}>{v.label}</span>
                   <div style={{ flex: 1, height: 3, borderRadius: 99, background: "rgba(255,255,255,0.07)" }}>

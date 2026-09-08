@@ -1,8 +1,10 @@
 "use client";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { UserCircleIcon, Notification02Icon, ShieldKeyIcon, Logout01Icon, CheckmarkCircle02Icon, TrendingUpIcon } from "@hugeicons/core-free-icons";
-import { mockUser } from "@/lib/mock";
+import { getDashboard, logout, isLoggedIn } from "@/lib/api";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
@@ -18,36 +20,59 @@ const Toggle = ({ on }: { on: boolean }) => (
   </div>
 );
 
-const sections = [
-  {
-    icon: UserCircleIcon, label: "Profile", accent: "#e05060",
-    fields: [
-      { label: "Full Name", value: "Adejare Akolawole", type: "text" },
-      { label: "Email", value: "adejare.akolawole@gmail.com", type: "email" },
-      { label: "Display Name", value: "Adejare", type: "text" },
-      { label: "Archetype", value: "The Analytical Connector", type: "text" },
-    ],
-  },
-  {
-    icon: Notification02Icon, label: "Notifications", accent: "#60a5fa",
-    fields: [
-      { label: "New insights available", value: "On", type: "toggle" },
-      { label: "Weekly intelligence summary", value: "On", type: "toggle" },
-      { label: "Relationship report ready", value: "Off", type: "toggle" },
-      { label: "Streak reminders", value: "On", type: "toggle" },
-    ],
-  },
-  {
-    icon: ShieldKeyIcon, label: "Privacy & Security", accent: "#a78bfa",
-    fields: [
-      { label: "Two-factor authentication", value: "Off", type: "toggle" },
-      { label: "Data sharing preferences", value: "Minimal", type: "text" },
-      { label: "Allow anonymous benchmarking", value: "On", type: "toggle" },
-    ],
-  },
-];
-
 export default function SettingsPage() {
+  const router = useRouter();
+  const [dash, setDash] = useState<{
+    name: string; email: string; initials: string; pull_score: number | null;
+    archetype: string | null; plan: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!isLoggedIn()) { router.push("/login"); return; }
+    getDashboard().then(res => {
+      const p = (res.profile || {}) as Record<string, unknown>;
+      const arch = res.archetype as Record<string, unknown> | null;
+      setDash({
+        name: res.user.name as string || res.user.email.split("@")[0],
+        email: res.user.email,
+        initials: res.user.initials as string || "?",
+        pull_score: res.pull_score as number | null,
+        archetype: (arch?.name as string) ?? null,
+        plan: (p.subscription_tier as string) || "free",
+      });
+    }).catch(() => {});
+  }, [router]);
+
+  function handleSignOut() { logout(); router.push("/login"); }
+
+  const sections = [
+    {
+      icon: UserCircleIcon, label: "Profile", accent: "#e05060",
+      fields: [
+        { label: "Display Name", value: dash?.name ?? "—", type: "text" },
+        { label: "Email", value: dash?.email ?? "—", type: "email" },
+        { label: "Archetype", value: dash?.archetype ?? "—", type: "text" },
+      ],
+    },
+    {
+      icon: Notification02Icon, label: "Notifications", accent: "#60a5fa",
+      fields: [
+        { label: "New insights available", value: "On", type: "toggle" },
+        { label: "Weekly intelligence summary", value: "On", type: "toggle" },
+        { label: "Relationship report ready", value: "Off", type: "toggle" },
+        { label: "Streak reminders", value: "On", type: "toggle" },
+      ],
+    },
+    {
+      icon: ShieldKeyIcon, label: "Privacy & Security", accent: "#a78bfa",
+      fields: [
+        { label: "Two-factor authentication", value: "Off", type: "toggle" },
+        { label: "Data sharing preferences", value: "Minimal", type: "text" },
+        { label: "Allow anonymous benchmarking", value: "On", type: "toggle" },
+      ],
+    },
+  ];
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <motion.div {...f(0)}>
@@ -63,25 +88,24 @@ export default function SettingsPage() {
             {/* Avatar */}
             <div style={{ position: "relative", marginBottom: 16 }}>
               <div style={{ width: 80, height: 80, borderRadius: 20, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, fontWeight: 800, color: "white", background: "linear-gradient(135deg, #7c2232, #b03040)", boxShadow: "0 4px 20px rgba(124,34,50,0.4)" }}>
-                {mockUser.initials}
+                {dash?.initials ?? "?"}
               </div>
               <div style={{ position: "absolute", bottom: -4, right: -4, width: 20, height: 20, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "#34d399", border: "2px solid white" }}>
                 <div style={{ width: 8, height: 8, borderRadius: "50%", background: "white" }} />
               </div>
             </div>
 
-            <p style={{ fontSize: 15, fontWeight: 700, color: "var(--text-primary)" }}>Adejare Akolawole</p>
-            <p style={{ fontSize: 12, marginTop: 2, color: "var(--text-muted)" }}>adejare.akolawole@gmail.com</p>
+            <p style={{ fontSize: 15, fontWeight: 700, color: "var(--text-primary)" }}>{dash?.name ?? "—"}</p>
+            <p style={{ fontSize: 12, marginTop: 2, color: "var(--text-muted)" }}>{dash?.email ?? "—"}</p>
             <span style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, padding: "5px 12px", borderRadius: 99, background: "rgba(192,64,79,0.1)", color: "var(--brand)", border: "1px solid rgba(192,64,79,0.2)" }}>
-              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={11} /> Premium Member
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={11} /> {dash?.plan === "free" ? "Free" : "Premium"} Member
             </span>
 
             <div style={{ width: "100%", marginTop: 20, paddingTop: 20, borderTop: "1px solid rgba(0,0,0,0.06)", display: "flex", flexDirection: "column", gap: 10 }}>
               {[
-                { label: "Pull Score", value: mockUser.pull_score, color: "var(--brand)" },
-                { label: "Member since", value: "Sep 2026", color: "var(--text-primary)" },
-                { label: "Plan", value: "Premium", color: "var(--brand)" },
-                { label: "Streak", value: "12 days", color: "#fbbf24" },
+                { label: "Pull Score", value: dash?.pull_score ?? "—", color: "var(--brand)" },
+                { label: "Plan", value: dash?.plan === "free" ? "Free" : "Premium", color: "var(--brand)" },
+                { label: "Archetype", value: dash?.archetype ?? "Emerging", color: "var(--text-primary)" },
               ].map(item => (
                 <div key={item.label} style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
                   <span style={{ color: "var(--text-muted)" }}>{item.label}</span>
@@ -102,7 +126,7 @@ export default function SettingsPage() {
               <button style={{ width: "100%", padding: "10px 0", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", border: "none", cursor: "pointer", boxShadow: "0 4px 12px rgba(192,64,79,0.25)" }}>
                 Upgrade Plan
               </button>
-              <button style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "10px 0", borderRadius: 12, fontSize: 13, fontWeight: 600, color: "#f87171", background: "transparent", border: "1px solid rgba(248,113,113,0.25)", cursor: "pointer" }}>
+              <button onClick={handleSignOut} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "10px 0", borderRadius: 12, fontSize: 13, fontWeight: 600, color: "#f87171", background: "transparent", border: "1px solid rgba(248,113,113,0.25)", cursor: "pointer" }}>
                 <HugeiconsIcon icon={Logout01Icon} size={14} /> Sign Out
               </button>
             </div>

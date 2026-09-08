@@ -55,7 +55,7 @@ export async function getMe() {
 // Dashboard
 export async function getDashboard() {
   return request<{
-    user: { id: string; email: string };
+    user: { id: string; email: string; name?: string; initials?: string };
     profile: Record<string, unknown> | null;
     pull_score: number | null;
     archetype: Record<string, unknown> | null;

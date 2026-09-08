@@ -5,6 +5,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ScaleIcon, SentIcon, CheckmarkCircle01Icon,
 } from "@hugeicons/core-free-icons";
+import { runRealityCheck } from "@/lib/api";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
@@ -26,9 +27,27 @@ export default function RealityCheckPage() {
   const [what, setWhat]     = useState("");
   const [means, setMeans]   = useState("");
   const [action, setAction] = useState("");
-  const [ran, setRan]       = useState(false);
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState<string | null>(null);
+  const [error, setError]   = useState(false);
 
-  const canRun = what.trim().length > 0;
+  const canRun = what.trim().length > 0 && !running;
+
+  async function handleRun() {
+    if (!canRun) return;
+    setRunning(true);
+    setResult(null);
+    setError(false);
+    try {
+      const res = await runRealityCheck({ situation: what, thinking: means, considering: action });
+      setResult((res as Record<string, unknown>).result as string ?? (res as Record<string, unknown>).analysis as string ?? "Check complete.");
+    } catch {
+      setError(true);
+      setResult("Something went wrong. Please try again.");
+    } finally {
+      setRunning(false);
+    }
+  }
 
   return (
     <div style={{ maxWidth: 640, margin: "0 auto", display: "flex", flexDirection: "column", gap: 0, padding: "0 0 40px" }}>
@@ -114,7 +133,7 @@ export default function RealityCheckPage() {
           </p>
           <button
             disabled={!canRun}
-            onClick={() => setRan(true)}
+            onClick={handleRun}
             style={{
               display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
               width: "100%", padding: "13px", borderRadius: 12,
@@ -126,25 +145,25 @@ export default function RealityCheckPage() {
               transition: "all 0.2s",
             }}>
             <HugeiconsIcon icon={SentIcon} size={13} />
-            Run Reality Check
+            {running ? "Analysing…" : "Run Reality Check"}
           </button>
         </div>
       </motion.div>
 
       {/* Result */}
-      {ran && (
+      {result && (
         <motion.div {...f(0)} style={{
           background: CREAM, borderRadius: 18, padding: "20px",
-          border: "1px solid rgba(45,26,20,0.1)",
+          border: `1px solid ${error ? "rgba(192,64,79,0.2)" : "rgba(45,26,20,0.1)"}`,
           boxShadow: "0 4px 24px rgba(45,26,20,0.08)",
           marginBottom: 14,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
             <HugeiconsIcon icon={CheckmarkCircle01Icon} size={14} style={{ color: WINE2 }} />
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: WINE2 }}>Reality Check complete</p>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: WINE2 }}>Reality Check</p>
           </div>
-          <p style={{ fontSize: 13, color: MID, lineHeight: 1.75 }}>
-            The Pull has read your situation against your intelligence profile. A full read requires more signal — keep sharing moments and patterns will sharpen over time.
+          <p style={{ fontSize: 14, color: DARK, lineHeight: 1.85, whiteSpace: "pre-wrap" }}>
+            {result}
           </p>
         </motion.div>
       )}
