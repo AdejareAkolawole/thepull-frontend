@@ -6,18 +6,18 @@ import {
   TrendingUpIcon, ArrowRight01Icon, AiSparklesIcon,
   AiInnovation01Icon, Activity01Icon,
   FlashIcon, PresentationLineChart01Icon, Calendar03Icon, Target01Icon,
-  AiBrain01Icon, EyeIcon, FavouriteIcon, FireIcon, Analytics01Icon, LockIcon,
+  AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, CheckmarkCircle01Icon, LockIcon,
 } from "@hugeicons/core-free-icons";
+import { mockUser, mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
 
 const achievementIconMap: Record<string, any> = {
   brain: AiBrain01Icon,
-  chart: Analytics01Icon,
   eye: EyeIcon,
+  chart: Analytics01Icon,
   star: FavouriteIcon,
   fire: FireIcon,
   target: Target01Icon,
 };
-import { mockUser, mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 16 },
@@ -192,7 +192,7 @@ export default function DashboardClient() {
               <Sparkline data={scoreHistory} />
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: "auto", paddingTop: 12, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-              {[{ label: "Percentile", value: "Top 18%" }, { label: "Streak", value: "12d" }, { label: "Domains", value: "5/8" }].map(s => (
+              {[{ label: "Streak", value: "12d" }, { label: "Domains", value: "5/8" }, { label: "Signals", value: "847" }].map(s => (
                 <div key={s.label} style={{ textAlign: "center" as const }}>
                   <p style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)" }}>{s.value}</p>
                   <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 1 }}>{s.label}</p>
@@ -272,13 +272,11 @@ export default function DashboardClient() {
                     opacity: a.done ? 1 : 0.5,
                     position: "relative", overflow: "hidden",
                   }}>
-                    {!a.done && (
-                      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(0,0,0,0.12)" }}>
-                        <HugeiconsIcon icon={LockIcon} size={18} />
-                      </div>
-                    )}
-                    <div style={{ marginBottom: 6, display: "flex", justifyContent: "center" }}>
-                      <HugeiconsIcon icon={achievementIconMap[a.iconKey] ?? FavouriteIcon} size={20} style={{ color: a.done ? a.color : "var(--text-muted)" }} />
+                    <div style={{ marginBottom: 6, display: "flex", alignItems: "center" }}>
+                      {a.done
+                        ? <HugeiconsIcon icon={achievementIconMap[a.iconKey]} size={18} style={{ color: a.color }} />
+                        : <HugeiconsIcon icon={LockIcon} size={16} style={{ color: "rgba(0,0,0,0.25)" }} />
+                      }
                     </div>
                     <p style={{ fontSize: 10, fontWeight: 700, color: a.done ? a.color : "var(--text-muted)", lineHeight: 1.2 }}>{a.label}</p>
                   </div>
