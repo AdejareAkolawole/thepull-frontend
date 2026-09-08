@@ -13,8 +13,9 @@ import {
 const WINE  = "#3d0e1a";
 const WINE2 = "#c0404f";
 const GOLD  = "#c9a84c";
-const CREAM = "#3d0e1a";
-const BLACK = "#ffffff";
+const T1    = "#0f0a14";
+const T2    = "rgba(15,10,20,0.5)";
+const T3    = "rgba(15,10,20,0.32)";
 
 const f = (d = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -48,19 +49,19 @@ export default function UpgradePage() {
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
 
   return (
-    <div style={{ background: BLACK, minHeight: "100vh", marginTop: -20, paddingBottom: 120 }}>
+    <div style={{ background: "#ffffff", minHeight: "100vh", marginTop: -20, paddingBottom: 120 }}>
 
       {/* ── HERO ── */}
       <div style={{ textAlign: "center", padding: "80px 24px 64px", position: "relative", overflow: "hidden" }}>
         <motion.div {...f(0)} style={{ position: "relative", zIndex: 2 }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(192,64,79,0.08)", border: "1px solid rgba(192,64,79,0.2)", marginBottom: 32 }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(15,10,20,0.05)", border: "1px solid rgba(15,10,20,0.1)", marginBottom: 32 }}>
             <HugeiconsIcon icon={AiSparklesIcon} size={11} style={{ color: WINE2 }} />
-            <span style={{ fontSize: 10, fontWeight: 700, color: WINE2, letterSpacing: "0.12em", textTransform: "uppercase" }}>Premium Intelligence</span>
+            <span style={{ fontSize: 10, fontWeight: 700, color: T2, letterSpacing: "0.12em", textTransform: "uppercase" }}>Premium Intelligence</span>
           </div>
           <h1 style={{ fontSize: 72, fontWeight: 800, color: "#0f0a14", lineHeight: 1, letterSpacing: "-0.04em", marginBottom: 22 }}>
-            Know yourself<br /><span style={{ color: WINE2 }}>completely.</span>
+            Know yourself<br /><span style={{ color: T1 }}>completely.</span>
           </h1>
-          <p style={{ fontSize: 17, color: "rgba(61,14,26,0.45)", lineHeight: 1.75, maxWidth: 480, margin: "0 auto" }}>
+          <p style={{ fontSize: 17, color: T2, lineHeight: 1.75, maxWidth: 480, margin: "0 auto" }}>
             Free gives you a foundation. Pro unlocks the full picture — deeper dimensions, living reports, unlimited guidance.
           </p>
         </motion.div>
@@ -74,7 +75,7 @@ export default function UpgradePage() {
               padding: "9px 22px", borderRadius: 99,
               background: billing === b ? GOLD : "transparent",
               border: "none",
-              color: billing === b ? WINE : "rgba(61,14,26,0.45)",
+              color: billing === b ? T1 : T2,
               fontSize: 13, fontWeight: 700, cursor: "pointer",
               transition: "all 0.2s",
               letterSpacing: "0.02em",
@@ -96,12 +97,12 @@ export default function UpgradePage() {
           display: "flex", flexDirection: "column",
         }}>
           <div style={{ marginBottom: 36 }}>
-            <p style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(61,14,26,0.3)", fontWeight: 700, marginBottom: 10 }}>Free</p>
+            <p style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: T3, fontWeight: 700, marginBottom: 10 }}>Free</p>
             <div style={{ display: "flex", alignItems: "flex-end", gap: 6, marginBottom: 18 }}>
               <span style={{ fontSize: 72, fontWeight: 800, color: "#0f0a14", lineHeight: 1, letterSpacing: "-0.04em" }}>$0</span>
-              <span style={{ fontSize: 15, color: "rgba(61,14,26,0.3)", paddingBottom: 10 }}>forever</span>
+              <span style={{ fontSize: 15, color: T3, paddingBottom: 10 }}>forever</span>
             </div>
-            <p style={{ fontSize: 14, color: "rgba(61,14,26,0.45)", lineHeight: 1.7 }}>
+            <p style={{ fontSize: 14, color: T2, lineHeight: 1.7 }}>
               The Pull gives you a foundational understanding of who you are. Genuinely useful on its own — and it grows as you do.
             </p>
           </div>
@@ -109,8 +110,8 @@ export default function UpgradePage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 13, flex: 1, marginBottom: 36 }}>
             {FREE_FEATURES.map(feat => (
               <div key={feat} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                <HugeiconsIcon icon={CheckmarkCircle01Icon} size={15} style={{ color: "rgba(61,14,26,0.2)", flexShrink: 0, marginTop: 2 }} />
-                <span style={{ fontSize: 13, color: "rgba(61,14,26,0.5)", lineHeight: 1.55 }}>{feat}</span>
+                <HugeiconsIcon icon={CheckmarkCircle01Icon} size={15} style={{ color: T3, flexShrink: 0, marginTop: 2 }} />
+                <span style={{ fontSize: 13, color: T2, lineHeight: 1.55 }}>{feat}</span>
               </div>
             ))}
           </div>
@@ -145,8 +146,8 @@ export default function UpgradePage() {
             {billing === "monthly" ? (
               <>
                 <div style={{ display: "flex", alignItems: "flex-end", gap: 6, marginBottom: 12 }}>
-                  <span style={{ fontSize: 72, fontWeight: 800, color: CREAM, lineHeight: 1, letterSpacing: "-0.04em" }}>$24</span>
-                  <span style={{ fontSize: 28, fontWeight: 800, color: CREAM, lineHeight: 1, paddingBottom: 8 }}>.99</span>
+                  <span style={{ fontSize: 72, fontWeight: 800, color: T1, lineHeight: 1, letterSpacing: "-0.04em" }}>$24</span>
+                  <span style={{ fontSize: 28, fontWeight: 800, color: T1, lineHeight: 1, paddingBottom: 8 }}>.99</span>
                   <span style={{ fontSize: 15, color: "rgba(245,240,232,0.3)", paddingBottom: 10 }}>/month</span>
                 </div>
                 {/* Founding pill */}
@@ -158,8 +159,8 @@ export default function UpgradePage() {
             ) : (
               <>
                 <div style={{ display: "flex", alignItems: "flex-end", gap: 6, marginBottom: 12 }}>
-                  <span style={{ fontSize: 72, fontWeight: 800, color: CREAM, lineHeight: 1, letterSpacing: "-0.04em" }}>$249</span>
-                  <span style={{ fontSize: 28, fontWeight: 800, color: CREAM, lineHeight: 1, paddingBottom: 8 }}>.99</span>
+                  <span style={{ fontSize: 72, fontWeight: 800, color: T1, lineHeight: 1, letterSpacing: "-0.04em" }}>$249</span>
+                  <span style={{ fontSize: 28, fontWeight: 800, color: T1, lineHeight: 1, paddingBottom: 8 }}>.99</span>
                   <span style={{ fontSize: 15, color: "rgba(245,240,232,0.3)", paddingBottom: 10 }}>/year</span>
                 </div>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" as const, marginBottom: 18 }}>
@@ -205,16 +206,16 @@ export default function UpgradePage() {
 
       {/* ── TRUST LINE ── */}
       <motion.div {...f(0.3)} style={{ textAlign: "center", marginTop: 28 }}>
-        <p style={{ fontSize: 12, color: "rgba(61,14,26,0.3)" }}>Cancel any time · Founding 500 price locked forever · No surprise charges</p>
+        <p style={{ fontSize: 12, color: T3 }}>Cancel any time · Founding 500 price locked forever · No surprise charges</p>
       </motion.div>
 
       {/* ── BOTTOM CTA ── */}
       <div style={{ textAlign: "center", padding: "80px 24px 0" }}>
         <motion.div {...f(0.1)}>
           <h2 style={{ fontSize: 48, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.04em", lineHeight: 1.05, marginBottom: 18 }}>
-            Your intelligence<br /><span style={{ color: WINE2 }}>is waiting.</span>
+            Your intelligence<br /><span style={{ color: T1 }}>is waiting.</span>
           </h2>
-          <p style={{ fontSize: 15, color: "rgba(61,14,26,0.4)", lineHeight: 1.7, maxWidth: 400, margin: "0 auto 36px" }}>
+          <p style={{ fontSize: 15, color: T2, lineHeight: 1.7, maxWidth: 400, margin: "0 auto 36px" }}>
             Start with Pro and let The Pull go deeper with you.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
@@ -222,7 +223,7 @@ export default function UpgradePage() {
               <HugeiconsIcon icon={AiSparklesIcon} size={14} />
               START PRO
             </button>
-            <Link href="/pull-profile" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 24px", borderRadius: 16, background: "rgba(15,10,20,0.04)", border: "1px solid rgba(15,10,20,0.1)", color: "rgba(61,14,26,0.4)", fontSize: 14, fontWeight: 600, textDecoration: "none" }}>
+            <Link href="/pull-profile" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 24px", borderRadius: 16, background: "rgba(15,10,20,0.04)", border: "1px solid rgba(15,10,20,0.1)", color: T2, fontSize: 14, fontWeight: 600, textDecoration: "none" }}>
               View My Profile
             </Link>
           </div>
