@@ -6,7 +6,17 @@ import {
   TrendingUpIcon, ArrowRight01Icon, AiSparklesIcon,
   AiInnovation01Icon, Activity01Icon,
   FlashIcon, PresentationLineChart01Icon, Calendar03Icon, Target01Icon,
+  AiBrain01Icon, EyeIcon, FavouriteIcon, FireIcon, Analytics01Icon, LockIcon,
 } from "@hugeicons/core-free-icons";
+
+const achievementIconMap: Record<string, any> = {
+  brain: AiBrain01Icon,
+  chart: Analytics01Icon,
+  eye: EyeIcon,
+  star: FavouriteIcon,
+  fire: FireIcon,
+  target: Target01Icon,
+};
 import { mockUser, mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
 
 const fade = (delay = 0) => ({
@@ -263,9 +273,13 @@ export default function DashboardClient() {
                     position: "relative", overflow: "hidden",
                   }}>
                     {!a.done && (
-                      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: "rgba(0,0,0,0.12)" }}>🔒</div>
+                      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(0,0,0,0.12)" }}>
+                        <HugeiconsIcon icon={LockIcon} size={18} />
+                      </div>
                     )}
-                    <div style={{ fontSize: 20, marginBottom: 6 }}>{a.done ? (a as any).icon ?? "⭐" : "🔒"}</div>
+                    <div style={{ marginBottom: 6, display: "flex", justifyContent: "center" }}>
+                      <HugeiconsIcon icon={achievementIconMap[a.iconKey] ?? FavouriteIcon} size={20} style={{ color: a.done ? a.color : "var(--text-muted)" }} />
+                    </div>
                     <p style={{ fontSize: 10, fontWeight: 700, color: a.done ? a.color : "var(--text-muted)", lineHeight: 1.2 }}>{a.label}</p>
                   </div>
                 ))}
