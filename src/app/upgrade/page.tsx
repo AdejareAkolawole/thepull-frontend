@@ -422,25 +422,19 @@ export default function UpgradePage() {
               ))}
             </div>
             <p style={{ fontSize: 11, color: "rgba(245,240,232,0.2)", fontStyle: "italic", marginBottom: 16 }}>The deepest understanding for those who want it all.</p>
-            <div style={{ display: "flex", flexDirection: "column" as const, gap: 10 }}>
-              {["Monthly", "Annual"].map(period => (
-                <button key={period} style={{
-                  display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
-                  padding: "14px", borderRadius: 14,
-                  background: period === "Monthly"
-                    ? "linear-gradient(135deg,#b8922a,#c9a84c,#e2c36a)"
-                    : "linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.25))",
-                  border: period === "Annual" ? "1px solid rgba(201,168,76,0.25)" : "none",
-                  color: period === "Monthly" ? "#1a0a10" : "rgba(201,168,76,0.85)",
-                  fontSize: 13, fontWeight: 800, cursor: "pointer",
-                  boxShadow: period === "Monthly" ? "0 4px 24px rgba(201,168,76,0.25)" : "none",
-                  letterSpacing: "0.01em",
-                }}>
-                  <HugeiconsIcon icon={AiSparklesIcon} size={13} />
-                  START KNOW ME · {period}
-                </button>
-              ))}
-            </div>
+            <button style={{
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
+              padding: "14px", borderRadius: 14,
+              background: "linear-gradient(135deg,#b8922a,#c9a84c,#e2c36a)",
+              border: "none",
+              color: "#1a0a10",
+              fontSize: 13, fontWeight: 800, cursor: "pointer",
+              boxShadow: "0 4px 24px rgba(201,168,76,0.25)",
+              letterSpacing: "0.01em",
+            }}>
+              <HugeiconsIcon icon={AiSparklesIcon} size={13} />
+              START KNOW ME · {billing === "annual" ? "Annual" : "Monthly"}
+            </button>
           </div>
         </div>
       </motion.div>
