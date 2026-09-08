@@ -7,6 +7,7 @@ import {
   AiInnovation01Icon, Activity01Icon,
   FlashIcon, PresentationLineChart01Icon, Calendar03Icon, Target01Icon,
   AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, CheckmarkCircle01Icon, LockIcon,
+  BookOpen01Icon, Share01Icon,
 } from "@hugeicons/core-free-icons";
 import { mockUser, mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
 
@@ -116,8 +117,8 @@ export default function DashboardClient() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
-      {/* ROW 1: Hero + Score */}
-      <div className="dash-row-1" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 12 }}>
+      {/* ROW 1: Hero full width */}
+      <div className="dash-row-1" style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12 }}>
 
         {/* Hero */}
         <motion.div {...fade(0)} className="rounded-2xl relative overflow-hidden" style={{ minHeight: 240, background: "linear-gradient(140deg, #3d0e1a 0%, #6b1c2b 45%, #a03040 100%)" }}>
@@ -152,55 +153,6 @@ export default function DashboardClient() {
           </div>
         </motion.div>
 
-        {/* Score card */}
-        <motion.div {...fade(0.06)}>
-          <Card style={{ padding: 20, height: "100%", display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-              <div>
-                <p style={{ fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "var(--text-muted)", marginBottom: 3 }}>Your Archetype</p>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "var(--brand)" }}>{mockUser.archetype}</p>
-              </div>
-              <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 700, padding: "4px 10px", borderRadius: 99, background: "rgba(22,163,74,0.08)", color: "#16a34a", border: "1px solid rgba(22,163,74,0.15)" }}>
-                <HugeiconsIcon icon={TrendingUpIcon} size={10} /> Rising
-              </span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-              <div>
-                <p className="font-display" style={{ fontSize: 72, lineHeight: 1, fontWeight: 700, color: "var(--text-primary)" }}>{mockUser.pull_score}</p>
-                <p style={{ fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "var(--text-muted)", marginTop: 3 }}>Pull Score</p>
-              </div>
-              <div style={{ position: "relative", width: 76, height: 76 }}>
-                <svg viewBox="0 0 76 76" style={{ width: 76, height: 76 }}>
-                  <circle cx="38" cy="38" r="30" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="5" />
-                  <circle cx="38" cy="38" r="30" fill="none" stroke="url(#sg2)" strokeWidth="5"
-                    strokeLinecap="round" strokeDasharray={`${(74/100)*188.5} 188.5`} transform="rotate(-90 38 38)" />
-                  <defs>
-                    <linearGradient id="sg2" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#7c2232" /><stop offset="100%" stopColor="#c0404f" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)" }}>74%</span>
-                </div>
-              </div>
-            </div>
-            <div style={{ marginBottom: 8 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--text-muted)", marginBottom: 5 }}>
-                <span>30-day trend</span><span style={{ color: "#16a34a", fontWeight: 700 }}>+6 pts</span>
-              </div>
-              <Sparkline data={scoreHistory} />
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: "auto", paddingTop: 12, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-              {[{ label: "Streak", value: "12d" }, { label: "Domains", value: "5/8" }, { label: "Signals", value: "847" }].map(s => (
-                <div key={s.label} style={{ textAlign: "center" as const }}>
-                  <p style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)" }}>{s.value}</p>
-                  <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 1 }}>{s.label}</p>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </motion.div>
       </div>
 
       {/* ARCHETYPE CARD */}
@@ -387,6 +339,140 @@ export default function DashboardClient() {
             </div>
           </div>
         </Card>
+      </motion.div>
+
+      {/* ══ WHO AM I ══ */}
+      <motion.div {...fade(0.3)} style={{ paddingTop: 24 }}>
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <p style={{ fontSize: 9, letterSpacing: "0.24em", textTransform: "uppercase" as const, color: "var(--text-muted)", fontWeight: 700, marginBottom: 8 }}>Your Living Identity</p>
+          <h2 style={{ fontSize: 40, fontWeight: 400, color: "#3d0e1a", letterSpacing: "-0.02em", lineHeight: 1 }}>Who Am I?</h2>
+        </div>
+
+        {/* Current Lens */}
+        <div style={{ borderRadius: 18, padding: "20px 24px", background: "linear-gradient(150deg, #0d0608 0%, #1a0c10 100%)", marginBottom: 14, display: "flex", alignItems: "center", gap: 18 }}>
+          <div style={{ width: 64, height: 64, borderRadius: 16, background: "rgba(37,99,235,0.15)", border: "1.5px solid rgba(37,99,235,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <HugeiconsIcon icon={AiBrain01Icon} size={28} style={{ color: "#60a5fa" }} />
+          </div>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+              <span style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "#60a5fa", fontWeight: 700 }}>Your Current Lens</span>
+              <span style={{ fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 99, background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.55)" }}>Emerging Identity</span>
+            </div>
+            <p style={{ fontSize: 22, fontWeight: 700, color: "#fff", marginBottom: 3 }}>{mockUser.archetype}</p>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", fontStyle: "italic" }}>Steady presence is the strongest love.</p>
+          </div>
+        </div>
+
+        {/* Story glimpse */}
+        <div style={{ borderRadius: 18, padding: "20px 24px", background: "#f5f0e4", border: "1px solid rgba(201,168,76,0.15)", marginBottom: 14 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+            <HugeiconsIcon icon={BookOpen01Icon} size={13} style={{ color: "rgba(61,14,26,0.45)" }} />
+            <span style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(61,14,26,0.45)", fontWeight: 700 }}>A Glimpse of Your Story</span>
+          </div>
+          <p style={{ fontSize: 14, color: "rgba(61,14,26,0.75)", lineHeight: 1.75 }}>
+            You are an Analytical Connector at your core, defined by an unwavering commitment to understanding and the creation of meaningful connections for those you love. Your identity is built on the quiet strength of insight, where your primary mission is to ensure that the truth remains visible beneath the surface...
+          </p>
+        </div>
+
+        {/* CTAs */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24, flexWrap: "wrap" as const }}>
+          <Link href="/pull-profile" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 22px", borderRadius: 14, background: "#c9a84c", color: "#fff", fontSize: 13, fontWeight: 800, textDecoration: "none" }}>
+            Open Living Report <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
+          </Link>
+          <button style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 22px", borderRadius: 14, background: "transparent", border: "1px solid rgba(15,10,20,0.14)", color: "rgba(15,10,20,0.65)", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+            Continue Reading
+          </button>
+          <button style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "12px 16px", borderRadius: 14, background: "transparent", border: "none", color: "rgba(15,10,20,0.38)", fontSize: 13, fontWeight: 500, cursor: "pointer" }}>
+            <HugeiconsIcon icon={Share01Icon} size={14} /> Share Story
+          </button>
+        </div>
+
+        {/* Identity Coverage banner */}
+        <div style={{ borderRadius: 18, padding: "20px 24px", background: "linear-gradient(150deg, #2a0e18 0%, #1a0810 100%)", marginBottom: 14, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div>
+            <p style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.6)", fontWeight: 700, marginBottom: 6 }}>Identity Coverage</p>
+            <p style={{ fontSize: 22, fontWeight: 600, color: "#c9a84c" }}>Foundation Complete</p>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.32)", marginTop: 4 }}>Your 7 core dimensions are complete.</p>
+          </div>
+          <div style={{ textAlign: "right" as const }}>
+            <p style={{ fontSize: 32, fontWeight: 700, color: "rgba(255,255,255,0.75)" }}>11<span style={{ fontSize: 16, fontWeight: 400, color: "rgba(255,255,255,0.3)" }}>/12</span></p>
+            <p style={{ fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.3)", fontWeight: 700 }}>Overall Domain Coverage</p>
+          </div>
+        </div>
+
+        {/* Version + Confidence */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+          <div style={{ borderRadius: 18, padding: "18px 22px", background: "linear-gradient(150deg, #2a0e18 0%, #1a0810 100%)", display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(139,92,246,0.2)", border: "1px solid rgba(139,92,246,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <HugeiconsIcon icon={AiBrain01Icon} size={18} style={{ color: "#a78bfa" }} />
+            </div>
+            <div>
+              <p style={{ fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.3)", fontWeight: 700, marginBottom: 3 }}>Profile Version</p>
+              <p style={{ fontSize: 20, fontWeight: 700, color: "rgba(255,255,255,0.8)" }}>v7.0</p>
+            </div>
+            <div style={{ marginLeft: "auto", textAlign: "right" as const }}>
+              <p style={{ fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)", marginBottom: 3 }}>Last Updated</p>
+              <p style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.6)" }}>Today</p>
+            </div>
+          </div>
+          <div style={{ borderRadius: 18, padding: "18px 22px", background: "linear-gradient(150deg, #2a0e18 0%, #1a0810 100%)", display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{ position: "relative", width: 52, height: 52, flexShrink: 0 }}>
+              <svg viewBox="0 0 52 52" style={{ width: 52, height: 52 }}>
+                <circle cx="26" cy="26" r="20" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="4" />
+                <circle cx="26" cy="26" r="20" fill="none" stroke="#4ade80" strokeWidth="4" strokeLinecap="round"
+                  strokeDasharray={`${(47/100)*125.7} 125.7`} transform="rotate(-90 26 26)" />
+              </svg>
+              <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#4ade80" }}>47</span>
+              </div>
+            </div>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.3)", fontWeight: 700, marginBottom: 3 }}>Behavioural Confidence</p>
+              <p style={{ fontSize: 14, fontWeight: 700, color: "rgba(255,255,255,0.7)" }}>Building</p>
+            </div>
+            <button style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}>
+              Explain <HugeiconsIcon icon={ArrowRight01Icon} size={10} />
+            </button>
+          </div>
+        </div>
+
+        {/* Identity Summary */}
+        <div style={{ borderRadius: 18, padding: "20px 24px", background: "linear-gradient(150deg, #2a0e18 0%, #1a0810 100%)", marginBottom: 14 }}>
+          <p style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.55)", fontWeight: 700, marginBottom: 12 }}>Identity Summary</p>
+          <p style={{ fontSize: 16, color: "rgba(255,255,255,0.7)", lineHeight: 1.7 }}>
+            Your identity is still emerging. As you complete intelligence domains, your behavioural archetype and confidence will reveal themselves.
+          </p>
+        </div>
+
+        {/* Coverage Progress */}
+        <div style={{ borderRadius: 18, padding: "22px 24px", background: "linear-gradient(150deg, #2a0e18 0%, #1a0810 100%)" }}>
+          <p style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.55)", fontWeight: 700, marginBottom: 18 }}>Identity Coverage Progress</p>
+          {[
+            { label: "Core Dimensions", val: 7, max: 7, pct: 100, color: "#4ade80" },
+            { label: "Deeper Dimensions", val: 4, max: 5, pct: 80, color: "#c9a84c" },
+            { label: "Coming Soon", val: 0, max: 3, pct: 0, color: "rgba(255,255,255,0.15)", note: "3 new domains" },
+          ].map(d => (
+            <div key={d.label} style={{ marginBottom: 18 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 7 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.75)" }}>{d.label}</span>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)" }}>{d.note ?? `${d.val} / ${d.max} gathered`}</span>
+              </div>
+              <div style={{ height: 5, borderRadius: 99, background: "rgba(255,255,255,0.07)" }}>
+                <div style={{ height: "100%", width: `${d.pct}%`, borderRadius: 99, background: d.color }} />
+              </div>
+            </div>
+          ))}
+          <p style={{ fontSize: 10, color: "rgba(255,255,255,0.2)", lineHeight: 1.6, marginTop: 4 }}>
+            Coverage counts gathered results, not access. Core dimensions include synthesized perspectives that draw on the same lived evidence and journey activity rather than a separate measurement.
+          </p>
+          <div style={{ marginTop: 16, borderRadius: 12, padding: "14px 18px", border: "1px solid rgba(255,255,255,0.08)", display: "flex", alignItems: "center", gap: 10 }}>
+            <HugeiconsIcon icon={LockIcon} size={14} style={{ color: "rgba(255,255,255,0.35)", flexShrink: 0 }} />
+            <div>
+              <p style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.65)" }}>Unlock deeper understanding with Premium <span style={{ color: "rgba(255,255,255,0.3)" }}>›</span></p>
+              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>Expand your identity through deeper dimensions — how you handle tension, what sustains you, your emotional rhythm and your unified synthesis.</p>
+            </div>
+          </div>
+        </div>
       </motion.div>
 
       <style>{`
