@@ -73,7 +73,7 @@ export default function UpgradePage() {
           {(["monthly", "annual"] as const).map(b => (
             <button key={b} onClick={() => setBilling(b)} style={{
               padding: "9px 22px", borderRadius: 99,
-              background: billing === b ? GOLD : "transparent",
+              background: billing === b ? WINE2 : "transparent",
               border: "none",
               color: billing === b ? T1 : T2,
               fontSize: 13, fontWeight: 700, cursor: "pointer",
@@ -124,18 +124,18 @@ export default function UpgradePage() {
         {/* PRO */}
         <motion.div {...f(0.2)} style={{
           background: "linear-gradient(160deg, #1c1208 0%, #130e05 50%, #1a1007 100%)",
-          border: "1px solid rgba(201,168,76,0.25)",
+          border: "1px solid rgba(192,64,79,0.2)",
           borderRadius: 28, padding: "40px 36px 36px",
           display: "flex", flexDirection: "column",
           position: "relative", overflow: "hidden",
-          boxShadow: "0 0 80px rgba(201,168,76,0.06)",
+          boxShadow: "0 0 80px rgba(192,64,79,0.06)",
         }}>
           {/* Glow */}
-          <div style={{ position: "absolute", top: -60, right: -40, width: 240, height: 240, background: "radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 65%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", top: -60, right: -40, width: 240, height: 240, background: "radial-gradient(circle, rgba(192,64,79,0.08) 0%, transparent 65%)", pointerEvents: "none" }} />
 
           {/* Badge */}
-          <div style={{ position: "absolute", top: 20, right: 20, background: billing === "annual" ? "rgba(74,222,128,0.12)" : "rgba(201,168,76,0.12)", border: `1px solid ${billing === "annual" ? "rgba(74,222,128,0.3)" : "rgba(201,168,76,0.28)"}`, borderRadius: 99, padding: "4px 12px" }}>
-            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.16em", color: billing === "annual" ? "#4ade80" : GOLD }}>
+          <div style={{ position: "absolute", top: 20, right: 20, background: billing === "annual" ? "rgba(74,222,128,0.12)" : "rgba(192,64,79,0.1)", border: `1px solid ${billing === "annual" ? "rgba(74,222,128,0.3)" : "rgba(192,64,79,0.25)"}`, borderRadius: 99, padding: "4px 12px" }}>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.16em", color: billing === "annual" ? "#4ade80" : WINE2 }}>
               {billing === "annual" ? "BEST VALUE" : "MOST CHOSEN"}
             </span>
           </div>
@@ -151,8 +151,8 @@ export default function UpgradePage() {
                   <span style={{ fontSize: 15, color: "rgba(245,240,232,0.3)", paddingBottom: 10 }}>/month</span>
                 </div>
                 {/* Founding pill */}
-                <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.22)", marginBottom: 18 }}>
-                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: GOLD }} />
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(192,64,79,0.08)", border: "1px solid rgba(201,168,76,0.22)", marginBottom: 18 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: WINE2 }} />
                   <span style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: "0.06em" }}>FOUNDING 500 · $19.99 LOCKED</span>
                 </div>
               </>
@@ -182,7 +182,7 @@ export default function UpgradePage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 13, flex: 1, marginBottom: 36, position: "relative", zIndex: 1 }}>
             {PRO_FEATURES.map((feat, i) => (
               <div key={feat} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                <HugeiconsIcon icon={CheckmarkCircle01Icon} size={15} style={{ color: i === 0 ? "rgba(245,240,232,0.3)" : GOLD, flexShrink: 0, marginTop: 2 }} />
+                <HugeiconsIcon icon={CheckmarkCircle01Icon} size={15} style={{ color: i === 0 ? T3 : WINE2, flexShrink: 0, marginTop: 2 }} />
                 <span style={{ fontSize: 13, color: i === 0 ? "rgba(245,240,232,0.4)" : "rgba(245,240,232,0.75)", lineHeight: 1.55, fontWeight: i === 0 ? 400 : 500 }}>{feat}</span>
               </div>
             ))}
@@ -190,7 +190,7 @@ export default function UpgradePage() {
 
           <button style={{
             width: "100%", padding: "16px", borderRadius: 16,
-            background: `linear-gradient(135deg, ${GOLD} 0%, rgba(201,168,76,0.8) 100%)`,
+            background: `linear-gradient(135deg,${WINE},${WINE2})`,
             border: "none", color: WINE,
             fontSize: 14, fontWeight: 800, cursor: "pointer",
             letterSpacing: "0.05em", textTransform: "uppercase" as const,
@@ -219,7 +219,7 @@ export default function UpgradePage() {
             Start with Pro and let The Pull go deeper with you.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-            <button style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 30px", borderRadius: 16, background: `linear-gradient(135deg,${GOLD},rgba(201,168,76,0.8))`, border: "none", color: WINE, fontSize: 14, fontWeight: 800, cursor: "pointer", boxShadow: "0 8px 24px rgba(201,168,76,0.2)", letterSpacing: "0.04em" }}>
+            <button style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 30px", borderRadius: 16, background: `linear-gradient(135deg,${WINE},${WINE2})`, border: "none", color: WINE, fontSize: 14, fontWeight: 800, cursor: "pointer", boxShadow: "0 8px 24px rgba(192,64,79,0.25)", letterSpacing: "0.04em" }}>
               <HugeiconsIcon icon={AiSparklesIcon} size={14} />
               START PRO
             </button>
