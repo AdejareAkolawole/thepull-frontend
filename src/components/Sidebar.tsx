@@ -66,7 +66,7 @@ export default function Sidebar() {
         {open ? (
           <>
             <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: 9, textDecoration: "none", overflow: "hidden" }}>
-              <img src="/logo.jpg" alt="ThePull" style={{ height: 28, width: 28, borderRadius: 7, objectFit: "cover", flexShrink: 0 }} />
+              <img src="/logo.jpg" alt="ThePull" style={{ height: 28, width: "auto", borderRadius: 0, background: "none", flexShrink: 0 }} />
               <div style={{ overflow: "hidden" }}>
                 <p style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>MyPullScore</p>
                 <p style={{ fontSize: 9, color: "var(--text-muted)", whiteSpace: "nowrap", marginTop: 1 }}>Personal intelligence</p>
