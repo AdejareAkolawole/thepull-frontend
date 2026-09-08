@@ -100,7 +100,7 @@ export default function DashboardClient() {
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
       {/* ── HERO ── */}
-      <motion.div {...fade(0)} className="dash-hero" style={{
+      <motion.div {...fade(0)} style={{
         borderRadius: 22, overflow: "hidden", position: "relative",
         background: `linear-gradient(130deg, ${WINE} 0%, #6b1c2b 55%, #8c2535 100%)`,
         minHeight: 240,
@@ -108,17 +108,17 @@ export default function DashboardClient() {
         <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(ellipse at 75% 50%, rgba(255,255,255,0.05) 0%, transparent 55%)", pointerEvents: "none" }} />
 
         {/* Left */}
-        <div className="dash-hero-inner" style={{ padding: "44px 48px 44px", maxWidth: 520, position: "relative", zIndex: 2 }}>
+        <div style={{ padding: "44px 48px 44px", maxWidth: 520, position: "relative", zIndex: 2 }}>
           <p style={{ fontSize: 10, letterSpacing: "0.26em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginBottom: 10, fontWeight: 700 }}>
             — Intelligence Based on Your Profile
           </p>
-          <h2 className="mobile-h1" style={{ fontSize: 38, fontWeight: 800, color: "#fff", lineHeight: 1.1, marginBottom: 10, letterSpacing: "-0.02em" }}>
+          <h1 style={{ fontSize: 38, fontWeight: 800, color: "#fff", lineHeight: 1.1, marginBottom: 10, letterSpacing: "-0.02em" }}>
             Dashboard Overview
-          </h2>
+          </h1>
           <p style={{ fontSize: 13, color: "rgba(255,255,255,0.44)", lineHeight: 1.7, marginBottom: 28 }}>
             {greeting}, {mockUser.name}. 3 new intelligence signals since your last visit.
           </p>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 10 }}>
             <Link href="/pull-profile" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 20px", borderRadius: 11, background: "#fff", color: WINE, fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
               Pull Profile <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
             </Link>
@@ -128,8 +128,8 @@ export default function DashboardClient() {
           </div>
         </div>
 
-        {/* Floating glass insight cards — hidden on mobile */}
-        <div className="dash-hero-cards" style={{ position: "absolute", right: 40, top: "50%", transform: "translateY(-50%)", width: 320, height: 200, zIndex: 3 }}>
+        {/* Floating glass insight cards — like the reference */}
+        <div style={{ position: "absolute", right: 40, top: "50%", transform: "translateY(-50%)", width: 320, height: 200, zIndex: 3 }}>
           {/* Back card */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.32, duration: 0.5 }}
             style={{ position: "absolute", top: 0, right: 0, width: 210, padding: "14px 16px", borderRadius: 14, background: "rgba(255,255,255,0.18)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.25)", transform: "rotate(6deg) translate(30px,-10px)" }}>
@@ -230,7 +230,7 @@ export default function DashboardClient() {
         </motion.div>
 
         {/* AI ASSISTANT — spans both stat rows */}
-        <motion.div {...fade(0.1)} className="dash-ai-panel" style={{
+        <motion.div {...fade(0.1)} style={{
           background: "#fff", border: `1px solid ${BD}`, borderRadius: 18,
           boxShadow: "0 1px 8px rgba(0,0,0,0.05)",
           gridRow: "1 / 3", display: "flex", flexDirection: "column", overflow: "hidden",
