@@ -230,7 +230,7 @@ export default function DashboardClient() {
         </motion.div>
 
         {/* AI ASSISTANT — spans both stat rows */}
-        <motion.div {...fade(0.1)} style={{
+        <motion.div {...fade(0.1)} className="dash-ai-panel" style={{
           background: "#fff", border: `1px solid ${BD}`, borderRadius: 18,
           boxShadow: "0 1px 8px rgba(0,0,0,0.05)",
           gridRow: "1 / 3", display: "flex", flexDirection: "column", overflow: "hidden",

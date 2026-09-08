@@ -65,6 +65,13 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
 
+/* Pill nav — show label on hover */
+.pill-nav-item:hover .pill-nav-label {
+  max-width: 120px !important;
+  opacity: 1 !important;
+  margin-left: 7px !important;
+}
+
 /* Mobile bottom nav — hidden on desktop */
 .desktop-hide-mobile-nav { display: flex; }
 @media (min-width: 768px) {
@@ -108,11 +115,27 @@ body {
   /* Page header — stack on small screens */
   .page-header-row { flex-direction: column !important; align-items: flex-start !important; }
 
-  /* Dashboard grid rows — collapse (also targeted from DashboardClient style tag) */
-  .dash-row-1, .dash-row-2 {
+  /* Dashboard main grid — collapse 4-col to 1-col */
+  .dash-main {
     grid-template-columns: 1fr !important;
+    grid-template-rows: auto !important;
   }
+  /* AI panel loses spanning */
+  .dash-ai-panel { grid-row: auto !important; }
+
+  /* Dashboard people cards — 1 col */
+  .dash-people { grid-template-columns: 1fr !important; }
+
+  /* Identity rows — stack */
+  .id-row1, .id-row3 { grid-template-columns: 1fr !important; }
+
+  /* Relationship dimension cards — 2 col on mobile */
+  .id-rel { grid-template-columns: repeat(2, 1fr) !important; }
+
   .dash-hero-inner { padding: 24px 20px !important; }
+
+  /* Dashboard hero heading size */
+  .dash-hero h2 { font-size: 32px !important; }
 
   /* Vault — hide search+filter on mobile to keep header clean */
   .vault-search-bar, .vault-filter-btn { display: none !important; }
