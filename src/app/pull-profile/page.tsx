@@ -1,9 +1,9 @@
 "use client";
 import { motion } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight01Icon, TrendingUpIcon, AiSparklesIcon, Activity01Icon, UserCircleIcon, Target01Icon } from "@hugeicons/core-free-icons";
+import { TrendingUpIcon, AiSparklesIcon, Activity01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
-import { mockUser, mockDimensions } from "@/lib/mock";
+import { mockUser, mockDimensions, mockIdentityVector } from "@/lib/mock";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
@@ -13,13 +13,6 @@ const Card = ({ children, style = {} }: any) => (
   </div>
 );
 
-const traits = [
-  "Deeply analytical before emotional disclosure",
-  "High empathy with selective vulnerability",
-  "Strong pattern recognition in social dynamics",
-  "Tendency to over-explain when nervous",
-  "Values authenticity above social approval",
-];
 
 const history = [68, 70, 69, 71, 72, 71, 73, 74];
 
@@ -133,24 +126,57 @@ export default function PullProfilePage() {
         </motion.div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {/* Traits */}
+          {/* Primary Archetype card */}
           <motion.div {...f(0.12)}>
-            <Card style={{ padding: 20 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-                <div style={{ width: 28, height: 28, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(224,80,96,0.1)" }}>
-                  <HugeiconsIcon icon={UserCircleIcon} size={14} style={{ color: "var(--brand)" }} />
+            <div style={{ borderRadius: 16, overflow: "hidden", background: "linear-gradient(145deg, #1a0508 0%, #2d0b14 50%, #1a0508 100%)", border: "1px solid rgba(192,64,79,0.2)" }}>
+              {/* Top section */}
+              <div style={{ padding: "20px 20px 16px", display: "flex", alignItems: "flex-start", gap: 16 }}>
+                {/* Icon ring */}
+                <div style={{ flexShrink: 0, width: 60, height: 60, borderRadius: "50%", border: "2px solid rgba(192,64,79,0.5)", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(192,64,79,0.08)" }}>
+                  <span style={{ fontSize: 24 }}>🧬</span>
                 </div>
-                <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>Core Traits</p>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(192,64,79,0.7)", marginBottom: 6 }}>Primary Archetype</p>
+                  <span style={{ fontSize: 9, fontWeight: 700, padding: "3px 8px", borderRadius: 99, background: "rgba(192,64,79,0.15)", color: "rgba(192,64,79,0.9)", border: "1px solid rgba(192,64,79,0.25)", letterSpacing: "0.08em" }}>
+                    {mockUser.archetype_stage}
+                  </span>
+                  <p style={{ fontSize: 20, fontWeight: 700, color: "white", marginTop: 8, lineHeight: 1.15 }}>{mockUser.archetype}</p>
+                  <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", marginTop: 4, lineHeight: 1.5 }}>{mockUser.archetype_tagline}</p>
+                </div>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {traits.map(t => (
-                  <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                    <div style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--brand)", flexShrink: 0, marginTop: 7 }} />
-                    <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5 }}>{t}</p>
-                  </div>
-                ))}
+
+              {/* Confidence + Version */}
+              <div style={{ margin: "0 20px", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+                <div style={{ padding: "12px 0" }}>
+                  <p style={{ fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)", marginBottom: 4 }}>Confidence</p>
+                  <p style={{ fontSize: 22, fontWeight: 800, color: "#c0404f" }}>{mockUser.archetype_confidence}%</p>
+                </div>
+                <div style={{ padding: "12px 0 12px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
+                  <p style={{ fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)", marginBottom: 4 }}>Version</p>
+                  <p style={{ fontSize: 22, fontWeight: 800, color: "#c0404f" }}>{mockUser.archetype_version}</p>
+                </div>
               </div>
-            </Card>
+
+              {/* Identity Vector */}
+              <div style={{ padding: "16px 20px 20px" }}>
+                <p style={{ fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)", marginBottom: 12 }}>Identity Vector — Behavioural Alignment</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {mockIdentityVector.map((v, i) => (
+                    <div key={v.label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <span style={{ fontSize: 11, color: i === 0 ? "white" : "rgba(255,255,255,0.45)", fontWeight: i === 0 ? 700 : 400, minWidth: 130, flexShrink: 0 }}>{v.label}</span>
+                      <div style={{ flex: 1, height: 3, borderRadius: 99, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+                        <motion.div
+                          style={{ height: "100%", borderRadius: 99, background: i === 0 ? `linear-gradient(90deg, #7c2232, ${v.color})` : v.color, opacity: i === 0 ? 1 : 0.5 }}
+                          initial={{ width: 0 }} animate={{ width: `${v.pct}%` }}
+                          transition={{ duration: 1, delay: 0.3 + i * 0.07 }}
+                        />
+                      </div>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: i === 0 ? "white" : "rgba(255,255,255,0.35)", minWidth: 32, textAlign: "right" as const }}>{v.pct}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </motion.div>
 
           {/* Score chart */}
@@ -173,25 +199,6 @@ export default function PullProfilePage() {
                 <span>68</span><span style={{ fontWeight: 700, color: "var(--text-primary)" }}>74</span>
               </div>
             </Card>
-          </motion.div>
-
-          {/* CTA */}
-          <motion.div {...f(0.2)}>
-            <div className="cta-banner" style={{ borderRadius: 16, padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #3d0e1a, #6b1c2b)", border: "1px solid rgba(192,64,79,0.25)" }}>
-              <div style={{ position: "absolute", top: -24, right: -24, width: 80, height: 80, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.3), transparent)", filter: "blur(16px)" }} />
-              <div style={{ display: "flex", alignItems: "center", gap: 12, position: "relative" }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: "rgba(224,80,96,0.2)", border: "1px solid rgba(224,80,96,0.3)" }}>
-                  <HugeiconsIcon icon={Target01Icon} size={16} style={{ color: "var(--brand)" }} />
-                </div>
-                <div>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: "white" }}>Complete Emotional Landscape</p>
-                  <p style={{ fontSize: 11, marginTop: 2, color: "rgba(255,255,255,0.4)" }}>Next assessment unlocks new insights</p>
-                </div>
-              </div>
-              <Link href="/journey" className="cta-banner-btn" style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", textDecoration: "none", flexShrink: 0, marginLeft: 16, position: "relative" }}>
-                Start <HugeiconsIcon icon={ArrowRight01Icon} size={11} />
-              </Link>
-            </div>
           </motion.div>
         </div>
       </div>

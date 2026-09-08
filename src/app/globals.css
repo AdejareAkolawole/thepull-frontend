@@ -109,7 +109,7 @@ body {
   .page-header-row { flex-direction: column !important; align-items: flex-start !important; }
 
   /* Dashboard grid rows — collapse (also targeted from DashboardClient style tag) */
-  .dash-row-1, .dash-row-2, .dash-row-3 {
+  .dash-row-1, .dash-row-2 {
     grid-template-columns: 1fr !important;
   }
   .dash-hero-inner { padding: 24px 20px !important; }

@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  TrendingUpIcon, ArrowRight01Icon, AiSparklesIcon, CheckmarkCircle02Icon,
-  AddCircleIcon, UserAdd01Icon, AiInnovation01Icon, Activity01Icon,
+  TrendingUpIcon, ArrowRight01Icon, AiSparklesIcon,
+  AiInnovation01Icon, Activity01Icon,
   FlashIcon, PresentationLineChart01Icon, Calendar03Icon, Target01Icon,
 } from "@hugeicons/core-free-icons";
-import { mockUser, mockDimensions, mockPeople, mockInsights, mockAchievements } from "@/lib/mock";
+import { mockUser, mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 16 },
@@ -132,17 +132,12 @@ export default function DashboardClient() {
                 </Link>
               </div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, marginTop: 24, flexWrap: "wrap" as const }}>
-              <span style={{ fontSize: 10, color: "rgba(255,255,255,0.28)" }}>In vault:</span>
-              {mockPeople.map(p => {
-                const cc = p.compatibility === "high" ? "#4ade80" : "#fbbf24";
-                return (
-                  <Link key={p.id} href="/vault" style={{ display: "flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 99, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.72)", textDecoration: "none", whiteSpace: "nowrap" as const }}>
-                    <span style={{ width: 15, height: 15, borderRadius: 4, background: "rgba(255,255,255,0.18)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 800 }}>{p.initials}</span>
-                    {p.name} <span style={{ color: cc, fontWeight: 800 }}>{p.score}</span>
-                  </Link>
-                );
-              })}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 24, flexWrap: "wrap" as const }}>
+              {[{ label: "Analytical", color: "#c0404f" }, { label: "Empathetic", color: "#60a5fa" }, { label: "Strategic", color: "#a78bfa" }].map(t => (
+                <span key={t.label} style={{ fontSize: 10, fontWeight: 700, padding: "4px 12px", borderRadius: 99, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.6)", letterSpacing: "0.05em" }}>
+                  {t.label}
+                </span>
+              ))}
             </div>
           </div>
         </motion.div>
@@ -253,22 +248,27 @@ export default function DashboardClient() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <motion.div {...fade(0.15)} style={{ flex: 1 }}>
-            <Card style={{ padding: 16, height: "100%" }}>
-              <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", marginBottom: 10 }}>Achievements</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+            <Card style={{ padding: 16, height: "100%", overflow: "hidden" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>Achievements</p>
+                <span style={{ fontSize: 10, color: "var(--text-muted)" }}>{mockAchievements.filter(a => a.done).length}/{mockAchievements.length} unlocked</span>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7 }}>
                 {mockAchievements.map(a => (
-                  <div key={a.label} style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                    <HugeiconsIcon icon={a.done ? CheckmarkCircle02Icon : AddCircleIcon} size={14}
-                      style={{ color: a.done ? "#16a34a" : "rgba(0,0,0,0.15)", flexShrink: 0 }} />
-                    <span style={{ fontSize: 11, color: a.done ? "var(--text-secondary)" : "var(--text-muted)" }}>{a.label}</span>
+                  <div key={a.label} style={{
+                    borderRadius: 12, padding: "10px 10px 8px",
+                    background: a.done ? `${a.color}0f` : "rgba(0,0,0,0.03)",
+                    border: `1px solid ${a.done ? `${a.color}25` : "rgba(0,0,0,0.07)"}`,
+                    opacity: a.done ? 1 : 0.5,
+                    position: "relative", overflow: "hidden",
+                  }}>
+                    {!a.done && (
+                      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: "rgba(0,0,0,0.12)" }}>🔒</div>
+                    )}
+                    <div style={{ fontSize: 20, marginBottom: 6 }}>{a.done ? a.icon : "🔒"}</div>
+                    <p style={{ fontSize: 10, fontWeight: 700, color: a.done ? a.color : "var(--text-muted)", lineHeight: 1.2 }}>{a.label}</p>
                   </div>
                 ))}
-              </div>
-              <div style={{ marginTop: 12, height: 3, borderRadius: 99, overflow: "hidden", background: "rgba(0,0,0,0.06)" }}>
-                <motion.div style={{ height: "100%", borderRadius: 99, background: "linear-gradient(90deg, #7c2232, #c0404f)" }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${(mockAchievements.filter((a: any) => a.done).length / mockAchievements.length) * 100}%` }}
-                  transition={{ duration: 1, delay: 0.5 }} />
               </div>
             </Card>
           </motion.div>
@@ -287,83 +287,38 @@ export default function DashboardClient() {
         </div>
       </div>
 
-      {/* ROW 3: Vault + Quick Actions */}
-      <div className="dash-row-3" style={{ display: "grid", gridTemplateColumns: "1fr 250px", gap: 12 }}>
-
-        <motion.div {...fade(0.21)}>
-          <Card style={{ padding: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-              <div>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>My Vault</p>
-                <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 1 }}>People you're tracking</p>
-              </div>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <Link href="/vault" style={{ fontSize: 11, fontWeight: 700, color: "var(--brand)", textDecoration: "none" }}>View all →</Link>
-                <Link href="/vault/add" style={{ display: "flex", alignItems: "center", gap: 5, padding: "6px 12px", borderRadius: 10, background: "linear-gradient(135deg, #7c2232, #c0404f)", color: "white", fontSize: 11, fontWeight: 700, textDecoration: "none" }}>
-                  <HugeiconsIcon icon={UserAdd01Icon} size={11} /> Add
-                </Link>
-              </div>
+      {/* ROW 3: Quick Actions full width */}
+      <motion.div {...fade(0.25)}>
+        <Card style={{ padding: 16 }}>
+          <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", marginBottom: 10 }}>Quick Actions</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 7, marginBottom: 8 }}>
+            {[
+              { label: "AI Coach", href: "/coach", icon: AiInnovation01Icon, color: "#2563eb", bg: "rgba(37,99,235,0.07)" },
+              { label: "Reports", href: "/reports", icon: PresentationLineChart01Icon, color: "#7c3aed", bg: "rgba(124,58,237,0.07)" },
+              { label: "Journey", href: "/journey", icon: Target01Icon, color: "#d97706", bg: "rgba(217,119,6,0.07)" },
+              { label: "Journal", href: "/journal", icon: FlashIcon, color: "#c0404f", bg: "rgba(192,64,79,0.07)" },
+            ].map(a => (
+              <Link key={a.label} href={a.href} style={{ display: "flex", flexDirection: "column" as const, alignItems: "flex-start", gap: 8, padding: 12, borderRadius: 12, background: a.bg, textDecoration: "none", border: "1px solid rgba(0,0,0,0.04)" }}>
+                <div style={{ width: 26, height: 26, borderRadius: 7, background: `${a.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <HugeiconsIcon icon={a.icon} size={13} style={{ color: a.color }} />
+                </div>
+                <span style={{ fontSize: 11, fontWeight: 700, color: a.color }}>{a.label}</span>
+              </Link>
+            ))}
+          </div>
+          <div style={{ padding: "10px 12px", borderRadius: 12, background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.05)", display: "flex", alignItems: "flex-start", gap: 9 }}>
+            <HugeiconsIcon icon={Calendar03Icon} size={13} style={{ color: "var(--text-muted)", flexShrink: 0, marginTop: 1 }} />
+            <div>
+              <p style={{ fontSize: 11, fontWeight: 700, color: "var(--text-primary)" }}>Today's focus</p>
+              <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2, lineHeight: 1.4 }}>Complete your Emotional Landscape assessment</p>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {mockPeople.map(p => {
-                const cc = p.compatibility === "high" ? "#16a34a" : p.compatibility === "medium" ? "#d97706" : "#dc2626";
-                return (
-                  <Link key={p.id} href={`/vault/${p.id}`} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", textDecoration: "none" }}>
-                    <div style={{ width: 36, height: 36, borderRadius: 10, background: "linear-gradient(135deg, #7c2232, #a03040)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "white", flexShrink: 0 }}>
-                      {p.initials}
-                    </div>
-                    <div style={{ flex: "0 0 auto", minWidth: 90 }}>
-                      <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>{p.name}</p>
-                      <p style={{ fontSize: 11, color: "var(--text-muted)" }}>{p.relation}</p>
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ height: 3, borderRadius: 99, overflow: "hidden", background: "rgba(0,0,0,0.06)" }}>
-                        <div style={{ height: "100%", borderRadius: 99, background: cc, width: `${p.score}%` }} />
-                      </div>
-                    </div>
-                    <div style={{ textAlign: "right" as const, minWidth: 44, flexShrink: 0 }}>
-                      <p style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>{p.score}</p>
-                      <p style={{ fontSize: 10, color: cc, textTransform: "capitalize" as const, fontWeight: 600 }}>{p.compatibility}</p>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </Card>
-        </motion.div>
-
-        <motion.div {...fade(0.25)}>
-          <Card style={{ padding: 16, height: "100%" }}>
-            <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", marginBottom: 10 }}>Quick Actions</p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7, marginBottom: 8 }}>
-              {[
-                { label: "Add Person", href: "/vault/add", icon: UserAdd01Icon, color: "#c0404f", bg: "rgba(192,64,79,0.07)" },
-                { label: "AI Coach", href: "/coach", icon: AiInnovation01Icon, color: "#2563eb", bg: "rgba(37,99,235,0.07)" },
-                { label: "Reports", href: "/reports", icon: PresentationLineChart01Icon, color: "#7c3aed", bg: "rgba(124,58,237,0.07)" },
-                { label: "Journey", href: "/journey", icon: Target01Icon, color: "#d97706", bg: "rgba(217,119,6,0.07)" },
-              ].map(a => (
-                <Link key={a.label} href={a.href} style={{ display: "flex", flexDirection: "column" as const, alignItems: "flex-start", gap: 8, padding: 12, borderRadius: 12, background: a.bg, textDecoration: "none", border: "1px solid rgba(0,0,0,0.04)" }}>
-                  <div style={{ width: 26, height: 26, borderRadius: 7, background: `${a.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <HugeiconsIcon icon={a.icon} size={13} style={{ color: a.color }} />
-                  </div>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: a.color }}>{a.label}</span>
-                </Link>
-              ))}
-            </div>
-            <div style={{ padding: "10px 12px", borderRadius: 12, background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.05)", display: "flex", alignItems: "flex-start", gap: 9 }}>
-              <HugeiconsIcon icon={Calendar03Icon} size={13} style={{ color: "var(--text-muted)", flexShrink: 0, marginTop: 1 }} />
-              <div>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "var(--text-primary)" }}>Today's focus</p>
-                <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2, lineHeight: 1.4 }}>Complete your Emotional Landscape assessment</p>
-              </div>
-            </div>
-          </Card>
-        </motion.div>
-      </div>
+          </div>
+        </Card>
+      </motion.div>
 
       <style>{`
         @media (max-width: 767px) {
-          .dash-row-1, .dash-row-2, .dash-row-3 {
+          .dash-row-1, .dash-row-2 {
             grid-template-columns: 1fr !important;
           }
           .dash-hero-inner { padding: 24px 20px !important; }

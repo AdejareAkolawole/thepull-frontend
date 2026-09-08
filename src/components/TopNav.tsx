@@ -10,15 +10,14 @@ import {
 
 const navItems = [
   { href: "/dashboard", icon: Home01Icon, label: "Home" },
-  { href: "/vault", icon: VaultIcon, label: "Vault" },
   { href: "/coach", icon: Message02Icon, label: "Coach" },
   { href: "/pull-profile", icon: AiBrain01Icon, label: "Profile" },
+  { href: "/journey", icon: FlashIcon, label: "Journey" },
   { href: "/settings", icon: Settings01Icon, label: "Settings" },
 ];
 
 const allNavItems = [
   { href: "/dashboard", icon: Home01Icon, label: "Home" },
-  { href: "/vault", icon: VaultIcon, label: "Vault" },
   { href: "/pull-profile", icon: AiBrain01Icon, label: "Profile" },
   { href: "/coach", icon: Message02Icon, label: "AI Coach" },
   { href: "/reports", icon: Analytics01Icon, label: "Reports" },

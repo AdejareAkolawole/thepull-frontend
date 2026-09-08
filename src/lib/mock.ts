@@ -3,11 +3,25 @@ export const mockUser = {
   initials: "AA",
   archetype: "The Analytical Connector",
   archetype_key: "analytical_connector",
+  archetype_confidence: 72,
+  archetype_version: "V10.0",
+  archetype_stage: "Emerging Identity",
+  archetype_tagline: "We currently believe your strongest identity is rooted in logic, pattern recognition, and emotional selectivity.",
   pull_score: 74,
   pull_trend: "rising" as const,
   plan: "premium" as const,
   joined: "2024-09-01",
 };
+
+export const mockIdentityVector = [
+  { label: "Analytical Connector", pct: 72, color: "#c0404f" },
+  { label: "Explorer", pct: 58, color: "#60a5fa" },
+  { label: "Builder", pct: 51, color: "#fbbf24" },
+  { label: "Visionary", pct: 47, color: "#a78bfa" },
+  { label: "Nurturer", pct: 44, color: "#34d399" },
+  { label: "Strategist", pct: 38, color: "#f97316" },
+  { label: "Connector", pct: 33, color: "#e879f9" },
+];
 
 export const mockDimensions = [
   { label: "Emotional Intelligence", score: 81, color: "#c6ad83" },
@@ -48,12 +62,12 @@ export const mockInsights = [
 ];
 
 export const mockAchievements = [
-  { label: "First Assessment", done: true },
-  { label: "Added 3 People", done: true },
-  { label: "First Report", done: true },
-  { label: "30-Day Streak", done: false },
-  { label: "Premium Upgrade", done: true },
-  { label: "Reality Check", done: false },
+  { label: "First Assessment", desc: "Completed your first intelligence assessment", icon: "🧠", done: true, color: "#c0404f" },
+  { label: "Self Aware", desc: "Reached 65+ on Self-Awareness dimension", icon: "🪞", done: true, color: "#60a5fa" },
+  { label: "First Report", desc: "Generated your first intelligence report", icon: "📊", done: true, color: "#a78bfa" },
+  { label: "Premium Member", desc: "Unlocked full intelligence engine access", icon: "⚡", done: true, color: "#fbbf24" },
+  { label: "30-Day Streak", desc: "Engaged with The Pull for 30 days straight", icon: "🔥", done: false, color: "#f97316" },
+  { label: "Reality Check", desc: "Complete the Emotional Landscape assessment", icon: "🎯", done: false, color: "#34d399" },
 ];
 
 export const mockJourneySteps = [
