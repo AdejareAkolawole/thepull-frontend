@@ -57,7 +57,7 @@ export default function UpgradePage() {
             <HugeiconsIcon icon={AiSparklesIcon} size={11} style={{ color: GOLD }} />
             <span style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: "0.12em", textTransform: "uppercase" }}>Premium Intelligence</span>
           </div>
-          <h1 style={{ fontSize: 72, fontWeight: 800, color: WINE, lineHeight: 1, letterSpacing: "-0.04em", marginBottom: 22 }}>
+          <h1 style={{ fontSize: 72, fontWeight: 800, color: "#0f0a14", lineHeight: 1, letterSpacing: "-0.04em", marginBottom: 22 }}>
             Know yourself<br /><span style={{ color: GOLD }}>completely.</span>
           </h1>
           <p style={{ fontSize: 17, color: "rgba(61,14,26,0.45)", lineHeight: 1.75, maxWidth: 480, margin: "0 auto" }}>
@@ -98,7 +98,7 @@ export default function UpgradePage() {
           <div style={{ marginBottom: 36 }}>
             <p style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(61,14,26,0.3)", fontWeight: 700, marginBottom: 10 }}>Free</p>
             <div style={{ display: "flex", alignItems: "flex-end", gap: 6, marginBottom: 18 }}>
-              <span style={{ fontSize: 72, fontWeight: 800, color: WINE, lineHeight: 1, letterSpacing: "-0.04em" }}>$0</span>
+              <span style={{ fontSize: 72, fontWeight: 800, color: "#0f0a14", lineHeight: 1, letterSpacing: "-0.04em" }}>$0</span>
               <span style={{ fontSize: 15, color: "rgba(61,14,26,0.3)", paddingBottom: 10 }}>forever</span>
             </div>
             <p style={{ fontSize: 14, color: "rgba(61,14,26,0.45)", lineHeight: 1.7 }}>
@@ -211,7 +211,7 @@ export default function UpgradePage() {
       {/* ── BOTTOM CTA ── */}
       <div style={{ textAlign: "center", padding: "80px 24px 0" }}>
         <motion.div {...f(0.1)}>
-          <h2 style={{ fontSize: 48, fontWeight: 800, color: WINE, letterSpacing: "-0.04em", lineHeight: 1.05, marginBottom: 18 }}>
+          <h2 style={{ fontSize: 48, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.04em", lineHeight: 1.05, marginBottom: 18 }}>
             Your intelligence<br /><span style={{ color: GOLD }}>is waiting.</span>
           </h2>
           <p style={{ fontSize: 15, color: "rgba(61,14,26,0.4)", lineHeight: 1.7, maxWidth: 400, margin: "0 auto 36px" }}>
