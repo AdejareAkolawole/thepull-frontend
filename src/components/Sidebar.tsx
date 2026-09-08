@@ -7,16 +7,16 @@ import {
   Home01Icon, AiBrain01Icon, BookOpen01Icon, Message02Icon,
   FlashIcon, ScaleIcon, Notification01Icon, UserCircleIcon,
   CreditCardIcon, Settings01Icon, AiSparklesIcon, CompassIcon,
-  ArrowLeft01Icon, ArrowRight01Icon,
+  SidebarLeft01Icon,
 } from "@hugeicons/core-free-icons";
 
 const mainNav = [
-  { href: "/dashboard",   icon: Home01Icon,       label: "Home" },
-  { href: "/pull-profile",icon: AiSparklesIcon,   label: "Pull Profile" },
-  { href: "/journal",     icon: BookOpen01Icon,   label: "Journal" },
-  { href: "/coach",       icon: AiBrain01Icon,    label: "Ask The Pull" },
-  { href: "/reports",     icon: ScaleIcon,        label: "Reality Check" },
-  { href: "/journey",     icon: CompassIcon,      label: "Journey" },
+  { href: "/dashboard",    icon: Home01Icon,      label: "Home" },
+  { href: "/pull-profile", icon: AiSparklesIcon,  label: "Pull Profile" },
+  { href: "/journal",      icon: BookOpen01Icon,  label: "Journal" },
+  { href: "/coach",        icon: AiBrain01Icon,   label: "Ask The Pull" },
+  { href: "/reports",      icon: ScaleIcon,       label: "Reality Check" },
+  { href: "/journey",      icon: CompassIcon,     label: "Journey" },
 ];
 
 const bottomNav = [
@@ -26,127 +26,173 @@ const bottomNav = [
   { href: "/settings",         icon: Settings01Icon,     label: "Settings" },
 ];
 
-const W_OPEN = 236;
-const W_CLOSED = 64;
-
 export default function Sidebar() {
   const path = usePathname();
   const [open, setOpen] = useState(true);
 
-  // sync CSS class on <html> so main content can offset correctly
   useEffect(() => {
-    const saved = localStorage.getItem("sidebar-open");
-    if (saved === "false") setOpen(false);
+    const saved = localStorage.getItem("sb");
+    if (saved === "0") setOpen(false);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("sidebar-open", String(open));
+    localStorage.setItem("sb", open ? "1" : "0");
     document.documentElement.classList.toggle("sidebar-collapsed", !open);
   }, [open]);
 
   const isActive = (href: string) =>
     href === "/dashboard" ? path === href : path.startsWith(href);
 
-  const NavItem = ({ href, icon, label }: { href: string; icon: any; label: string }) => {
-    const active = isActive(href);
-    return (
-      <Link href={href} title={!open ? label : undefined} style={{
-        display: "flex",
-        alignItems: "center",
-        gap: open ? 10 : 0,
-        padding: open ? "9px 14px" : "9px 0",
-        justifyContent: open ? "flex-start" : "center",
-        borderRadius: 99,
-        textDecoration: "none",
-        fontSize: 13.5,
-        fontWeight: active ? 700 : 500,
-        color: active ? "#c0404f" : "rgba(15,10,20,0.55)",
-        background: active ? "rgba(192,64,79,0.09)" : "transparent",
-        transition: "all 0.2s",
-        marginBottom: 2,
-        overflow: "hidden",
-        whiteSpace: "nowrap" as const,
-      }}>
-        <HugeiconsIcon icon={icon} size={18} style={{ color: active ? "#c0404f" : "rgba(15,10,20,0.38)", flexShrink: 0 }} />
-        {open && <span style={{ transition: "opacity 0.15s", opacity: open ? 1 : 0 }}>{label}</span>}
-      </Link>
-    );
-  };
-
   return (
     <aside className="app-sidebar" style={{
-      position: "fixed",
-      top: 0, left: 0,
-      height: "100vh",
-      width: open ? W_OPEN : W_CLOSED,
-      display: "flex",
-      flexDirection: "column",
+      position: "fixed", top: 0, left: 0, height: "100vh",
+      width: open ? 240 : 68,
+      display: "flex", flexDirection: "column",
       zIndex: 40,
-      background: "#f5f4f0",
-      borderRight: "1px solid rgba(15,10,20,0.07)",
-      overflowY: "auto",
-      overflowX: "hidden",
-      transition: "width 0.25s cubic-bezier(0.4,0,0.2,1)",
+      background: "var(--bg)",
+      borderRight: "1px solid var(--border)",
+      transition: "width 0.22s cubic-bezier(0.4,0,0.2,1)",
+      overflowX: "hidden", overflowY: "auto",
     }}>
 
-      {/* Logo + collapse toggle */}
+      {/* Header */}
       <div style={{
-        padding: open ? "20px 14px 16px" : "20px 0 16px",
-        display: "flex",
-        alignItems: "center",
+        height: 56, flexShrink: 0,
+        display: "flex", alignItems: "center",
+        padding: open ? "0 16px 0 16px" : "0 0 0 0",
         justifyContent: open ? "space-between" : "center",
-        gap: 8,
-        transition: "padding 0.25s",
+        borderBottom: "1px solid var(--border)",
       }}>
+        {open ? (
+          <>
+            <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: 9, textDecoration: "none", overflow: "hidden" }}>
+              <img src="/logo.jpg" alt="ThePull" style={{ height: 28, width: 28, borderRadius: 7, objectFit: "cover", flexShrink: 0 }} />
+              <div style={{ overflow: "hidden" }}>
+                <p style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>MyPullScore</p>
+                <p style={{ fontSize: 9, color: "var(--text-muted)", whiteSpace: "nowrap", marginTop: 1 }}>Personal intelligence</p>
+              </div>
+            </Link>
+            <button onClick={() => setOpen(false)} style={toggleBtn}>
+              <HugeiconsIcon icon={SidebarLeft01Icon} size={15} style={{ color: "var(--text-muted)" }} />
+            </button>
+          </>
+        ) : (
+          <button onClick={() => setOpen(true)} title="Expand" style={{ ...toggleBtn, width: 36, height: 36 }}>
+            <HugeiconsIcon icon={SidebarLeft01Icon} size={15} style={{ color: "var(--text-muted)", transform: "scaleX(-1)" }} />
+          </button>
+        )}
+      </div>
+
+      {/* Main nav */}
+      <nav style={{ flex: 1, padding: "8px 8px 4px" }}>
+        {mainNav.map(({ href, icon, label }) => {
+          const active = isActive(href);
+          return (
+            <Link key={href} href={href} title={!open ? label : undefined} style={{
+              display: "flex", alignItems: "center",
+              gap: 10,
+              height: 38,
+              padding: open ? "0 10px" : "0",
+              justifyContent: open ? "flex-start" : "center",
+              borderRadius: 10,
+              textDecoration: "none",
+              marginBottom: 2,
+              fontWeight: active ? 600 : 400,
+              fontSize: 13.5,
+              color: active ? "var(--brand)" : "var(--text-secondary)",
+              background: active ? "var(--brand-light)" : "transparent",
+              transition: "background 0.12s, color 0.12s",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              position: "relative",
+            }}>
+              {/* Active left bar */}
+              {active && (
+                <span style={{
+                  position: "absolute", left: 0, top: "20%", height: "60%",
+                  width: 3, borderRadius: 99, background: "var(--brand)",
+                }} />
+              )}
+              <HugeiconsIcon icon={icon} size={17} style={{
+                color: active ? "var(--brand)" : "var(--text-muted)",
+                flexShrink: 0,
+                marginLeft: active ? 6 : (open ? 0 : 0),
+              }} />
+              {open && <span>{label}</span>}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Divider */}
+      <div style={{ height: 1, background: "var(--border)", margin: "0 8px" }} />
+
+      {/* Bottom nav */}
+      <div style={{ padding: "8px 8px" }}>
+        {/* User row — expanded only */}
         {open && (
-          <div style={{ display: "flex", alignItems: "center", gap: 10, overflow: "hidden" }}>
-            <img src="/logo.jpg" alt="ThePull" style={{ height: 32, width: "auto", borderRadius: 8, flexShrink: 0 }} />
+          <div style={{
+            display: "flex", alignItems: "center", gap: 10,
+            padding: "10px 10px", marginBottom: 4,
+            borderRadius: 10,
+          }}>
+            <div style={{
+              width: 30, height: 30, borderRadius: 9, flexShrink: 0,
+              background: "linear-gradient(135deg,#7c2232,#c0404f)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 10, fontWeight: 800, color: "#fff",
+            }}>AA</div>
             <div style={{ overflow: "hidden" }}>
-              <p style={{ fontSize: 13, fontWeight: 800, color: "#0f0a14", lineHeight: 1.2, letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>MyPullScore</p>
-              <p style={{ fontSize: 9.5, color: "rgba(15,10,20,0.4)", lineHeight: 1.3, marginTop: 1, whiteSpace: "nowrap" }}>Personal intelligence that grows with you.</p>
+              <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", whiteSpace: "nowrap" }}>Good Morning 👋</p>
+              <p style={{ fontSize: 10, color: "var(--text-muted)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 148 }}>adejare.akolawole@gmail.com</p>
             </div>
           </div>
         )}
         {!open && (
-          <img src="/logo.jpg" alt="ThePull" style={{ height: 32, width: 32, borderRadius: 8, objectFit: "cover" }} />
-        )}
-        <button onClick={() => setOpen(o => !o)} title={open ? "Collapse sidebar" : "Expand sidebar"} style={{
-          width: 28, height: 28, borderRadius: 8,
-          border: "1px solid rgba(15,10,20,0.1)",
-          background: "#fff",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          cursor: "pointer", flexShrink: 0,
-          color: "rgba(15,10,20,0.45)",
-          transition: "background 0.15s",
-        }}>
-          <HugeiconsIcon icon={open ? ArrowLeft01Icon : ArrowRight01Icon} size={13} />
-        </button>
-      </div>
-
-      {/* Main nav */}
-      <nav style={{ flex: 1, padding: open ? "4px 10px" : "4px 8px", overflowY: "auto", overflowX: "hidden" }}>
-        {mainNav.map(item => <NavItem key={item.href} {...item} />)}
-      </nav>
-
-      {/* Divider */}
-      <div style={{ height: 1, background: "rgba(15,10,20,0.08)", margin: open ? "0 10px" : "0 8px" }} />
-
-      {/* Bottom section */}
-      <div style={{ padding: open ? "12px 10px" : "12px 8px" }}>
-        <NavItem href="/notifications" icon={Notification01Icon} label="Notifications" />
-
-        {/* User greeting — only when expanded */}
-        {open && (
-          <div style={{ padding: "10px 14px", marginBottom: 2 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: "#0f0a14", whiteSpace: "nowrap" }}>Good Morning 👋</p>
-            <p style={{ fontSize: 11, color: "rgba(15,10,20,0.42)", marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>adejare.akolawole@gmail.com</p>
-          </div>
+          <div style={{
+            width: 30, height: 30, borderRadius: 9, margin: "8px auto 6px",
+            background: "linear-gradient(135deg,#7c2232,#c0404f)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 10, fontWeight: 800, color: "#fff",
+          }}>AA</div>
         )}
 
-        <NavItem href="/settings/profile" icon={UserCircleIcon}  label="My Profile" />
-        <NavItem href="/upgrade"          icon={CreditCardIcon}  label="Subscription" />
-        <NavItem href="/settings"         icon={Settings01Icon}  label="Settings" />
+        {bottomNav.map(({ href, icon, label }) => {
+          const active = isActive(href);
+          return (
+            <Link key={href} href={href} title={!open ? label : undefined} style={{
+              display: "flex", alignItems: "center",
+              gap: 10, height: 36,
+              padding: open ? "0 10px" : "0",
+              justifyContent: open ? "flex-start" : "center",
+              borderRadius: 10,
+              textDecoration: "none",
+              marginBottom: 2,
+              fontWeight: active ? 600 : 400,
+              fontSize: 13,
+              color: active ? "var(--brand)" : "var(--text-secondary)",
+              background: active ? "var(--brand-light)" : "transparent",
+              whiteSpace: "nowrap", overflow: "hidden",
+              position: "relative",
+            }}>
+              {active && (
+                <span style={{ position: "absolute", left: 0, top: "20%", height: "60%", width: 3, borderRadius: 99, background: "var(--brand)" }} />
+              )}
+              <HugeiconsIcon icon={icon} size={16} style={{ color: active ? "var(--brand)" : "var(--text-muted)", flexShrink: 0, marginLeft: active ? 6 : 0 }} />
+              {open && <span>{label}</span>}
+            </Link>
+          );
+        })}
       </div>
     </aside>
   );
 }
+
+const toggleBtn: React.CSSProperties = {
+  display: "flex", alignItems: "center", justifyContent: "center",
+  width: 30, height: 30, borderRadius: 8,
+  border: "1px solid var(--border)",
+  background: "var(--surface)",
+  cursor: "pointer", flexShrink: 0,
+  transition: "background 0.12s",
+};
