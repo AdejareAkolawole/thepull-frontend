@@ -58,8 +58,12 @@ export default function TopNav() {
       }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", height: 56 }}>
           {/* Logo */}
-          <Link href="/dashboard" style={{ marginRight: 32, flexShrink: 0, display: "flex", alignItems: "center", textDecoration: "none" }}>
-            <img src="/logo.jpg" alt="THEPULL" style={{ height: 28, width: "auto", display: "block" }} />
+          <Link href="/dashboard" style={{ marginRight: 32, flexShrink: 0, display: "flex", alignItems: "center", gap: 9, textDecoration: "none" }}>
+            <img src="/logo.jpg" alt="THEPULL" style={{ height: 30, width: "auto", display: "block", borderRadius: 7 }} />
+            <div>
+              <p style={{ fontSize: 13, fontWeight: 800, color: "#0f0a14", lineHeight: 1.2, letterSpacing: "-0.02em" }}>MyPullScore</p>
+              <p style={{ fontSize: 9, color: "rgba(15,10,20,0.38)", lineHeight: 1.2 }}>Personal intelligence that grows with you.</p>
+            </div>
           </Link>
 
           {/* Nav links — hidden on mobile */}
@@ -70,7 +74,7 @@ export default function TopNav() {
                 <Link key={href} href={href}
                   style={{
                     display: "flex", alignItems: "center", gap: 6,
-                    padding: "6px 12px", borderRadius: 10,
+                    padding: "6px 14px", borderRadius: 99,
                     fontSize: 13, fontWeight: active ? 700 : 500,
                     color: active ? "#c0404f" : "rgba(15,10,20,0.5)",
                     background: active ? "rgba(192,64,79,0.08)" : "transparent",

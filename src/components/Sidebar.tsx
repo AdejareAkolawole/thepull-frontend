@@ -1,76 +1,105 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Home01Icon, UserGroupIcon, AiBrain01Icon, Message02Icon,
-  Analytics01Icon, Settings01Icon, BookOpen01Icon, FlashIcon, Logout01Icon, VaultIcon
+  Home01Icon, AiBrain01Icon, Message02Icon, BookOpen01Icon,
+  FlashIcon, ScaleIcon, Notification01Icon, UserCircleIcon,
+  CreditCardIcon, Settings01Icon,
 } from "@hugeicons/core-free-icons";
 
-const nav = [
+const mainNav = [
   { href: "/dashboard", icon: Home01Icon, label: "Home" },
-  { href: "/vault", icon: VaultIcon, label: "My Vault" },
   { href: "/pull-profile", icon: AiBrain01Icon, label: "Pull Profile" },
-  { href: "/coach", icon: Message02Icon, label: "AI Coach" },
-  { href: "/reports", icon: Analytics01Icon, label: "Reports" },
-  { href: "/journey", icon: FlashIcon, label: "My Journey" },
   { href: "/journal", icon: BookOpen01Icon, label: "Journal" },
+  { href: "/coach", icon: Message02Icon, label: "Ask The Pull" },
+  { href: "/reports", icon: ScaleIcon, label: "Reality Check" },
+  { href: "/journey", icon: FlashIcon, label: "Journey" },
+];
+
+const bottomNav = [
+  { href: "/notifications", icon: Notification01Icon, label: "Notifications" },
+  { href: "/settings/profile", icon: UserCircleIcon, label: "My Profile" },
+  { href: "/upgrade", icon: CreditCardIcon, label: "Subscription" },
+  { href: "/settings", icon: Settings01Icon, label: "Settings" },
 ];
 
 export default function Sidebar() {
   const path = usePathname();
 
+  const isActive = (href: string) =>
+    href === "/dashboard" ? path === href : path.startsWith(href);
+
+  const NavItem = ({ href, icon, label }: { href: string; icon: any; label: string }) => {
+    const active = isActive(href);
+    return (
+      <Link
+        href={href}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          padding: "9px 14px",
+          borderRadius: 99,
+          textDecoration: "none",
+          fontSize: 13.5,
+          fontWeight: active ? 700 : 500,
+          color: active ? "#c0404f" : "rgba(15,10,20,0.55)",
+          background: active ? "rgba(192,64,79,0.09)" : "transparent",
+          transition: "all 0.15s",
+          marginBottom: 2,
+        }}
+      >
+        <HugeiconsIcon icon={icon} size={17} style={{ color: active ? "#c0404f" : "rgba(15,10,20,0.38)", flexShrink: 0 }} />
+        {label}
+      </Link>
+    );
+  };
+
   return (
-    <aside
-      className="fixed top-0 left-0 h-screen w-[220px] flex flex-col z-40"
-      style={{ background: "var(--surface)", borderRight: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
-    >
+    <aside style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      height: "100vh",
+      width: 236,
+      display: "flex",
+      flexDirection: "column",
+      zIndex: 40,
+      background: "#f5f4f0",
+      borderRight: "1px solid rgba(15,10,20,0.07)",
+    }}>
+
       {/* Logo */}
-      <div className="px-5 py-5 flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: "linear-gradient(135deg, #7c2232 0%, #b03040 100%)" }}>
-          <span className="font-display font-bold text-sm text-white">P</span>
-        </div>
+      <div style={{ padding: "22px 18px 16px", display: "flex", alignItems: "center", gap: 10 }}>
+        <img src="/logo.jpg" alt="ThePull" style={{ height: 32, width: "auto", borderRadius: 8, flexShrink: 0 }} />
         <div>
-          <p className="text-sm font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>THEPULL</p>
-          <p className="text-[10px] tracking-wide" style={{ color: "var(--text-muted)" }}>Intelligence</p>
+          <p style={{ fontSize: 13, fontWeight: 800, color: "#0f0a14", lineHeight: 1.2, letterSpacing: "-0.02em" }}>MyPullScore</p>
+          <p style={{ fontSize: 9.5, color: "rgba(15,10,20,0.4)", lineHeight: 1.3, marginTop: 1 }}>Personal intelligence that grows with you.</p>
         </div>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto">
-        {nav.map(({ href, icon: Icon, label }) => {
-          const active = path === href || (href !== "/dashboard" && path.startsWith(href));
-          return (
-            <Link key={href} href={href}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150",
-                active
-                  ? "text-[var(--brand)]"
-                  : "text-[var(--text-secondary)] hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)]"
-              )}
-              style={active ? { background: "var(--brand-light)" } : {}}
-            >
-              <HugeiconsIcon icon={Icon} size={17}
-                className={active ? "text-[var(--brand)]" : "text-[var(--text-muted)]"} />
-              <span>{label}</span>
-            </Link>
-          );
-        })}
+      {/* Main nav */}
+      <nav style={{ flex: 1, padding: "4px 10px", overflowY: "auto" }}>
+        {mainNav.map(item => <NavItem key={item.href} {...item} />)}
       </nav>
 
-      {/* Bottom */}
-      <div className="px-3 py-4 space-y-1" style={{ borderTop: "1px solid var(--border)" }}>
-        <Link href="/settings"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-[var(--text-secondary)] hover:bg-[var(--surface-2)]">
-          <HugeiconsIcon icon={Settings01Icon} size={17} className="text-[var(--text-muted)]" />
-          Settings
-        </Link>
-        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-[var(--text-secondary)] hover:bg-[var(--surface-2)]">
-          <HugeiconsIcon icon={Logout01Icon} size={17} className="text-[var(--text-muted)]" />
-          Sign out
-        </button>
+      {/* Divider */}
+      <div style={{ height: 1, background: "rgba(15,10,20,0.08)", margin: "0 10px" }} />
+
+      {/* Bottom section */}
+      <div style={{ padding: "12px 10px" }}>
+        <NavItem href="/notifications" icon={Notification01Icon} label="Notifications" />
+
+        {/* User greeting */}
+        <div style={{ padding: "10px 14px", marginBottom: 2 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: "#0f0a14" }}>Good Morning 👋</p>
+          <p style={{ fontSize: 11, color: "rgba(15,10,20,0.42)", marginTop: 1 }}>adejare.akolawole@gmail.com</p>
+        </div>
+
+        <NavItem href="/settings/profile" icon={UserCircleIcon} label="My Profile" />
+        <NavItem href="/upgrade" icon={CreditCardIcon} label="Subscription" />
+        <NavItem href="/settings" icon={Settings01Icon} label="Settings" />
       </div>
     </aside>
   );
