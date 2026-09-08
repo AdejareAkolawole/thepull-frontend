@@ -8,7 +8,7 @@ import {
   FlashIcon, PresentationLineChart01Icon, Calendar03Icon, Target01Icon,
   AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, CheckmarkCircle01Icon, LockIcon,
 } from "@hugeicons/core-free-icons";
-import { mockUser, mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
+import { mockUser, mockDimensions, mockInsights, mockAchievements, mockIdentityVector } from "@/lib/mock";
 
 const achievementIconMap: Record<string, any> = {
   brain: AiBrain01Icon,
@@ -202,6 +202,44 @@ export default function DashboardClient() {
           </Card>
         </motion.div>
       </div>
+
+      {/* Archetype Banner */}
+      <motion.div {...fade(0.08)}>
+        <div style={{
+          borderRadius: 20, padding: "20px 24px",
+          background: "linear-gradient(145deg, #1a0508 0%, #2d0b14 100%)",
+          border: "1px solid rgba(192,64,79,0.2)",
+          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20,
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 14, border: "1.5px solid rgba(192,64,79,0.4)", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(192,64,79,0.08)", flexShrink: 0 }}>
+              <HugeiconsIcon icon={AiBrain01Icon} size={22} style={{ color: "#c0404f" }} />
+            </div>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.7)" }}>Primary Archetype</p>
+                <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 7px", borderRadius: 99, background: "rgba(192,64,79,0.15)", color: "rgba(192,64,79,0.9)", border: "1px solid rgba(192,64,79,0.25)" }}>{mockUser.archetype_stage}</span>
+              </div>
+              <p style={{ fontSize: 18, fontWeight: 700, color: "white", lineHeight: 1.1 }}>{mockUser.archetype}</p>
+              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", marginTop: 3 }}>{mockUser.archetype_tagline.slice(0, 80)}…</p>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 20, flexShrink: 0 }}>
+            <div style={{ textAlign: "center" }}>
+              <p style={{ fontSize: 22, fontWeight: 800, color: "#c0404f" }}>{mockUser.archetype_confidence}%</p>
+              <p style={{ fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)" }}>Confidence</p>
+            </div>
+            <div style={{ width: 1, height: 32, background: "rgba(255,255,255,0.08)" }} />
+            <div style={{ textAlign: "center" }}>
+              <p style={{ fontSize: 22, fontWeight: 800, color: "#c0404f" }}>{mockUser.archetype_version}</p>
+              <p style={{ fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)" }}>Version</p>
+            </div>
+            <Link href="/pull-profile" style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", textDecoration: "none" }}>
+              Full Profile <HugeiconsIcon icon={ArrowRight01Icon} size={11} />
+            </Link>
+          </div>
+        </div>
+      </motion.div>
 
       {/* ROW 2: Radar + Insights + Side column */}
       <div className="dash-row-2" style={{ display: "grid", gridTemplateColumns: "220px 1fr 210px", gap: 12 }}>

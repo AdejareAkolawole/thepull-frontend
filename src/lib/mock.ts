@@ -62,12 +62,13 @@ export const mockInsights = [
 ];
 
 export const mockAchievements = [
-  { label: "First Assessment", desc: "Completed your first intelligence assessment", iconKey: "brain", done: true, color: "#c0404f" },
-  { label: "Self Aware", desc: "Reached 65+ on Self-Awareness dimension", iconKey: "eye", done: true, color: "#60a5fa" },
-  { label: "First Report", desc: "Generated your first intelligence report", iconKey: "chart", done: true, color: "#a78bfa" },
-  { label: "Premium Member", desc: "Unlocked full intelligence engine access", iconKey: "star", done: true, color: "#fbbf24" },
-  { label: "30-Day Streak", desc: "Engaged with The Pull for 30 days straight", iconKey: "fire", done: false, color: "#f97316" },
-  { label: "Reality Check", desc: "Complete the Emotional Landscape assessment", iconKey: "target", done: false, color: "#34d399" },
+  { label: "First Discovery", desc: "Completed your first assessment", iconKey: "brain", done: false, color: "#c0404f" },
+  { label: "Inner Explorer", desc: "Completed first assessment", iconKey: "chart", done: true, color: "#f97316" },
+  { label: "Intelligence Unlocked", desc: "Generated first report", iconKey: "eye", done: false, color: "#a78bfa" },
+  { label: "Pull Milestone", desc: "Reached Pull Score 50+", iconKey: "star", done: false, color: "#fbbf24" },
+  { label: "Weekly Reflection", desc: "7-day reflection streak", iconKey: "fire", done: false, color: "#f97316" },
+  { label: "Consistent Seeker", desc: "Maintained 7-day streak", iconKey: "target", done: false, color: "#34d399" },
+  { label: "Premium Intelligence", desc: "Unlocked premium features", iconKey: "star", done: false, color: "#60a5fa" },
 ];
 
 export const mockJourneySteps = [
