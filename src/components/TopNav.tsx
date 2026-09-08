@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+
+const DARK_PAGES = ["/dashboard"];
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Home01Icon, VaultIcon, AiBrain01Icon, Message02Icon, Analytics01Icon,
@@ -46,15 +48,17 @@ export default function TopNav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const dark = DARK_PAGES.some(p => path.startsWith(p));
+
   return (
     <>
       {/* Desktop sticky top bar — hidden on mobile via CSS */}
       <header style={{
         position: "sticky", top: 0, zIndex: 50, width: "100%",
-        background: "rgba(255,255,255,0.92)",
-        backdropFilter: "blur(16px)",
-        borderBottom: "1px solid rgba(0,0,0,0.07)",
-        boxShadow: "0 1px 12px rgba(0,0,0,0.05)",
+        background: dark ? "rgba(12,8,16,0.85)" : "rgba(255,255,255,0.92)",
+        backdropFilter: "blur(20px)",
+        borderBottom: dark ? "1px solid rgba(255,255,255,0.07)" : "1px solid rgba(0,0,0,0.07)",
+        boxShadow: dark ? "none" : "0 1px 12px rgba(0,0,0,0.05)",
       }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", height: 56 }}>
           {/* Logo */}
@@ -76,8 +80,8 @@ export default function TopNav() {
                     display: "flex", alignItems: "center", gap: 6,
                     padding: "6px 12px", borderRadius: 10,
                     fontSize: 13, fontWeight: active ? 700 : 500,
-                    color: active ? "#c0404f" : "rgba(15,10,20,0.5)",
-                    background: active ? "rgba(192,64,79,0.08)" : "transparent",
+                    color: active ? "#c0404f" : dark ? "rgba(255,255,255,0.38)" : "rgba(15,10,20,0.5)",
+                    background: active ? (dark ? "rgba(192,64,79,0.15)" : "rgba(192,64,79,0.08)") : "transparent",
                     textDecoration: "none",
                     transition: "all 0.15s",
                   }}>
