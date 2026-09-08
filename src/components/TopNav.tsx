@@ -10,19 +10,19 @@ import {
 
 const navItems = [
   { href: "/dashboard", icon: Home01Icon, label: "Home" },
-  { href: "/coach", icon: Message02Icon, label: "Coach" },
-  { href: "/pull-profile", icon: AiBrain01Icon, label: "Profile" },
+  { href: "/pull-profile", icon: AiBrain01Icon, label: "Pull Profile" },
+  { href: "/coach", icon: Message02Icon, label: "Ask The Pull" },
   { href: "/journey", icon: FlashIcon, label: "Journey" },
   { href: "/settings", icon: Settings01Icon, label: "Settings" },
 ];
 
 const allNavItems = [
   { href: "/dashboard", icon: Home01Icon, label: "Home" },
-  { href: "/pull-profile", icon: AiBrain01Icon, label: "Profile" },
-  { href: "/coach", icon: Message02Icon, label: "AI Coach" },
-  { href: "/reports", icon: Analytics01Icon, label: "Reports" },
-  { href: "/journey", icon: FlashIcon, label: "Journey" },
+  { href: "/pull-profile", icon: AiBrain01Icon, label: "Pull Profile" },
   { href: "/journal", icon: BookOpen01Icon, label: "Journal" },
+  { href: "/coach", icon: Message02Icon, label: "Ask The Pull" },
+  { href: "/reports", icon: Analytics01Icon, label: "Reality Check" },
+  { href: "/journey", icon: FlashIcon, label: "Journey" },
   { href: "/settings", icon: Settings01Icon, label: "Settings" },
 ];
 

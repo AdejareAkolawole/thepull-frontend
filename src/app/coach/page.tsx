@@ -65,7 +65,7 @@ export default function CoachPage() {
           </div>
           <div style={{ flex: 1 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>The Pull</p>
-            <p style={{ fontSize: 11, color: "var(--text-muted)" }}>AI relationship intelligence coach</p>
+            <p style={{ fontSize: 11, color: "var(--text-muted)" }}>Ask The Pull</p>
           </div>
         </div>
 
@@ -151,7 +151,7 @@ export default function CoachPage() {
             </div>
             <div>
               <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>The Pull</p>
-              <p style={{ fontSize: 11, color: "var(--text-muted)" }}>AI relationship intelligence coach</p>
+              <p style={{ fontSize: 11, color: "var(--text-muted)" }}>Ask The Pull</p>
             </div>
             <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#22c55e" }}>
               <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e" }} /> Online
