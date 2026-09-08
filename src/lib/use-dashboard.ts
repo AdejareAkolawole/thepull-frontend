@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getDashboard, isLoggedIn } from "./api";
-import { mockUser, mockDimensions } from "./mock";
 
 export interface DashboardData {
   user: {
@@ -19,7 +18,7 @@ export interface DashboardData {
     domains_covered: number;
     domains_total: number;
     dimensions_complete: number;
-  };
+  } | null;
   dimensions: Array<{ label: string; score: number; color: string }>;
   loading: boolean;
   error: string | null;
@@ -28,8 +27,8 @@ export interface DashboardData {
 
 export function useDashboard(): DashboardData {
   const [data, setData] = useState<DashboardData>({
-    user: mockUser as DashboardData["user"],
-    dimensions: mockDimensions,
+    user: null,
+    dimensions: [],
     loading: true,
     error: null,
     unauthenticated: false,
@@ -46,39 +45,42 @@ export function useDashboard(): DashboardData {
         const profile = (res.profile || {}) as Record<string, unknown>;
         const displayName = (profile.display_name as string) || res.user.email.split("@")[0];
         const initials = displayName.slice(0, 2).toUpperCase();
+        const arch = res.archetype as Record<string, unknown> | null;
+        const narrative = res.living_narrative as Record<string, unknown> | null;
+        const dimColors = ["#c0404f", "#60a5fa", "#f59e0b", "#a78bfa", "#34d399", "#fb923c"];
+        const dimensions = res.dimension_scores
+          ? Object.entries(res.dimension_scores as Record<string, number>).slice(0, 6).map(([k, v], i) => ({
+              label: k.replace(/_/g, " "),
+              score: Math.round(v * 100),
+              color: dimColors[i % dimColors.length],
+            }))
+          : [];
 
         setData({
           user: {
             name: displayName,
             initials,
-            archetype: ((res.archetype as Record<string, unknown> | null)?.name as string) || mockUser.archetype,
-            archetype_key: mockUser.archetype_key,
-            archetype_confidence: mockUser.archetype_confidence,
-            archetype_stage: mockUser.archetype_stage,
-            archetype_tagline: mockUser.archetype_tagline,
-            pull_score: res.pull_score ?? mockUser.pull_score,
-            pull_trend: mockUser.pull_trend,
+            archetype: (arch?.name as string) || "Emerging Identity",
+            archetype_key: "",
+            archetype_confidence: arch?.confidence != null ? Math.round((arch.confidence as number) * 100) : (res.behavioural_confidence as number) ?? 0,
+            archetype_stage: "emerging",
+            archetype_tagline: (arch?.tagline as string) || "",
+            pull_score: (res.pull_score as number) ?? 0,
+            pull_trend: "stable",
             plan: ((profile.subscription_tier as string) || "free") as "free" | "premium" | "elite",
-            identity_summary: ((res.living_narrative as Record<string, unknown> | null)?.narrative as string) || mockUser.identity_summary,
-            domains_covered: mockUser.domains_covered,
-            domains_total: mockUser.domains_total,
-            dimensions_complete: mockUser.dimensions_complete,
+            identity_summary: (narrative?.narrative as string) || "",
+            domains_covered: 0,
+            domains_total: 12,
+            dimensions_complete: dimensions.length,
           },
-          dimensions: mockDimensions,
+          dimensions,
           loading: false,
           error: null,
           unauthenticated: false,
         });
       })
       .catch(() => {
-        // Fall back to mock data gracefully
-        setData({
-          user: mockUser as DashboardData["user"],
-          dimensions: mockDimensions,
-          loading: false,
-          error: null,
-          unauthenticated: false,
-        });
+        setData(prev => ({ ...prev, loading: false, error: "Failed to load dashboard" }));
       });
   }, []);
 

@@ -9,7 +9,6 @@ import {
   AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, CheckmarkCircle01Icon, LockIcon,
   BookOpen01Icon, Share01Icon, HelpCircleIcon, ArrowDown01Icon, CompassIcon,
 } from "@hugeicons/core-free-icons";
-import { mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
 import { getDashboard, isLoggedIn } from "@/lib/api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -40,7 +39,7 @@ const Card = ({ children, className = "", style = {} }: any) => (
   </div>
 );
 
-function RadarChart({ dimensions, pullScore }: { dimensions: typeof mockDimensions; pullScore?: number | null }) {
+function RadarChart({ dimensions, pullScore }: { dimensions: Array<{ label: string; score: number; color: string }>; pullScore?: number | null }) {
   const cx = 110, cy = 110, r = 78;
   const n = dimensions.length;
   const pts = dimensions.map((d, i) => {
@@ -112,6 +111,7 @@ function Sparkline({ data, color = "#c0404f" }: { data: number[]; color?: string
 }
 
 const scoreHistory = [68, 70, 69, 71, 72, 71, 73, 74];
+const DIMENSION_COLORS = ["#c0404f", "#60a5fa", "#f59e0b", "#a78bfa", "#34d399", "#fb923c"];
 
 export default function DashboardClient() {
   const hour = new Date().getHours();
@@ -492,9 +492,9 @@ export default function DashboardClient() {
               <Link href="/pull-profile" style={{ fontSize: 10, fontWeight: 700, color: "var(--brand)", textDecoration: "none" }}>Full view →</Link>
             </div>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <RadarChart dimensions={dash?.dimension_scores
-                ? Object.entries(dash.dimension_scores).slice(0, 6).map(([k, v], i) => ({ label: k.replace(/_/g, " "), score: Math.round(v * 100), color: mockDimensions[i % mockDimensions.length]?.color ?? "#c0404f" }))
-                : mockDimensions}
+              <RadarChart dimensions={dash?.dimension_scores && Object.keys(dash.dimension_scores).length > 0
+                ? Object.entries(dash.dimension_scores).slice(0, 6).map(([k, v], i) => ({ label: k.replace(/_/g, " "), score: Math.round(v * 100), color: DIMENSION_COLORS[i % DIMENSION_COLORS.length] }))
+                : [{ label: "Awaiting", score: 0, color: "#c0404f" }]}
                 pullScore={pullScore} />
             </div>
           </Card>
@@ -509,28 +509,46 @@ export default function DashboardClient() {
               </span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {mockInsights.map(ins => {
-                const cfg = ins.type === "observation"
-                  ? { col: "#2563eb", bg: "rgba(37,99,235,0.06)", icon: Activity01Icon }
-                  : ins.type === "pattern"
-                  ? { col: "#c0404f", bg: "rgba(192,64,79,0.06)", icon: PresentationLineChart01Icon }
-                  : { col: "#d97706", bg: "rgba(217,119,6,0.06)", icon: FlashIcon };
-                return (
-                  <div key={ins.id} style={{ display: "flex", gap: 10, padding: "10px 12px", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", cursor: "pointer" }}>
-                    <div style={{ width: 28, height: 28, borderRadius: 8, background: cfg.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <HugeiconsIcon icon={cfg.icon} size={13} style={{ color: cfg.col }} />
+              {(() => {
+                const derived: Array<{ id: string; type: string; title: string; body: string }> = [];
+                if (dash?.archetype_strengths?.length) {
+                  derived.push({ id: "s0", type: "observation", title: "Core Strength Identified", body: dash.archetype_strengths[0] });
+                }
+                if (dash?.archetype_blind_spots?.length) {
+                  derived.push({ id: "b0", type: "pattern", title: "Growth Edge Detected", body: dash.archetype_blind_spots[0] });
+                }
+                if (dash?.archetype_tagline) {
+                  derived.push({ id: "t0", type: "opportunity", title: "Your Archetype Insight", body: dash.archetype_tagline });
+                }
+                if (derived.length === 0) {
+                  return (
+                    <div style={{ textAlign: "center", padding: "24px 12px", color: "var(--text-muted)", fontSize: 12 }}>
+                      Complete your assessment to unlock living insights.
                     </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
-                        <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: cfg.col }}>{ins.type}</span>
-                        <span style={{ fontSize: 9, color: "var(--text-muted)" }}>{ins.timestamp}</span>
+                  );
+                }
+                return derived.map(ins => {
+                  const cfg = ins.type === "observation"
+                    ? { col: "#2563eb", bg: "rgba(37,99,235,0.06)", icon: Activity01Icon }
+                    : ins.type === "pattern"
+                    ? { col: "#c0404f", bg: "rgba(192,64,79,0.06)", icon: PresentationLineChart01Icon }
+                    : { col: "#d97706", bg: "rgba(217,119,6,0.06)", icon: FlashIcon };
+                  return (
+                    <div key={ins.id} style={{ display: "flex", gap: 10, padding: "10px 12px", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)" }}>
+                      <div style={{ width: 28, height: 28, borderRadius: 8, background: cfg.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        <HugeiconsIcon icon={cfg.icon} size={13} style={{ color: cfg.col }} />
                       </div>
-                      <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.35, marginBottom: 3 }}>{ins.title}</p>
-                      <p style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const }}>{ins.body}</p>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
+                          <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: cfg.col }}>{ins.type}</span>
+                        </div>
+                        <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.35, marginBottom: 3 }}>{ins.title}</p>
+                        <p style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const }}>{ins.body}</p>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                });
+              })()}
             </div>
           </Card>
         </motion.div>
@@ -538,29 +556,43 @@ export default function DashboardClient() {
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <motion.div {...fade(0.15)} style={{ flex: 1 }}>
             <Card style={{ padding: 16, height: "100%", overflow: "hidden" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>Achievements</p>
-                <span style={{ fontSize: 10, color: "var(--text-muted)" }}>{mockAchievements.filter(a => a.done).length}/{mockAchievements.length} unlocked</span>
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7 }}>
-                {mockAchievements.map(a => (
-                  <div key={a.label} style={{
-                    borderRadius: 12, padding: "10px 10px 8px",
-                    background: a.done ? `${a.color}0f` : "rgba(0,0,0,0.03)",
-                    border: `1px solid ${a.done ? `${a.color}25` : "rgba(0,0,0,0.07)"}`,
-                    opacity: a.done ? 1 : 0.5,
-                    position: "relative", overflow: "hidden",
-                  }}>
-                    <div style={{ marginBottom: 6, display: "flex", alignItems: "center" }}>
-                      {a.done
-                        ? <HugeiconsIcon icon={achievementIconMap[a.iconKey]} size={18} style={{ color: a.color }} />
-                        : <HugeiconsIcon icon={LockIcon} size={16} style={{ color: "rgba(0,0,0,0.25)" }} />
-                      }
+              {(() => {
+                const achievements = [
+                  { label: "Joined", iconKey: "star", color: "#c9a84c", done: true },
+                  { label: "Assessment", iconKey: "brain", color: "#60a5fa", done: !!dash?.onboarding_complete },
+                  { label: "Pull Score", iconKey: "chart", color: "#c0404f", done: !!dash?.pull_score },
+                  { label: "Archetype", iconKey: "eye", color: "#a78bfa", done: !!dash?.archetype },
+                  { label: "Score 80+", iconKey: "fire", color: "#f97316", done: (dash?.pull_score ?? 0) >= 80 },
+                  { label: "Journal", iconKey: "target", color: "#34d399", done: false },
+                ];
+                const doneCount = achievements.filter(a => a.done).length;
+                return (
+                  <>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                      <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>Achievements</p>
+                      <span style={{ fontSize: 10, color: "var(--text-muted)" }}>{doneCount}/{achievements.length} unlocked</span>
                     </div>
-                    <p style={{ fontSize: 10, fontWeight: 700, color: a.done ? a.color : "var(--text-muted)", lineHeight: 1.2 }}>{a.label}</p>
-                  </div>
-                ))}
-              </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7 }}>
+                      {achievements.map(a => (
+                        <div key={a.label} style={{
+                          borderRadius: 12, padding: "10px 10px 8px",
+                          background: a.done ? `${a.color}0f` : "rgba(0,0,0,0.03)",
+                          border: `1px solid ${a.done ? `${a.color}25` : "rgba(0,0,0,0.07)"}`,
+                          opacity: a.done ? 1 : 0.5,
+                        }}>
+                          <div style={{ marginBottom: 6 }}>
+                            {a.done
+                              ? <HugeiconsIcon icon={achievementIconMap[a.iconKey]} size={18} style={{ color: a.color }} />
+                              : <HugeiconsIcon icon={LockIcon} size={16} style={{ color: "rgba(0,0,0,0.25)" }} />
+                            }
+                          </div>
+                          <p style={{ fontSize: 10, fontWeight: 700, color: a.done ? a.color : "var(--text-muted)", lineHeight: 1.2 }}>{a.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                );
+              })()}
             </Card>
           </motion.div>
           <motion.div {...fade(0.19)}>
