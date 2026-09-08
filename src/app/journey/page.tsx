@@ -1,8 +1,10 @@
 "use client";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { CheckmarkCircle02Icon, AddCircleIcon, FlashIcon, Target01Icon, ArrowRight01Icon, Calendar03Icon } from "@hugeicons/core-free-icons";
-import { mockJourneySteps } from "@/lib/mock";
+import { getDashboard, getAssessmentStatus, isLoggedIn } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
@@ -12,20 +14,51 @@ const Card = ({ children, style = {} }: any) => (
   </div>
 );
 
-const milestones = [
-  { label: "Joined THEPULL", date: "Sep 1, 2026", done: true },
-  { label: "Completed first assessment", date: "Sep 2, 2026", done: true },
-  { label: "First AI Coach session", date: "Sep 3, 2026", done: true },
-  { label: "Generated first intelligence report", date: "Sep 4, 2026", done: true },
-  { label: "Reached 5 mapped dimensions", date: "Sep 5, 2026", done: true },
-  { label: "Complete Emotional Landscape assessment", date: "Upcoming", done: false },
-  { label: "Reach Pull Score 80+", date: "Upcoming", done: false },
-  { label: "30-day insight streak", date: "Upcoming", done: false },
-];
-
 export default function JourneyPage() {
+  const router = useRouter();
+  const [dash, setDash] = useState<any>(null);
+  const [assessment, setAssessment] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!isLoggedIn()) { router.push("/login"); return; }
+    Promise.all([getDashboard(), getAssessmentStatus()])
+      .then(([d, a]) => { setDash(d); setAssessment(a); })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const hasScore = !!dash?.pull_score;
+  const hasArchetype = !!dash?.archetype;
+  const hasAssessment = assessment?.has_session;
+  const assessmentComplete = assessment?.status === "complete";
+  const hasPullProfile = !!dash?.profile;
+
+  const milestones = [
+    { label: "Joined THEPULL", done: true },
+    { label: "Completed first assessment", done: assessmentComplete },
+    { label: "Generated Pull Score", done: hasScore },
+    { label: "Unlocked Archetype", done: hasArchetype },
+    { label: "Pull Profile activated", done: hasPullProfile },
+    { label: "Reach Pull Score 80+", done: hasScore && (dash?.pull_score ?? 0) >= 80 },
+    { label: "Complete Emotional Landscape assessment", done: false },
+    { label: "30-day insight streak", done: false },
+  ];
+
+  const steps = [
+    { label: "Complete your assessment", description: "Answer questions to build your intelligence", done: assessmentComplete },
+    { label: "Review your Pull Profile", description: "Understand your archetype and dimensions", done: hasArchetype },
+    { label: "Session with AI Coach", description: "Get personalised insights from your coach", done: false },
+    { label: "Run a Reality Check", description: "Test a situation against your intelligence", done: false },
+    { label: "Write your first journal entry", description: "Reflect on your patterns and growth", done: false },
+  ];
+
   const done = milestones.filter(m => m.done).length;
   const pct = Math.round((done / milestones.length) * 100);
+
+  if (loading) {
+    return <div style={{ textAlign: "center", padding: 60, color: "var(--text-muted)", fontSize: 13 }}>Loading your journey…</div>;
+  }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -52,7 +85,11 @@ export default function JourneyPage() {
                 transition={{ duration: 1.2, delay: 0.4 }} />
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 24, marginTop: 20 }}>
-              {[{ label: "Complete", value: done }, { label: "Remaining", value: milestones.length - done }, { label: "Day streak", value: 12 }].map((s, i) => (
+              {[
+                { label: "Complete", value: done },
+                { label: "Remaining", value: milestones.length - done },
+                { label: "Pull Score", value: dash?.pull_score ?? "—" },
+              ].map((s, i) => (
                 <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 16 }}>
                   {i > 0 && <div style={{ width: 1, height: 24, background: "rgba(255,255,255,0.12)" }} />}
                   <div>
@@ -100,9 +137,6 @@ export default function JourneyPage() {
                     </div>
                     <div style={{ flex: 1 }}>
                       <p style={{ fontSize: 13, fontWeight: 600, color: m.done ? "var(--text-primary)" : "var(--text-muted)" }}>{m.label}</p>
-                      <p style={{ fontSize: 11, marginTop: 2, display: "flex", alignItems: "center", gap: 4, color: "var(--text-muted)" }}>
-                        <HugeiconsIcon icon={Calendar03Icon} size={10} /> {m.date}
-                      </p>
                     </div>
                     {m.done && (
                       <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 99, flexShrink: 0, background: "rgba(52,211,153,0.1)", color: "#34d399", border: "1px solid rgba(52,211,153,0.2)" }}>
@@ -123,7 +157,7 @@ export default function JourneyPage() {
             <Card style={{ padding: 20 }}>
               <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", marginBottom: 16 }}>Journey Steps</p>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {mockJourneySteps.map((s, i) => (
+                {steps.map((s, i) => (
                   <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <div style={{ width: 28, height: 28, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 11, fontWeight: 700, background: s.done ? "rgba(224,80,96,0.15)" : "rgba(0,0,0,0.04)", color: s.done ? "var(--brand)" : "var(--text-muted)", border: `1px solid ${s.done ? "rgba(224,80,96,0.25)" : "rgba(0,0,0,0.08)"}` }}>
                       {i + 1}
@@ -139,25 +173,25 @@ export default function JourneyPage() {
             </Card>
           </motion.div>
 
-          {/* Streak */}
-          <motion.div {...f(0.18)}>
-            <Card style={{ padding: 20 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.2)" }}>
-                  <HugeiconsIcon icon={FlashIcon} size={17} style={{ color: "#fbbf24" }} />
+          {/* Pull Score card */}
+          {hasScore && (
+            <motion.div {...f(0.18)}>
+              <Card style={{ padding: 20 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(192,64,79,0.1)", border: "1px solid rgba(192,64,79,0.2)" }}>
+                    <HugeiconsIcon icon={FlashIcon} size={17} style={{ color: "var(--brand)" }} />
+                  </div>
+                  <div>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>Pull Score: {dash?.pull_score}</p>
+                    <p style={{ fontSize: 11, color: "var(--text-muted)" }}>{(dash?.archetype as any)?.name ?? "Archetype unlocked"}</p>
+                  </div>
                 </div>
-                <div>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>12-Day Streak</p>
-                  <p style={{ fontSize: 11, color: "var(--text-muted)" }}>Personal best — keep going!</p>
+                <div style={{ height: 6, borderRadius: 99, background: "rgba(0,0,0,0.06)", overflow: "hidden", marginTop: 8 }}>
+                  <div style={{ height: "100%", borderRadius: 99, width: `${Math.min(dash?.pull_score ?? 0, 100)}%`, background: "linear-gradient(90deg, #7c2232, #c0404f)" }} />
                 </div>
-              </div>
-              <div className="week-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 6 }}>
-                {Array.from({ length: 14 }).map((_, i) => (
-                  <div key={i} style={{ aspectRatio: "1", borderRadius: 6, background: i < 12 ? `rgba(251,191,36,${0.35 + i * 0.04})` : "rgba(0,0,0,0.04)", border: i < 12 ? "1px solid rgba(251,191,36,0.3)" : "1px solid rgba(0,0,0,0.06)" }} />
-                ))}
-              </div>
-            </Card>
-          </motion.div>
+              </Card>
+            </motion.div>
+          )}
 
           {/* Next step CTA */}
           <motion.div {...f(0.22)}>
@@ -168,11 +202,17 @@ export default function JourneyPage() {
                   <HugeiconsIcon icon={Target01Icon} size={14} style={{ color: "var(--brand)" }} />
                 </div>
                 <div>
-                  <p style={{ fontSize: 12, fontWeight: 700, color: "white" }}>Next: Emotional Landscape</p>
-                  <p style={{ fontSize: 10, marginTop: 2, color: "rgba(255,255,255,0.4)" }}>~8 min assessment</p>
+                  <p style={{ fontSize: 12, fontWeight: 700, color: "white" }}>
+                    {!assessmentComplete ? "Next: Complete Assessment" : !hasScore ? "Next: Generate Intelligence" : "Next: Coach Session"}
+                  </p>
+                  <p style={{ fontSize: 10, marginTop: 2, color: "rgba(255,255,255,0.4)" }}>
+                    {!assessmentComplete ? "Answer the onboarding questions" : !hasScore ? "Build your Pull Score" : "Talk to your AI coach"}
+                  </p>
                 </div>
               </div>
-              <button className="cta-banner-btn" style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", border: "none", cursor: "pointer", flexShrink: 0, position: "relative", marginLeft: 16 }}>
+              <button
+                onClick={() => router.push(!assessmentComplete ? "/onboarding" : "/coach")}
+                className="cta-banner-btn" style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", border: "none", cursor: "pointer", flexShrink: 0, position: "relative", marginLeft: 16 }}>
                 Start <HugeiconsIcon icon={ArrowRight01Icon} size={10} />
               </button>
             </div>
