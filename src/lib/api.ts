@@ -16,7 +16,10 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(err.detail || `HTTP ${res.status}`);
+    const error: any = new Error(typeof err.detail === "string" ? err.detail : `HTTP ${res.status}`);
+    error.status = res.status;
+    error.detail = err.detail;
+    throw error;
   }
   return res.json();
 }
@@ -107,7 +110,7 @@ export async function deleteJournalEntry(id: string) {
 
 // Coach
 export async function sendCoachMessage(prompt: string) {
-  return request<{ response: string }>("/coach/chat", {
+  return request<{ response: string; usage?: { used: number; limit: number; remaining: number } }>("/coach/chat", {
     method: "POST",
     body: JSON.stringify({ prompt }),
   });
