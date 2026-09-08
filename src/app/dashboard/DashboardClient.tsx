@@ -9,7 +9,10 @@ import {
   AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, CheckmarkCircle01Icon, LockIcon,
   BookOpen01Icon, Share01Icon, HelpCircleIcon, ArrowDown01Icon, CompassIcon,
 } from "@hugeicons/core-free-icons";
-import { mockUser, mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
+import { mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
+import { getDashboard, isLoggedIn } from "@/lib/api";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const achievementIconMap: Record<string, any> = {
   brain: AiBrain01Icon,
@@ -37,7 +40,7 @@ const Card = ({ children, className = "", style = {} }: any) => (
   </div>
 );
 
-function RadarChart({ dimensions }: { dimensions: typeof mockDimensions }) {
+function RadarChart({ dimensions, pullScore }: { dimensions: typeof mockDimensions; pullScore?: number | null }) {
   const cx = 110, cy = 110, r = 78;
   const n = dimensions.length;
   const pts = dimensions.map((d, i) => {
@@ -79,7 +82,7 @@ function RadarChart({ dimensions }: { dimensions: typeof mockDimensions }) {
           {p.label}
         </text>
       ))}
-      <text x={cx} y={cy - 7} textAnchor="middle" style={{ fontSize: 20, fontWeight: 700, fill: "#0f0a14", fontFamily: "Inter,sans-serif" }}>74</text>
+      <text x={cx} y={cy - 7} textAnchor="middle" style={{ fontSize: 20, fontWeight: 700, fill: "#0f0a14", fontFamily: "Inter,sans-serif" }}>{pullScore ?? "—"}</text>
       <text x={cx} y={cy + 10} textAnchor="middle" style={{ fontSize: 7, fill: "rgba(15,10,20,0.35)", fontFamily: "Inter,sans-serif", letterSpacing: 2 }}>PULL SCORE</text>
     </svg>
   );
@@ -113,6 +116,58 @@ const scoreHistory = [68, 70, 69, 71, 72, 71, 73, 74];
 export default function DashboardClient() {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const router = useRouter();
+
+  const [dash, setDash] = useState<{
+    name: string;
+    archetype: string | null;
+    archetype_tagline: string | null;
+    archetype_confidence: number;
+    archetype_strengths: string[] | null;
+    archetype_blind_spots: string[] | null;
+    pull_score: number | null;
+    identity_summary: string | null;
+    identity_state: string | null;
+    plan: string;
+    onboarding_complete: boolean;
+    dimension_scores: Record<string, number> | null;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!isLoggedIn()) { router.push("/login"); return; }
+    getDashboard().then(res => {
+      const p = (res.profile || {}) as Record<string, unknown>;
+      // Redirect to onboarding if not complete
+      if (!p.onboarding_complete) { router.push("/onboarding"); return; }
+
+      const arch = res.archetype as Record<string, unknown> | null;
+      const narrative = res.living_narrative as Record<string, unknown> | null;
+
+      setDash({
+        name: (p.display_name as string) || res.user.email.split("@")[0],
+        archetype: (arch?.name as string) ?? null,
+        archetype_tagline: (arch?.tagline as string) ?? null,
+        archetype_confidence: arch?.confidence != null ? Math.round((arch.confidence as number) * 100) : (res.behavioural_confidence as number) ?? 0,
+        archetype_strengths: (arch?.strengths as string[]) ?? null,
+        archetype_blind_spots: (arch?.blind_spots as string[]) ?? null,
+        pull_score: res.pull_score as number | null,
+        identity_summary: (narrative?.narrative as string) ?? null,
+        identity_state: (narrative?.identity_state as string) ?? null,
+        plan: (p.subscription_tier as string) || "free",
+        onboarding_complete: (p.onboarding_complete as boolean) ?? false,
+        dimension_scores: res.dimension_scores as Record<string, number> | null,
+      });
+    }).catch(() => {});
+  }, [router]);
+
+  // Derived display values — real data when available, neutral defaults otherwise
+  const displayName  = dash?.name ?? "—";
+  const archetype    = dash?.archetype ?? "Emerging Identity";
+  const archetypeTagline = dash?.archetype_tagline ?? null;
+  const confidence   = dash?.archetype_confidence ?? 0;
+  const pullScore    = dash?.pull_score ?? null;
+  const summary      = dash?.identity_summary ?? "Your intelligence profile is being built. Share a moment from your life to begin.";
+  const hasIntel     = dash?.onboarding_complete ?? false;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -130,7 +185,7 @@ export default function DashboardClient() {
                 <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)", fontWeight: 600 }}>Personal Intelligence</span>
               </div>
               <h1 className="font-display" style={{ fontSize: 34, lineHeight: 1.06, fontWeight: 300, color: "rgba(255,255,255,0.8)", marginBottom: 2 }}>{greeting},</h1>
-              <h1 className="font-display" style={{ fontSize: 34, lineHeight: 1.06, fontWeight: 600, color: "#fff", marginBottom: 10 }}>{mockUser.name}.</h1>
+              <h1 className="font-display" style={{ fontSize: 34, lineHeight: 1.06, fontWeight: 600, color: "#fff", marginBottom: 10 }}>{displayName}.</h1>
               <p style={{ fontSize: 13, color: "rgba(255,255,255,0.48)", lineHeight: 1.6, maxWidth: 340 }}>
                 3 new insights ready. Your intelligence profile has evolved since your last visit.
               </p>
@@ -157,7 +212,7 @@ export default function DashboardClient() {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
                   <span style={{ fontSize: 10, fontWeight: 600, padding: "4px 12px", borderRadius: 99, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.25)", color: "rgba(201,168,76,0.85)" }}>
-                    Behavioural confidence {mockUser.archetype_confidence}%
+                    Behavioural confidence {confidence}%
                   </span>
                   <button style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.45)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                     <HugeiconsIcon icon={HelpCircleIcon} size={12} style={{ color: "rgba(255,255,255,0.3)" }} />
@@ -195,14 +250,16 @@ export default function DashboardClient() {
             </div>
 
             {/* Name + desc */}
-            <p style={{ fontSize: 21, fontWeight: 700, color: "#fff", lineHeight: 1.15, marginBottom: 6, letterSpacing: "-0.02em" }}>{mockUser.archetype}</p>
-            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.32)", lineHeight: 1.6, marginBottom: 16 }}>We currently believe your strongest identity is rooted in logic, pattern recognition, and ...</p>
+            <p style={{ fontSize: 21, fontWeight: 700, color: "#fff", lineHeight: 1.15, marginBottom: 6, letterSpacing: "-0.02em" }}>{archetype}</p>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.32)", lineHeight: 1.6, marginBottom: 16 }}>
+              {archetypeTagline ?? "Your identity is being shaped from your signals. Keep sharing moments from your life."}
+            </p>
 
             {/* Confidence / Version */}
             <div style={{ display: "flex", borderTop: "1px solid rgba(255,255,255,0.07)", borderBottom: "1px solid rgba(255,255,255,0.07)", paddingTop: 14, paddingBottom: 14, marginBottom: 16 }}>
               <div style={{ flex: 1 }}>
                 <p style={{ fontSize: 8, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)", marginBottom: 5 }}>Confidence</p>
-                <p style={{ fontSize: 24, fontWeight: 700, color: "#c0404f", lineHeight: 1 }}>{mockUser.archetype_confidence}%</p>
+                <p style={{ fontSize: 24, fontWeight: 700, color: "#c0404f", lineHeight: 1 }}>{confidence}%</p>
               </div>
               <div style={{ width: 1, background: "rgba(255,255,255,0.07)", margin: "0 20px" }} />
               <div style={{ flex: 1 }}>
@@ -261,7 +318,7 @@ export default function DashboardClient() {
               <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.35)" }}>Your Current Lens</p>
               <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", padding: "3px 9px", borderRadius: 99, background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.1)" }}>Emerging Identity</span>
             </div>
-            <p style={{ fontSize: 22, fontWeight: 700, color: "#fff", letterSpacing: "-0.02em", marginBottom: 3 }}>{mockUser.archetype ?? "The Explorer"}</p>
+            <p style={{ fontSize: 22, fontWeight: 700, color: "#fff", letterSpacing: "-0.02em", marginBottom: 3 }}>{archetype}</p>
             <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>The map is not the territory. Keep walking.</p>
           </div>
         </div>
@@ -278,8 +335,8 @@ export default function DashboardClient() {
             <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "#c0404f" }}>A Glimpse of Your Story</p>
           </div>
           <p style={{ fontSize: 14, color: "rgba(15,10,20,0.72)", lineHeight: 1.8 }}>
-            {mockUser.identity_summary
-              ? mockUser.identity_summary.slice(0, 260) + (mockUser.identity_summary.length > 260 ? "…" : "")
+            {summary
+              ? summary.slice(0, 260) + (summary.length > 260 ? "…" : "")
               : "You are a multifaceted explorer — someone who seeks the unknown while holding the people you love close. Your intelligence is still emerging, and every moment you share sharpens what The Pull can see in you…"}
           </p>
         </div>
@@ -319,11 +376,11 @@ export default function DashboardClient() {
           <div>
             <p style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "#c9a84c", fontWeight: 700, marginBottom: 6 }}>Identity Coverage</p>
             <p style={{ fontSize: 24, fontWeight: 700, color: "#c9a84c", letterSpacing: "-0.02em" }}>Foundation Complete</p>
-            <p style={{ fontSize: 12, color: "rgba(15,10,20,0.42)", marginTop: 4 }}>Your {mockUser.dimensions_complete ?? 7} core dimensions are complete.</p>
+            <p style={{ fontSize: 12, color: "rgba(15,10,20,0.42)", marginTop: 4 }}>Your {hasIntel ? 7 : 0} core dimensions are complete.</p>
           </div>
           <div style={{ textAlign: "right" as const }}>
             <p style={{ fontSize: 36, fontWeight: 700, color: "#0f0a14", letterSpacing: "-0.03em" }}>
-              {mockUser.domains_covered ?? 11}<span style={{ fontSize: 18, fontWeight: 400, color: "rgba(15,10,20,0.3)" }}>/{mockUser.domains_total ?? 12}</span>
+              {hasIntel ? 11 : 0}<span style={{ fontSize: 18, fontWeight: 400, color: "rgba(15,10,20,0.3)" }}>/{12}</span>
             </p>
             <p style={{ fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "rgba(15,10,20,0.35)", fontWeight: 700 }}>Overall Domain Coverage</p>
           </div>
@@ -338,7 +395,7 @@ export default function DashboardClient() {
             </div>
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "rgba(15,10,20,0.35)", fontWeight: 700, marginBottom: 3 }}>Profile Version</p>
-              <p style={{ fontSize: 22, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.02em" }}>v{mockUser.profile_version ?? "7.0"}</p>
+              <p style={{ fontSize: 22, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.02em" }}>v{hasIntel ? "1.0" : "—"}</p>
             </div>
             <div style={{ textAlign: "right" as const }}>
               <p style={{ fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "rgba(15,10,20,0.28)", marginBottom: 3 }}>Last Updated</p>
@@ -351,10 +408,10 @@ export default function DashboardClient() {
               <svg viewBox="0 0 52 52" style={{ width: 52, height: 52 }}>
                 <circle cx="26" cy="26" r="20" fill="none" stroke="rgba(15,10,20,0.07)" strokeWidth="4" />
                 <circle cx="26" cy="26" r="20" fill="none" stroke="#4ade80" strokeWidth="4" strokeLinecap="round"
-                  strokeDasharray={`${((mockUser.archetype_confidence ?? 47) / 100) * 125.7} 125.7`} transform="rotate(-90 26 26)" />
+                  strokeDasharray={`${((confidence) / 100) * 125.7} 125.7`} transform="rotate(-90 26 26)" />
               </svg>
               <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#16a34a" }}>{mockUser.archetype_confidence ?? 47}</span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#16a34a" }}>{confidence}</span>
               </div>
             </div>
             <div style={{ flex: 1 }}>
@@ -371,7 +428,7 @@ export default function DashboardClient() {
         <div style={{ borderRadius: 24, padding: "22px 26px", background: "#ffffff", border: "1px solid rgba(15,10,20,0.08)", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", marginBottom: 12 }}>
           <p style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(15,10,20,0.35)", fontWeight: 700, marginBottom: 12 }}>Identity Summary</p>
           <p style={{ fontSize: 15, color: "rgba(15,10,20,0.72)", lineHeight: 1.75 }}>
-            {mockUser.identity_summary ?? "Your identity is still emerging. As you complete intelligence domains, your behavioural archetype and confidence will reveal themselves."}
+            {summary}
           </p>
         </div>
 
@@ -379,7 +436,7 @@ export default function DashboardClient() {
         <div style={{ borderRadius: 24, padding: "24px 26px", background: "#ffffff", border: "1px solid rgba(15,10,20,0.08)", boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}>
           <p style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(15,10,20,0.35)", fontWeight: 700, marginBottom: 20 }}>Identity Coverage Progress</p>
           {[
-            { label: "Core Dimensions", val: mockUser.dimensions_complete ?? 7, max: 7, pct: Math.round(((mockUser.dimensions_complete ?? 7) / 7) * 100), color: "#4ade80" },
+            { label: "Core Dimensions", val: hasIntel ? 7 : 0, max: 7, pct: hasIntel ? 100 : 0, color: "#4ade80" },
             { label: "Deeper Dimensions", val: 4, max: 5, pct: 80, color: "#c9a84c" },
             { label: "Coming Soon", val: 0, max: 3, pct: 0, color: "rgba(15,10,20,0.1)", note: "3 new domains" },
           ].map(d => (
@@ -419,7 +476,10 @@ export default function DashboardClient() {
               <Link href="/pull-profile" style={{ fontSize: 10, fontWeight: 700, color: "var(--brand)", textDecoration: "none" }}>Full view →</Link>
             </div>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <RadarChart dimensions={mockDimensions} />
+              <RadarChart dimensions={dash?.dimension_scores
+                ? Object.entries(dash.dimension_scores).slice(0, 6).map(([k, v], i) => ({ label: k.replace(/_/g, " "), score: Math.round(v * 100), color: mockDimensions[i % mockDimensions.length]?.color ?? "#c0404f" }))
+                : mockDimensions}
+                pullScore={pullScore} />
             </div>
           </Card>
         </motion.div>

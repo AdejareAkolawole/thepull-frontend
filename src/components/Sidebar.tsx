@@ -1,14 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Home01Icon, AiBrain01Icon, BookOpen01Icon, Message02Icon,
   FlashIcon, ScaleIcon, Notification01Icon, UserCircleIcon,
   CreditCardIcon, Settings01Icon, AiSparklesIcon, CompassIcon,
-  SidebarLeft01Icon,
+  SidebarLeft01Icon, Logout01Icon,
 } from "@hugeicons/core-free-icons";
+import { logout } from "@/lib/api";
 
 const mainNav = [
   { href: "/dashboard",    icon: Home01Icon,      label: "Home" },
@@ -28,7 +29,13 @@ const bottomNav = [
 
 export default function Sidebar() {
   const path = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(true);
+
+  function handleLogout() {
+    logout();
+    router.push("/login");
+  }
 
   useEffect(() => {
     const saved = localStorage.getItem("sb");
@@ -183,6 +190,23 @@ export default function Sidebar() {
             </Link>
           );
         })}
+
+        {/* Logout */}
+        <button onClick={handleLogout} title={!open ? "Log out" : undefined} style={{
+          display: "flex", alignItems: "center",
+          gap: 10, height: 36, width: "100%",
+          padding: open ? "0 10px" : "0",
+          justifyContent: open ? "flex-start" : "center",
+          borderRadius: 10, border: "none", cursor: "pointer",
+          marginTop: 4,
+          background: "transparent",
+          fontSize: 13, fontWeight: 400,
+          color: "#c0404f",
+          whiteSpace: "nowrap", overflow: "hidden",
+        }}>
+          <HugeiconsIcon icon={Logout01Icon} size={16} style={{ color: "#c0404f", flexShrink: 0 }} />
+          {open && <span>Log out</span>}
+        </button>
       </div>
     </aside>
   );

@@ -1,12 +1,14 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Home01Icon, AiBrain01Icon, Message02Icon, BookOpen01Icon,
   FlashIcon, Settings01Icon, AiSparklesIcon, ScaleIcon, CompassIcon,
+  Logout01Icon,
 } from "@hugeicons/core-free-icons";
+import { logout } from "@/lib/api";
 
 // Mobile bottom nav — 5 most important
 const navItems = [
@@ -31,8 +33,14 @@ const allNavItems = [
 
 export default function TopNav() {
   const path = usePathname();
+  const router = useRouter();
   const [hidden, setHidden] = useState(false);
   const lastY = useRef(0);
+
+  function handleLogout() {
+    logout();
+    router.push("/login");
+  }
 
   useEffect(() => {
     const onScroll = () => {
@@ -91,11 +99,20 @@ export default function TopNav() {
             })}
           </nav>
 
-          {/* Profile chip */}
+          {/* Profile chip + logout */}
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
             <div style={{ width: 32, height: 32, borderRadius: 10, background: "linear-gradient(135deg, #7c2232, #c0404f)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "white" }}>
               AA
             </div>
+            <button onClick={handleLogout} title="Log out" style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              width: 32, height: 32, borderRadius: 10,
+              border: "1px solid rgba(192,64,79,0.2)",
+              background: "rgba(192,64,79,0.06)",
+              cursor: "pointer",
+            }}>
+              <HugeiconsIcon icon={Logout01Icon} size={15} style={{ color: "#c0404f" }} />
+            </button>
           </div>
         </div>
       </header>
