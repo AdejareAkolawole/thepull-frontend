@@ -53,12 +53,12 @@ export default function UpgradePage() {
       {/* ── HERO ── */}
       <div style={{ textAlign: "center", padding: "80px 24px 64px", position: "relative", overflow: "hidden" }}>
         <motion.div {...f(0)} style={{ position: "relative", zIndex: 2 }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.25)", marginBottom: 32 }}>
-            <HugeiconsIcon icon={AiSparklesIcon} size={11} style={{ color: GOLD }} />
-            <span style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: "0.12em", textTransform: "uppercase" }}>Premium Intelligence</span>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(192,64,79,0.08)", border: "1px solid rgba(192,64,79,0.2)", marginBottom: 32 }}>
+            <HugeiconsIcon icon={AiSparklesIcon} size={11} style={{ color: WINE2 }} />
+            <span style={{ fontSize: 10, fontWeight: 700, color: WINE2, letterSpacing: "0.12em", textTransform: "uppercase" }}>Premium Intelligence</span>
           </div>
           <h1 style={{ fontSize: 72, fontWeight: 800, color: "#0f0a14", lineHeight: 1, letterSpacing: "-0.04em", marginBottom: 22 }}>
-            Know yourself<br /><span style={{ color: GOLD }}>completely.</span>
+            Know yourself<br /><span style={{ color: WINE2 }}>completely.</span>
           </h1>
           <p style={{ fontSize: 17, color: "rgba(61,14,26,0.45)", lineHeight: 1.75, maxWidth: 480, margin: "0 auto" }}>
             Free gives you a foundation. Pro unlocks the full picture — deeper dimensions, living reports, unlimited guidance.
@@ -212,7 +212,7 @@ export default function UpgradePage() {
       <div style={{ textAlign: "center", padding: "80px 24px 0" }}>
         <motion.div {...f(0.1)}>
           <h2 style={{ fontSize: 48, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.04em", lineHeight: 1.05, marginBottom: 18 }}>
-            Your intelligence<br /><span style={{ color: GOLD }}>is waiting.</span>
+            Your intelligence<br /><span style={{ color: WINE2 }}>is waiting.</span>
           </h2>
           <p style={{ fontSize: 15, color: "rgba(61,14,26,0.4)", lineHeight: 1.7, maxWidth: 400, margin: "0 auto 36px" }}>
             Start with Pro and let The Pull go deeper with you.
