@@ -39,7 +39,7 @@ export default function JourneyPage() {
       <motion.div {...f(0.05)} style={{ borderRadius: 20, position: "relative", overflow: "hidden", minHeight: 200 }}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #3d0e1a 0%, #6b1c2b 45%, #a03040 100%)" }} />
         <div style={{ position: "absolute", top: -64, left: -64, width: 320, height: 320, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.3), transparent)", filter: "blur(40px)" }} />
-        <div style={{ position: "relative", zIndex: 1, padding: "32px 40px", display: "flex", alignItems: "center", gap: 48, flexWrap: "wrap" }}>
+        <div className="hero-pad" style={{ position: "relative", zIndex: 1, padding: "32px 40px", display: "flex", alignItems: "center", gap: 48, flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 200 }}>
             <p style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 8 }}>Journey Progress</p>
             <p className="font-display" style={{ fontSize: 48, fontWeight: 600, color: "white", lineHeight: 1 }}>
@@ -161,7 +161,7 @@ export default function JourneyPage() {
 
           {/* Next step CTA */}
           <motion.div {...f(0.22)}>
-            <div style={{ borderRadius: 16, padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #3d0e1a, #6b1c2b)", border: "1px solid rgba(192,64,79,0.25)" }}>
+            <div className="cta-banner" style={{ borderRadius: 16, padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #3d0e1a, #6b1c2b)", border: "1px solid rgba(192,64,79,0.25)" }}>
               <div style={{ position: "absolute", top: -24, right: -24, width: 80, height: 80, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.3), transparent)", filter: "blur(16px)" }} />
               <div style={{ display: "flex", alignItems: "center", gap: 12, position: "relative" }}>
                 <div style={{ width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: "rgba(224,80,96,0.2)", border: "1px solid rgba(224,80,96,0.3)" }}>
@@ -172,7 +172,7 @@ export default function JourneyPage() {
                   <p style={{ fontSize: 10, marginTop: 2, color: "rgba(255,255,255,0.4)" }}>~8 min assessment</p>
                 </div>
               </div>
-              <button style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", border: "none", cursor: "pointer", flexShrink: 0, position: "relative", marginLeft: 16 }}>
+              <button className="cta-banner-btn" style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", border: "none", cursor: "pointer", flexShrink: 0, position: "relative", marginLeft: 16 }}>
                 Start <HugeiconsIcon icon={ArrowRight01Icon} size={10} />
               </button>
             </div>

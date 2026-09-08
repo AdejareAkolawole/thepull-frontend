@@ -22,7 +22,7 @@ export default function ReportsPage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {/* Header */}
-      <motion.div {...f(0)} style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
+      <motion.div {...f(0)} className="page-header-row" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <div>
           <p style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 4 }}>Intelligence</p>
           <h1 className="font-display" style={{ fontSize: 36, fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.1 }}>Reports</h1>
@@ -101,7 +101,7 @@ export default function ReportsPage() {
 
       {/* CTA banner */}
       <motion.div {...f(0.3)}>
-        <div style={{ borderRadius: 16, padding: "28px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24, position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #3d0e1a 0%, #6b1c2b 50%, #a03040 100%)", border: "1px solid rgba(192,64,79,0.25)", boxShadow: "0 8px 40px rgba(61,14,26,0.2)" }}>
+        <div className="cta-banner" style={{ borderRadius: 16, padding: "28px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24, position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #3d0e1a 0%, #6b1c2b 50%, #a03040 100%)", border: "1px solid rgba(192,64,79,0.25)", boxShadow: "0 8px 40px rgba(61,14,26,0.2)" }}>
           <div style={{ position: "absolute", top: -48, left: -48, width: 192, height: 192, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.25), transparent)", filter: "blur(30px)" }} />
           <div style={{ position: "relative" }}>
             <p style={{ fontSize: 15, fontWeight: 700, color: "white", marginBottom: 6 }}>Ready to generate a new report?</p>
@@ -109,7 +109,7 @@ export default function ReportsPage() {
               Select a person from your vault to generate a deep relationship intelligence report powered by your full profile.
             </p>
           </div>
-          <button style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08))", border: "1px solid rgba(255,255,255,0.2)", cursor: "pointer", flexShrink: 0, position: "relative" }}>
+          <button className="cta-banner-btn" style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08))", border: "1px solid rgba(255,255,255,0.2)", cursor: "pointer", flexShrink: 0, position: "relative" }}>
             Get started <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
           </button>
         </div>

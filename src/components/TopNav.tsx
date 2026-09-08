@@ -36,8 +36,8 @@ export default function TopNav() {
             THE<span style={{ color: "#c0404f" }}>PULL</span>
           </span>
 
-          {/* Nav links */}
-          <nav style={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
+          {/* Nav links — hidden on mobile */}
+          <nav className="desktop-nav-links" style={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
             {navItems.map(({ href, icon: Icon, label }) => {
               const active = path === href || (href !== "/dashboard" && path.startsWith(href));
               return (
@@ -94,10 +94,13 @@ export default function TopNav() {
         })}
       </nav>
 
-      {/* Inline style to hide mobile nav on desktop — most reliable approach */}
+      {/* Inline style to hide mobile nav on desktop, and desktop nav links on mobile */}
       <style>{`
         @media (min-width: 768px) {
           .desktop-hide-mobile-nav { display: none !important; }
+        }
+        @media (max-width: 767px) {
+          .desktop-nav-links { display: none !important; }
         }
       `}</style>
     </>

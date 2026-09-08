@@ -57,7 +57,7 @@ export default function PullProfilePage() {
       <motion.div {...f(0)} style={{ borderRadius: 20, position: "relative", overflow: "hidden", minHeight: 220 }}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #3d0e1a 0%, #6b1c2b 45%, #a03040 100%)" }} />
         <div style={{ position: "absolute", top: -64, left: -64, width: 320, height: 320, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.3), transparent)", filter: "blur(40px)" }} />
-        <div style={{ position: "relative", zIndex: 1, padding: "32px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 32, flexWrap: "wrap" }}>
+        <div className="hero-pad" style={{ position: "relative", zIndex: 1, padding: "32px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 32, flexWrap: "wrap" }}>
           <div>
             <p style={{ fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 16 }}>Pull Profile</p>
             <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
@@ -177,7 +177,7 @@ export default function PullProfilePage() {
 
           {/* CTA */}
           <motion.div {...f(0.2)}>
-            <div style={{ borderRadius: 16, padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #3d0e1a, #6b1c2b)", border: "1px solid rgba(192,64,79,0.25)" }}>
+            <div className="cta-banner" style={{ borderRadius: 16, padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #3d0e1a, #6b1c2b)", border: "1px solid rgba(192,64,79,0.25)" }}>
               <div style={{ position: "absolute", top: -24, right: -24, width: 80, height: 80, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.3), transparent)", filter: "blur(16px)" }} />
               <div style={{ display: "flex", alignItems: "center", gap: 12, position: "relative" }}>
                 <div style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: "rgba(224,80,96,0.2)", border: "1px solid rgba(224,80,96,0.3)" }}>
@@ -188,7 +188,7 @@ export default function PullProfilePage() {
                   <p style={{ fontSize: 11, marginTop: 2, color: "rgba(255,255,255,0.4)" }}>Next assessment unlocks new insights</p>
                 </div>
               </div>
-              <Link href="/journey" style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", textDecoration: "none", flexShrink: 0, marginLeft: 16, position: "relative" }}>
+              <Link href="/journey" className="cta-banner-btn" style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", textDecoration: "none", flexShrink: 0, marginLeft: 16, position: "relative" }}>
                 Start <HugeiconsIcon icon={ArrowRight01Icon} size={11} />
               </Link>
             </div>

@@ -107,12 +107,12 @@ export default function DashboardClient() {
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
       {/* ROW 1: Hero + Score */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 12 }}>
+      <div className="dash-row-1" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 12 }}>
 
         {/* Hero */}
         <motion.div {...fade(0)} className="rounded-2xl relative overflow-hidden" style={{ minHeight: 240, background: "linear-gradient(140deg, #3d0e1a 0%, #6b1c2b 45%, #a03040 100%)" }}>
           <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 60% at 10% 20%, rgba(255,255,255,0.05) 0%, transparent 60%)" }} />
-          <div style={{ position: "relative", padding: "36px 40px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div className="dash-hero-inner" style={{ position: "relative", padding: "36px 40px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 16 }}>
                 <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ade80" }} />
@@ -199,7 +199,7 @@ export default function DashboardClient() {
       </div>
 
       {/* ROW 2: Radar + Insights + Side column */}
-      <div style={{ display: "grid", gridTemplateColumns: "220px 1fr 210px", gap: 12 }}>
+      <div className="dash-row-2" style={{ display: "grid", gridTemplateColumns: "220px 1fr 210px", gap: 12 }}>
 
         <motion.div {...fade(0.09)}>
           <Card style={{ padding: 16, height: "100%" }}>
@@ -288,7 +288,7 @@ export default function DashboardClient() {
       </div>
 
       {/* ROW 3: Vault + Quick Actions */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 250px", gap: 12 }}>
+      <div className="dash-row-3" style={{ display: "grid", gridTemplateColumns: "1fr 250px", gap: 12 }}>
 
         <motion.div {...fade(0.21)}>
           <Card style={{ padding: 20 }}>
@@ -360,6 +360,15 @@ export default function DashboardClient() {
           </Card>
         </motion.div>
       </div>
+
+      <style>{`
+        @media (max-width: 767px) {
+          .dash-row-1, .dash-row-2, .dash-row-3 {
+            grid-template-columns: 1fr !important;
+          }
+          .dash-hero-inner { padding: 24px 20px !important; }
+        }
+      `}</style>
     </div>
   );
 }

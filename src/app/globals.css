@@ -90,4 +90,29 @@ body {
   [data-cols="vault"] {
     grid-template-columns: 1fr !important;
   }
+
+  /* Hero section inner padding — reduce on mobile */
+  .hero-pad { padding: 24px 20px !important; }
+
+  /* CTA banner flex — stack on mobile */
+  .cta-banner { flex-direction: column !important; align-items: flex-start !important; }
+  .cta-banner-btn { align-self: flex-start; margin-left: 0 !important; }
+
+  /* Reports list row — hide action buttons to save space */
+  .report-actions { display: none !important; }
+
+  /* Page header — stack on small screens */
+  .page-header-row { flex-direction: column !important; align-items: flex-start !important; }
+
+  /* Dashboard grid rows — collapse (also targeted from DashboardClient style tag) */
+  .dash-row-1, .dash-row-2, .dash-row-3 {
+    grid-template-columns: 1fr !important;
+  }
+  .dash-hero-inner { padding: 24px 20px !important; }
+
+  /* Vault hero padding */
+  .vault-hero-inner { padding: 24px 20px !important; }
+
+  /* H1 size — a bit smaller on mobile */
+  h1.mobile-h1 { font-size: 28px !important; }
 }
