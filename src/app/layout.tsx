@@ -6,6 +6,7 @@ import IntelligenceBar from "@/components/IntelligenceBar";
 export const metadata: Metadata = {
   title: "THEPULL — Personal Intelligence",
   description: "Personal intelligence that grows with you.",
+  icons: { icon: "/logo.jpg", apple: "/logo.jpg" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
