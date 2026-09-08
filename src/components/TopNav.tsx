@@ -4,25 +4,28 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Home01Icon, VaultIcon, AiBrain01Icon, Message02Icon, Analytics01Icon,
-  FlashIcon, BookOpen01Icon, Settings01Icon,
+  Home01Icon, AiBrain01Icon, Message02Icon, BookOpen01Icon,
+  FlashIcon, Settings01Icon, AiSparklesIcon, ScaleIcon, CompassIcon,
 } from "@hugeicons/core-free-icons";
 
+// Mobile bottom nav — 5 most important
 const navItems = [
   { href: "/dashboard", icon: Home01Icon, label: "Home" },
-  { href: "/coach", icon: Message02Icon, label: "Coach" },
-  { href: "/pull-profile", icon: AiBrain01Icon, label: "Profile" },
-  { href: "/journey", icon: FlashIcon, label: "Journey" },
+  { href: "/pull-profile", icon: AiSparklesIcon, label: "Pull Profile" },
+  { href: "/coach", icon: AiBrain01Icon, label: "Ask The Pull" },
+  { href: "/journey", icon: CompassIcon, label: "Journey" },
   { href: "/settings", icon: Settings01Icon, label: "Settings" },
 ];
 
+// Desktop top nav — full list matching sidebar
 const allNavItems = [
   { href: "/dashboard", icon: Home01Icon, label: "Home" },
-  { href: "/pull-profile", icon: AiBrain01Icon, label: "Profile" },
-  { href: "/coach", icon: Message02Icon, label: "AI Coach" },
-  { href: "/reports", icon: Analytics01Icon, label: "Reports" },
-  { href: "/journey", icon: FlashIcon, label: "Journey" },
+  { href: "/pull-profile", icon: AiSparklesIcon, label: "Pull Profile" },
   { href: "/journal", icon: BookOpen01Icon, label: "Journal" },
+  { href: "/coach", icon: AiBrain01Icon, label: "Ask The Pull" },
+  { href: "/reports", icon: ScaleIcon, label: "Reality Check" },
+  { href: "/journey", icon: CompassIcon, label: "Journey" },
+  { href: "/upgrade", icon: FlashIcon, label: "Subscription" },
   { href: "/settings", icon: Settings01Icon, label: "Settings" },
 ];
 
