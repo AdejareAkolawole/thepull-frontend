@@ -349,6 +349,114 @@ export default function UpgradePage() {
         <p style={{ fontSize: 12, color: T3 }}>Cancel any time · Founding 500 price locked forever · No surprise charges</p>
       </motion.div>
 
+      {/* ── CHOOSE YOUR DEPTH ──────────────────────────────────── */}
+      <motion.div {...f(0.32)} style={{
+        position: "relative", overflow: "hidden",
+        background: "linear-gradient(170deg,#150608 0%,#200c14 55%,#160a0f 100%)",
+        margin: "48px 0 0", padding: "80px 24px 72px",
+      }}>
+        {/* Glow blobs */}
+        <div style={{ position: "absolute", top: -100, left: "50%", transform: "translateX(-50%)", width: 600, height: 400, borderRadius: "50%", background: "radial-gradient(ellipse,rgba(192,64,79,0.1) 0%,transparent 65%)", filter: "blur(40px)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: -60, right: "20%", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,168,76,0.07) 0%,transparent 70%)", filter: "blur(30px)", pointerEvents: "none" }} />
+
+        <div style={{ maxWidth: 840, margin: "0 auto", position: "relative", zIndex: 1 }}>
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: 64 }}>
+            <p style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.32em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.6)", marginBottom: 20 }}>Choose Your Depth</p>
+            <h2 style={{ fontSize: 48, fontWeight: 800, color: "#fff", letterSpacing: "-0.04em", lineHeight: 1.08, marginBottom: 14, fontFamily: "Georgia,'Times New Roman',serif" }}>
+              The Pull doesn&apos;t just assess you once.
+            </h2>
+            <p style={{ fontSize: 17, color: "rgba(245,240,232,0.55)", marginBottom: 10 }}>It gets to know you. Choose how deeply.</p>
+            <p style={{ fontSize: 13, color: "rgba(245,240,232,0.3)", lineHeight: 1.7, maxWidth: 480, margin: "0 auto 16px" }}>
+              Start by understanding yourself. Let The Pull learn you over time. Eventually, use what it knows to make better decisions.
+            </p>
+            <p style={{ fontSize: 13, fontWeight: 600, color: "rgba(201,168,76,0.8)", fontStyle: "italic" }}>Personal intelligence that grows with you.</p>
+          </div>
+
+          {/* 3-tier row */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 1, borderRadius: 20, overflow: "hidden", border: "1px solid rgba(245,240,232,0.07)", marginBottom: 64 }}>
+            {[
+              { tag: "Learn", name: "LEARN ME",        sub: "Start understanding yourself.",    dim: false },
+              { tag: "Understand", name: "UNDERSTAND ME", sub: "Understand yourself more deeply.", dim: false },
+              { tag: "Know", name: "KNOW ME",           sub: "Know yourself at the deepest level.", dim: false },
+            ].map((tier, i) => (
+              <div key={tier.name} style={{
+                padding: "32px 28px",
+                background: i === 1 ? "rgba(245,240,232,0.04)" : "rgba(245,240,232,0.02)",
+                borderLeft: i > 0 ? "1px solid rgba(245,240,232,0.07)" : "none",
+                textAlign: "center" as const,
+              }}>
+                <p style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.28em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.55)", marginBottom: 14 }}>{tier.tag}</p>
+                <p style={{ fontSize: 22, fontWeight: 800, color: "#fff", letterSpacing: "-0.02em", marginBottom: 8 }}>{tier.name}</p>
+                <p style={{ fontSize: 12, color: "rgba(245,240,232,0.35)", fontStyle: "italic" }}>{tier.sub}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* WHY section */}
+          <div style={{ borderTop: "1px solid rgba(245,240,232,0.07)", paddingTop: 64 }}>
+            <div style={{ textAlign: "center", marginBottom: 48 }}>
+              <p style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.28em", textTransform: "uppercase" as const, color: "rgba(245,240,232,0.25)", marginBottom: 20 }}>Why The Pull Gets More Valuable With Time</p>
+              <h3 style={{ fontSize: 40, fontWeight: 800, color: "#fff", letterSpacing: "-0.03em", lineHeight: 1.12, marginBottom: 6, fontFamily: "Georgia,'Times New Roman',serif" }}>
+                Most assessments tell you who you are once.
+              </h3>
+              <p style={{ fontSize: 40, fontWeight: 800, color: "rgba(201,168,76,0.85)", letterSpacing: "-0.03em", lineHeight: 1.12, marginBottom: 28, fontFamily: "Georgia,'Times New Roman',serif", fontStyle: "italic" }}>
+                The Pull keeps learning.
+              </p>
+              <p style={{ fontSize: 14, color: "rgba(245,240,232,0.38)", lineHeight: 1.8, maxWidth: 560, margin: "0 auto" }}>
+                On day one, The Pull establishes your foundation — your Pull Score, your archetype, the shape of who you are. Then it shifts. As you live, you bring experience. The Pull notices patterns. As patterns repeat, its confidence grows. Eventually, The Pull can tell you things it could not have known on day one.
+              </p>
+            </div>
+
+            {/* 5-step journey */}
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: 0, marginBottom: 64, flexWrap: "wrap" as const }}>
+              {[
+                { n: 1, label: "Foundation",        sub: "Who you are, today" },
+                { n: 2, label: "Experience",        sub: "You live, you share" },
+                { n: 3, label: "Pattern",           sub: "The Pull notices" },
+                { n: 4, label: "Learning",          sub: "Confidence grows" },
+                { n: 5, label: "Deeper Intelligence", sub: "What it could not know on day one" },
+              ].map((step, i) => (
+                <div key={step.n} style={{ display: "flex", alignItems: "center" }}>
+                  <div style={{ textAlign: "center" as const, width: 120 }}>
+                    <div style={{
+                      width: 40, height: 40, borderRadius: "50%",
+                      background: i < 2 ? "rgba(192,64,79,0.2)" : i === 2 ? "rgba(201,168,76,0.15)" : "rgba(245,240,232,0.06)",
+                      border: `1px solid ${i < 2 ? "rgba(192,64,79,0.35)" : i === 2 ? "rgba(201,168,76,0.3)" : "rgba(245,240,232,0.12)"}`,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      margin: "0 auto 12px",
+                      fontSize: 14, fontWeight: 800,
+                      color: i < 2 ? "rgba(192,64,79,0.9)" : i === 2 ? "rgba(201,168,76,0.85)" : "rgba(245,240,232,0.35)",
+                    }}>{step.n}</div>
+                    <p style={{ fontSize: 12, fontWeight: 600, color: "rgba(245,240,232,0.75)", marginBottom: 4 }}>{step.label}</p>
+                    <p style={{ fontSize: 10, color: "rgba(245,240,232,0.3)", lineHeight: 1.5 }}>{step.sub}</p>
+                  </div>
+                  {i < 4 && (
+                    <div style={{ width: 32, flexShrink: 0, display: "flex", justifyContent: "center", paddingBottom: 28 }}>
+                      <HugeiconsIcon icon={ArrowRight01Icon} size={13} style={{ color: "rgba(245,240,232,0.15)" }} />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* 3-column footer */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 1, borderTop: "1px solid rgba(245,240,232,0.07)", paddingTop: 40 }}>
+              {[
+                { tag: "Pull Score",          q: "What is my current intelligence profile?" },
+                { tag: "Living Intelligence", q: "What has The Pull learned about me over time?" },
+                { tag: "Ask The Pull",        q: "What can I ask about what it knows?" },
+              ].map((col, i) => (
+                <div key={col.tag} style={{ padding: "0 24px", borderLeft: i > 0 ? "1px solid rgba(245,240,232,0.07)" : "none" }}>
+                  <p style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.24em", textTransform: "uppercase" as const, color: "rgba(245,240,232,0.25)", marginBottom: 10 }}>{col.tag}</p>
+                  <p style={{ fontSize: 15, fontWeight: 600, color: "rgba(245,240,232,0.6)", lineHeight: 1.5, fontStyle: "italic" }}>{col.q}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
       {/* BOTTOM CTA */}
       <motion.div {...f(0.35)} style={{ textAlign: "center", padding: "80px 24px 0" }}>
         <h2 style={{ fontSize: 44, fontWeight: 800, color: T1, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 16 }}>
