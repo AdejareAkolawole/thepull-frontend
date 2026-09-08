@@ -265,7 +265,7 @@ export default function DashboardClient() {
                     {!a.done && (
                       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: "rgba(0,0,0,0.12)" }}>🔒</div>
                     )}
-                    <div style={{ fontSize: 20, marginBottom: 6 }}>{a.done ? a.icon : "🔒"}</div>
+                    <div style={{ fontSize: 20, marginBottom: 6 }}>{a.done ? (a as any).icon ?? "⭐" : "🔒"}</div>
                     <p style={{ fontSize: 10, fontWeight: 700, color: a.done ? a.color : "var(--text-muted)", lineHeight: 1.2 }}>{a.label}</p>
                   </div>
                 ))}
