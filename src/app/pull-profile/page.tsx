@@ -234,11 +234,11 @@ export default function PullProfilePage() {
         </motion.div>
 
         {/* Insight sections */}
-        {[
+        {([
           {
             icon: AiSparklesIcon,
-            heading: "Here's what The Pull is noticing",
-            sub: "The Pull doesn't say something because the day changed. It speaks only when your experiences have earned it. This is separate from your Pull Score.",
+            tag: "Here's what The Pull is noticing",
+            sub: "The Pull doesn't say something because the day changed. It speaks only when your experiences have earned it.",
             cardTitle: "The Pull is still getting to know you",
             cardBody: "There isn't enough here yet for The Pull to say something meaningful — and it won't pretend otherwise. Share a real experience and the pattern-finding begins.",
             actions: [
@@ -248,8 +248,8 @@ export default function PullProfilePage() {
           },
           {
             icon: CheckmarkCircle01Icon,
-            heading: "What The Pull Is Learning",
-            sub: "The Pull gets smarter about you as your experiences accumulate. This is separate from your Pull Score — your score describes your current measured intelligence; this shows what The Pull is learning from your experiences over time.",
+            tag: "What The Pull Is Learning",
+            sub: "The Pull gets smarter about you as your experiences accumulate — your score measures intelligence, this shows what it's learning over time.",
             cardTitle: "The Pull is still getting to know you",
             cardBody: "As you use The Pull and share real experiences, patterns will begin to emerge here. The more you bring, the more The Pull notices.",
             actions: [
@@ -258,9 +258,9 @@ export default function PullProfilePage() {
           },
           {
             icon: Activity01Icon,
-            heading: "What's Changing",
-            sub: "The Pull doesn't just store what it learned — it watches how your evidence shifts over time. This is change in evidence, not a new score, and it's separate from your Pull Score.",
-            cardTitle: "Your Pull is still gathering enough experience",
+            tag: "What's Changing",
+            sub: "The Pull watches how your evidence shifts over time — this is change in evidence, not a new score.",
+            cardTitle: "Your Pull is still gathering experience",
             cardBody: "To see how you're changing, The Pull needs a meaningful run of experiences to compare across time. It won't claim a change until the evidence can honestly support one.",
             actions: [
               { label: "Tell The Pull what happened", icon: Add01Icon, primary: false },
@@ -268,44 +268,96 @@ export default function PullProfilePage() {
           },
           {
             icon: Time01Icon,
-            heading: "Since you last checked in",
-            sub: "Since you last checked in. The Pull only shows changes here when its understanding actually moved — never just to give you something to read.",
+            tag: "Since you last checked in",
+            sub: "The Pull only shows changes here when its understanding actually moved — never just to give you something to read.",
             cardTitle: null,
             cardBody: null,
             actions: [],
           },
-        ].map((section, i) => (
-          <motion.div key={section.heading} {...f(0.18 + i * 0.05)} style={{ marginBottom: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 8, paddingLeft: 4 }}>
-              <HugeiconsIcon icon={section.icon} size={12} style={{ color: MID }} />
-              <p style={{ fontSize: 11, fontWeight: 700, color: MID }}>{section.heading}</p>
-            </div>
-            <p style={{ fontSize: 12, color: MID, lineHeight: 1.65, marginBottom: section.cardTitle ? 12 : 0, paddingLeft: 4 }}>{section.sub}</p>
-
-            {section.cardTitle && (
-              <div style={{ background: "linear-gradient(150deg,#1c0a10 0%,#2a1018 100%)", borderRadius: 20, padding: "36px 28px", textAlign: "center" as const }}>
-                <div style={{ width: 44, height: 44, borderRadius: 14, background: "rgba(245,240,232,0.08)", border: "1px solid rgba(245,240,232,0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
-                  <HugeiconsIcon icon={section.icon} size={20} style={{ color: "rgba(245,240,232,0.6)" }} />
+        ] as const).map((section, i) => (
+          <motion.div key={section.tag} {...f(0.18 + i * 0.05)} style={{ marginBottom: 20 }}>
+            {/* Section card */}
+            <div style={{
+              background: "linear-gradient(160deg,#1a0910 0%,#26101a 60%,#1e0c14 100%)",
+              borderRadius: 24,
+              overflow: "hidden",
+              border: "1px solid rgba(245,240,232,0.06)",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(245,240,232,0.06)",
+            }}>
+              {/* Card header strip */}
+              <div style={{
+                padding: "18px 24px 16px",
+                borderBottom: "1px solid rgba(245,240,232,0.07)",
+                display: "flex", alignItems: "center", gap: 10,
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: 8,
+                  background: "rgba(245,240,232,0.07)",
+                  border: "1px solid rgba(245,240,232,0.1)",
+                  display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                }}>
+                  <HugeiconsIcon icon={section.icon} size={13} style={{ color: "rgba(245,240,232,0.6)" }} />
                 </div>
-                <p style={{ fontSize: 20, fontWeight: 600, color: CREAM, marginBottom: 12, fontFamily: "Georgia, serif" }}>{section.cardTitle}</p>
-                <p style={{ fontSize: 13, color: "rgba(245,240,232,0.45)", lineHeight: 1.7, marginBottom: 24, maxWidth: 380, margin: "0 auto 24px" }}>{section.cardBody}</p>
-                <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" as const }}>
-                  {section.actions.map(a => (
-                    <button key={a.label} style={{
-                      display: "inline-flex", alignItems: "center", gap: 7,
-                      padding: "10px 20px", borderRadius: 99,
-                      fontSize: 13, fontWeight: 600, cursor: "pointer",
-                      background: a.primary ? "rgba(245,240,232,0.12)" : "transparent",
-                      border: "1px solid rgba(245,240,232,0.2)",
-                      color: "rgba(245,240,232,0.8)",
-                    }}>
-                      <HugeiconsIcon icon={a.icon} size={13} />
-                      {a.label}
-                    </button>
-                  ))}
+                <div>
+                  <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(245,240,232,0.85)", letterSpacing: "0.01em" }}>{section.tag}</p>
+                  <p style={{ fontSize: 10.5, color: "rgba(245,240,232,0.35)", marginTop: 2, lineHeight: 1.5 }}>{section.sub}</p>
                 </div>
               </div>
-            )}
+
+              {/* Card body */}
+              {section.cardTitle ? (
+                <div style={{ padding: "40px 28px 36px", textAlign: "center" as const, position: "relative" as const }}>
+                  {/* Subtle glow blob */}
+                  <div style={{
+                    position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+                    width: 180, height: 80,
+                    background: "radial-gradient(ellipse,rgba(192,64,79,0.12) 0%,transparent 70%)",
+                    pointerEvents: "none",
+                  }} />
+                  {/* Icon circle */}
+                  <div style={{
+                    width: 52, height: 52, borderRadius: 16,
+                    background: "rgba(245,240,232,0.05)",
+                    border: "1px solid rgba(245,240,232,0.1)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    margin: "0 auto 20px",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+                  }}>
+                    <HugeiconsIcon icon={section.icon} size={22} style={{ color: "rgba(245,240,232,0.45)" }} />
+                  </div>
+                  <p style={{
+                    fontSize: 19, fontWeight: 600, color: "rgba(245,240,232,0.92)",
+                    marginBottom: 10, fontFamily: "Georgia, 'Times New Roman', serif",
+                    lineHeight: 1.3, letterSpacing: "-0.01em",
+                  }}>{section.cardTitle}</p>
+                  <p style={{
+                    fontSize: 13, color: "rgba(245,240,232,0.38)",
+                    lineHeight: 1.75, maxWidth: 340, margin: "0 auto 28px",
+                  }}>{section.cardBody}</p>
+                  <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" as const }}>
+                    {section.actions.map((a: { label: string; icon: typeof Add01Icon; primary: boolean }) => (
+                      <button key={a.label} style={{
+                        display: "inline-flex", alignItems: "center", gap: 8,
+                        padding: "11px 22px", borderRadius: 99,
+                        fontSize: 13, fontWeight: 600, cursor: "pointer",
+                        background: a.primary ? "rgba(192,64,79,0.2)" : "rgba(245,240,232,0.06)",
+                        border: `1px solid ${a.primary ? "rgba(192,64,79,0.35)" : "rgba(245,240,232,0.12)"}`,
+                        color: a.primary ? "rgba(245,192,200,0.95)" : "rgba(245,240,232,0.65)",
+                        letterSpacing: "0.005em",
+                        transition: "all 0.15s",
+                      }}>
+                        <HugeiconsIcon icon={a.icon} size={13} />
+                        {a.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div style={{ padding: "28px 24px", textAlign: "center" as const }}>
+                  <p style={{ fontSize: 13, color: "rgba(245,240,232,0.3)", fontStyle: "italic" }}>Nothing new since your last check-in.</p>
+                </div>
+              )}
+            </div>
           </motion.div>
         ))}
       </div>
