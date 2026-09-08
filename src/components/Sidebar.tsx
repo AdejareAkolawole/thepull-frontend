@@ -84,7 +84,7 @@ export default function Sidebar() {
       </div>
 
       {/* Main nav */}
-      <nav style={{ flex: 1, padding: "8px 8px 4px" }}>
+      <nav style={{ flex: 1, padding: "28px 8px 4px" }}>
         {mainNav.map(({ href, icon, label }) => {
           const active = isActive(href);
           return (
