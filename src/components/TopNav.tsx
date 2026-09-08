@@ -130,6 +130,10 @@ export default function TopNav() {
       </nav>
 
       <style>{`
+        /* TopNav header: hide on desktop — sidebar takes over */
+        @media (min-width: 1024px) {
+          .topnav-header { display: none !important; }
+        }
         /* Mobile bottom nav: hide ≥768px */
         @media (min-width: 768px) {
           .desktop-hide-mobile-nav { display: none !important; }
@@ -137,10 +141,6 @@ export default function TopNav() {
         /* Desktop nav links: hide on mobile */
         @media (max-width: 767px) {
           .desktop-nav-links { display: none !important; }
-        }
-        /* TopNav header: hide on desktop (≥1024px) — sidebar takes over */
-        @media (min-width: 1024px) {
-          .topnav-header { display: none !important; }
         }
       `}</style>
     </>
