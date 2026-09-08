@@ -21,7 +21,7 @@ export default function JourneyPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isLoggedIn()) { router.push("/login"); return; }
+    if (!isLoggedIn()) { setLoading(false); router.push("/login"); return; }
     Promise.all([getDashboard(), getAssessmentStatus()])
       .then(([d, a]) => { setDash(d); setAssessment(a); })
       .catch(() => {})

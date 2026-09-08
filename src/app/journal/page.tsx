@@ -37,9 +37,13 @@ export default function JournalPage() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (!isLoggedIn()) { router.push("/login"); return; }
+    if (!isLoggedIn()) {
+      setLoading(false);
+      router.push("/login");
+      return;
+    }
     load();
-  }, []);
+  }, [router]);
 
   async function load() {
     setLoading(true);
