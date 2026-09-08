@@ -211,7 +211,7 @@ export default function UpgradePage() {
           </div>
 
           <div style={{ position: "relative", zIndex: 1 }}>
-            <p style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)", fontWeight: 700, marginBottom: 20 }}>Pro</p>
+            <p style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)", fontWeight: 700, marginBottom: 20 }}>Understand Me</p>
 
             <div style={{ display: "flex", alignItems: "flex-end", gap: 5, marginBottom: billing === "monthly" ? 14 : 10 }}>
               <span style={{ fontSize: 64, fontWeight: 800, color: "#fff", lineHeight: 1, letterSpacing: "-0.04em" }}>${price}</span>
