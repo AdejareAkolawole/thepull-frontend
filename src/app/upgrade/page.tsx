@@ -211,32 +211,6 @@ export default function UpgradePage() {
         <p style={{ fontSize: 12, color: "rgba(245,240,232,0.18)" }}>Cancel any time · Founding 500 price locked forever · No surprise charges</p>
       </motion.div>
 
-      {/* ── TESTIMONIALS ── */}
-      <div style={{ maxWidth: 880, margin: "80px auto 0", padding: "0 24px" }}>
-        <motion.div {...f(0.1)} style={{ textAlign: "center", marginBottom: 40 }}>
-          <p style={{ fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(245,240,232,0.22)", fontWeight: 700, marginBottom: 12 }}>What people say</p>
-          <h2 style={{ fontSize: 36, fontWeight: 800, color: CREAM, letterSpacing: "-0.03em" }}>It actually evolves.</h2>
-        </motion.div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
-          {[
-            { name: "Zara M.", role: "Executive Coach", quote: "I've done every personality test out there. The Pull is the first one that actually evolves as I do." },
-            { name: "Kwame A.", role: "Entrepreneur", quote: "The deeper dimensions unlocked something I couldn't name. My relationship with conflict changed completely." },
-            { name: "Sofia L.", role: "Therapist", quote: "I recommend it to clients who want a living mirror, not a static snapshot." },
-          ].map((t, i) => (
-            <motion.div key={t.name} {...f(0.14 + i * 0.06)} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 20, padding: "26px 22px" }}>
-              <p style={{ fontSize: 14, color: "rgba(245,240,232,0.6)", lineHeight: 1.75, fontStyle: "italic", fontFamily: "Georgia,serif", marginBottom: 20 }}>"{t.quote}"</p>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 10, background: `linear-gradient(135deg,${WINE},${WINE2})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "#fff" }}>{t.name[0]}</div>
-                <div>
-                  <p style={{ fontSize: 12, fontWeight: 700, color: CREAM }}>{t.name}</p>
-                  <p style={{ fontSize: 10, color: "rgba(245,240,232,0.3)" }}>{t.role}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
       {/* ── BOTTOM CTA ── */}
       <div style={{ textAlign: "center", padding: "80px 24px 0", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
