@@ -80,7 +80,7 @@ export default function UpgradePage() {
       </motion.div>
 
       {/* CARDS */}
-      <div style={{ maxWidth: 840, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "start" }}>
+      <div className="upgrade-grid" style={{ maxWidth: 840, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "start" }}>
 
         {/* FREE */}
         <motion.div {...f(0.12)} style={{

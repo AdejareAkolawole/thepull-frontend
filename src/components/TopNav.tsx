@@ -51,8 +51,8 @@ export default function TopNav() {
 
   return (
     <>
-      {/* Desktop sticky top bar — hidden on mobile via CSS */}
-      <header style={{
+      {/* Desktop sticky top bar — hidden on desktop (sidebar replaces it) and on mobile */}
+      <header className="topnav-header" style={{
         position: "sticky", top: 0, zIndex: 50, width: "100%",
         background: "rgba(255,255,255,0.92)",
         backdropFilter: "blur(16px)",
@@ -65,7 +65,7 @@ export default function TopNav() {
             <img src="/logo.jpg" alt="THEPULL" style={{ height: 30, width: "auto", display: "block", borderRadius: 7 }} />
             <div>
               <p style={{ fontSize: 13, fontWeight: 800, color: "#0f0a14", lineHeight: 1.2, letterSpacing: "-0.02em" }}>MyPullScore</p>
-              <p style={{ fontSize: 9, color: "rgba(15,10,20,0.38)", lineHeight: 1.2 }}>Personal intelligence that grows with you.</p>
+              <p className="nav-logo-tagline" style={{ fontSize: 9, color: "rgba(15,10,20,0.38)", lineHeight: 1.2 }}>Personal intelligence that grows with you.</p>
             </div>
           </Link>
 
@@ -129,13 +129,18 @@ export default function TopNav() {
         })}
       </nav>
 
-      {/* Inline style to hide mobile nav on desktop, and desktop nav links on mobile */}
       <style>{`
+        /* Mobile bottom nav: hide ≥768px */
         @media (min-width: 768px) {
           .desktop-hide-mobile-nav { display: none !important; }
         }
+        /* Desktop nav links: hide on mobile */
         @media (max-width: 767px) {
           .desktop-nav-links { display: none !important; }
+        }
+        /* TopNav header: hide on desktop (≥1024px) — sidebar takes over */
+        @media (min-width: 1024px) {
+          .topnav-header { display: none !important; }
         }
       `}</style>
     </>

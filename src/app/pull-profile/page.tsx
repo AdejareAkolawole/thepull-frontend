@@ -74,7 +74,7 @@ export default function PullProfilePage() {
         <motion.div {...f(0)} style={{ width: "100%", maxWidth: 600 }}>
           <div style={{ background: CREAM, borderRadius: 28, overflow: "hidden", boxShadow: "0 12px 60px rgba(45,26,20,0.10)" }}>
             {/* Score header */}
-            <div style={{ textAlign: "center", padding: "48px 44px 0" }}>
+            <div className="profile-score-pad" style={{ textAlign: "center", padding: "48px 44px 0" }}>
               <p style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: MID, marginBottom: 24, fontWeight: 700 }}>Your Pull Score</p>
               <p style={{ fontSize: 120, fontWeight: 800, color: DARK, lineHeight: 0.9, letterSpacing: "-0.04em", marginBottom: 12 }}>{mockUser.pull_score}</p>
               <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: WINE, marginBottom: 18 }}>{mockUser.archetype_stage}</p>
@@ -88,7 +88,7 @@ export default function PullProfilePage() {
             </div>
 
             {/* Forces */}
-            <div style={{ padding: "0 44px" }}>
+            <div className="profile-forces-pad" style={{ padding: "0 44px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
                 <span style={{ fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: MID, fontWeight: 700 }}>Forces</span>
                 <div style={{ flex: 1, height: 1, background: "rgba(45,26,20,0.1)" }} />
@@ -118,7 +118,7 @@ export default function PullProfilePage() {
                     <AnimatePresence>
                       {isOpen && force.whatThisMeans && (
                         <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} style={{ overflow: "hidden" }}>
-                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24, paddingTop: 16, paddingBottom: 22 }}>
+                          <div className="profile-forces-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24, paddingTop: 16, paddingBottom: 22 }}>
                             {[
                               { heading: "What This Means",    body: force.whatThisMeans },
                               { heading: "Why We Believe This",body: force.whyWeBelieve  },
@@ -140,7 +140,7 @@ export default function PullProfilePage() {
             </div>
 
             {/* Reading */}
-            <div style={{ margin: "32px 44px 0", padding: "24px 0", borderTop: "1px solid rgba(45,26,20,0.09)" }}>
+            <div className="profile-reading-pad" style={{ margin: "32px 44px 0", padding: "24px 0", borderTop: "1px solid rgba(45,26,20,0.09)" }}>
               <p style={{ fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: MID, marginBottom: 14, fontWeight: 700 }}>Reading</p>
               <p style={{ fontSize: 16, color: DARK, lineHeight: 1.8 }}>
                 Your Pull Score reflects a developing foundation of self-awareness and relationship curiosity. Your strongest intelligence right now is in communication, handling tension, what you value. As your Living Profile grows — you are at 81% coverage — your Pull Score will continue evolving.
@@ -180,7 +180,7 @@ export default function PullProfilePage() {
           </motion.div>
 
           {/* Archetype + Story */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div className="profile-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
             {/* Archetype */}
             <motion.div {...f(0.12)} style={{ ...glass(0.06), padding: "32px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 22 }}>
@@ -226,7 +226,7 @@ export default function PullProfilePage() {
           </div>
 
           {/* Greeting + Achievements */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div className="profile-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
             {/* Greeting */}
             <motion.div {...f(0.18)} style={{ ...glass(0.06), padding: "32px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
               <div>
@@ -253,7 +253,7 @@ export default function PullProfilePage() {
                 </div>
                 <span style={{ fontSize: 11, color: "rgba(245,240,232,0.3)" }}>{unlockedCount}/{mockAchievements.length}</span>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+              <div className="profile-achievements" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
                 {mockAchievements.map((a) => (
                   <div key={a.label} style={{ borderRadius: 14, padding: "12px 8px 10px", background: a.done ? `${a.color}15` : "rgba(245,240,232,0.03)", border: `1px solid ${a.done ? `${a.color}30` : "rgba(245,240,232,0.07)"}`, display: "flex", flexDirection: "column", alignItems: "center", gap: 6, position: "relative" }}>
                     {a.done && <div style={{ position: "absolute", top: 6, right: 6, width: 6, height: 6, borderRadius: "50%", background: a.color }} />}
@@ -276,7 +276,7 @@ export default function PullProfilePage() {
               <HugeiconsIcon icon={HeartIcon} size={12} style={{ color: "rgba(245,240,232,0.3)" }} />
               <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(245,240,232,0.3)", fontWeight: 700 }}>Your Relationship Style</p>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 10 }}>
+            <div className="profile-rel-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 10 }}>
               {relationshipDimensions.map((d, i) => (
                 <motion.div key={d.label} {...f(0.26 + i * 0.04)}>
                   <div style={{ ...glass(0.05), padding: "22px 18px 20px", height: "100%" }}>
@@ -293,7 +293,7 @@ export default function PullProfilePage() {
           </motion.div>
 
           {/* Identity Vector + Coverage */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div className="profile-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
             {/* Identity Vector */}
             <motion.div {...f(0.3)} style={{ ...glass(0.05), padding: "28px" }}>
               <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(245,240,232,0.28)", fontWeight: 700, marginBottom: 20 }}>Identity Vector — Behavioural Alignment</p>

@@ -38,6 +38,9 @@
   --shadow-md: 0 2px 8px rgba(0,0,0,0.07), 0 8px 32px rgba(0,0,0,0.06);
   --shadow-lg: 0 4px 16px rgba(0,0,0,0.08), 0 16px 48px rgba(0,0,0,0.08);
   --glow-brand: 0 0 40px rgba(192,64,79,0.12);
+
+  /* sidebar width — referenced in layout offset */
+  --sidebar-w: 236px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -55,7 +58,6 @@ body {
   min-height: 100vh;
 }
 
-/* font-display class now uses Aeonik with tighter tracking for a premium heading feel */
 .font-display {
   font-family: 'Aeonik', 'Inter', system-ui, sans-serif;
   letter-spacing: -0.03em;
@@ -65,23 +67,58 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
 
-/* Mobile bottom nav — hidden on desktop */
+/* ─── SIDEBAR ─────────────────────────────────────────────── */
+/* Hidden on mobile + tablet; visible on desktop */
+.app-sidebar { display: none !important; }
+
+@media (min-width: 1024px) {
+  .app-sidebar { display: flex !important; }
+  /* offset main content so it doesn't hide behind the sidebar */
+  .with-sidebar { margin-left: var(--sidebar-w) !important; }
+  /* hide the desktop top-nav links — sidebar handles navigation */
+  .desktop-nav-links { display: none !important; }
+}
+
+/* ─── MOBILE BOTTOM NAV ───────────────────────────────────── */
 .desktop-hide-mobile-nav { display: flex; }
 @media (min-width: 768px) {
   .desktop-hide-mobile-nav { display: none !important; }
 }
 
-/* Responsive grid helpers — use data-cols attribute on grid containers */
-[data-cols="3"] { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-[data-cols="4"] { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-[data-cols="2-hero"] { display: grid; grid-template-columns: minmax(0,5fr) minmax(0,7fr); gap: 12px; }
+/* ─── RESPONSIVE GRID HELPERS ─────────────────────────────── */
+[data-cols="3"]       { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+[data-cols="4"]       { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+[data-cols="2-hero"]  { display: grid; grid-template-columns: minmax(0,5fr) minmax(0,7fr); gap: 12px; }
 [data-cols="sidebar"] { display: grid; grid-template-columns: 300px 1fr; gap: 12px; }
 [data-cols="journey"] { display: grid; grid-template-columns: minmax(0,7fr) minmax(0,5fr); gap: 12px; }
-[data-cols="vault"] { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+[data-cols="vault"]   { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 
+/* ─── TABLET (768 – 1023px) ───────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  main { padding: 20px 20px 40px !important; }
+
+  /* Dashboard rows: hero+archetype stack, radar row becomes 2-col then stacks */
+  .dash-row-1 { grid-template-columns: 1fr !important; }
+  .dash-row-2 { grid-template-columns: 1fr 1fr !important; }
+  .dash-row-2 > *:last-child { grid-column: 1 / -1; }
+
+  /* Pull profile 2-col grids stay 2-col on tablet — OK */
+  /* Relationship style row: 3 cols on tablet */
+  .profile-rel-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  /* Upgrade pricing: stack on tablet too */
+  .upgrade-grid { grid-template-columns: 1fr !important; max-width: 480px !important; margin-left: auto !important; margin-right: auto !important; }
+
+  /* Journey week grid: 4 cols tablet */
+  .week-grid { grid-template-columns: repeat(4, 1fr) !important; }
+
+  /* Settings: sidebar stays sidebar on tablet */
+}
+
+/* ─── MOBILE (< 768px) ────────────────────────────────────── */
 @media (max-width: 767px) {
   main { padding: 16px 16px 90px !important; }
 
+  /* Kill all multi-col grids */
   [data-cols="3"],
   [data-cols="2-hero"],
   [data-cols="sidebar"],
@@ -90,33 +127,51 @@ body {
     grid-template-columns: 1fr !important;
   }
 
-  /* 4-col stat grids → 2×2 on mobile (much better for small tiles) */
-  [data-cols="4"] {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
+  /* 4-col stat grids → 2×2 */
+  [data-cols="4"] { grid-template-columns: repeat(2, 1fr) !important; }
 
-  /* Hero section inner padding — reduce on mobile */
+  /* Dashboard */
+  .dash-row-1, .dash-row-2 { grid-template-columns: 1fr !important; }
+  .dash-hero-inner { padding: 24px 20px !important; }
+  .dash-who-grid   { grid-template-columns: 1fr !important; }
+  .dash-quick-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Pull profile */
+  .profile-2col  { grid-template-columns: 1fr !important; }
+  .profile-rel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .profile-achievements { grid-template-columns: repeat(2, 1fr) !important; }
+  .profile-forces-grid  { grid-template-columns: 1fr !important; }
+  .profile-score-pad    { padding: 28px 20px 0 !important; }
+  .profile-forces-pad   { padding: 0 20px !important; }
+  .profile-reading-pad  { margin: 24px 20px 0 !important; }
+
+  /* Upgrade pricing: stack */
+  .upgrade-grid { grid-template-columns: 1fr !important; }
+
+  /* Journey week: 4 cols on mobile */
+  .week-grid { grid-template-columns: repeat(4, 1fr) !important; }
+
+  /* Hero section inner padding */
   .hero-pad { padding: 24px 20px !important; }
 
-  /* CTA banner flex — stack on mobile */
+  /* CTA banner — stack */
   .cta-banner { flex-direction: column !important; align-items: flex-start !important; }
-  .cta-banner-btn { align-self: flex-start; margin-left: 0 !important; }
+  .cta-banner-btn { align-self: flex-start; margin-left: 0 !important; margin-top: 10px !important; }
 
-  /* Reports list row — hide action buttons to save space */
+  /* Reports list — hide action buttons */
   .report-actions { display: none !important; }
 
-  /* Page header — stack on small screens */
+  /* Page header — stack */
   .page-header-row { flex-direction: column !important; align-items: flex-start !important; }
 
-  /* Dashboard grid rows — collapse (also targeted from DashboardClient style tag) */
-  .dash-row-1, .dash-row-2 {
-    grid-template-columns: 1fr !important;
-  }
-  .dash-hero-inner { padding: 24px 20px !important; }
+  /* Settings sidebar layout already data-cols="sidebar" — handled above */
 
-  /* Vault — hide search+filter on mobile to keep header clean */
+  /* Vault */
   .vault-search-bar, .vault-filter-btn { display: none !important; }
 
-  /* H1 size — a bit smaller on mobile */
+  /* H1 mobile size */
   h1.mobile-h1 { font-size: 28px !important; }
+
+  /* TopNav logo tagline — hide on very small screens */
+  .nav-logo-tagline { display: none !important; }
 }

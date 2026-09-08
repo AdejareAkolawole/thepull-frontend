@@ -151,7 +151,7 @@ export default function JourneyPage() {
                   <p style={{ fontSize: 11, color: "var(--text-muted)" }}>Personal best — keep going!</p>
                 </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 6 }}>
+              <div className="week-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 6 }}>
                 {Array.from({ length: 14 }).map((_, i) => (
                   <div key={i} style={{ aspectRatio: "1", borderRadius: 6, background: i < 12 ? `rgba(251,191,36,${0.35 + i * 0.04})` : "rgba(0,0,0,0.04)", border: i < 12 ? "1px solid rgba(251,191,36,0.3)" : "1px solid rgba(0,0,0,0.06)" }} />
                 ))}

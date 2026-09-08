@@ -50,17 +50,17 @@ export default function Sidebar() {
   };
 
   return (
-    <aside style={{
+    <aside className="app-sidebar" style={{
       position: "fixed",
       top: 0,
       left: 0,
       height: "100vh",
       width: 236,
-      display: "flex",
       flexDirection: "column",
       zIndex: 40,
       background: "#f5f4f0",
       borderRight: "1px solid rgba(15,10,20,0.07)",
+      overflowY: "auto",
     }}>
 
       {/* Logo */}
