@@ -68,13 +68,13 @@ export default function UpgradePage() {
 
       {/* ── BILLING TOGGLE ── */}
       <motion.div {...f(0.1)} style={{ display: "flex", justifyContent: "center", marginBottom: 40 }}>
-        <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 99, padding: 4 }}>
+        <div style={{ display: "inline-flex", background: "rgba(61,14,26,0.06)", border: "1px solid rgba(61,14,26,0.1)", borderRadius: 99, padding: 4 }}>
           {(["monthly", "annual"] as const).map(b => (
             <button key={b} onClick={() => setBilling(b)} style={{
               padding: "9px 22px", borderRadius: 99,
               background: billing === b ? GOLD : "transparent",
               border: "none",
-              color: billing === b ? WINE : "rgba(245,240,232,0.38)",
+              color: billing === b ? WINE : "rgba(61,14,26,0.45)",
               fontSize: 13, fontWeight: 700, cursor: "pointer",
               transition: "all 0.2s",
               letterSpacing: "0.02em",
