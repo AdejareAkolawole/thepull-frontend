@@ -54,7 +54,7 @@ export default function TopNav() {
       <header className="desktop-nav-links" style={{
         position: "sticky", top: 0, zIndex: 50, width: "100%",
         background: "transparent",
-        padding: "10px 24px",
+        padding: "14px 32px",
       }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
 
@@ -69,29 +69,31 @@ export default function TopNav() {
 
           {/* Pill nav */}
           <nav style={{
-            display: "flex", alignItems: "center", gap: 2,
-            background: "rgba(255,255,255,0.9)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            border: "1px solid rgba(15,10,20,0.08)",
+            display: "flex", alignItems: "center", gap: 4,
+            background: "rgba(255,255,255,0.95)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            border: "1px solid rgba(15,10,20,0.1)",
             borderRadius: 99,
-            padding: "5px 6px",
-            boxShadow: "0 2px 16px rgba(15,10,20,0.07)",
+            padding: "6px 8px",
+            boxShadow: "0 4px 32px rgba(15,10,20,0.1), 0 1px 0 rgba(255,255,255,0.8) inset",
           }}>
             {allNavItems.map(({ href, icon: Icon, label }) => {
               const active = path === href || (href !== "/dashboard" && path.startsWith(href));
               return (
                 <Link key={href} href={href} style={{
-                  display: "flex", alignItems: "center", gap: 6,
-                  padding: "6px 14px", borderRadius: 99,
-                  fontSize: 13, fontWeight: active ? 700 : 500,
-                  color: active ? "#fff" : "rgba(15,10,20,0.5)",
-                  background: active ? "#c0404f" : "transparent",
+                  display: "flex", alignItems: "center", gap: 7,
+                  padding: "9px 18px", borderRadius: 99,
+                  fontSize: 14, fontWeight: active ? 700 : 500,
+                  color: active ? "#fff" : "rgba(15,10,20,0.45)",
+                  background: active ? "linear-gradient(135deg,#7c2232,#c0404f)" : "transparent",
                   textDecoration: "none",
-                  transition: "all 0.15s",
+                  transition: "all 0.18s",
                   whiteSpace: "nowrap" as const,
+                  boxShadow: active ? "0 4px 14px rgba(192,64,79,0.35)" : "none",
+                  letterSpacing: active ? "-0.01em" : "0",
                 }}>
-                  <HugeiconsIcon icon={Icon} size={14} />
+                  <HugeiconsIcon icon={Icon} size={16} />
                   {label}
                 </Link>
               );
