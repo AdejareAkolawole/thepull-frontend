@@ -11,6 +11,11 @@ export const mockUser = {
   pull_trend: "rising" as const,
   plan: "premium" as const,
   joined: "2024-09-01",
+  profile_version: "7.0",
+  dimensions_complete: 7,
+  domains_covered: 11,
+  domains_total: 12,
+  identity_summary: "Your identity is still emerging. As you complete intelligence domains, your behavioural archetype and confidence will reveal themselves.",
 };
 
 export const mockIdentityVector = [
