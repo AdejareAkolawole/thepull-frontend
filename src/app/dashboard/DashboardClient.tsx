@@ -395,70 +395,71 @@ export default function DashboardClient() {
         ))}
       </div>
 
-      {/* ══ LIVING IDENTITY ZONE — glassmorphism on wine-tinted bg ══ */}
+      {/* ══ LIVING IDENTITY ZONE — dark glass with cream accents ══ */}
       <div style={{
         position: "relative", borderRadius: 28, overflow: "hidden",
-        background: `linear-gradient(150deg, ${WINE} 0%, #5a1522 35%, #2a0a10 70%, #1a0508 100%)`,
+        background: "linear-gradient(150deg, #0f0a14 0%, #140d18 40%, #0c0a10 100%)",
         padding: "48px 40px 52px", display: "flex", flexDirection: "column", gap: 20,
         marginTop: 12,
       }}>
-        {/* ambient glows */}
-        <div style={{ position: "absolute", top: -80, left: "30%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.18) 0%, transparent 65%)", pointerEvents: "none" }} />
-        <div style={{ position: "absolute", bottom: -60, right: "10%", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 65%)", pointerEvents: "none" }} />
+        {/* ambient glows — cream/gold, not wine */}
+        <div style={{ position: "absolute", top: -60, left: "20%", width: 500, height: 300, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(245,240,232,0.04) 0%, transparent 65%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: -40, right: "15%", width: 360, height: 280, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(201,168,76,0.07) 0%, transparent 65%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: "40%", left: "-5%", width: 240, height: 240, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.06) 0%, transparent 65%)", pointerEvents: "none" }} />
 
         {/* Section header */}
         <motion.div {...fade(0.44)} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", position: "relative", zIndex: 2 }}>
           <div>
-            <p style={{ fontSize: 10, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 10, fontWeight: 700 }}>Your Living Identity</p>
-            <h2 style={{ fontSize: 52, fontWeight: 800, color: "#fff", lineHeight: 1, letterSpacing: "-0.03em" }}>Who Am I?</h2>
+            <p style={{ fontSize: 10, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(245,240,232,0.35)", marginBottom: 10, fontWeight: 700 }}>Your Living Identity</p>
+            <h2 style={{ fontSize: 52, fontWeight: 800, color: "#f5f0e8", lineHeight: 1, letterSpacing: "-0.03em" }}>Who Am I?</h2>
           </div>
-          <Link href="/pull-profile" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 20px", borderRadius: 12, background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.65)", fontSize: 12, fontWeight: 600, textDecoration: "none", backdropFilter: "blur(12px)" }}>
+          <Link href="/pull-profile" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 20px", borderRadius: 12, background: "rgba(245,240,232,0.07)", border: "1px solid rgba(245,240,232,0.14)", color: "rgba(245,240,232,0.5)", fontSize: 12, fontWeight: 600, textDecoration: "none", backdropFilter: "blur(12px)" }}>
             Full Profile <HugeiconsIcon icon={ArrowUpRight01Icon} size={12} />
           </Link>
         </motion.div>
 
-        {/* ROW 1 — Archetype hero card + story */}
+        {/* ROW 1 — Archetype + Story */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, position: "relative", zIndex: 2 }} className="id-row1">
           {/* Archetype */}
-          <motion.div {...fade(0.47)} style={{ background: "rgba(255,255,255,0.07)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.14)", borderRadius: 22, padding: "32px 32px 28px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <motion.div {...fade(0.47)} style={{ background: "rgba(245,240,232,0.06)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)", border: "1px solid rgba(245,240,232,0.12)", borderRadius: 22, padding: "32px 32px 28px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-                <div style={{ width: 44, height: 44, borderRadius: 14, border: "1.5px solid rgba(96,165,250,0.45)", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(96,165,250,0.1)" }}>
-                  <HugeiconsIcon icon={ShieldIcon} size={20} style={{ color: "#93c5fd" }} />
+                <div style={{ width: 44, height: 44, borderRadius: 14, border: "1.5px solid rgba(201,168,76,0.4)", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(201,168,76,0.08)" }}>
+                  <HugeiconsIcon icon={ShieldIcon} size={20} style={{ color: GOLD }} />
                 </div>
                 <div>
-                  <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(201,168,76,0.7)", fontWeight: 700 }}>Your Current Lens</p>
-                  <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 9px", borderRadius: 99, background: "rgba(192,64,79,0.2)", color: "rgba(255,180,180,0.9)", border: "1px solid rgba(192,64,79,0.3)" }}>{mockUser.archetype_stage}</span>
+                  <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(201,168,76,0.6)", fontWeight: 700 }}>Your Current Lens</p>
+                  <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 9px", borderRadius: 99, background: "rgba(245,240,232,0.1)", color: "rgba(245,240,232,0.65)", border: "1px solid rgba(245,240,232,0.18)" }}>{mockUser.archetype_stage}</span>
                 </div>
               </div>
-              <h3 style={{ fontSize: 28, fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 8, letterSpacing: "-0.02em" }}>{mockUser.archetype}</h3>
-              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.65, marginBottom: 24 }}>{mockUser.archetype_tagline}</p>
+              <h3 style={{ fontSize: 28, fontWeight: 800, color: "#f5f0e8", lineHeight: 1.15, marginBottom: 10, letterSpacing: "-0.02em" }}>{mockUser.archetype}</h3>
+              <p style={{ fontSize: 13, color: "rgba(245,240,232,0.4)", lineHeight: 1.7, marginBottom: 24 }}>{mockUser.archetype_tagline}</p>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 14px", borderRadius: 99, background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.22)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "7px 13px", borderRadius: 99, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.2)" }}>
                 <HugeiconsIcon icon={FavouriteIcon} size={11} style={{ color: GOLD }} />
                 <span style={{ fontSize: 11, color: GOLD, fontWeight: 700 }}>Confidence {mockUser.archetype_confidence}%</span>
               </div>
-              <div style={{ height: 3, flex: 1, borderRadius: 99, background: "rgba(255,255,255,0.08)", overflow: "hidden" }}>
-                <motion.div style={{ height: "100%", borderRadius: 99, background: `linear-gradient(90deg, ${GOLD}, rgba(201,168,76,0.6))` }}
+              <div style={{ height: 3, flex: 1, borderRadius: 99, background: "rgba(245,240,232,0.08)", overflow: "hidden" }}>
+                <motion.div style={{ height: "100%", borderRadius: 99, background: `linear-gradient(90deg,${GOLD},rgba(201,168,76,0.5))` }}
                   initial={{ width: 0 }} animate={{ width: `${mockUser.archetype_confidence}%` }} transition={{ duration: 1.2, delay: 0.6 }} />
               </div>
             </div>
           </motion.div>
 
           {/* Story */}
-          <motion.div {...fade(0.5)} style={{ background: "rgba(255,255,255,0.05)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 22, padding: "32px 32px 28px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <motion.div {...fade(0.5)} style={{ background: "rgba(245,240,232,0.04)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)", border: "1px solid rgba(245,240,232,0.08)", borderRadius: 22, padding: "32px 32px 28px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <p style={{ fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 16, fontWeight: 700 }}>A Glimpse Of Your Story</p>
-              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.7)", lineHeight: 1.8, fontStyle: "italic" }}>
+              <p style={{ fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(245,240,232,0.28)", marginBottom: 18, fontWeight: 700 }}>A Glimpse Of Your Story</p>
+              <p style={{ fontSize: 16, color: "rgba(245,240,232,0.7)", lineHeight: 1.8, fontStyle: "italic", fontFamily: "Georgia, serif" }}>
                 "Your identity is built on the quiet strength of dependability. You act as an anchor in an unpredictable world — finding fulfilment in being reliably present."
               </p>
             </div>
-            <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
-              <Link href="/reports" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 18px", borderRadius: 11, background: "#fff", color: WINE, fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
+            <div style={{ display: "flex", gap: 10, marginTop: 28 }}>
+              <Link href="/reports" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 20px", borderRadius: 11, background: "#f5f0e8", color: WINE, fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
                 Living Report <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
               </Link>
-              <Link href="/coach" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 18px", borderRadius: 11, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.14)", color: "rgba(255,255,255,0.55)", fontSize: 12, fontWeight: 600, textDecoration: "none" }}>
+              <Link href="/coach" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 20px", borderRadius: 11, background: "rgba(245,240,232,0.07)", border: "1px solid rgba(245,240,232,0.12)", color: "rgba(245,240,232,0.45)", fontSize: 12, fontWeight: 600, textDecoration: "none" }}>
                 Ask The Pull
               </Link>
             </div>
@@ -468,59 +469,59 @@ export default function DashboardClient() {
         {/* ROW 2 — Relationship style cards */}
         <motion.div {...fade(0.52)} style={{ position: "relative", zIndex: 2 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-            <HugeiconsIcon icon={HeartIcon} size={12} style={{ color: "rgba(255,255,255,0.35)" }} />
-            <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", fontWeight: 700 }}>Relationship Style</p>
+            <HugeiconsIcon icon={HeartIcon} size={12} style={{ color: "rgba(245,240,232,0.3)" }} />
+            <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(245,240,232,0.3)", fontWeight: 700 }}>Relationship Style</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 10 }} className="id-rel">
             {relationshipDimensions.map((d, i) => (
               <motion.div key={d.label} {...fade(0.54 + i * 0.04)}>
-                <div style={{ background: "rgba(255,255,255,0.06)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 18, padding: "20px 18px 18px", height: "100%" }}>
-                  <div style={{ width: 34, height: 34, borderRadius: 11, background: "rgba(192,64,79,0.18)", border: "1px solid rgba(192,64,79,0.25)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
-                    <HugeiconsIcon icon={d.icon} size={15} style={{ color: "rgba(255,180,180,0.85)" }} />
+                <div style={{ background: "rgba(245,240,232,0.05)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid rgba(245,240,232,0.1)", borderRadius: 18, padding: "20px 18px 18px", height: "100%" }}>
+                  <div style={{ width: 34, height: 34, borderRadius: 11, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.18)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
+                    <HugeiconsIcon icon={d.icon} size={15} style={{ color: GOLD }} />
                   </div>
-                  <p style={{ fontSize: 12, fontWeight: 700, color: "#fff", marginBottom: 3, lineHeight: 1.3 }}>{d.label}</p>
-                  <p style={{ fontSize: 8, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.28)", marginBottom: 10 }}>{d.sub}</p>
-                  <p style={{ fontSize: 10, color: "rgba(255,200,200,0.55)", fontStyle: "italic" }}>Still discovering</p>
+                  <p style={{ fontSize: 12, fontWeight: 700, color: "#f5f0e8", marginBottom: 3, lineHeight: 1.3 }}>{d.label}</p>
+                  <p style={{ fontSize: 8, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(245,240,232,0.25)", marginBottom: 10 }}>{d.sub}</p>
+                  <p style={{ fontSize: 10, color: "rgba(245,240,232,0.38)", fontStyle: "italic" }}>Still discovering</p>
                 </div>
               </motion.div>
             ))}
           </div>
         </motion.div>
 
-        {/* ROW 3 — Identity Vector + Coverage side by side */}
+        {/* ROW 3 — Identity Vector + Coverage */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, position: "relative", zIndex: 2 }} className="id-row3">
           {/* Identity Vector */}
-          <motion.div {...fade(0.6)} style={{ background: "rgba(255,255,255,0.06)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.11)", borderRadius: 22, padding: "28px 28px 24px" }}>
-            <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.28)", fontWeight: 700, marginBottom: 20 }}>Identity Vector — Behavioural Alignment</p>
+          <motion.div {...fade(0.6)} style={{ background: "rgba(245,240,232,0.05)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)", border: "1px solid rgba(245,240,232,0.1)", borderRadius: 22, padding: "28px 28px 24px" }}>
+            <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(245,240,232,0.28)", fontWeight: 700, marginBottom: 20 }}>Identity Vector — Behavioural Alignment</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
               {mockIdentityVector.map((v, i) => (
                 <div key={v.label} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <span style={{ fontSize: 11, fontWeight: i === 0 ? 700 : 400, color: i === 0 ? "#fff" : "rgba(255,255,255,0.35)", minWidth: 148, flexShrink: 0 }}>{v.label}</span>
-                  <div style={{ flex: 1, height: 3, borderRadius: 99, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
-                    <motion.div style={{ height: "100%", borderRadius: 99, background: i === 0 ? `linear-gradient(90deg,${WINE2},#e05565)` : "rgba(255,255,255,0.22)" }}
+                  <span style={{ fontSize: 11, fontWeight: i === 0 ? 700 : 400, color: i === 0 ? "#f5f0e8" : "rgba(245,240,232,0.32)", minWidth: 148, flexShrink: 0 }}>{v.label}</span>
+                  <div style={{ flex: 1, height: 3, borderRadius: 99, background: "rgba(245,240,232,0.07)", overflow: "hidden" }}>
+                    <motion.div style={{ height: "100%", borderRadius: 99, background: i === 0 ? `linear-gradient(90deg,${GOLD},rgba(201,168,76,0.6))` : "rgba(245,240,232,0.2)" }}
                       initial={{ width: 0 }} animate={{ width: `${v.pct}%` }} transition={{ duration: 1, delay: 0.7 + i * 0.06 }} />
                   </div>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: i === 0 ? WINE2 : "rgba(255,255,255,0.25)", minWidth: 36, textAlign: "right" as const }}>{v.pct}%</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: i === 0 ? GOLD : "rgba(245,240,232,0.22)", minWidth: 36, textAlign: "right" as const }}>{v.pct}%</span>
                 </div>
               ))}
             </div>
           </motion.div>
 
           {/* Coverage */}
-          <motion.div {...fade(0.62)} style={{ background: "rgba(255,255,255,0.06)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.11)", borderRadius: 22, padding: "28px 28px 24px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <motion.div {...fade(0.62)} style={{ background: "rgba(245,240,232,0.05)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)", border: "1px solid rgba(245,240,232,0.1)", borderRadius: 22, padding: "28px 28px 24px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(192,64,79,0.6)", fontWeight: 700, marginBottom: 20 }}>Identity Coverage</p>
+              <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(245,240,232,0.28)", fontWeight: 700, marginBottom: 20 }}>Identity Coverage</p>
               {[
-                { label: "Core Dimensions", gathered: 7, total: 7, color: "#22c55e" },
-                { label: "Deeper Dimensions", gathered: 4, total: 5, color: WINE2 },
-                { label: "Coming Soon", gathered: 0, total: 3, color: "rgba(255,255,255,0.15)", note: "3 new domains" },
+                { label: "Core Dimensions", gathered: 7, total: 7, color: "#4ade80" },
+                { label: "Deeper Dimensions", gathered: 4, total: 5, color: GOLD },
+                { label: "Coming Soon", gathered: 0, total: 3, color: "rgba(245,240,232,0.15)", note: "3 new domains" },
               ].map((row, i) => (
                 <div key={row.label} style={{ marginBottom: 16 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 7 }}>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: i < 2 ? "#fff" : "rgba(255,255,255,0.3)" }}>{row.label}</span>
-                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)" }}>{row.note ?? `${row.gathered} / ${row.total}`}</span>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: i < 2 ? "#f5f0e8" : "rgba(245,240,232,0.28)" }}>{row.label}</span>
+                    <span style={{ fontSize: 11, color: "rgba(245,240,232,0.3)" }}>{row.note ?? `${row.gathered} / ${row.total}`}</span>
                   </div>
-                  <div style={{ height: 5, borderRadius: 99, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+                  <div style={{ height: 5, borderRadius: 99, background: "rgba(245,240,232,0.07)", overflow: "hidden" }}>
                     <motion.div style={{ height: "100%", borderRadius: 99, background: row.color }}
                       initial={{ width: 0 }} animate={{ width: row.total > 0 ? `${(row.gathered / row.total) * 100}%` : "5%" }}
                       transition={{ duration: 1.2, delay: 0.5 + i * 0.12 }} />
@@ -528,13 +529,13 @@ export default function DashboardClient() {
                 </div>
               ))}
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "13px 16px", borderRadius: 14, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)", cursor: "pointer" }}>
-              <HugeiconsIcon icon={LockIcon} size={13} style={{ color: "rgba(255,255,255,0.35)" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "13px 16px", borderRadius: 14, border: "1px solid rgba(245,240,232,0.1)", background: "rgba(245,240,232,0.04)", cursor: "pointer" }}>
+              <HugeiconsIcon icon={LockIcon} size={13} style={{ color: GOLD }} />
               <div style={{ flex: 1 }}>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>Unlock with Premium</p>
-                <p style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>Deeper dimensions await.</p>
+                <p style={{ fontSize: 12, fontWeight: 700, color: "#f5f0e8" }}>Unlock with Premium</p>
+                <p style={{ fontSize: 10, color: "rgba(245,240,232,0.3)", marginTop: 2 }}>Deeper dimensions await.</p>
               </div>
-              <HugeiconsIcon icon={ArrowRight01Icon} size={12} style={{ color: "rgba(255,255,255,0.3)", flexShrink: 0 }} />
+              <HugeiconsIcon icon={ArrowRight01Icon} size={12} style={{ color: "rgba(245,240,232,0.3)", flexShrink: 0 }} />
             </div>
           </motion.div>
         </div>
