@@ -13,7 +13,7 @@ import {
 const WINE  = "#3d0e1a";
 const WINE2 = "#c0404f";
 const GOLD  = "#c9a84c";
-const CREAM = "#f5f0e8";
+const CREAM = "#3d0e1a";
 const BLACK = "#ffffff";
 
 const f = (d = 0) => ({
