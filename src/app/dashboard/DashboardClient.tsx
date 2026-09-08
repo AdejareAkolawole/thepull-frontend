@@ -7,7 +7,7 @@ import {
   AiInnovation01Icon, Activity01Icon,
   FlashIcon, PresentationLineChart01Icon, Calendar03Icon, Target01Icon,
   AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, CheckmarkCircle01Icon, LockIcon,
-  BookOpen01Icon, Share01Icon,
+  BookOpen01Icon, Share01Icon, HelpCircleIcon, ArrowDown01Icon,
 } from "@hugeicons/core-free-icons";
 import { mockUser, mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
 
@@ -143,12 +143,33 @@ export default function DashboardClient() {
                 </Link>
               </div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 24, flexWrap: "wrap" as const }}>
-              {[{ label: "Analytical", color: "#c0404f" }, { label: "Empathetic", color: "#60a5fa" }, { label: "Strategic", color: "#a78bfa" }].map(t => (
-                <span key={t.label} style={{ fontSize: 10, fontWeight: 700, padding: "4px 12px", borderRadius: 99, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.6)", letterSpacing: "0.05em" }}>
-                  {t.label}
-                </span>
-              ))}
+            {/* Living Intelligence bar */}
+            <div style={{
+              marginTop: 24,
+              borderTop: "1px solid rgba(255,255,255,0.08)",
+              paddingTop: 16,
+            }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" as const, marginBottom: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <HugeiconsIcon icon={AiSparklesIcon} size={12} style={{ color: "rgba(201,168,76,0.8)" }} />
+                  <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(201,168,76,0.85)", letterSpacing: "0.01em" }}>Living Intelligence</span>
+                  <span style={{ fontSize: 11, color: "rgba(255,255,255,0.38)" }}>Your Living Intelligence begins with your first signals</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                  <span style={{ fontSize: 10, fontWeight: 600, padding: "4px 12px", borderRadius: 99, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.25)", color: "rgba(201,168,76,0.85)" }}>
+                    Behavioural confidence {mockUser.archetype_confidence}%
+                  </span>
+                  <button style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.45)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    <HugeiconsIcon icon={HelpCircleIcon} size={12} style={{ color: "rgba(255,255,255,0.3)" }} />
+                    Explain
+                    <HugeiconsIcon icon={ArrowDown01Icon} size={10} style={{ color: "rgba(255,255,255,0.3)" }} />
+                  </button>
+                </div>
+              </div>
+              <Link href="/journal" style={{ fontSize: 11, color: "rgba(201,168,76,0.7)", textDecoration: "underline", textDecorationColor: "rgba(201,168,76,0.3)", textUnderlineOffset: 3 }}>
+                Bring The Pull a moment from your life
+              </Link>
+              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.32)" }}> — your first signals begin here.</span>
             </div>
           </div>
         </motion.div>
