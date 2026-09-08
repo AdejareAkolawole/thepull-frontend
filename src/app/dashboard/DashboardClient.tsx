@@ -176,6 +176,40 @@ export default function DashboardClient() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
+      {/* ── LIVING INTELLIGENCE ── */}
+      <motion.div {...fade(0)}>
+        <div style={{
+          borderRadius: 18, padding: "18px 22px",
+          background: "linear-gradient(135deg, #1a0e04 0%, #2a1a08 50%, #1e1206 100%)",
+          border: "1px solid rgba(201,168,76,0.2)",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.18), inset 0 1px 0 rgba(201,168,76,0.08)",
+          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" as const,
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, flex: 1, minWidth: 0 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <HugeiconsIcon icon={AiSparklesIcon} size={18} style={{ color: "rgba(201,168,76,0.9)" }} />
+            </div>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+                <span style={{ fontSize: 12, fontWeight: 800, color: "rgba(201,168,76,0.95)", letterSpacing: "0.01em" }}>Living Intelligence</span>
+                <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)", color: "rgba(201,168,76,0.8)", letterSpacing: "0.08em", textTransform: "uppercase" as const }}>Active</span>
+              </div>
+              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.42)", lineHeight: 1.4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                Your intelligence is alive and evolving with every signal you bring.
+              </p>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+            <span style={{ fontSize: 11, fontWeight: 600, padding: "5px 14px", borderRadius: 99, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.22)", color: "rgba(201,168,76,0.85)" }}>
+              Confidence {confidence}%
+            </span>
+            <Link href="/journal" style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 700, padding: "6px 14px", borderRadius: 10, background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)", color: "rgba(201,168,76,0.9)", textDecoration: "none" }}>
+              Add a signal <HugeiconsIcon icon={ArrowRight01Icon} size={11} />
+            </Link>
+          </div>
+        </div>
+      </motion.div>
+
       {/* ROW 1: Hero + Archetype card */}
       <div className="dash-row-1" style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 12 }}>
 
@@ -201,34 +235,6 @@ export default function DashboardClient() {
                   <HugeiconsIcon icon={AiInnovation01Icon} size={12} /> Ask The Pull
                 </Link>
               </div>
-            </div>
-            {/* Living Intelligence bar */}
-            <div style={{
-              marginTop: 24,
-              borderTop: "1px solid rgba(255,255,255,0.08)",
-              paddingTop: 16,
-            }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" as const, marginBottom: 10 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <HugeiconsIcon icon={AiSparklesIcon} size={12} style={{ color: "rgba(201,168,76,0.8)" }} />
-                  <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(201,168,76,0.85)", letterSpacing: "0.01em" }}>Living Intelligence</span>
-                  <span style={{ fontSize: 11, color: "rgba(255,255,255,0.38)" }}>Your Living Intelligence begins with your first signals</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-                  <span style={{ fontSize: 10, fontWeight: 600, padding: "4px 12px", borderRadius: 99, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.25)", color: "rgba(201,168,76,0.85)" }}>
-                    Behavioural confidence {confidence}%
-                  </span>
-                  <button style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.45)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                    <HugeiconsIcon icon={HelpCircleIcon} size={12} style={{ color: "rgba(255,255,255,0.3)" }} />
-                    Explain
-                    <HugeiconsIcon icon={ArrowDown01Icon} size={10} style={{ color: "rgba(255,255,255,0.3)" }} />
-                  </button>
-                </div>
-              </div>
-              <Link href="/journal" style={{ fontSize: 11, color: "rgba(201,168,76,0.7)", textDecoration: "underline", textDecorationColor: "rgba(201,168,76,0.3)", textUnderlineOffset: 3 }}>
-                Bring The Pull a moment from your life
-              </Link>
-              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.32)" }}> — your first signals begin here.</span>
             </div>
           </div>
         </motion.div>

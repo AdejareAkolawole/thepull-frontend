@@ -14,9 +14,9 @@ import { logout } from "@/lib/api";
 const mainNav = [
   { href: "/dashboard",    icon: Home01Icon,      label: "Home" },
   { href: "/pull-profile", icon: AiSparklesIcon,  label: "Pull Profile" },
-  { href: "/journal",      icon: BookOpen01Icon,  label: "Journal" },
   { href: "/coach",        icon: AiBrain01Icon,   label: "Ask The Pull" },
   { href: "/reports",      icon: ScaleIcon,       label: "Reality Check" },
+  { href: "/journal",      icon: BookOpen01Icon,  label: "Journal" },
   { href: "/journey",      icon: CompassIcon,     label: "Journey" },
 ];
 
