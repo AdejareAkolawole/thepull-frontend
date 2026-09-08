@@ -5,6 +5,7 @@ import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   CheckmarkCircle01Icon, AiSparklesIcon, ArrowRight01Icon,
+  LockIcon, FlashIcon, StarIcon,
 } from "@hugeicons/core-free-icons";
 
 const WINE  = "#3d0e1a";
@@ -49,6 +50,74 @@ export default function UpgradePage() {
 
   return (
     <div style={{ background: "#fff", minHeight: "100vh", marginTop: -20, paddingBottom: 100 }}>
+
+      {/* ── FOUNDING 500 BANNER ─────────────────────────────── */}
+      <motion.div {...f(0)} style={{ position: "relative", overflow: "hidden", background: "linear-gradient(160deg,#150608 0%,#2a0d14 45%,#1a0a10 100%)", padding: "72px 24px 64px" }}>
+        {/* Ambient glows */}
+        <div style={{ position: "absolute", top: -120, left: "20%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle,rgba(192,64,79,0.18) 0%,transparent 65%)", filter: "blur(40px)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: -80, right: "15%", width: 360, height: 360, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,168,76,0.1) 0%,transparent 65%)", filter: "blur(40px)", pointerEvents: "none" }} />
+
+        <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
+
+          {/* Label */}
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 18px", borderRadius: 99, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.25)", marginBottom: 28 }}>
+            <HugeiconsIcon icon={StarIcon} size={11} style={{ color: "rgba(201,168,76,0.8)" }} />
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.28em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.85)" }}>The Founding 500</span>
+          </div>
+
+          {/* Headline */}
+          <h2 style={{ fontSize: 56, fontWeight: 800, color: "#fff", letterSpacing: "-0.04em", lineHeight: 1.06, marginBottom: 20, fontFamily: "Georgia, 'Times New Roman', serif" }}>
+            You&apos;re early.<br />Make it count.
+          </h2>
+
+          {/* Body */}
+          <p style={{ fontSize: 16, color: "rgba(245,240,232,0.55)", lineHeight: 1.8, marginBottom: 8, maxWidth: 520, margin: "0 auto 8px" }}>
+            Join the first 500 members of The Pull and lock in{" "}
+            <span style={{ color: "rgba(201,168,76,0.9)", fontWeight: 700 }}>Pull at $19.99/month</span>
+            {" "}for as long as you remain subscribed.
+          </p>
+          <p style={{ fontSize: 13, color: "rgba(245,240,232,0.28)", lineHeight: 1.6, marginBottom: 40 }}>
+            Regular price: $24.99/month · Founding Members also receive 7-day early access to Living Mastery when it launches.
+          </p>
+
+          {/* Scarcity pill + bar */}
+          <div style={{ maxWidth: 420, margin: "0 auto 40px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+              <span style={{ fontSize: 11, color: "rgba(245,240,232,0.35)" }}>Spots claimed</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(201,168,76,0.75)" }}>347 / 500</span>
+            </div>
+            {/* Progress bar */}
+            <div style={{ height: 6, borderRadius: 99, background: "rgba(245,240,232,0.07)", overflow: "hidden" }}>
+              <div style={{ height: "100%", width: "69.4%", borderRadius: 99, background: "linear-gradient(90deg,rgba(201,168,76,0.6) 0%,rgba(201,168,76,0.9) 100%)" }} />
+            </div>
+            <p style={{ fontSize: 10, color: "rgba(245,240,232,0.22)", marginTop: 8, textAlign: "center" as const }}>153 founding memberships remaining</p>
+          </div>
+
+          {/* CTA button */}
+          <button style={{
+            display: "inline-flex", alignItems: "center", gap: 10,
+            padding: "17px 40px", borderRadius: 99,
+            background: "linear-gradient(135deg,#c9a84c 0%,#e2c36a 50%,#c9a84c 100%)",
+            backgroundSize: "200% 100%",
+            border: "none", cursor: "pointer",
+            fontSize: 15, fontWeight: 800, color: "#1a0a10",
+            letterSpacing: "0.01em",
+            boxShadow: "0 8px 40px rgba(201,168,76,0.35), 0 2px 0 rgba(255,255,255,0.15) inset",
+          }}>
+            <HugeiconsIcon icon={AiSparklesIcon} size={16} />
+            Claim Founding Membership
+          </button>
+
+          {/* Lock line */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, marginTop: 16 }}>
+            <HugeiconsIcon icon={LockIcon} size={11} style={{ color: "rgba(245,240,232,0.25)" }} />
+            <span style={{ fontSize: 11, color: "rgba(245,240,232,0.28)", fontStyle: "italic" }}>$19.99/month · Founding Rate locked while continuously subscribed</span>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Thin divider */}
+      <div style={{ height: 1, background: "rgba(15,10,20,0.06)" }} />
 
       {/* HERO */}
       <motion.div {...f(0)} style={{ textAlign: "center", padding: "80px 24px 56px" }}>
