@@ -127,7 +127,7 @@ export default function DashboardClient() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 12 }}>
                 <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#4ade80" }} />
-                <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)", fontWeight: 600 }}>Relationship Intelligence</span>
+                <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)", fontWeight: 600 }}>Personal Intelligence</span>
               </div>
               <h1 className="font-display" style={{ fontSize: 34, lineHeight: 1.06, fontWeight: 300, color: "rgba(255,255,255,0.8)", marginBottom: 2 }}>{greeting},</h1>
               <h1 className="font-display" style={{ fontSize: 34, lineHeight: 1.06, fontWeight: 600, color: "#fff", marginBottom: 10 }}>{mockUser.name}.</h1>
