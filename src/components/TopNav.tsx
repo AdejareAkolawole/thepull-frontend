@@ -11,6 +11,14 @@ import {
 const navItems = [
   { href: "/dashboard", icon: Home01Icon, label: "Home" },
   { href: "/vault", icon: VaultIcon, label: "Vault" },
+  { href: "/coach", icon: Message02Icon, label: "Coach" },
+  { href: "/pull-profile", icon: AiBrain01Icon, label: "Profile" },
+  { href: "/settings", icon: Settings01Icon, label: "Settings" },
+];
+
+const allNavItems = [
+  { href: "/dashboard", icon: Home01Icon, label: "Home" },
+  { href: "/vault", icon: VaultIcon, label: "Vault" },
   { href: "/pull-profile", icon: AiBrain01Icon, label: "Profile" },
   { href: "/coach", icon: Message02Icon, label: "AI Coach" },
   { href: "/reports", icon: Analytics01Icon, label: "Reports" },
@@ -57,7 +65,7 @@ export default function TopNav() {
 
           {/* Nav links — hidden on mobile */}
           <nav className="desktop-nav-links" style={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
-            {navItems.map(({ href, icon: Icon, label }) => {
+            {allNavItems.map(({ href, icon: Icon, label }) => {
               const active = path === href || (href !== "/dashboard" && path.startsWith(href));
               return (
                 <Link key={href} href={href}
