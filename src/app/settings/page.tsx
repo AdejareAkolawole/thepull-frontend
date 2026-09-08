@@ -128,7 +128,7 @@ export default function SettingsPage() {
                         <Toggle on={field.value === "On"} />
                       ) : (
                         <input defaultValue={field.value}
-                          style={{ fontSize: 13, background: "transparent", border: "none", borderBottom: "1px solid transparent", outline: "none", textAlign: "right", maxWidth: 200, color: "var(--text-primary)" }}
+                          style={{ fontSize: 13, background: "transparent", border: "none", borderBottom: "1px solid transparent", outline: "none", textAlign: "right", maxWidth: "min(200px, 50vw)", color: "var(--text-primary)" }}
                           onFocus={e => (e.currentTarget.style.borderColor = "var(--brand)")}
                           onBlur={e => (e.currentTarget.style.borderColor = "transparent")} />
                       )}
