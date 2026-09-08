@@ -33,30 +33,31 @@ export default function PullProfilePage() {
 
       {/* Row 1: Quiet moment + Achievements */}
       <motion.div {...f(0)} data-cols="2-hero">
-        {/* Left: warm greeting card */}
+        {/* Left: greeting card */}
         <div style={{
           borderRadius: 20, padding: "36px 32px",
-          background: "linear-gradient(140deg, #faf5ec 0%, #f5e8d4 100%)",
-          border: "1px solid rgba(180,140,80,0.15)",
+          background: "#ffffff",
+          border: "1px solid rgba(0,0,0,0.07)",
+          boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)",
           display: "flex", flexDirection: "column", justifyContent: "space-between",
         }}>
           <div>
-            <h2 style={{ fontSize: 32, fontWeight: 700, color: "#1a0e04", lineHeight: 1.2, marginBottom: 10 }}>
+            <h2 style={{ fontSize: 32, fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.2, marginBottom: 10 }}>
               A quiet moment, {mockUser.name}.
             </h2>
-            <p style={{ fontSize: 15, color: "#5a3e22", marginBottom: 6 }}>Here's your intelligence today.</p>
-            <p style={{ fontSize: 14, color: "#c9a84c", fontWeight: 600 }}>New patterns are beginning to surface.</p>
+            <p style={{ fontSize: 15, color: "var(--text-secondary)", marginBottom: 6 }}>Here's your intelligence today.</p>
+            <p style={{ fontSize: 14, color: "var(--brand)", fontWeight: 600 }}>New patterns are beginning to surface.</p>
           </div>
           <div style={{ marginTop: 28 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-              <div style={{ flex: 1, height: 1, background: "rgba(180,140,80,0.3)" }} />
-              <span style={{ fontSize: 9, letterSpacing: "0.25em", color: "#c9a84c", fontWeight: 700 }}>THE PULL</span>
-              <div style={{ flex: 1, height: 1, background: "rgba(180,140,80,0.3)" }} />
+              <div style={{ flex: 1, height: 1, background: "rgba(0,0,0,0.08)" }} />
+              <span style={{ fontSize: 9, letterSpacing: "0.25em", color: "var(--brand)", fontWeight: 700 }}>THE PULL</span>
+              <div style={{ flex: 1, height: 1, background: "rgba(0,0,0,0.08)" }} />
             </div>
-            <p style={{ fontSize: 18, fontWeight: 700, color: "#1a0e04", lineHeight: 1.3, marginBottom: 8 }}>
+            <p style={{ fontSize: 18, fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.3, marginBottom: 8 }}>
               This is what The Pull understands about you.
             </p>
-            <p style={{ fontSize: 13, color: "#7a5c38", lineHeight: 1.6 }}>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
               Your personal intelligence, as The Pull has come to know it — and as it keeps evolving.
             </p>
           </div>
@@ -103,7 +104,7 @@ export default function PullProfilePage() {
 
       {/* Your Living Identity heading */}
       <motion.div {...f(0.06)} style={{ textAlign: "center", padding: "20px 0 8px" }}>
-        <p style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(180,140,80,0.8)", marginBottom: 10 }}>Your Living Identity</p>
+        <p style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 10 }}>Your Living Identity</p>
         <h2 style={{ fontSize: 52, fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.03em", lineHeight: 1 }}>Who Am I?</h2>
       </motion.div>
 
@@ -126,7 +127,7 @@ export default function PullProfilePage() {
               </span>
             </div>
             <p style={{ fontSize: 28, fontWeight: 700, color: "white", lineHeight: 1.1, marginBottom: 4 }}>{mockUser.archetype}</p>
-            <p style={{ fontSize: 13, color: "rgba(201,168,76,0.7)", fontStyle: "italic" }}>Steady presence is the strongest love.</p>
+            <p style={{ fontSize: 13, color: "rgba(192,64,79,0.6)", fontStyle: "italic" }}>Steady presence is the strongest love.</p>
           </div>
         </div>
       </motion.div>
@@ -135,16 +136,18 @@ export default function PullProfilePage() {
       <motion.div {...f(0.13)}>
         <div style={{
           borderRadius: 20, padding: "24px 28px",
-          background: "linear-gradient(140deg, #faf5ec 0%, #f5e8d4 100%)",
-          border: "1px solid rgba(180,140,80,0.15)", marginBottom: 4,
+          background: "#ffffff",
+          border: "1px solid rgba(0,0,0,0.07)",
+          boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)",
+          marginBottom: 4,
         }}>
-          <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#c9a84c", marginBottom: 12 }}>A Glimpse Of Your Story</p>
-          <p style={{ fontSize: 14, color: "#2d1a0a", lineHeight: 1.75 }}>
+          <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--brand)", marginBottom: 12 }}>A Glimpse Of Your Story</p>
+          <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.75 }}>
             {mockUser.archetype_tagline} Your identity is built on the quiet strength of dependability, where your primary mission is to ensure that the ground remains solid beneath your feet. You carry a deep sense of responsibility, acting as an anchor in an unpredictable world, finding your greatest fulfilment in being reliably present.
           </p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 12 }}>
-          <button style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "#1a0e04", background: "#c9a84c", border: "none", cursor: "pointer" }}>
+          <button style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", border: "none", cursor: "pointer", boxShadow: "0 4px 16px rgba(192,64,79,0.3)" }}>
             Open Living Report <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
           </button>
           <button style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 12, fontSize: 13, fontWeight: 600, color: "var(--text-primary)", background: "transparent", border: "1px solid rgba(0,0,0,0.12)", cursor: "pointer" }}>
@@ -159,8 +162,8 @@ export default function PullProfilePage() {
           {/* Header */}
           <div style={{ padding: "24px 28px 20px", borderBottom: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
             <div>
-              <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(201,168,76,0.7)", marginBottom: 8 }}>Identity Coverage</p>
-              <h3 style={{ fontSize: 26, fontWeight: 700, color: "#c9a84c", marginBottom: 4 }}>Foundation Complete</h3>
+              <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(192,64,79,0.6)", marginBottom: 8 }}>Identity Coverage</p>
+              <h3 style={{ fontSize: 26, fontWeight: 700, color: "white", marginBottom: 4 }}>Foundation Complete</h3>
               <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>Your 7 core dimensions are complete.</p>
             </div>
             <div style={{ textAlign: "right" }}>
@@ -213,7 +216,7 @@ export default function PullProfilePage() {
             <div style={{ position: "relative", width: 52, height: 52, flexShrink: 0 }}>
               <svg viewBox="0 0 52 52" style={{ width: 52, height: 52, transform: "rotate(-90deg)" }}>
                 <circle cx="26" cy="26" r="22" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="4" />
-                <circle cx="26" cy="26" r="22" fill="none" stroke="#c9a84c" strokeWidth="4" strokeLinecap="round"
+                <circle cx="26" cy="26" r="22" fill="none" stroke="#c0404f" strokeWidth="4" strokeLinecap="round"
                   strokeDasharray={`${(mockUser.archetype_confidence / 100) * 138.2} 138.2`} />
               </svg>
               <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -224,7 +227,7 @@ export default function PullProfilePage() {
               <p style={{ fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 2 }}>Pull Confidence</p>
               <p style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.7)" }}>Building</p>
             </div>
-            <button style={{ fontSize: 11, color: "rgba(201,168,76,0.7)", background: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}>
+            <button style={{ fontSize: 11, color: "rgba(192,64,79,0.6)", background: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}>
               Explain <span style={{ fontSize: 10 }}>↓</span>
             </button>
           </div>
@@ -242,11 +245,11 @@ export default function PullProfilePage() {
       {/* Identity Coverage Progress */}
       <motion.div {...f(0.19)}>
         <div style={{ borderRadius: 20, padding: "24px 28px", background: "linear-gradient(145deg, #1a0508 0%, #2d0b14 100%)", border: "1px solid rgba(192,64,79,0.15)" }}>
-          <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(201,168,76,0.7)", marginBottom: 20 }}>Identity Coverage Progress</p>
+          <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(192,64,79,0.6)", marginBottom: 20 }}>Identity Coverage Progress</p>
 
           {[
             { label: "Core Dimensions", gathered: 7, total: 7, color: "#22c55e" },
-            { label: "Deeper Dimensions", gathered: 4, total: 5, color: "#c9a84c" },
+            { label: "Deeper Dimensions", gathered: 4, total: 5, color: "#c0404f" },
             { label: "Coming Soon", gathered: 0, total: 3, color: "rgba(255,255,255,0.2)", note: "3 new domains" },
           ].map((row, i) => (
             <div key={row.label} style={{ marginBottom: i < 2 ? 18 : 0 }}>
@@ -290,16 +293,17 @@ export default function PullProfilePage() {
             <motion.div key={d.label} {...f(0.24 + i * 0.04)}>
               <div style={{
                 borderRadius: 16, padding: "20px",
-                background: "linear-gradient(140deg, #faf5ec 0%, #f5e8d4 100%)",
-                border: "1px solid rgba(180,140,80,0.15)",
+                background: "#ffffff",
+                border: "1px solid rgba(0,0,0,0.07)",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
               }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(180,140,80,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-                  <HugeiconsIcon icon={d.icon} size={16} style={{ color: "rgba(100,70,30,0.5)" }} />
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: "var(--brand-light)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+                  <HugeiconsIcon icon={d.icon} size={16} style={{ color: "var(--brand)" }} />
                 </div>
-                <p style={{ fontSize: 14, fontWeight: 700, color: "#2d1a0a", marginBottom: 2 }}>{d.label}</p>
-                <p style={{ fontSize: 8, letterSpacing: "0.15em", color: "rgba(100,70,30,0.5)", marginBottom: 12 }}>{d.sub}</p>
-                <p style={{ fontSize: 12, color: "#c0404f", fontStyle: "italic", marginBottom: 4 }}>Still being discovered</p>
-                <p style={{ fontSize: 11, color: "rgba(100,70,30,0.5)" }}>Complete assessments to unlock</p>
+                <p style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)", marginBottom: 2 }}>{d.label}</p>
+                <p style={{ fontSize: 8, letterSpacing: "0.15em", color: "var(--text-muted)", marginBottom: 12 }}>{d.sub}</p>
+                <p style={{ fontSize: 12, color: "var(--brand)", fontStyle: "italic", marginBottom: 4 }}>Still being discovered</p>
+                <p style={{ fontSize: 11, color: "var(--text-muted)" }}>Complete assessments to unlock</p>
               </div>
             </motion.div>
           ))}
@@ -336,7 +340,7 @@ export default function PullProfilePage() {
               <HugeiconsIcon icon={AiSparklesIcon} size={16} style={{ color: "#c0404f" }} />
             </div>
             <div>
-              <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(201,168,76,0.7)" }}>Ask The Pull</p>
+              <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(192,64,79,0.6)" }}>Ask The Pull</p>
               <p style={{ fontSize: 15, fontWeight: 700, color: "white" }}>Your Intelligence Guide</p>
             </div>
           </div>
@@ -345,7 +349,7 @@ export default function PullProfilePage() {
           </p>
           <div style={{ padding: "14px 16px", borderRadius: 12, border: "1px solid rgba(201,168,76,0.2)", background: "rgba(0,0,0,0.2)", marginBottom: 12 }}>
             <p style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>Suggested question</p>
-            <p style={{ fontSize: 12, color: "#c9a84c", fontStyle: "italic" }}>"What's changed about me since I last checked in?"</p>
+            <p style={{ fontSize: 12, color: "#c0404f", fontStyle: "italic" }}>"What's changed about me since I last checked in?"</p>
           </div>
           <Link href="/coach" style={{
             display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
