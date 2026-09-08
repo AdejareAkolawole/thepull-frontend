@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Home01Icon, VaultIcon, AiBrain01Icon, Message02Icon, Analytics01Icon,
-  FlashIcon, BookOpen01Icon, Settings01Icon,
+  FlashIcon, BookOpen01Icon, Settings01Icon, AiSparklesIcon,
 } from "@hugeicons/core-free-icons";
 
 const navItems = [
@@ -13,6 +13,7 @@ const navItems = [
   { href: "/pull-profile", icon: AiBrain01Icon, label: "Pull Profile" },
   { href: "/coach", icon: Message02Icon, label: "Ask The Pull" },
   { href: "/journey", icon: FlashIcon, label: "Journey" },
+  { href: "/upgrade", icon: FlashIcon, label: "Upgrade" },
   { href: "/settings", icon: Settings01Icon, label: "Settings" },
 ];
 
@@ -23,6 +24,7 @@ const allNavItems = [
   { href: "/coach", icon: Message02Icon, label: "Ask The Pull" },
   { href: "/reports", icon: Analytics01Icon, label: "Reality Check" },
   { href: "/journey", icon: FlashIcon, label: "Journey" },
+  { href: "/upgrade", icon: AiSparklesIcon, label: "Upgrade" },
   { href: "/settings", icon: Settings01Icon, label: "Settings" },
 ];
 
