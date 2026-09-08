@@ -203,6 +203,67 @@ export default function DashboardClient() {
         </motion.div>
       </div>
 
+      {/* ARCHETYPE CARD */}
+      <motion.div {...fade(0.07)}>
+        <div style={{
+          borderRadius: 22, padding: "28px 32px",
+          background: "linear-gradient(150deg, #1a0810 0%, #2a0e18 50%, #1a0810 100%)",
+          border: "1px solid rgba(192,64,79,0.12)",
+          boxShadow: "0 8px 40px rgba(61,14,26,0.3)",
+          position: "relative", overflow: "hidden",
+        }}>
+          <div style={{ position: "absolute", top: -60, right: -40, width: 200, height: 200, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.18) 0%, transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 24, alignItems: "start" }}>
+            {/* Left */}
+            <div>
+              <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(192,64,79,0.7)", fontWeight: 700, marginBottom: 10 }}>Primary Archetype</p>
+              <div style={{ display: "inline-flex", alignItems: "center", padding: "4px 12px", borderRadius: 99, background: "rgba(192,64,79,0.12)", border: "1px solid rgba(192,64,79,0.25)", marginBottom: 12 }}>
+                <span style={{ fontSize: 10, fontWeight: 700, color: "#c0404f" }}>Emerging Identity</span>
+              </div>
+              <h2 style={{ fontSize: 30, fontWeight: 700, color: "#fff", lineHeight: 1.1, marginBottom: 8, letterSpacing: "-0.02em" }}>
+                {mockUser.archetype}
+              </h2>
+              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", lineHeight: 1.6, maxWidth: 380 }}>
+                We currently believe your strongest identity is rooted in logic, pattern recognition, and deep analytical thinking.
+              </p>
+              <div style={{ display: "flex", gap: 0, marginTop: 18 }}>
+                <div style={{ paddingRight: 24, borderRight: "1px solid rgba(255,255,255,0.08)" }}>
+                  <p style={{ fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.28)", marginBottom: 4 }}>Confidence</p>
+                  <p style={{ fontSize: 28, fontWeight: 700, color: "#c0404f", lineHeight: 1 }}>{mockUser.archetype_confidence}%</p>
+                </div>
+                <div style={{ paddingLeft: 24 }}>
+                  <p style={{ fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.28)", marginBottom: 4 }}>Version</p>
+                  <p style={{ fontSize: 28, fontWeight: 700, color: "#c0404f", lineHeight: 1 }}>V10.0</p>
+                </div>
+              </div>
+            </div>
+            {/* Right — Identity Vector */}
+            <div style={{ minWidth: 260 }}>
+              <p style={{ fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.28)", marginBottom: 14 }}>Identity Vector</p>
+              {[
+                { label: "Analytical Connector", pct: 72, color: "#c0404f" },
+                { label: "Explorer", pct: 58, color: "#60a5fa" },
+                { label: "Builder", pct: 51, color: "#f59e0b" },
+                { label: "Visionary", pct: 47, color: "#a78bfa" },
+              ].map(v => (
+                <div key={v.label} style={{ marginBottom: 12 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
+                    <span style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.75)" }}>{v.label}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.5)" }}>{v.pct}%</span>
+                  </div>
+                  <div style={{ height: 3, borderRadius: 99, background: "rgba(255,255,255,0.07)" }}>
+                    <div style={{ height: "100%", width: `${v.pct}%`, borderRadius: 99, background: v.color, transition: "width 0.8s ease" }} />
+                  </div>
+                </div>
+              ))}
+              <Link href="/pull-profile" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, marginTop: 18, padding: "11px 0", borderRadius: 13, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.7)", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>
+                View Full Profile <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
       {/* ROW 2: Radar + Insights + Side column */}
       <div className="dash-row-2" style={{ display: "grid", gridTemplateColumns: "220px 1fr 210px", gap: 12 }}>
 
