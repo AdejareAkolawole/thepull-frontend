@@ -65,11 +65,20 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
 
-/* Pill nav — show label on hover */
+/* Pill nav — show label on hover (desktop) */
 .pill-nav-item:hover .pill-nav-label {
   max-width: 120px !important;
   opacity: 1 !important;
   margin-left: 7px !important;
+}
+
+/* Mobile bottom nav — active item always shows label */
+@media (max-width: 767px) {
+  .pill-nav-item.mobile-active .pill-nav-label {
+    max-width: 120px !important;
+    opacity: 1 !important;
+    margin-left: 7px !important;
+  }
 }
 
 /* Mobile bottom nav — hidden on desktop */

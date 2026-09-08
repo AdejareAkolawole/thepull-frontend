@@ -134,7 +134,7 @@ export default function TopNav() {
         {navItems.map(({ href, icon: Icon, label }) => {
           const active = path === href || (href !== "/dashboard" && path.startsWith(href));
           return (
-            <Link key={href} href={href} className="pill-nav-item"
+            <Link key={href} href={href} className={`pill-nav-item${active ? " mobile-active" : ""}`}
               style={{ display: "flex", alignItems: "center", gap: 0, textDecoration: "none", padding: "9px 13px", borderRadius: 99, background: active ? "linear-gradient(135deg,#7c2232,#c0404f)" : "transparent", transition: "all 0.22s cubic-bezier(0.4,0,0.2,1)", boxShadow: active ? "0 4px 14px rgba(192,64,79,0.3)" : "none", overflow: "hidden", whiteSpace: "nowrap" as const }}>
               <HugeiconsIcon icon={Icon} size={18} style={{ color: active ? "#fff" : "rgba(255,255,255,0.45)", flexShrink: 0 }} />
               <span className="pill-nav-label" style={{ maxWidth: 0, opacity: 0, overflow: "hidden", transition: "max-width 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.18s, margin 0.22s", marginLeft: 0, fontSize: 13, fontWeight: 700, color: "#fff" }}>
