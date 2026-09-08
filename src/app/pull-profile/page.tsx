@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { TrendingUpIcon, AiSparklesIcon, Activity01Icon } from "@hugeicons/core-free-icons";
+import { TrendingUpIcon, AiSparklesIcon, Activity01Icon, AiBrain01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { mockUser, mockDimensions, mockIdentityVector } from "@/lib/mock";
 
@@ -133,7 +133,7 @@ export default function PullProfilePage() {
               <div style={{ padding: "20px 20px 16px", display: "flex", alignItems: "flex-start", gap: 16 }}>
                 {/* Icon ring */}
                 <div style={{ flexShrink: 0, width: 60, height: 60, borderRadius: "50%", border: "2px solid rgba(192,64,79,0.5)", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(192,64,79,0.08)" }}>
-                  <span style={{ fontSize: 24 }}>🧬</span>
+                  <HugeiconsIcon icon={AiBrain01Icon} size={26} style={{ color: "#c0404f" }} />
                 </div>
                 <div style={{ flex: 1 }}>
                   <p style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(192,64,79,0.7)", marginBottom: 6 }}>Primary Archetype</p>

@@ -62,12 +62,12 @@ export const mockInsights = [
 ];
 
 export const mockAchievements = [
-  { label: "First Assessment", desc: "Completed your first intelligence assessment", icon: "🧠", done: true, color: "#c0404f" },
-  { label: "Self Aware", desc: "Reached 65+ on Self-Awareness dimension", icon: "🪞", done: true, color: "#60a5fa" },
-  { label: "First Report", desc: "Generated your first intelligence report", icon: "📊", done: true, color: "#a78bfa" },
-  { label: "Premium Member", desc: "Unlocked full intelligence engine access", icon: "⚡", done: true, color: "#fbbf24" },
-  { label: "30-Day Streak", desc: "Engaged with The Pull for 30 days straight", icon: "🔥", done: false, color: "#f97316" },
-  { label: "Reality Check", desc: "Complete the Emotional Landscape assessment", icon: "🎯", done: false, color: "#34d399" },
+  { label: "First Assessment", desc: "Completed your first intelligence assessment", iconKey: "brain", done: true, color: "#c0404f" },
+  { label: "Self Aware", desc: "Reached 65+ on Self-Awareness dimension", iconKey: "eye", done: true, color: "#60a5fa" },
+  { label: "First Report", desc: "Generated your first intelligence report", iconKey: "chart", done: true, color: "#a78bfa" },
+  { label: "Premium Member", desc: "Unlocked full intelligence engine access", iconKey: "star", done: true, color: "#fbbf24" },
+  { label: "30-Day Streak", desc: "Engaged with The Pull for 30 days straight", iconKey: "fire", done: false, color: "#f97316" },
+  { label: "Reality Check", desc: "Complete the Emotional Landscape assessment", iconKey: "target", done: false, color: "#34d399" },
 ];
 
 export const mockJourneySteps = [
