@@ -61,8 +61,8 @@ export default function TopNav() {
           <Link href="/dashboard" style={{ marginRight: 32, flexShrink: 0, display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
             <img src="/logo.jpg" alt="THEPULL" style={{ height: 32, width: "auto", display: "block" }} />
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <span style={{ fontSize: 12, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.01em", lineHeight: 1.1 }}>MyPullScore</span>
-              <span style={{ fontSize: 9, fontWeight: 700, color: "#b8922a", letterSpacing: "0.01em", lineHeight: 1.3 }}>Personal Intelligence That Grows You.</span>
+              <span style={{ fontSize: 12, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.01em", lineHeight: 1.1 }}>mypullscore</span>
+              <span style={{ fontSize: 9, color: "rgba(15,10,20,0.4)", letterSpacing: "0.01em", lineHeight: 1.3 }}>Personal intelligence that grows you.</span>
             </div>
           </Link>
 
