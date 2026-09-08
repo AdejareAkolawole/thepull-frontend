@@ -6,7 +6,7 @@ import {
   TrendingUpIcon, ArrowRight01Icon, AiSparklesIcon,
   AiInnovation01Icon, Activity01Icon,
   FlashIcon, PresentationLineChart01Icon, Calendar03Icon, Target01Icon,
-  AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, Fire01Icon, CheckmarkCircle01Icon, LockIcon,
+  AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, CheckmarkCircle01Icon, LockIcon,
 } from "@hugeicons/core-free-icons";
 import { mockUser, mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
 
@@ -15,7 +15,7 @@ const achievementIconMap: Record<string, any> = {
   eye: EyeIcon,
   chart: Analytics01Icon,
   star: FavouriteIcon,
-  fire: Fire01Icon,
+  fire: FireIcon,
   target: Target01Icon,
 };
 
