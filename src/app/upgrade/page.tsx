@@ -351,7 +351,7 @@ export default function UpgradePage() {
               boxShadow: "0 4px 20px rgba(192,64,79,0.4)",
             }}>
               <HugeiconsIcon icon={AiSparklesIcon} size={15} />
-              Start Pro{billing === "annual" ? " · Annual" : ""}
+              Start Understand Me{billing === "annual" ? " · Annual" : ""}
             </button>
           </div>
         </motion.div>
