@@ -3,25 +3,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Home01Icon, AiBrain01Icon, Message02Icon, BookOpen01Icon,
+  Home01Icon, AiBrain01Icon, BookOpen01Icon, Message02Icon,
   FlashIcon, ScaleIcon, Notification01Icon, UserCircleIcon,
-  CreditCardIcon, Settings01Icon,
+  CreditCardIcon, Settings01Icon, AiSparklesIcon, CompassIcon,
 } from "@hugeicons/core-free-icons";
 
 const mainNav = [
   { href: "/dashboard", icon: Home01Icon, label: "Home" },
-  { href: "/pull-profile", icon: AiBrain01Icon, label: "Pull Profile" },
+  { href: "/pull-profile", icon: AiSparklesIcon, label: "Pull Profile" },
   { href: "/journal", icon: BookOpen01Icon, label: "Journal" },
-  { href: "/coach", icon: Message02Icon, label: "Ask The Pull" },
+  { href: "/coach", icon: AiBrain01Icon, label: "Ask The Pull" },
   { href: "/reports", icon: ScaleIcon, label: "Reality Check" },
-  { href: "/journey", icon: FlashIcon, label: "Journey" },
-];
-
-const bottomNav = [
-  { href: "/notifications", icon: Notification01Icon, label: "Notifications" },
-  { href: "/settings/profile", icon: UserCircleIcon, label: "My Profile" },
-  { href: "/upgrade", icon: CreditCardIcon, label: "Subscription" },
-  { href: "/settings", icon: Settings01Icon, label: "Settings" },
+  { href: "/journey", icon: CompassIcon, label: "Journey" },
 ];
 
 export default function Sidebar() {
