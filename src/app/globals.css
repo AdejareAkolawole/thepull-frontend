@@ -1,5 +1,11 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..900;1,9..40,100..900&display=swap');
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/Aeonik-Regular.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --bg: #f5f4f7;
@@ -25,7 +31,7 @@
   --amber: #d97706;
   --blue: #2563eb;
 
-  --font: 'DM Sans', system-ui, sans-serif;
+  --font: 'Aeonik', system-ui, sans-serif;
   font-feature-settings: "cv11", "ss01";
 
   --shadow-sm: 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
@@ -41,7 +47,7 @@
 html { font-size: 16px; }
 
 html, body, h1, h2, h3, h4, h5, h6, p, span, div, button, input, textarea, a, label {
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: 'Aeonik', system-ui, sans-serif;
 }
 
 body {
@@ -53,7 +59,7 @@ body {
 }
 
 .font-display {
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: 'Aeonik', system-ui, sans-serif;
   letter-spacing: -0.03em;
 }
 
