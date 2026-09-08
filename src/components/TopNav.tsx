@@ -50,40 +50,48 @@ export default function TopNav() {
 
   return (
     <>
-      {/* Desktop sticky top bar — hidden on mobile via CSS */}
-      <header style={{
+      {/* Desktop sticky top bar — hidden on mobile */}
+      <header className="desktop-nav-links" style={{
         position: "sticky", top: 0, zIndex: 50, width: "100%",
-        background: "rgba(255,255,255,0.92)",
-        backdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(0,0,0,0.07)",
-        boxShadow: "0 1px 12px rgba(0,0,0,0.05)",
+        background: "transparent",
+        padding: "10px 24px",
       }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", height: 56 }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+
           {/* Logo */}
-          <Link href="/dashboard" style={{ marginRight: 32, flexShrink: 0, display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-            <img src="/logo.jpg" alt="THEPULL" style={{ height: 32, width: "auto", display: "block" }} />
+          <Link href="/dashboard" style={{ flexShrink: 0, display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+            <img src="/logo.jpg" alt="THEPULL" style={{ height: 30, width: "auto", display: "block" }} />
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
               <span style={{ fontSize: 12, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.01em", lineHeight: 1.1 }}>MyPullScore</span>
-              <span style={{ fontSize: 9, fontWeight: 700, color: "#c9a84c", letterSpacing: "0.01em", lineHeight: 1.3 }}>Personal Intelligence That Grows You.</span>
+              <span style={{ fontSize: 9, fontWeight: 700, color: "#c0404f", letterSpacing: "0.01em", lineHeight: 1.3 }}>Personal Intelligence That Grows You.</span>
             </div>
           </Link>
 
-          {/* Nav links — hidden on mobile */}
-          <nav className="desktop-nav-links" style={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
+          {/* Pill nav */}
+          <nav style={{
+            display: "flex", alignItems: "center", gap: 2,
+            background: "rgba(255,255,255,0.9)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            border: "1px solid rgba(15,10,20,0.08)",
+            borderRadius: 99,
+            padding: "5px 6px",
+            boxShadow: "0 2px 16px rgba(15,10,20,0.07)",
+          }}>
             {allNavItems.map(({ href, icon: Icon, label }) => {
               const active = path === href || (href !== "/dashboard" && path.startsWith(href));
               return (
-                <Link key={href} href={href}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 6,
-                    padding: "6px 12px", borderRadius: 10,
-                    fontSize: 13, fontWeight: active ? 700 : 500,
-                    color: active ? "#c0404f" : "rgba(15,10,20,0.5)",
-                    background: active ? "rgba(192,64,79,0.08)" : "transparent",
-                    textDecoration: "none",
-                    transition: "all 0.15s",
-                  }}>
-                  <HugeiconsIcon icon={Icon} size={15} />
+                <Link key={href} href={href} style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  padding: "6px 14px", borderRadius: 99,
+                  fontSize: 13, fontWeight: active ? 700 : 500,
+                  color: active ? "#fff" : "rgba(15,10,20,0.5)",
+                  background: active ? "#c0404f" : "transparent",
+                  textDecoration: "none",
+                  transition: "all 0.15s",
+                  whiteSpace: "nowrap" as const,
+                }}>
+                  <HugeiconsIcon icon={Icon} size={14} />
                   {label}
                 </Link>
               );
@@ -91,8 +99,8 @@ export default function TopNav() {
           </nav>
 
           {/* Profile chip */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 10, background: "linear-gradient(135deg, #7c2232, #c0404f)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "white" }}>
+          <div style={{ flexShrink: 0 }}>
+            <div style={{ width: 34, height: 34, borderRadius: 99, background: "linear-gradient(135deg,#7c2232,#c0404f)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "white" }}>
               AA
             </div>
           </div>
