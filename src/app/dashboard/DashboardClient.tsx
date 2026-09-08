@@ -7,7 +7,7 @@ import {
   AiInnovation01Icon, Activity01Icon,
   FlashIcon, PresentationLineChart01Icon, Calendar03Icon, Target01Icon,
   AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, CheckmarkCircle01Icon, LockIcon,
-  BookOpen01Icon, Share01Icon, HelpCircleIcon, ArrowDown01Icon,
+  BookOpen01Icon, Share01Icon, HelpCircleIcon, ArrowDown01Icon, CompassIcon,
 } from "@hugeicons/core-free-icons";
 import { mockUser, mockDimensions, mockInsights, mockAchievements } from "@/lib/mock";
 
@@ -243,6 +243,75 @@ export default function DashboardClient() {
         <div style={{ marginBottom: 20, textAlign: "center" as const }}>
           <p style={{ fontSize: 9, letterSpacing: "0.24em", textTransform: "uppercase" as const, color: "var(--text-muted)", fontWeight: 700, marginBottom: 6 }}>Your Living Identity</p>
           <h2 style={{ fontSize: 36, fontWeight: 400, color: "#3d0e1a", letterSpacing: "-0.02em", lineHeight: 1 }}>Who Am I?</h2>
+        </div>
+
+        {/* ── Archetype card ── */}
+        <div style={{
+          borderRadius: 20, padding: "20px 22px", marginBottom: 12,
+          background: "linear-gradient(135deg,#0d0d0d 0%,#1a0a10 60%,#0a1a0d 100%)",
+          border: "1px solid rgba(255,255,255,0.07)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+          display: "flex", alignItems: "center", gap: 18,
+        }}>
+          <div style={{ width: 60, height: 60, borderRadius: 16, background: "rgba(34,197,94,0.08)", border: "1.5px solid rgba(34,197,94,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <HugeiconsIcon icon={CompassIcon} size={26} style={{ color: "#4ade80" }} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
+              <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.35)" }}>Your Current Lens</p>
+              <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", padding: "3px 9px", borderRadius: 99, background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.1)" }}>Emerging Identity</span>
+            </div>
+            <p style={{ fontSize: 22, fontWeight: 700, color: "#fff", letterSpacing: "-0.02em", marginBottom: 3 }}>{mockUser.archetype ?? "The Explorer"}</p>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>The map is not the territory. Keep walking.</p>
+          </div>
+        </div>
+
+        {/* ── Glimpse of your story ── */}
+        <div style={{
+          borderRadius: 20, padding: "22px 24px", marginBottom: 14,
+          background: "#faf7f0",
+          border: "1px solid rgba(61,14,26,0.08)",
+          boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 14 }}>
+            <HugeiconsIcon icon={BookOpen01Icon} size={12} style={{ color: "#c0404f" }} />
+            <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "#c0404f" }}>A Glimpse of Your Story</p>
+          </div>
+          <p style={{ fontSize: 14, color: "rgba(15,10,20,0.72)", lineHeight: 1.8 }}>
+            {mockUser.identity_summary
+              ? mockUser.identity_summary.slice(0, 260) + (mockUser.identity_summary.length > 260 ? "…" : "")
+              : "You are a multifaceted explorer — someone who seeks the unknown while holding the people you love close. Your intelligence is still emerging, and every moment you share sharpens what The Pull can see in you…"}
+          </p>
+        </div>
+
+        {/* ── Action buttons ── */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, flexWrap: "wrap" as const }}>
+          <Link href="/pull-profile" style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            padding: "13px 22px", borderRadius: 12, textDecoration: "none",
+            background: "linear-gradient(135deg,#b8922a 0%,#c9a84c 50%,#1a0a10 100%)",
+            color: "#fff", fontSize: 13, fontWeight: 800, letterSpacing: "0.01em",
+            boxShadow: "0 4px 20px rgba(184,146,42,0.3)",
+          }}>
+            Open Living Report <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
+          </Link>
+          <Link href="/journal" style={{
+            display: "inline-flex", alignItems: "center", gap: 7,
+            padding: "13px 20px", borderRadius: 12, textDecoration: "none",
+            background: "transparent", border: "1px solid rgba(15,10,20,0.12)",
+            color: "rgba(15,10,20,0.65)", fontSize: 13, fontWeight: 600,
+          }}>
+            Continue Reading
+          </Link>
+          <button style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            padding: "13px 16px", borderRadius: 12,
+            background: "none", border: "none", cursor: "pointer",
+            color: "rgba(15,10,20,0.38)", fontSize: 13, fontWeight: 500,
+          }}>
+            <HugeiconsIcon icon={Share01Icon} size={13} />
+            Share Story
+          </button>
         </div>
 
         {/* Identity Coverage banner */}
