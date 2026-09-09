@@ -110,7 +110,7 @@ export default function LandingPage() {
         @media (max-width: 860px) {
           .feat-grid  { grid-template-columns: 1fr 1fr !important; }
           .step-grid  { grid-template-columns: 1fr 1fr !important; }
-          .price-grid { grid-template-columns: 1fr !important; }
+          .price-grid { grid-template-columns: 1fr !important; gap: 12px !important; max-width: 480px !important; margin-left: auto !important; margin-right: auto !important; }
           .faq-inner  { grid-template-columns: 1fr !important; gap: 40px !important; }
           section, .pad { padding-left: 24px !important; padding-right: 24px !important; }
           .nav-mid { display: none !important; }
@@ -448,7 +448,7 @@ export default function LandingPage() {
 
       {/* ══ PRICING ══ */}
       <section id="pricing" style={{ padding: "110px 64px", background: "#fff" }} className="pad">
-        <div style={{ maxWidth: 860, margin: "0 auto" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
           <S>
             <motion.div variants={up} style={{ textAlign: "center", marginBottom: 60 }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 13px",
@@ -457,86 +457,148 @@ export default function LandingPage() {
                 <span style={{ fontSize: 10, fontWeight: 700, color: C.wine,
                   letterSpacing: "0.12em", textTransform: "uppercase" }}>Pricing</span>
               </div>
-              <h2 style={{ fontSize: "clamp(32px,4.5vw,56px)", fontWeight: 800,
-                letterSpacing: "-0.04em", lineHeight: 1.06, marginBottom: 14 }}>Start free. Go deeper.</h2>
-              <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.8 }}>
-                Free forever — premium for those who want the full picture.
+              <h2 style={{ fontSize: "clamp(28px,4.5vw,52px)", fontWeight: 800,
+                letterSpacing: "-0.04em", lineHeight: 1.06, marginBottom: 12 }}>
+                Choose how deeply you want to know yourself.
+              </h2>
+              <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.8 }}>
+                Start free. Let The Pull learn you over time.
               </p>
             </motion.div>
-            <div className="price-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-              {/* Free tier */}
-              <motion.div variants={up} style={{ borderRadius: 28, border: `1.5px solid ${C.border}`,
-                padding: "40px 36px", display: "flex", flexDirection: "column" }}>
-                <div style={{ marginBottom: 32 }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, color: C.muted, marginBottom: 20,
-                    letterSpacing: "0.1em", textTransform: "uppercase" }}>Free</p>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 6 }}>
-                    <span style={{ fontSize: 58, fontWeight: 900, color: C.ink, letterSpacing: "-0.06em", lineHeight: 1 }}>$0</span>
-                  </div>
-                  <p style={{ fontSize: 13, color: C.muted }}>Always free — no card required</p>
+
+            {/* Founding 500 banner */}
+            <motion.div variants={up} style={{ borderRadius: 18, marginBottom: 16,
+              background: "linear-gradient(135deg, #1a0a10 0%, #0c0308 100%)",
+              border: "1px solid rgba(201,168,76,0.2)", padding: "20px 28px",
+              display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 14 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ padding: "4px 12px", borderRadius: 99,
+                  background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)" }}>
+                  <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.22em",
+                    textTransform: "uppercase" as const, color: C.gold }}>Founding 500</span>
                 </div>
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>
+                  Lock in <strong style={{ color: C.gold }}>$19.99/month</strong> for life — 153 spots remaining
+                </p>
+              </div>
+              <div style={{ height: 4, borderRadius: 99, background: "rgba(255,255,255,0.06)",
+                overflow: "hidden", width: 160, flexShrink: 0 }}>
+                <div style={{ height: "100%", width: "69%", borderRadius: 99,
+                  background: "linear-gradient(90deg, rgba(201,168,76,0.5), rgba(201,168,76,0.9))" }} />
+              </div>
+            </motion.div>
+
+            {/* 3 pricing cards */}
+            <div className="price-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+
+              {/* LEARN ME — Free */}
+              <motion.div variants={up} style={{ borderRadius: 24, border: `1.5px solid ${C.border}`,
+                padding: "32px 28px", display: "flex", flexDirection: "column", background: "#faf9f7" }}>
+                <p style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.2em",
+                  textTransform: "uppercase" as const, color: C.wine, marginBottom: 16 }}>Learn Me</p>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 3, marginBottom: 4 }}>
+                  <span style={{ fontSize: 52, fontWeight: 900, color: C.ink, letterSpacing: "-0.05em", lineHeight: 1 }}>$0</span>
+                </div>
+                <p style={{ fontSize: 12, color: C.muted, marginBottom: 28 }}>Free forever</p>
                 <Link href="/register" style={{ display: "flex", alignItems: "center",
-                  justifyContent: "center", padding: "13px 0", borderRadius: 99,
+                  justifyContent: "center", padding: "12px 0", borderRadius: 99,
                   border: `1.5px solid ${C.border}`, color: C.ink,
-                  fontSize: 14, fontWeight: 700, marginBottom: 32, transition: "border-color .18s" }}>
+                  fontSize: 13, fontWeight: 700, marginBottom: 28 }}>
                   Get started free
                 </Link>
-                <div style={{ flex: 1 }}>
-                  {["Pull Score + Archetype","5 Coach sessions / month","3 Reality checks / month","Smart Journal (10 / month)","Journey Map"].map(f => (
-                    <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 13 }}>
-                      <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} style={{ color: "#ddd", flexShrink: 0 }} />
-                      <span style={{ fontSize: 13, color: "#888" }}>{f}</span>
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 11 }}>
+                  {["Your Pull Score","Your Pull Archetype","Foundational intelligence","Ask The Pull — 5x/month","Living profile that grows with you"].map(f => (
+                    <div key={f} style={{ display: "flex", alignItems: "flex-start", gap: 9 }}>
+                      <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} style={{ color: "#ccc", flexShrink: 0, marginTop: 1 }} />
+                      <span style={{ fontSize: 12.5, color: "#888", lineHeight: 1.5 }}>{f}</span>
                     </div>
                   ))}
                 </div>
               </motion.div>
-              {/* Premium tier */}
-              <motion.div variants={up} whileHover={{ y: -4, boxShadow: `0 32px 80px ${C.ink}28` }}
-                style={{ borderRadius: 28, background: C.ink, padding: "40px 36px",
-                  position: "relative", boxShadow: `0 20px 60px ${C.ink}1a`,
-                  display: "flex", flexDirection: "column", transition: "all .2s" }}>
-                <div style={{ position: "absolute", inset: 0, borderRadius: 28, overflow: "hidden", pointerEvents: "none" }}>
-                  <div style={{ position: "absolute", top: "-40%", right: "-20%", width: 280, height: 280,
-                    background: `radial-gradient(ellipse, ${C.wine}80 0%, transparent 65%)` }} />
-                </div>
-                <div style={{ position: "absolute", top: 20, right: 20, padding: "5px 12px",
+
+              {/* UNDERSTAND ME — $24.99 */}
+              <motion.div variants={up} whileHover={{ y: -4 }}
+                style={{ borderRadius: 24, background: C.wine, padding: "32px 28px",
+                  position: "relative", overflow: "hidden",
+                  boxShadow: `0 20px 60px ${C.wine}30`,
+                  display: "flex", flexDirection: "column", transition: "transform .2s" }}>
+                <div style={{ position: "absolute", top: "-30%", right: "-15%", width: 240, height: 240,
+                  background: "radial-gradient(ellipse, rgba(192,64,79,0.4) 0%, transparent 65%)", pointerEvents: "none" }} />
+                <div style={{ position: "absolute", top: 16, right: 16, padding: "4px 10px",
                   borderRadius: 99, background: C.gold, color: C.ink,
-                  fontSize: 9, fontWeight: 900, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                  Most popular
+                  fontSize: 8, fontWeight: 900, letterSpacing: "0.1em", textTransform: "uppercase" as const }}>
+                  Most chosen
                 </div>
-                <div style={{ marginBottom: 32, position: "relative" }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.3)", marginBottom: 20,
-                    letterSpacing: "0.1em", textTransform: "uppercase" }}>Premium</p>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 6 }}>
-                    <span style={{ fontSize: 58, fontWeight: 900, color: "#fff", letterSpacing: "-0.06em", lineHeight: 1 }}>$12</span>
-                    <span style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginLeft: 2 }}>/mo</span>
+                <div style={{ position: "relative" }}>
+                  <p style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.2em",
+                    textTransform: "uppercase" as const, color: "rgba(255,255,255,0.4)", marginBottom: 16 }}>Understand Me</p>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 3, marginBottom: 4 }}>
+                    <span style={{ fontSize: 52, fontWeight: 900, color: "#fff", letterSpacing: "-0.05em", lineHeight: 1 }}>$24</span>
+                    <span style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", paddingBottom: 4 }}>.99/mo</span>
                   </div>
-                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.35)" }}>Cancel anytime, no commitment</p>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 24,
+                    padding: "4px 10px", borderRadius: 99, background: `rgba(201,168,76,0.12)`,
+                    border: "1px solid rgba(201,168,76,0.25)" }}>
+                    <span style={{ fontSize: 9, fontWeight: 700, color: C.gold }}>Founding 500 · $19.99 locked</span>
+                  </div>
+                  <Link href="/upgrade" style={{ display: "flex", alignItems: "center",
+                    justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 99,
+                    background: "#fff", color: C.ink, fontSize: 13, fontWeight: 800, marginBottom: 28 }}>
+                    Start Understand Me <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
+                  </Link>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+                    {["Everything in Free","Deeper Intelligence Access","Full Living Intelligence History","Ask The Pull (Unlimited)","Reality Check","Priority Processing"].map((f, i) => (
+                      <div key={f} style={{ display: "flex", alignItems: "flex-start", gap: 9 }}>
+                        <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13}
+                          style={{ color: i === 0 ? "rgba(255,255,255,0.25)" : "rgba(192,64,79,0.9)", flexShrink: 0, marginTop: 1 }} />
+                        <span style={{ fontSize: 12.5, lineHeight: 1.5,
+                          color: i === 0 ? "rgba(255,255,255,0.45)" : "rgba(255,255,255,0.8)",
+                          fontWeight: i === 0 ? 600 : 400 }}>{f}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <Link href="/upgrade" style={{ display: "flex", alignItems: "center",
-                  justifyContent: "center", gap: 8, padding: "13px 0", borderRadius: 99,
-                  background: "#fff", color: C.ink, fontSize: 14, fontWeight: 800, marginBottom: 32,
-                  position: "relative" }}>
-                  Upgrade now <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
-                </Link>
-                <div style={{ flex: 1, position: "relative" }}>
-                  {[
-                    { label: "Everything in Free", bold: true },
-                    { label: "Unlimited Coach sessions" },
-                    { label: "Unlimited Reality checks" },
-                    { label: "Unlimited AI journal insights" },
-                    { label: "Deep intelligence reports" },
-                    { label: "Priority support" },
-                  ].map(f => (
-                    <div key={f.label} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 13 }}>
-                      <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} style={{ color: C.gold, flexShrink: 0 }} />
-                      <span style={{ fontSize: 13, color: f.bold ? "#fff" : "rgba(255,255,255,0.5)",
-                        fontWeight: f.bold ? 700 : 400 }}>{f.label}</span>
-                    </div>
-                  ))}
+              </motion.div>
+
+              {/* KNOW ME — $69.99 */}
+              <motion.div variants={up} whileHover={{ y: -4 }}
+                style={{ borderRadius: 24, padding: "32px 28px",
+                  background: "linear-gradient(150deg, #0d0608 0%, #1a0c12 100%)",
+                  border: "1px solid rgba(201,168,76,0.15)",
+                  boxShadow: "0 16px 56px rgba(0,0,0,0.22)",
+                  display: "flex", flexDirection: "column", transition: "transform .2s" }}>
+                <div style={{ position: "relative" }}>
+                  <p style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.2em",
+                    textTransform: "uppercase" as const, color: "rgba(201,168,76,0.6)", marginBottom: 16 }}>Know Me</p>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 3, marginBottom: 4 }}>
+                    <span style={{ fontSize: 52, fontWeight: 900, color: "#fff", letterSpacing: "-0.05em", lineHeight: 1 }}>$69</span>
+                    <span style={{ fontSize: 14, color: "rgba(255,255,255,0.35)", paddingBottom: 4 }}>.99/mo</span>
+                  </div>
+                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", marginBottom: 24 }}>or $699/year — save $140</p>
+                  <Link href="/upgrade" style={{ display: "flex", alignItems: "center",
+                    justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 99,
+                    background: "linear-gradient(135deg, #b8922a, #c9a84c, #e2c36a)",
+                    color: "#1a0a10", fontSize: 13, fontWeight: 800, marginBottom: 28 }}>
+                    Start Know Me <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
+                  </Link>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+                    {["Everything in Understand Me","Deep Synthesis insights","How Your Intelligence Is Evolving","Cross-engine analysis","Priority Feature Access"].map((f, i) => (
+                      <div key={f} style={{ display: "flex", alignItems: "flex-start", gap: 9 }}>
+                        <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13}
+                          style={{ color: i === 0 ? "rgba(255,255,255,0.2)" : "rgba(201,168,76,0.7)", flexShrink: 0, marginTop: 1 }} />
+                        <span style={{ fontSize: 12.5, lineHeight: 1.5,
+                          color: i === 0 ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.65)",
+                          fontWeight: i === 0 ? 600 : 400 }}>{f}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             </div>
+
+            <motion.div variants={up} style={{ textAlign: "center", marginTop: 20 }}>
+              <p style={{ fontSize: 12, color: C.muted }}>Cancel any time · No surprise charges · Founding 500 rate locked for life</p>
+            </motion.div>
           </S>
         </div>
       </section>
