@@ -1,15 +1,14 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   AiBrain01Icon, BookOpen01Icon, Analytics01Icon, SparklesIcon,
   ShieldCheckIcon, ArrowRight01Icon, CheckmarkCircle02Icon,
-  ChartLineData03Icon, UserCircleIcon, FlashIcon, Target01Icon,
+  UserCircleIcon, Target01Icon,
   EyeIcon, Activity01Icon, StarIcon, CompassIcon, LockIcon,
-  Globe02Icon, TrendingUpIcon, Message02Icon, HeartCheckIcon,
+  Globe02Icon, TrendingUpIcon, Message02Icon,
 } from "@hugeicons/core-free-icons";
 
 const C = {
@@ -140,12 +139,9 @@ export default function LandingPage() {
           display: "flex", alignItems: "center", padding: "0 48px",
           background: "rgba(255,255,255,0.86)", backdropFilter: "blur(20px)",
           borderBottom: `1px solid ${C.border}` }}>
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, marginRight: "auto" }}>
-          <div style={{ width: 30, height: 30, borderRadius: 7, overflow: "hidden",
-            position: "relative", background: C.wine, flexShrink: 0 }}>
-            <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover" }} />
-          </div>
-          <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.02em" }}>MyPullScore</span>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 0, marginRight: "auto" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.jpg" alt="MyPullScore" style={{ height: 36, width: "auto", borderRadius: 8, display: "block" }} />
         </Link>
         <div className="nav-mid" style={{ display: "flex", gap: 28, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
           {[["Features","#features"],["How it works","#howitworks"],["Pricing","#pricing"],["FAQ","#faq"]].map(([l,h])=>(
@@ -262,22 +258,23 @@ export default function LandingPage() {
 
       {/* ══ STATS ══ */}
       <section style={{ background: C.blush, borderTop: `1px solid ${C.border}`,
-        borderBottom: `1px solid ${C.border}`, padding: "52px 64px" }} className="pad">
-        <S style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
+        borderBottom: `1px solid ${C.border}`, padding: "64px 64px" }} className="pad">
+        <S style={{ maxWidth: 1000, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
           {[
-            { end: 12000, suffix: "+", label: "Active users" },
-            { end: 98,    suffix: "%", label: "Profile accuracy" },
-            { end: 50,    suffix: "+", label: "Intelligence dimensions" },
-            { end: 5,     suffix: " min", label: "To your first score" },
+            { end: 12000, suffix: "+", label: "Active users", sub: "and growing daily" },
+            { end: 98,    suffix: "%", label: "Profile accuracy", sub: "across all archetypes" },
+            { end: 50,    suffix: "+", label: "Intelligence dimensions", sub: "mapped per person" },
+            { end: 5,     suffix: " min", label: "To your first score", sub: "no credit card needed" },
           ].map((s, i) => (
             <motion.div key={s.label} variants={up}
-              style={{ textAlign: "center", padding: "0 20px",
+              style={{ textAlign: "center", padding: "0 28px",
                 borderRight: i < 3 ? `1px solid ${C.border}` : "none" }}>
-              <p style={{ fontSize: "clamp(36px,4vw,52px)", fontWeight: 800, color: C.wine,
-                letterSpacing: "-0.05em", lineHeight: 1 }}>
+              <p style={{ fontSize: "clamp(40px,4.5vw,64px)", fontWeight: 900, color: C.wine,
+                letterSpacing: "-0.06em", lineHeight: 1, marginBottom: 6 }}>
                 <Count end={s.end} suffix={s.suffix} />
               </p>
-              <p style={{ fontSize: 13, color: C.muted, marginTop: 6 }}>{s.label}</p>
+              <p style={{ fontSize: 13, fontWeight: 600, color: C.ink, marginBottom: 3 }}>{s.label}</p>
+              <p style={{ fontSize: 11, color: C.muted }}>{s.sub}</p>
             </motion.div>
           ))}
         </S>
@@ -287,35 +284,80 @@ export default function LandingPage() {
       <section id="features" style={{ padding: "110px 64px", background: "#fff" }} className="pad">
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <S>
-            <motion.div variants={up} style={{ textAlign: "center", marginBottom: 64 }}>
+            <motion.div variants={up} style={{ marginBottom: 56 }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 13px",
                 borderRadius: 99, background: `${C.wine}0d`, border: `1px solid ${C.wine}18`, marginBottom: 18 }}>
                 <HugeiconsIcon icon={SparklesIcon} size={11} style={{ color: C.wine }} />
                 <span style={{ fontSize: 10, fontWeight: 700, color: C.wine,
                   letterSpacing: "0.12em", textTransform: "uppercase" }}>What you get</span>
               </div>
-              <h2 style={{ fontSize: "clamp(32px,4.5vw,56px)", fontWeight: 800,
-                letterSpacing: "-0.04em", lineHeight: 1.06, textWrap: "balance", maxWidth: 560, margin: "0 auto" }}>
-                Every tool to understand yourself deeply
-              </h2>
+              <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+                <h2 style={{ fontSize: "clamp(32px,4.5vw,56px)", fontWeight: 800,
+                  letterSpacing: "-0.04em", lineHeight: 1.06, textWrap: "balance", maxWidth: 480, margin: 0 }}>
+                  Every tool to understand yourself deeply
+                </h2>
+                <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 6,
+                  fontSize: 13, fontWeight: 600, color: C.wine, borderBottom: `1px solid ${C.wine}30`,
+                  paddingBottom: 2, flexShrink: 0 }}>
+                  Explore all features <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
+                </Link>
+              </div>
             </motion.div>
           </S>
           <S>
-            <div className="feat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
-              {FEATURES.map((f, idx) => (
-                <motion.div key={f.title} variants={up}
-                  whileHover={{ y: -4, boxShadow: "0 20px 50px rgba(0,0,0,0.07)" }}
-                  style={{ background: idx === 0 ? `${C.wine}08` : "#fff",
-                    borderRadius: 20, padding: "28px 24px",
-                    border: `1px solid ${idx === 0 ? C.wine + "18" : C.border}`,
-                    cursor: "default", transition: "all .2s" }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 12,
-                    background: `${C.wine}0d`, border: `1px solid ${C.wine}1a`,
-                    display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
-                    <HugeiconsIcon icon={f.icon} size={18} style={{ color: C.wine }} />
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gridTemplateRows: "auto auto", gap: 12 }}>
+              {/* Hero bento card */}
+              <motion.div variants={up}
+                whileHover={{ y: -4 }}
+                style={{ gridColumn: "span 2", borderRadius: 24,
+                  background: `linear-gradient(135deg, ${C.wine} 0%, #5c1124 100%)`,
+                  padding: "40px 36px", cursor: "default", position: "relative", overflow: "hidden",
+                  transition: "transform .2s" }}>
+                <div style={{ position: "absolute", top: "-40%", right: "-10%", width: 300, height: 300,
+                  background: `radial-gradient(ellipse, ${C.gold}22 0%, transparent 65%)`,
+                  pointerEvents: "none" }} />
+                <div style={{ width: 48, height: 48, borderRadius: 14, background: "rgba(255,255,255,0.1)",
+                  border: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center",
+                  justifyContent: "center", marginBottom: 22 }}>
+                  <HugeiconsIcon icon={AiBrain01Icon} size={22} style={{ color: "#fff" }} />
+                </div>
+                <h3 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 12,
+                  letterSpacing: "-0.02em" }}>AI Coach</h3>
+                <p style={{ fontSize: 14, color: "rgba(255,255,255,0.62)", lineHeight: 1.78, maxWidth: 400 }}>
+                  Real conversations with an AI that knows your complete intelligence profile. Honest, contextual, always available — like a therapist who never forgets a word.
+                </p>
+                <div style={{ display: "flex", gap: 8, marginTop: 28 }}>
+                  {["Contextual","Always on","Profile-aware"].map(t => (
+                    <span key={t} style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.5)",
+                      background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)",
+                      padding: "4px 10px", borderRadius: 99 }}>{t}</span>
+                  ))}
+                </div>
+              </motion.div>
+              {/* Small card 1 */}
+              <motion.div variants={up} whileHover={{ y: -4 }}
+                style={{ borderRadius: 24, padding: "28px 24px", background: C.blush,
+                  border: `1px solid ${C.border}`, cursor: "default", transition: "transform .2s" }}>
+                <div style={{ width: 40, height: 40, borderRadius: 12, background: `${C.wine}0d`,
+                  border: `1px solid ${C.wine}1a`, display: "flex", alignItems: "center",
+                  justifyContent: "center", marginBottom: 18 }}>
+                  <HugeiconsIcon icon={BookOpen01Icon} size={18} style={{ color: C.wine }} />
+                </div>
+                <h3 style={{ fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 9 }}>Smart Journal</h3>
+                <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.78 }}>Log real moments. The AI extracts emotional signals and feeds them into your evolving profile.</p>
+              </motion.div>
+              {/* Remaining 4 in a row */}
+              {FEATURES.slice(2).map((f) => (
+                <motion.div key={f.title} variants={up} whileHover={{ y: -3 }}
+                  style={{ borderRadius: 24, padding: "26px 22px", background: "#fff",
+                    border: `1px solid ${C.border}`, cursor: "default", transition: "transform .2s" }}>
+                  <div style={{ width: 38, height: 38, borderRadius: 11, background: `${C.wine}0a`,
+                    border: `1px solid ${C.wine}14`, display: "flex", alignItems: "center",
+                    justifyContent: "center", marginBottom: 16 }}>
+                    <HugeiconsIcon icon={f.icon} size={16} style={{ color: C.wine }} />
                   </div>
-                  <h3 style={{ fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 9 }}>{f.title}</h3>
-                  <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.78 }}>{f.desc}</p>
+                  <h3 style={{ fontSize: 14, fontWeight: 700, color: C.ink, marginBottom: 7 }}>{f.title}</h3>
+                  <p style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.75 }}>{f.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -341,55 +383,69 @@ export default function LandingPage() {
             </motion.div>
           </S>
           <S>
-            <div className="step-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)",
-              gap: 1, background: "rgba(255,255,255,0.06)", borderRadius: 24, overflow: "hidden" }}>
+            <div className="step-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12 }}>
               {[
-                { icon: UserCircleIcon, n: "01", title: "Create account",      desc: "Sign up with email or Google. Under a minute." },
-                { icon: Activity01Icon,  n: "02", title: "5-min assessment",    desc: "Answer focused questions about your patterns." },
-                { icon: Analytics01Icon, n: "03", title: "Get your Pull Score", desc: "Score and archetype generated instantly." },
-                { icon: TrendingUpIcon,  n: "04", title: "Keep growing",        desc: "Every session deepens your intelligence profile." },
+                { icon: UserCircleIcon, n: "01", title: "Create account",      desc: "Sign up with email or Google. Under a minute, no card required." },
+                { icon: Activity01Icon,  n: "02", title: "5-min assessment",    desc: "Answer focused questions about your patterns and tendencies." },
+                { icon: Analytics01Icon, n: "03", title: "Get your Pull Score", desc: "Your score, archetype, and full profile generated instantly." },
+                { icon: TrendingUpIcon,  n: "04", title: "Keep growing",        desc: "Every session deepens and refines your intelligence profile." },
               ].map((s, i) => (
                 <motion.div key={s.n} variants={up}
-                  style={{ padding: "40px 28px", background: C.ink, position: "relative" }}>
-                  <span style={{ fontSize: 10, color: C.gold, fontWeight: 700,
-                    letterSpacing: "0.18em", display: "block", marginBottom: 18 }}>{s.n}</span>
+                  style={{ padding: "36px 28px", background: "rgba(255,255,255,0.04)",
+                    borderRadius: 20, border: "1px solid rgba(255,255,255,0.07)", position: "relative" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: "50%",
+                      background: `linear-gradient(135deg, ${C.wine}, #9b2040)`,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 11, fontWeight: 900, color: "#fff", letterSpacing: "0.04em",
+                      flexShrink: 0, boxShadow: `0 0 20px ${C.wine}50` }}>
+                      {s.n}
+                    </div>
+                    {i < 3 && (
+                      <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(255,255,255,0.15), transparent)" }} />
+                    )}
+                  </div>
                   <div style={{ width: 38, height: 38, borderRadius: 11,
                     background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.09)",
-                    display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
-                    <HugeiconsIcon icon={s.icon} size={15} style={{ color: "rgba(255,255,255,0.5)" }} />
+                    display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+                    <HugeiconsIcon icon={s.icon} size={16} style={{ color: "rgba(255,255,255,0.55)" }} />
                   </div>
-                  <p style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 9 }}>{s.title}</p>
-                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.38)", lineHeight: 1.7 }}>{s.desc}</p>
-                  {i < 3 && <span style={{ position: "absolute", top: 44, right: -9,
-                    fontSize: 14, color: "rgba(255,255,255,0.15)", zIndex: 1 }}>→</span>}
+                  <p style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 8, letterSpacing: "-0.01em" }}>{s.title}</p>
+                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.72 }}>{s.desc}</p>
                 </motion.div>
               ))}
             </div>
           </S>
 
-          <S style={{ marginTop: 56 }}>
+          <S style={{ marginTop: 48 }}>
+            <motion.div variants={up} style={{ marginBottom: 24 }}>
+              <p style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.3)",
+                letterSpacing: "0.18em", textTransform: "uppercase" }}>What people are saying</p>
+            </motion.div>
             <div className="feat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
               {[
-                { q: "I've been to therapy for years. MyPullScore showed me patterns in 2 weeks that took me years to see.", name: "Amara J.", role: "Lagos, Nigeria" },
-                { q: "The Reality Check feature is wild. It told me exactly what I was doing before I could admit it.", name: "Marcus W.", role: "New York, USA" },
-                { q: "Talking to the AI coach feels like someone who knows my whole life history. Genuinely shocking.", name: "Sasha K.", role: "London, UK" },
+                { q: "I've been to therapy for years. MyPullScore showed me patterns in 2 weeks that took me years to see.", name: "Amara J.", role: "Lagos, Nigeria", color: "#9b3050" },
+                { q: "The Reality Check feature is wild. It told me exactly what I was doing before I could admit it.", name: "Marcus W.", role: "New York, USA", color: "#4a6fa5" },
+                { q: "Talking to the AI coach feels like someone who knows my whole life history. Genuinely shocking.", name: "Sasha K.", role: "London, UK", color: "#5a8a5a" },
               ].map(t => (
                 <motion.div key={t.name} variants={up}
-                  style={{ borderRadius: 20, border: "1px solid rgba(255,255,255,0.08)",
-                    padding: "28px 24px", background: "rgba(255,255,255,0.04)" }}>
-                  <div style={{ display: "flex", gap: 2, marginBottom: 16 }}>
-                    {[1,2,3,4,5].map(i => <span key={i} style={{ color: C.gold, fontSize: 12 }}>★</span>)}
+                  whileHover={{ y: -3 }}
+                  style={{ borderRadius: 20, border: "1px solid rgba(255,255,255,0.07)",
+                    padding: "28px 24px", background: "rgba(255,255,255,0.03)",
+                    transition: "transform .2s" }}>
+                  <div style={{ display: "flex", gap: 1, marginBottom: 20 }}>
+                    {[1,2,3,4,5].map(i => <span key={i} style={{ color: C.gold, fontSize: 11 }}>★</span>)}
                   </div>
-                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.58)", lineHeight: 1.78,
-                    marginBottom: 20, fontStyle: "italic" }}>&ldquo;{t.q}&rdquo;</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <div style={{ width: 30, height: 30, borderRadius: "50%",
-                      background: `linear-gradient(135deg, ${C.wine}, #c0404f)`,
+                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.82,
+                    marginBottom: 24 }}>&ldquo;{t.q}&rdquo;</p>
+                  <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
+                    <div style={{ width: 34, height: 34, borderRadius: "50%",
+                      background: t.color, border: "2px solid rgba(255,255,255,0.12)",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 11, fontWeight: 800, color: "#fff" }}>{t.name[0]}</div>
+                      fontSize: 12, fontWeight: 800, color: "#fff", flexShrink: 0 }}>{t.name[0]}</div>
                     <div>
-                      <p style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{t.name}</p>
-                      <p style={{ fontSize: 11, color: "rgba(255,255,255,0.28)" }}>{t.role}</p>
+                      <p style={{ fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 2 }}>{t.name}</p>
+                      <p style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{t.role}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -401,9 +457,9 @@ export default function LandingPage() {
 
       {/* ══ PRICING ══ */}
       <section id="pricing" style={{ padding: "110px 64px", background: "#fff" }} className="pad">
-        <div style={{ maxWidth: 820, margin: "0 auto" }}>
+        <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <S>
-            <motion.div variants={up} style={{ textAlign: "center", marginBottom: 56 }}>
+            <motion.div variants={up} style={{ textAlign: "center", marginBottom: 60 }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 13px",
                 borderRadius: 99, background: `${C.wine}0d`, border: `1px solid ${C.wine}18`, marginBottom: 18 }}>
                 <HugeiconsIcon icon={StarIcon} size={11} style={{ color: C.wine }} />
@@ -411,55 +467,83 @@ export default function LandingPage() {
                   letterSpacing: "0.12em", textTransform: "uppercase" }}>Pricing</span>
               </div>
               <h2 style={{ fontSize: "clamp(32px,4.5vw,56px)", fontWeight: 800,
-                letterSpacing: "-0.04em", lineHeight: 1.06 }}>Start free. Go deeper.</h2>
-              <p style={{ fontSize: 16, color: C.muted, marginTop: 14, lineHeight: 1.8 }}>
+                letterSpacing: "-0.04em", lineHeight: 1.06, marginBottom: 14 }}>Start free. Go deeper.</h2>
+              <p style={{ fontSize: 16, color: C.muted, lineHeight: 1.8 }}>
                 Free forever — premium for those who want the full picture.
               </p>
             </motion.div>
-            <div className="price-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <motion.div variants={up} style={{ borderRadius: 24, border: `1.5px solid ${C.border}`,
-                padding: "36px 32px" }}>
-                <p style={{ fontSize: 12, fontWeight: 700, color: C.muted, marginBottom: 18,
-                  letterSpacing: "0.08em", textTransform: "uppercase" }}>Free</p>
-                <p style={{ fontSize: 50, fontWeight: 800, color: C.ink,
-                  letterSpacing: "-0.05em", lineHeight: 1, marginBottom: 4 }}>$0</p>
-                <p style={{ fontSize: 13, color: C.muted, marginBottom: 28 }}>Forever free</p>
-                <Link href="/register" style={{ display: "flex", alignItems: "center",
-                  justifyContent: "center", padding: "12px 0", borderRadius: 99,
-                  border: `1.5px solid ${C.border}`, color: C.ink,
-                  fontSize: 14, fontWeight: 700, marginBottom: 28 }}>Get started</Link>
-                {["Pull Score + Archetype","5 Coach sessions/month","3 Reality checks/month","Smart Journal (10/mo)","Journey Map"].map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                    <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} style={{ color: "#ccc", flexShrink: 0 }} />
-                    <span style={{ fontSize: 13, color: "#777" }}>{f}</span>
+            <div className="price-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              {/* Free tier */}
+              <motion.div variants={up} style={{ borderRadius: 28, border: `1.5px solid ${C.border}`,
+                padding: "40px 36px", display: "flex", flexDirection: "column" }}>
+                <div style={{ marginBottom: 32 }}>
+                  <p style={{ fontSize: 11, fontWeight: 700, color: C.muted, marginBottom: 20,
+                    letterSpacing: "0.1em", textTransform: "uppercase" }}>Free</p>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 6 }}>
+                    <span style={{ fontSize: 58, fontWeight: 900, color: C.ink, letterSpacing: "-0.06em", lineHeight: 1 }}>$0</span>
                   </div>
-                ))}
+                  <p style={{ fontSize: 13, color: C.muted }}>Always free — no card required</p>
+                </div>
+                <Link href="/register" style={{ display: "flex", alignItems: "center",
+                  justifyContent: "center", padding: "13px 0", borderRadius: 99,
+                  border: `1.5px solid ${C.border}`, color: C.ink,
+                  fontSize: 14, fontWeight: 700, marginBottom: 32, transition: "border-color .18s" }}>
+                  Get started free
+                </Link>
+                <div style={{ flex: 1 }}>
+                  {["Pull Score + Archetype","5 Coach sessions / month","3 Reality checks / month","Smart Journal (10 / month)","Journey Map"].map(f => (
+                    <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 13 }}>
+                      <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} style={{ color: "#ddd", flexShrink: 0 }} />
+                      <span style={{ fontSize: 13, color: "#888" }}>{f}</span>
+                    </div>
+                  ))}
+                </div>
               </motion.div>
-              <motion.div variants={up} whileHover={{ scale: 1.012 }}
-                style={{ borderRadius: 24, background: C.ink, padding: "36px 32px",
-                  position: "relative", boxShadow: `0 20px 60px ${C.ink}22` }}>
-                <div style={{ position: "absolute", top: 18, right: 18, padding: "4px 11px",
+              {/* Premium tier */}
+              <motion.div variants={up} whileHover={{ y: -4, boxShadow: `0 32px 80px ${C.ink}28` }}
+                style={{ borderRadius: 28, background: C.ink, padding: "40px 36px",
+                  position: "relative", boxShadow: `0 20px 60px ${C.ink}1a`,
+                  display: "flex", flexDirection: "column", transition: "all .2s" }}>
+                <div style={{ position: "absolute", inset: 0, borderRadius: 28, overflow: "hidden", pointerEvents: "none" }}>
+                  <div style={{ position: "absolute", top: "-40%", right: "-20%", width: 280, height: 280,
+                    background: `radial-gradient(ellipse, ${C.wine}80 0%, transparent 65%)` }} />
+                </div>
+                <div style={{ position: "absolute", top: 20, right: 20, padding: "5px 12px",
                   borderRadius: 99, background: C.gold, color: C.ink,
-                  fontSize: 9, fontWeight: 900, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                  fontSize: 9, fontWeight: 900, letterSpacing: "0.1em", textTransform: "uppercase" }}>
                   Most popular
                 </div>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.35)", marginBottom: 18,
-                  letterSpacing: "0.08em", textTransform: "uppercase" }}>Premium</p>
-                <p style={{ fontSize: 50, fontWeight: 800, color: "#fff",
-                  letterSpacing: "-0.05em", lineHeight: 1, marginBottom: 4 }}>$12</p>
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", marginBottom: 28 }}>per month</p>
-                <Link href="/upgrade" style={{ display: "flex", alignItems: "center",
-                  justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 99,
-                  background: "#fff", color: C.ink, fontSize: 14, fontWeight: 700, marginBottom: 28 }}>
-                  Upgrade now <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
-                </Link>
-                {["Everything in Free","Unlimited Coach sessions","Unlimited Reality checks","Unlimited AI journal insights","Deep intelligence reports","Priority support"].map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                    <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} style={{ color: C.gold, flexShrink: 0 }} />
-                    <span style={{ fontSize: 13, color: f === "Everything in Free" ? "#fff" : "rgba(255,255,255,0.55)",
-                      fontWeight: f === "Everything in Free" ? 700 : 400 }}>{f}</span>
+                <div style={{ marginBottom: 32, position: "relative" }}>
+                  <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.3)", marginBottom: 20,
+                    letterSpacing: "0.1em", textTransform: "uppercase" }}>Premium</p>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 6 }}>
+                    <span style={{ fontSize: 58, fontWeight: 900, color: "#fff", letterSpacing: "-0.06em", lineHeight: 1 }}>$12</span>
+                    <span style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginLeft: 2 }}>/mo</span>
                   </div>
-                ))}
+                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.35)" }}>Cancel anytime, no commitment</p>
+                </div>
+                <Link href="/upgrade" style={{ display: "flex", alignItems: "center",
+                  justifyContent: "center", gap: 8, padding: "13px 0", borderRadius: 99,
+                  background: "#fff", color: C.ink, fontSize: 14, fontWeight: 800, marginBottom: 32,
+                  position: "relative" }}>
+                  Upgrade now <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
+                </Link>
+                <div style={{ flex: 1, position: "relative" }}>
+                  {[
+                    { label: "Everything in Free", bold: true },
+                    { label: "Unlimited Coach sessions" },
+                    { label: "Unlimited Reality checks" },
+                    { label: "Unlimited AI journal insights" },
+                    { label: "Deep intelligence reports" },
+                    { label: "Priority support" },
+                  ].map(f => (
+                    <div key={f.label} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 13 }}>
+                      <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} style={{ color: C.gold, flexShrink: 0 }} />
+                      <span style={{ fontSize: 13, color: f.bold ? "#fff" : "rgba(255,255,255,0.5)",
+                        fontWeight: f.bold ? 700 : 400 }}>{f.label}</span>
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             </div>
           </S>
@@ -566,12 +650,9 @@ export default function LandingPage() {
           <div className="foot-inner" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr",
             gap: 32, paddingBottom: 48, borderBottom: `1px solid ${C.border}` }}>
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                <div style={{ width: 30, height: 30, borderRadius: 7, overflow: "hidden",
-                  position: "relative", background: C.wine }}>
-                  <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover" }} />
-                </div>
-                <span style={{ fontSize: 14, fontWeight: 700, color: C.ink }}>MyPullScore</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 0, marginBottom: 12 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.jpg" alt="MyPullScore" style={{ height: 32, width: "auto", borderRadius: 7, display: "block" }} />
               </div>
               <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.78, maxWidth: 190 }}>
                 Your personal intelligence, finally under your control.
