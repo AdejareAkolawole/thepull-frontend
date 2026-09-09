@@ -54,6 +54,29 @@ const up = {
   v: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] as const } },
 };
 
+/* ── text scramble ── */
+const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#@!%&";
+function Scramble({ text, delay = 0, style = {} }: { text: string; delay?: number; style?: React.CSSProperties }) {
+  const [display, setDisplay] = useState(() => text.split("").map(c => c === " " ? " " : CHARS[Math.floor(Math.random()*CHARS.length)]).join(""));
+  useEffect(() => {
+    const t0 = setTimeout(() => {
+      let iter = 0;
+      const total = text.length * 4;
+      const iv = setInterval(() => {
+        setDisplay(text.split("").map((ch, i) => {
+          if (ch === " " || ch === "\n") return ch;
+          if (i <= Math.floor(iter / 4)) return ch;
+          return CHARS[Math.floor(Math.random() * CHARS.length)];
+        }).join(""));
+        iter++;
+        if (iter >= total) clearInterval(iv);
+      }, 28);
+    }, delay * 1000);
+    return () => clearTimeout(t0);
+  }, [text, delay]);
+  return <span style={style}>{display}</span>;
+}
+
 function Count({ end, suffix = "" }: { end: number; suffix?: string }) {
   const [v, setV] = useState(0);
   const ref = useRef(null);
@@ -72,6 +95,12 @@ function Count({ end, suffix = "" }: { end: number; suffix?: string }) {
 
 export default function LandingPage() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
+  const [cursor, setCursor] = useState({ x: 0.5, y: 0.5 });
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => setCursor({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
 
   return (
     <div style={{ fontFamily: "'Aeonik', system-ui, sans-serif", background: "#fff", color: C.ink, overflowX: "hidden" }}>
@@ -87,6 +116,31 @@ export default function LandingPage() {
           33% {border-radius:46% 54% 62% 38%/52% 62% 38% 48%}
           66% {border-radius:54% 46% 38% 62%/44% 38% 62% 56%}
           100%{border-radius:62% 38% 46% 54%/60% 44% 56% 40%}
+        }
+        @keyframes drift1 {
+          0%,100%{transform:translate(0,0) scale(1)}
+          30%{transform:translate(80px,-60px) scale(1.12)}
+          70%{transform:translate(-50px,70px) scale(0.92)}
+        }
+        @keyframes drift2 {
+          0%,100%{transform:translate(0,0) scale(1)}
+          40%{transform:translate(-70px,50px) scale(1.08)}
+          80%{transform:translate(90px,-40px) scale(0.95)}
+        }
+        @keyframes drift3 {
+          0%,100%{transform:translate(0,0) scale(1)}
+          50%{transform:translate(60px,80px) scale(1.1)}
+        }
+        @keyframes gradShift {
+          0%,100%{background-position:0% 50%}
+          50%{background-position:100% 50%}
+        }
+        @keyframes wordIn {
+          from{opacity:0;transform:translateY(18px) skewY(2deg)}
+          to{opacity:1;transform:translateY(0) skewY(0deg)}
+        }
+        @keyframes lineGrow {
+          from{width:0} to{width:100%}
         }
         *, *::before, *::after { box-sizing: border-box; }
         body { margin: 0; }
@@ -128,43 +182,81 @@ export default function LandingPage() {
         </div>
       </motion.nav>
 
-      {/* ══ HERO — centered, brain below headline ══ */}
-      <section style={{ paddingTop: 58, background: "#fff", overflow: "hidden" }}>
-        {/* text block */}
-        <div style={{ maxWidth: 760, margin: "0 auto", padding: "80px 32px 0", textAlign: "center" }}>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.08 }}
-            style={{ fontSize: "clamp(52px,7.5vw,104px)", fontWeight: 800, lineHeight: 0.93,
-              letterSpacing: "-0.055em", marginBottom: 28, textWrap: "balance" }}>
-            Know yourself<br />
-            <span style={{ background: `linear-gradient(118deg, ${C.wine} 0%, #c72b4a 40%, ${C.gold} 100%)`,
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              at a deeper level.
-            </span>
-          </motion.h1>
+      {/* ══ HERO ══ */}
+      <section style={{ paddingTop: 58, background: "#fff", overflow: "hidden", position: "relative", minHeight: "92vh", display: "flex", alignItems: "center" }}>
 
-          <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.18 }}
-            style={{ fontSize: 18, color: "#666", lineHeight: 1.78, maxWidth: 520, margin: "0 auto 36px" }}>
-            Your emotional patterns, personality, and behavioural tendencies — mapped into a living
-            intelligence profile that evolves with you.
-          </motion.p>
+        {/* drifting gradient orbs */}
+        <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
+          <div style={{ position: "absolute", top: "-10%", left: "-8%", width: 640, height: 640,
+            background: `radial-gradient(ellipse, ${C.wine}18 0%, transparent 68%)`,
+            filter: "blur(2px)", animation: "drift1 18s ease-in-out infinite, morph 14s ease-in-out infinite" }} />
+          <div style={{ position: "absolute", top: "20%", right: "-12%", width: 520, height: 520,
+            background: `radial-gradient(ellipse, ${C.gold}16 0%, transparent 65%)`,
+            filter: "blur(2px)", animation: "drift2 22s ease-in-out infinite, morph 18s ease-in-out 3s infinite" }} />
+          <div style={{ position: "absolute", bottom: "-15%", left: "28%", width: 480, height: 480,
+            background: `radial-gradient(ellipse, ${C.wineMid}10 0%, transparent 65%)`,
+            filter: "blur(1px)", animation: "drift3 26s ease-in-out infinite, morph 20s ease-in-out 6s infinite" }} />
+          {/* cursor glow */}
+          <div style={{
+            position: "fixed", width: 480, height: 480, borderRadius: "50%",
+            background: `radial-gradient(ellipse, ${C.wine}0d 0%, transparent 60%)`,
+            left: `${cursor.x * 100}vw`, top: `${cursor.y * 100}vh`,
+            transform: "translate(-50%,-50%)",
+            transition: "left 1.4s cubic-bezier(0.22,1,0.36,1), top 1.4s cubic-bezier(0.22,1,0.36,1)",
+            pointerEvents: "none", zIndex: 1,
+          }} />
+        </div>
 
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.28 }}
-            style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 20 }}>
-            <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "14px 30px", borderRadius: 99, background: C.ink, color: "#fff",
-              fontSize: 15, fontWeight: 700, boxShadow: `0 12px 40px ${C.ink}22` }}>
+        <div style={{ maxWidth: 800, margin: "0 auto", padding: "60px 32px 80px", textAlign: "center", position: "relative", zIndex: 2 }}>
+
+          {/* scramble headline */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
+            <h1 style={{ fontSize: "clamp(56px,8vw,112px)", fontWeight: 800, lineHeight: 0.92,
+              letterSpacing: "-0.055em", marginBottom: 32, fontFamily: "'Aeonik', system-ui, sans-serif" }}>
+              <Scramble text="Know yourself" delay={0.1} style={{ display: "block", color: C.ink }} />
+              <Scramble text="at a deeper level." delay={0.5}
+                style={{ display: "block",
+                  background: `linear-gradient(118deg, ${C.wine}, #c72b4a, ${C.gold}, ${C.wine})`,
+                  backgroundSize: "300% 300%", WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent", animation: "gradShift 4s ease infinite" }} />
+            </h1>
+          </motion.div>
+
+          {/* word-by-word subtitle */}
+          <p style={{ fontSize: 18, color: "#666", lineHeight: 1.78, maxWidth: 500, margin: "0 auto 44px" }}>
+            {"Your emotional patterns, personality, and behavioural tendencies — mapped into a living intelligence profile.".split(" ").map((word, i) => (
+              <span key={i} style={{ display: "inline-block", marginRight: "0.28em",
+                opacity: 0, animation: "wordIn 0.5s ease forwards",
+                animationDelay: `${0.9 + i * 0.05}s` }}>{word}</span>
+            ))}
+          </p>
+
+          {/* CTAs */}
+          <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.5 }}
+            style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 52 }}>
+            <Link href="/register"
+              style={{ display: "inline-flex", alignItems: "center", gap: 8,
+                padding: "15px 32px", borderRadius: 99, background: C.ink, color: "#fff",
+                fontSize: 15, fontWeight: 700, boxShadow: `0 16px 48px ${C.ink}28`,
+                transition: "transform .18s, box-shadow .18s" }}
+              onMouseEnter={e=>{ const el = e.currentTarget as HTMLElement; el.style.transform="scale(1.05)"; el.style.boxShadow=`0 22px 60px ${C.ink}40`; }}
+              onMouseLeave={e=>{ const el = e.currentTarget as HTMLElement; el.style.transform=""; el.style.boxShadow=`0 16px 48px ${C.ink}28`; }}>
               Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
             </Link>
-            <a href="#howitworks" style={{ display: "inline-flex", alignItems: "center",
-              padding: "14px 26px", borderRadius: 99, border: `1.5px solid ${C.border}`,
-              color: "#666", fontSize: 15, fontWeight: 600 }}>
+            <a href="#howitworks"
+              style={{ display: "inline-flex", alignItems: "center", padding: "15px 28px",
+                borderRadius: 99, border: `1.5px solid ${C.border}`, color: "#666",
+                fontSize: 15, fontWeight: 600, transition: "border-color .18s, color .18s" }}
+              onMouseEnter={e=>{ const el = e.currentTarget as HTMLElement; el.style.borderColor=C.wine+"50"; el.style.color=C.wine; }}
+              onMouseLeave={e=>{ const el = e.currentTarget as HTMLElement; el.style.borderColor=""; el.style.color="#666"; }}>
               See how it works
             </a>
           </motion.div>
 
-          {/* social proof row */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
-            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, paddingBottom: 48 }}>
+          {/* social proof */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
             <div style={{ display: "flex" }}>
               {["#9b3050","#7b2a44","#b83c60","#6d2039","#c9536e"].map((bg,i)=>(
                 <div key={i} style={{ width: 26, height: 26, borderRadius: "50%", border: "2px solid #fff",
@@ -179,7 +271,6 @@ export default function LandingPage() {
             <span style={{ fontSize: 13, color: C.muted }}>Trusted by <strong style={{ color: C.ink }}>12,000+</strong> worldwide</span>
           </motion.div>
         </div>
-
       </section>
 
       {/* ══ STATS ══ */}
