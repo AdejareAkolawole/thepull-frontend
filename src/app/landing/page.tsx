@@ -180,47 +180,6 @@ export default function LandingPage() {
           </motion.div>
         </div>
 
-        {/* animated metric cards as hero visual */}
-        <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] as const }}
-          style={{ maxWidth: 820, margin: "0 auto", padding: "0 32px 80px",
-            display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
-          {[
-            { label: "Pull Score", val: "82", sub: "Top 8% globally", color: C.wine, pct: 82 },
-            { label: "Emotional IQ", val: "74%", sub: "Growing +3 this week", color: C.wineMid, pct: 74 },
-            { label: "Self-Awareness", val: "84%", sub: "Your strongest trait", color: C.gold, pct: 84 },
-          ].map((m, i) => {
-            const r = 32, circ = 2 * Math.PI * r;
-            return (
-              <motion.div key={m.label}
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 + i * 0.12, duration: 0.6 }}
-                whileHover={{ y: -4, boxShadow: "0 20px 48px rgba(0,0,0,0.09)" }}
-                style={{ background: "#fff", borderRadius: 20, padding: "28px 22px",
-                  border: `1px solid ${C.border}`, boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
-                  transition: "all .22s" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-                  <div>
-                    <p style={{ fontSize: 10, fontWeight: 700, color: C.muted, letterSpacing: "0.1em",
-                      textTransform: "uppercase", marginBottom: 6 }}>{m.label}</p>
-                    <p style={{ fontSize: 36, fontWeight: 800, letterSpacing: "-0.04em",
-                      color: m.color, lineHeight: 1 }}>{m.val}</p>
-                  </div>
-                  <svg width={72} height={72} viewBox="0 0 72 72" style={{ flexShrink: 0 }}>
-                    <circle cx="36" cy="36" r={r} fill="none" stroke={`${m.color}10`} strokeWidth="4" />
-                    <motion.circle cx="36" cy="36" r={r} fill="none" stroke={m.color} strokeWidth="4"
-                      strokeLinecap="round" strokeDasharray={circ}
-                      initial={{ strokeDashoffset: circ }}
-                      animate={{ strokeDashoffset: circ * (1 - m.pct / 100) }}
-                      transition={{ duration: 1.6, delay: 0.6 + i * 0.15, ease: "easeOut" }}
-                      style={{ rotate: -90, transformOrigin: "36px 36px" }} />
-                  </svg>
-                </div>
-                <p style={{ fontSize: 12, color: C.muted, lineHeight: 1.5 }}>{m.sub}</p>
-              </motion.div>
-            );
-          })}
-        </motion.div>
       </section>
 
       {/* ══ STATS ══ */}
