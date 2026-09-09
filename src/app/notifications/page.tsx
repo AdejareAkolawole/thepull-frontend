@@ -5,7 +5,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Notification01Icon, AiSparklesIcon, FireIcon, CheckmarkCircle01Icon,
   InformationCircleIcon, AiBrain01Icon, Target01Icon, Analytics01Icon,
-  Delete02Icon, Tick01Icon, Filter01Icon,
+  Delete02Icon, Tick01Icon,
 } from "@hugeicons/core-free-icons";
 
 const f = (d = 0) => ({
