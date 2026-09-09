@@ -108,32 +108,32 @@ export default function LandingPage() {
         a { text-decoration: none; }
 
         @media (max-width: 860px) {
-          .feat-grid  { grid-template-columns: 1fr !important; }
+          .feat-grid  { grid-template-columns: 1fr 1fr !important; }
           .step-grid  { grid-template-columns: 1fr 1fr !important; }
           .price-grid { grid-template-columns: 1fr !important; }
           .faq-inner  { grid-template-columns: 1fr !important; gap: 40px !important; }
-          .foot-inner { grid-template-columns: 1fr 1fr !important; }
-          section, .pad { padding-left: 20px !important; padding-right: 20px !important; }
+          section, .pad { padding-left: 24px !important; padding-right: 24px !important; }
           .nav-mid { display: none !important; }
-          /* bento hero card full width on mobile */
-          .bento-hero { grid-column: span 1 !important; }
-          /* pricing cards */
-          .price-grid > * { width: 100% !important; }
+          /* footer: logo + tagline full width, then 2×2 link cols */
+          .foot-inner { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
+          .foot-brand { grid-column: span 2 !important; }
         }
 
         @media (max-width: 560px) {
+          .feat-grid  { grid-template-columns: 1fr !important; }
           .step-grid  { grid-template-columns: 1fr !important; }
-          .foot-inner { grid-template-columns: 1fr 1fr !important; }
-          /* nav */
-          nav { padding: 0 16px !important; }
-          /* hero */
+          section, .pad {
+            padding-left: 20px !important; padding-right: 20px !important;
+            padding-top: 72px !important; padding-bottom: 72px !important;
+          }
+          nav { padding-left: 16px !important; padding-right: 16px !important; }
           .hero-ctas { flex-direction: column !important; align-items: stretch !important; }
-          .hero-ctas a, .hero-ctas button { text-align: center !important; justify-content: center !important; }
-          .social-proof { flex-wrap: wrap !important; gap: 8px !important; }
-          /* sections */
-          section, .pad { padding-top: 72px !important; padding-bottom: 72px !important; }
-          /* features header row */
-          .feat-header { flex-direction: column !important; align-items: flex-start !important; }
+          .hero-ctas a { text-align: center !important; justify-content: center !important; }
+          .social-proof { flex-wrap: wrap !important; gap: 8px !important; justify-content: center !important; }
+          /* footer single col on very small */
+          .foot-inner { grid-template-columns: 1fr 1fr !important; }
+          .foot-brand { grid-column: span 2 !important; }
+          .foot-bottom { flex-direction: column !important; gap: 10px !important; align-items: flex-start !important; }
         }
       `}</style>
 
@@ -295,66 +295,52 @@ export default function LandingPage() {
                 <span style={{ fontSize: 10, fontWeight: 700, color: C.wine,
                   letterSpacing: "0.12em", textTransform: "uppercase" }}>What you get</span>
               </div>
-              <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
-                <h2 style={{ fontSize: "clamp(32px,4.5vw,56px)", fontWeight: 800,
-                  letterSpacing: "-0.04em", lineHeight: 1.06, textWrap: "balance", maxWidth: 480, margin: 0 }}>
-                  Every tool to understand yourself deeply
-                </h2>
-                <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 6,
-                  fontSize: 13, fontWeight: 600, color: C.wine, borderBottom: `1px solid ${C.wine}30`,
-                  paddingBottom: 2, flexShrink: 0 }}>
-                  Explore all features <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
-                </Link>
-              </div>
+              <h2 style={{ fontSize: "clamp(28px,4.5vw,52px)", fontWeight: 800,
+                letterSpacing: "-0.04em", lineHeight: 1.06, textWrap: "balance", maxWidth: 480, margin: 0 }}>
+                Every tool to understand yourself deeply
+              </h2>
             </motion.div>
           </S>
           <S>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gridTemplateRows: "auto auto", gap: 12 }}>
-              {/* Hero bento card */}
-              <motion.div variants={up}
-                whileHover={{ y: -4 }}
-                className="bento-hero"
-                style={{ gridColumn: "span 2", borderRadius: 24,
-                  background: `linear-gradient(135deg, ${C.wine} 0%, #5c1124 100%)`,
-                  padding: "40px 36px", cursor: "default", position: "relative", overflow: "hidden",
-                  transition: "transform .2s" }}>
-                <div style={{ position: "absolute", top: "-40%", right: "-10%", width: 300, height: 300,
-                  background: `radial-gradient(ellipse, ${C.gold}22 0%, transparent 65%)`,
-                  pointerEvents: "none" }} />
-                <div style={{ width: 48, height: 48, borderRadius: 14, background: "rgba(255,255,255,0.1)",
-                  border: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center",
-                  justifyContent: "center", marginBottom: 22 }}>
-                  <HugeiconsIcon icon={AiBrain01Icon} size={22} style={{ color: "#fff" }} />
+            {/* Hero AI Coach card — full width */}
+            <motion.div variants={up} whileHover={{ y: -3 }}
+              style={{ borderRadius: 24, marginBottom: 12,
+                background: `linear-gradient(135deg, ${C.wine} 0%, #5c1124 100%)`,
+                padding: "40px 36px", cursor: "default", position: "relative", overflow: "hidden",
+                transition: "transform .2s" }}>
+              <div style={{ position: "absolute", top: "-40%", right: "-5%", width: 320, height: 320,
+                background: `radial-gradient(ellipse, ${C.gold}20 0%, transparent 65%)`, pointerEvents: "none" }} />
+              <div style={{ position: "relative", display: "flex", gap: 40, flexWrap: "wrap", alignItems: "flex-start" }}>
+                <div style={{ flex: "1 1 240px" }}>
+                  <div style={{ width: 48, height: 48, borderRadius: 14, background: "rgba(255,255,255,0.1)",
+                    border: "1px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center",
+                    justifyContent: "center", marginBottom: 20 }}>
+                    <HugeiconsIcon icon={AiBrain01Icon} size={22} style={{ color: "#fff" }} />
+                  </div>
+                  <h3 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 12, letterSpacing: "-0.02em" }}>AI Coach</h3>
+                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.8, margin: 0 }}>
+                    Real conversations with an AI that knows your complete intelligence profile. Honest, contextual, always available.
+                  </p>
                 </div>
-                <h3 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 12,
-                  letterSpacing: "-0.02em" }}>AI Coach</h3>
-                <p style={{ fontSize: 14, color: "rgba(255,255,255,0.62)", lineHeight: 1.78, maxWidth: 400 }}>
-                  Real conversations with an AI that knows your complete intelligence profile. Honest, contextual, always available — like a therapist who never forgets a word.
-                </p>
-                <div style={{ display: "flex", gap: 8, marginTop: 28 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10, flex: "0 0 auto", alignSelf: "flex-end" }}>
                   {["Contextual","Always on","Profile-aware"].map(t => (
                     <span key={t} style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.5)",
                       background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)",
-                      padding: "4px 10px", borderRadius: 99 }}>{t}</span>
+                      padding: "6px 14px", borderRadius: 99, whiteSpace: "nowrap" }}>{t}</span>
                   ))}
                 </div>
-              </motion.div>
-              {/* Small card 1 */}
-              <motion.div variants={up} whileHover={{ y: -4 }}
-                style={{ borderRadius: 24, padding: "28px 24px", background: C.blush,
-                  border: `1px solid ${C.border}`, cursor: "default", transition: "transform .2s" }}>
-                <div style={{ width: 40, height: 40, borderRadius: 12, background: `${C.wine}0d`,
-                  border: `1px solid ${C.wine}1a`, display: "flex", alignItems: "center",
-                  justifyContent: "center", marginBottom: 18 }}>
-                  <HugeiconsIcon icon={BookOpen01Icon} size={18} style={{ color: C.wine }} />
-                </div>
-                <h3 style={{ fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 9 }}>Smart Journal</h3>
-                <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.78 }}>Log real moments. The AI extracts emotional signals and feeds them into your evolving profile.</p>
-              </motion.div>
-              {/* Remaining 4 in a row */}
-              {FEATURES.slice(2).map((f) => (
+              </div>
+            </motion.div>
+
+            {/* 2-col grid for remaining 5 features */}
+            <div className="feat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 12 }}>
+              {[
+                { icon: BookOpen01Icon, title: "Smart Journal", desc: "Log real moments. The AI extracts emotional signals and feeds them into your evolving profile.", bg: C.blush },
+                ...FEATURES.slice(2),
+              ].map((f) => (
                 <motion.div key={f.title} variants={up} whileHover={{ y: -3 }}
-                  style={{ borderRadius: 24, padding: "26px 22px", background: "#fff",
+                  style={{ borderRadius: 20, padding: "26px 22px",
+                    background: "bg" in f && f.bg ? f.bg : "#fff",
                     border: `1px solid ${C.border}`, cursor: "default", transition: "transform .2s" }}>
                   <div style={{ width: 38, height: 38, borderRadius: 11, background: `${C.wine}0a`,
                     border: `1px solid ${C.wine}14`, display: "flex", alignItems: "center",
@@ -362,7 +348,7 @@ export default function LandingPage() {
                     <HugeiconsIcon icon={f.icon} size={16} style={{ color: C.wine }} />
                   </div>
                   <h3 style={{ fontSize: 14, fontWeight: 700, color: C.ink, marginBottom: 7 }}>{f.title}</h3>
-                  <p style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.75 }}>{f.desc}</p>
+                  <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.75 }}>{f.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -650,47 +636,53 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ background: C.blush, borderTop: `1px solid ${C.border}`, padding: "60px 64px 0" }} className="pad">
+      <footer style={{ background: C.blush, borderTop: `1px solid ${C.border}`, padding: "56px 64px 0" }} className="pad">
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div className="foot-inner" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr",
+          <div className="foot-inner" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr",
             gap: 32, paddingBottom: 48, borderBottom: `1px solid ${C.border}` }}>
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 0, marginBottom: 12 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo.jpg" alt="MyPullScore" style={{ height: 32, width: "auto", borderRadius: 7, display: "block" }} />
-              </div>
-              <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.78, maxWidth: 190 }}>
+            {/* Brand col */}
+            <div className="foot-brand">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.jpg" alt="MyPullScore" style={{ height: 32, width: "auto", borderRadius: 7, display: "block", marginBottom: 14 }} />
+              <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.8, maxWidth: 200, marginBottom: 20 }}>
                 Your personal intelligence, finally under your control.
               </p>
+              <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 6,
+                fontSize: 13, fontWeight: 700, color: "#fff", background: C.ink,
+                padding: "10px 18px", borderRadius: 99 }}>
+                Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
+              </Link>
             </div>
+            {/* Link cols */}
             {[
               { title: "Product",   links: ["Pull Score","AI Coach","Reality Check","Journal","Pricing"] },
-              { title: "Company",   links: ["About","Careers","Blog","Contact"] },
-              { title: "Resources", links: ["Docs","Changelog","Support","Privacy"] },
-              { title: "Social",    links: ["X.com","LinkedIn","Instagram"] },
+              { title: "Company",   links: ["About","Blog","Contact"] },
+              { title: "Legal",     links: ["Privacy","Terms","Security"] },
             ].map(col => (
               <div key={col.title}>
                 <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.14em",
                   textTransform: "uppercase", color: "#bbb", marginBottom: 16 }}>{col.title}</p>
                 {col.links.map(l => (
-                  <p key={l} style={{ fontSize: 13, color: C.muted, marginBottom: 10, cursor: "pointer", transition: "color .18s" }}
+                  <p key={l} style={{ fontSize: 13, color: C.muted, marginBottom: 11, cursor: "pointer", transition: "color .18s" }}
                     onMouseEnter={e=>(e.currentTarget.style.color=C.ink)}
                     onMouseLeave={e=>(e.currentTarget.style.color=C.muted)}>{l}</p>
                 ))}
               </div>
             ))}
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 0" }}>
-            <p style={{ fontSize: 12, color: "#ccc" }}>© MyPullScore 2026 — Built for humans</p>
+          <div className="foot-bottom" style={{ display: "flex", justifyContent: "space-between",
+            alignItems: "center", padding: "20px 0" }}>
+            <p style={{ fontSize: 12, color: "#ccc" }}>© MyPullScore 2026</p>
             <div style={{ display: "flex", gap: 20 }}>
               {["Terms","Privacy"].map(l => (
-                <Link key={l} href={`/${l.toLowerCase()}`} style={{ fontSize: 12, color: "#ccc" }}>{l}</Link>
+                <Link key={l} href={`/${l.toLowerCase()}`} style={{ fontSize: 12, color: "#bbb" }}>{l}</Link>
               ))}
             </div>
           </div>
         </div>
-        <p style={{ fontSize: "clamp(48px,10vw,120px)", fontWeight: 900, color: "rgba(0,0,0,0.04)",
-          textAlign: "center", letterSpacing: "-0.05em", lineHeight: 0.8, userSelect: "none" }}>
+        <p style={{ fontSize: "clamp(36px,8vw,100px)", fontWeight: 900, color: "rgba(0,0,0,0.04)",
+          textAlign: "center", letterSpacing: "-0.05em", lineHeight: 0.9, userSelect: "none",
+          overflow: "hidden", marginTop: 0 }}>
           MyPullScore
         </p>
       </footer>
