@@ -4,7 +4,7 @@ import TopNav from "./TopNav";
 import Sidebar from "./Sidebar";
 import IntelligenceBar from "./IntelligenceBar";
 
-const AUTH_PATHS = ["/login", "/register", "/onboarding", "/pull-reveal"];
+const AUTH_PATHS = ["/login", "/register", "/onboarding", "/pull-reveal", "/landing", "/"];
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
