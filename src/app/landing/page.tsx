@@ -1,416 +1,493 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useInView, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import {
+  motion, useInView, AnimatePresence,
+  useScroll, useTransform, useSpring, useMotionValue,
+} from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   AiBrain01Icon, BookOpen01Icon, Analytics01Icon, SparklesIcon,
   ShieldCheckIcon, ArrowRight01Icon, CheckmarkCircle02Icon,
   ChartLineData03Icon, UserCircleIcon, FlashIcon, Target01Icon,
   EyeIcon, Activity01Icon, StarIcon, CompassIcon, LockIcon,
-  Globe02Icon, TrendingUpIcon, ArrowDown01Icon, Message02Icon,
-  ShieldKeyIcon, HeartCheckIcon, MymindIcon,
+  Globe02Icon, TrendingUpIcon, Message02Icon, HeartCheckIcon,
 } from "@hugeicons/core-free-icons";
 
-const W = "#3d0e1a", G = "#c9a84c", CR = "#f5f0e8";
+/* ── design tokens ── */
+const C = {
+  bg: "#ffffff",
+  ink: "#0c0308",
+  wine: "#3d0e1a",
+  wineMid: "#6b1a2e",
+  gold: "#c9a84c",
+  blush: "#f8f1f4",
+  muted: "#888",
+  border: "rgba(12,3,8,0.08)",
+};
 
-/* ─── Neural Brain Canvas ─── */
-function BrainCanvas() {
-  const ref = useRef<HTMLCanvasElement>(null);
-  useEffect(() => {
-    const canvas = ref.current; if (!canvas) return;
-    const ctx = canvas.getContext("2d")!;
-    let raf: number;
-    const resize = () => { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; };
-    resize();
-    window.addEventListener("resize", resize);
+/* ── NODE / CONNECTION DATA for SVG brain ── */
+const NODES = [
+  { x: 170, y: 170 }, { x: 230, y: 105 }, { x: 305, y: 80 },
+  { x: 380, y: 105 }, { x: 430, y: 170 }, { x: 405, y: 250 },
+  { x: 330, y: 295 }, { x: 245, y: 280 }, { x: 175, y: 230 },
+  { x: 285, y: 185 }, { x: 345, y: 155 }, { x: 310, y: 230 },
+  { x: 225, y: 155 }, { x: 265, y: 225 }, { x: 355, y: 210 },
+];
+const CONNECTIONS: [number, number][] = [
+  [0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,0],
+  [9,10],[9,11],[9,12],[9,13],[10,14],[11,13],[12,13],
+  [0,9],[1,12],[2,10],[3,14],[4,5],[5,11],[6,11],[7,13],[8,12],
+  [9,14],[13,14],
+];
 
-    const NODE_COUNT = 60;
-    interface Node { x: number; y: number; vx: number; vy: number; r: number; pulse: number; speed: number; }
-    const nodes: Node[] = Array.from({ length: NODE_COUNT }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      r: Math.random() * 3 + 1.5,
-      pulse: Math.random() * Math.PI * 2,
-      speed: Math.random() * 0.02 + 0.01,
-    }));
+/* ── morphing blob keyframes (CSS) ── */
+const BLOB_KF = `
+@keyframes morph {
+  0%   { border-radius: 62% 38% 46% 54% / 60% 44% 56% 40%; }
+  25%  { border-radius: 38% 62% 58% 42% / 48% 62% 38% 52%; }
+  50%  { border-radius: 46% 54% 34% 66% / 56% 36% 64% 44%; }
+  75%  { border-radius: 54% 46% 62% 38% / 42% 56% 44% 58%; }
+  100% { border-radius: 62% 38% 46% 54% / 60% 44% 56% 40%; }
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes ping { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2.2); opacity: 0; } }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes drawIn {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes signalMove {
+  0%   { offset-distance: 0%; opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+`;
 
-    interface Signal { from: number; to: number; progress: number; speed: number; color: string; }
-    const signals: Signal[] = [];
-    const COLORS = [W, G, "#a78bfa", "#60a5fa"];
+/* ── SVG Neural illustration ── */
+function NeuralSVG({ animate: doAnim }: { animate: boolean }) {
+  const SIGNAL_PATHS = [
+    CONNECTIONS[0], CONNECTIONS[5], CONNECTIONS[11], CONNECTIONS[17],
+    CONNECTIONS[2], CONNECTIONS[8],
+  ];
+  const pathRef = (i: number) => {
+    const [a, b] = CONNECTIONS[i];
+    const na = NODES[a], nb = NODES[b];
+    const mx = (na.x + nb.x) / 2 + (Math.sin(i * 1.7) * 22);
+    const my = (na.y + nb.y) / 2 + (Math.cos(i * 1.3) * 22);
+    return `M ${na.x} ${na.y} Q ${mx} ${my} ${nb.x} ${nb.y}`;
+  };
+  const signalPath = (c: [number, number]) => {
+    const [a, b] = c;
+    const na = NODES[a], nb = NODES[b];
+    return `M ${na.x} ${na.y} L ${nb.x} ${nb.y}`;
+  };
 
-    let frame = 0;
-    const draw = () => {
-      frame++;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+  return (
+    <svg viewBox="30 50 540 290" style={{ width: "100%", height: "100%", overflow: "visible" }}>
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2.5" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        <filter id="softglow">
+          <feGaussianBlur stdDeviation="6" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        {SIGNAL_PATHS.map((_, i) => (
+          <path key={i} id={`sp${i}`} d={signalPath(SIGNAL_PATHS[i])} />
+        ))}
+      </defs>
 
-      // spawn signal
-      if (frame % 18 === 0 && signals.length < 20) {
-        const fi = Math.floor(Math.random() * NODE_COUNT);
-        const ti = Math.floor(Math.random() * NODE_COUNT);
-        if (fi !== ti) signals.push({ from: fi, to: ti, progress: 0, speed: 0.008 + Math.random() * 0.012, color: COLORS[Math.floor(Math.random() * COLORS.length)] });
-      }
+      {/* connection lines */}
+      {CONNECTIONS.map((c, i) => {
+        const [a, b] = c;
+        const na = NODES[a], nb = NODES[b];
+        const mx = (na.x + nb.x) / 2 + Math.sin(i * 1.7) * 22;
+        const my = (na.y + nb.y) / 2 + Math.cos(i * 1.3) * 22;
+        const len = Math.hypot(nb.x - na.x, nb.y - na.y) * 1.2;
+        return (
+          <path
+            key={i}
+            d={`M ${na.x} ${na.y} Q ${mx} ${my} ${nb.x} ${nb.y}`}
+            fill="none"
+            stroke={i % 4 === 0 ? C.gold : i % 3 === 0 ? C.wineMid : "rgba(61,14,26,0.18)"}
+            strokeWidth={i % 3 === 0 ? 1.5 : 0.8}
+            strokeDasharray={len}
+            strokeDashoffset={len}
+            style={doAnim ? {
+              animation: `drawIn 1.2s cubic-bezier(.4,0,.2,1) ${i * 0.06}s forwards`,
+            } : { strokeDashoffset: 0 }}
+          />
+        );
+      })}
 
-      // update nodes
-      nodes.forEach(n => {
-        n.x += n.vx; n.y += n.vy; n.pulse += n.speed;
-        if (n.x < 0 || n.x > canvas.width)  n.vx *= -1;
-        if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
-      });
+      {/* traveling signals */}
+      {doAnim && SIGNAL_PATHS.map((_, i) => (
+        <circle
+          key={i}
+          r={3.5}
+          fill={i % 2 === 0 ? C.gold : C.wineMid}
+          filter="url(#glow)"
+          style={{
+            offsetPath: `path("${signalPath(SIGNAL_PATHS[i])}")`,
+            animation: `signalMove ${1.8 + i * 0.4}s ease-in-out ${0.8 + i * 0.25}s infinite`,
+          }}
+        />
+      ))}
 
-      // draw connections
-      nodes.forEach((a, i) => {
-        nodes.slice(i + 1).forEach(b => {
-          const dist = Math.hypot(a.x - b.x, a.y - b.y);
-          if (dist < 110) {
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(61,14,26,${0.07 * (1 - dist / 110)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        });
-      });
+      {/* nodes */}
+      {NODES.map((n, i) => (
+        <g key={i}>
+          <circle cx={n.x} cy={n.y} r={i < 9 ? 7 : 5} fill="#fff" stroke={i < 9 ? C.wine : C.wineMid} strokeWidth={i < 9 ? 2 : 1.5}
+            filter="url(#glow)"
+            style={doAnim ? { animation: `float ${3 + (i % 4) * 0.6}s ease-in-out ${i * 0.12}s infinite` } : undefined} />
+          {i < 9 && <circle cx={n.x} cy={n.y} r={3} fill={C.wine} style={doAnim ? { animation: `ping 2.4s ease-out ${i * 0.3}s infinite` } : undefined} />}
+        </g>
+      ))}
 
-      // draw signals
-      for (let i = signals.length - 1; i >= 0; i--) {
-        const s = signals[i];
-        const a = nodes[s.from], b = nodes[s.to];
-        const px = a.x + (b.x - a.x) * s.progress;
-        const py = a.y + (b.y - a.y) * s.progress;
-        ctx.beginPath();
-        ctx.arc(px, py, 3, 0, Math.PI * 2);
-        ctx.fillStyle = s.color;
-        ctx.fill();
-        // glow
-        ctx.beginPath();
-        ctx.arc(px, py, 7, 0, Math.PI * 2);
-        ctx.fillStyle = s.color + "33";
-        ctx.fill();
-        s.progress += s.speed;
-        if (s.progress >= 1) signals.splice(i, 1);
-      }
+      {/* hemisphere labels */}
+      <text x="182" y="64" fontSize="9" fill="rgba(61,14,26,0.35)" fontFamily="DM Sans,sans-serif" fontWeight="600" letterSpacing="0.15em" textAnchor="middle" textDecoration="none">LEFT HEMISPHERE</text>
+      <text x="378" y="64" fontSize="9" fill="rgba(61,14,26,0.35)" fontFamily="DM Sans,sans-serif" fontWeight="600" letterSpacing="0.15em" textAnchor="middle">RIGHT HEMISPHERE</text>
+      <line x1="290" y1="68" x2="290" y2="310" stroke="rgba(61,14,26,0.06)" strokeWidth="1" strokeDasharray="4 4" />
 
-      // draw nodes
-      nodes.forEach(n => {
-        const pulse = Math.sin(n.pulse) * 0.5 + 1;
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r * pulse, 0, Math.PI * 2);
-        ctx.fillStyle = W + "cc";
-        ctx.fill();
-        // outer ring
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r * pulse + 2, 0, Math.PI * 2);
-        ctx.strokeStyle = W + "22";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-      });
-
-      raf = requestAnimationFrame(draw);
-    };
-    draw();
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
-  }, []);
-  return <canvas ref={ref} style={{ width: "100%", height: "100%", display: "block" }} />;
+      {/* dimension labels */}
+      {[["Emotional IQ", 80, 330],["Self-Awareness", 290, 338],["Communication", 490, 295]].map(([l, x, y]) => (
+        <text key={l} x={x} y={y} fontSize="8.5" fill="rgba(12,3,8,0.3)" fontFamily="DM Sans,sans-serif" textAnchor="middle" fontWeight="500">{l}</text>
+      ))}
+    </svg>
+  );
 }
 
-/* ─── Live Counter ─── */
-function LiveCounter({ end, suffix = "", label }: { end: number; suffix?: string; label: string }) {
-  const [val, setVal] = useState(0);
+/* ── circular progress ring ── */
+function Ring({ pct, label, val, color }: { pct: number; label: string; val: string; color: string }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
-  useEffect(() => {
-    if (!inView) return;
-    let start = 0; const step = end / 60;
-    const iv = setInterval(() => { start += step; if (start >= end) { setVal(end); clearInterval(iv); } else setVal(Math.floor(start)); }, 16);
-    return () => clearInterval(iv);
-  }, [inView, end]);
+  const r = 38, circ = 2 * Math.PI * r;
   return (
-    <div ref={ref} style={{ textAlign: "center" }}>
-      <p style={{ fontSize: "clamp(36px,5vw,56px)", fontWeight: 900, color: "#1a0a10", letterSpacing: "-0.04em", lineHeight: 1 }}>{val.toLocaleString()}{suffix}</p>
-      <p style={{ fontSize: 13, color: "#888", marginTop: 6 }}>{label}</p>
+    <div ref={ref} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+      <svg width={96} height={96} viewBox="0 0 96 96">
+        <circle cx="48" cy="48" r={r} fill="none" stroke="rgba(61,14,26,0.07)" strokeWidth="6" />
+        <motion.circle
+          cx="48" cy="48" r={r} fill="none" stroke={color} strokeWidth="6"
+          strokeLinecap="round" strokeDasharray={circ}
+          initial={{ strokeDashoffset: circ }}
+          animate={inView ? { strokeDashoffset: circ * (1 - pct / 100) } : {}}
+          transition={{ duration: 1.4, ease: "easeOut", delay: 0.2 }}
+          style={{ rotate: -90, transformOrigin: "48px 48px" }}
+        />
+        <text x="48" y="44" textAnchor="middle" fontSize="16" fontWeight="800" fill={C.ink} fontFamily="Syne,sans-serif">{val}</text>
+        <text x="48" y="58" textAnchor="middle" fontSize="8" fill={C.muted} fontFamily="DM Sans,sans-serif">{label}</text>
+      </svg>
     </div>
   );
 }
 
-/* ─── Floating Profile Card ─── */
-function FloatingCard({ style, name, score, archetype, delta }: { style?: React.CSSProperties; name: string; score: number; archetype: string; delta: string }) {
-  return (
-    <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4 + Math.random() * 2, ease: "easeInOut" }}
-      style={{ position: "absolute", background: "#fff", borderRadius: 16, padding: "14px 18px", boxShadow: "0 20px 60px rgba(0,0,0,0.12), 0 1px 0 rgba(0,0,0,0.04)", width: 200, ...style }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-        <div style={{ width: 32, height: 32, borderRadius: "50%", background: `linear-gradient(135deg, ${W}, #c0404f)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#fff" }}>{name[0]}</div>
-        <div>
-          <p style={{ fontSize: 12, fontWeight: 700, color: "#1a0a10" }}>{name}</p>
-          <p style={{ fontSize: 10, color: "#aaa" }}>{archetype}</p>
-        </div>
-      </div>
-      <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-        <span style={{ fontSize: 28, fontWeight: 900, color: "#1a0a10", letterSpacing: "-0.04em" }}>{score}</span>
-        <span style={{ fontSize: 11, color: "#34d399", fontWeight: 700 }}>{delta}</span>
-      </div>
-      <div style={{ marginTop: 8, height: 3, borderRadius: 99, background: "#f0f0f0" }}>
-        <div style={{ height: "100%", width: `${score}%`, borderRadius: 99, background: `linear-gradient(90deg, ${W}, #c0404f)` }} />
-      </div>
-    </motion.div>
-  );
-}
-
-/* ─── Section wrapper ─── */
+/* ── section wrapper ── */
 function S({ children, style = {} }: { children: React.ReactNode; style?: React.CSSProperties }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
-    <motion.div ref={ref} initial="h" animate={inView ? "s" : "h"} variants={{ h: {}, s: { transition: { staggerChildren: 0.09 } } }} style={style}>
+    <motion.div ref={ref}
+      initial="h" animate={inView ? "v" : "h"}
+      variants={{ h: {}, v: { transition: { staggerChildren: 0.08 } } }}
+      style={style}>
       {children}
     </motion.div>
   );
 }
-const up = { h: { opacity: 0, y: 28 }, s: { opacity: 1, y: 0, transition: { duration: 0.65, ease: "easeOut" as const } } };
+const up = {
+  h: { opacity: 0, y: 24 },
+  v: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] as const } },
+};
+
+/* ── live counter ── */
+function Count({ end, suffix = "" }: { end: number; suffix?: string }) {
+  const [v, setV] = useState(0);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+  useEffect(() => {
+    if (!inView) return;
+    let cur = 0;
+    const step = end / 70;
+    const t = setInterval(() => {
+      cur += step;
+      if (cur >= end) { setV(end); clearInterval(t); } else setV(Math.floor(cur));
+    }, 14);
+    return () => clearInterval(t);
+  }, [inView, end]);
+  return <span ref={ref}>{v.toLocaleString()}{suffix}</span>;
+}
+
+/* ── FAQ ── */
+const FAQS = [
+  { q: "What does MyPullScore actually do?", a: "It maps every pattern, tendency, and blind spot in your personality into a living intelligence profile — updated every time you share a moment with it." },
+  { q: "What is the Pull Score?", a: "A composite intelligence rating built from emotional depth, communication style, self-awareness, and relationship patterns. It evolves as you use the app." },
+  { q: "How is this different from a personality test?", a: "Tests give a one-time snapshot. MyPullScore is a living model — it deepens from daily entries, coach conversations, and real moments you choose to share." },
+  { q: "Is my data private and secure?", a: "Yes. Your data is encrypted end-to-end, never sold, and only used to build your personal intelligence profile. You can delete everything at any time." },
+  { q: "Can I start for free?", a: "Yes. The free plan gives you your Pull Score, primary archetype, and 5 monthly coach sessions — no credit card required." },
+];
 
 const FEATURES = [
-  { icon: AiBrain01Icon,     title: "AI Coach",          desc: "Deep, personalised conversations with an AI that knows your full intelligence profile.",     color: "#c0404f" },
-  { icon: BookOpen01Icon,    title: "Smart Journal",     desc: "Log real moments. AI extracts emotional signals from every entry automatically.",             color: "#60a5fa" },
-  { icon: Analytics01Icon,   title: "Pull Score",        desc: "A composite intelligence score tracking emotional depth, communication, and self-awareness.", color: G },
-  { icon: Target01Icon,      title: "Reality Check",     desc: "Pause on any situation. Get an honest AI perspective that cuts through your narratives.",     color: "#a78bfa" },
-  { icon: CompassIcon,       title: "Journey Map",       desc: "Milestones, breakthroughs, and archetype evolution plotted on your personal timeline.",       color: "#34d399" },
-  { icon: EyeIcon,           title: "Auto Detection",    desc: "Surfaces recurring behavioural signals before they become invisible habits.",                  color: "#f97316" },
+  { icon: AiBrain01Icon,      c: "#c0404f", title: "AI Coach",      desc: "Real conversations with an AI that knows your complete intelligence profile. Honest, contextual, always available." },
+  { icon: BookOpen01Icon,     c: "#60a5fa", title: "Smart Journal",  desc: "Log real moments. The AI extracts emotional signals from every entry and feeds them into your evolving profile." },
+  { icon: Analytics01Icon,    c: C.gold,    title: "Pull Score",     desc: "A composite intelligence score tracking emotional depth, communication style, and self-awareness." },
+  { icon: Target01Icon,       c: "#a78bfa", title: "Reality Check",  desc: "Pause on any situation. Get an honest AI perspective that cuts through your narratives." },
+  { icon: CompassIcon,        c: "#34d399", title: "Journey Map",    desc: "Your milestones, breakthroughs, and archetype evolution mapped on a personal timeline." },
+  { icon: EyeIcon,            c: "#f97316", title: "Auto-Detect",    desc: "Surfaces recurring behavioural signals from your journal before they become invisible habits." },
 ];
 
-const FAQS = [
-  { q: "What does MyPullScore actually do?", a: "It maps every pattern, tendency, and blind spot in your personality into a living intelligence profile — updated every time you share a moment." },
-  { q: "What is the Pull Score?", a: "A composite intelligence rating built from emotional depth, communication style, self-awareness, and relationship patterns. It evolves as you use the app." },
-  { q: "How is this different from a personality test?", a: "Personality tests give a one-time snapshot. MyPullScore is a living model — it evolves from your daily entries, coach conversations, and real moments." },
-  { q: "Is my data private?", a: "Yes. Your data is encrypted end-to-end, never sold, and only ever used to build your personal intelligence profile." },
-  { q: "Can I start for free?", a: "Yes. The free plan gives you your Pull Score, primary archetype, and 5 monthly coach sessions with no credit card required." },
-  { q: "How quickly will I see results?", a: "Your first Pull Score and archetype are generated immediately after your onboarding assessment — usually within 5 minutes." },
-];
-
+/* ════════════════════════ PAGE ════════════════════════ */
 export default function LandingPage() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
-  const [liveCount] = useState(2847 + Math.floor(Math.random() * 200));
+  const [svgVisible, setSvgVisible] = useState(false);
+  const [liveCount] = useState(() => 2847 + Math.floor(Math.random() * 300));
+  const svgRef = useRef(null);
+  const svgInView = useInView(svgRef, { once: true, margin: "-80px" });
+
+  useEffect(() => { if (svgInView) setSvgVisible(true); }, [svgInView]);
+
   const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 600], [0, -80]);
-  const heroOp = useTransform(scrollY, [0, 400], [1, 0.3]);
+  const heroY = useTransform(scrollY, [0, 500], [0, -60]);
 
   return (
-    <div style={{ fontFamily: "system-ui, -apple-system, sans-serif", background: "#fff", color: "#1a0a10", overflowX: "hidden" }}>
+    <div style={{ fontFamily: "DM Sans, system-ui, sans-serif", background: C.bg, color: C.ink, overflowX: "hidden" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        ${BLOB_KF}
+        *, *::before, *::after { box-sizing: border-box; }
+        body { margin: 0; }
+        h1,h2,h3 { font-family: 'Syne', sans-serif; }
+        a { text-decoration: none; }
+        @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #ffffff; } }
+        @media (max-width: 900px) {
+          .hero-grid { grid-template-columns: 1fr !important; }
+          .brain-col { display: none !important; }
+          .feat-grid { grid-template-columns: 1fr 1fr !important; }
+          .step-grid { grid-template-columns: 1fr 1fr !important; }
+          .price-grid { grid-template-columns: 1fr !important; }
+          .faq-grid { grid-template-columns: 1fr !important; }
+          .foot-grid { grid-template-columns: 1fr 1fr !important; }
+          section, .section-pad { padding-left: 24px !important; padding-right: 24px !important; }
+        }
+      `}</style>
 
-      {/* ══ NAV ══ */}
-      <motion.nav initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
-        style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 64, display: "flex", alignItems: "center", padding: "0 48px", background: "rgba(255,255,255,0.85)", backdropFilter: "blur(24px)", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", marginRight: "auto" }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, overflow: "hidden", position: "relative" }}>
+      {/* ── LIVE DOT ── */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4 }}
+        style={{ position: "fixed", bottom: 24, left: 24, zIndex: 300, background: "#fff", borderRadius: 99, padding: "9px 16px", boxShadow: "0 4px 24px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06)", display: "flex", alignItems: "center", gap: 9, border: `1px solid ${C.border}` }}>
+        <span style={{ position: "relative", width: 8, height: 8, flexShrink: 0 }}>
+          <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#34d399", animation: "ping 1.8s ease-out infinite" }} />
+          <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#34d399" }} />
+        </span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: C.ink }}>{liveCount.toLocaleString()} people active now</span>
+      </motion.div>
+
+      {/* ── NAV ── */}
+      <motion.nav initial={{ y: -16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
+        style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 60, display: "flex", alignItems: "center", padding: "0 48px", background: "rgba(255,255,255,0.88)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${C.border}` }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 9, marginRight: "auto" }}>
+          <div style={{ width: 30, height: 30, borderRadius: 7, overflow: "hidden", position: "relative" }}>
             <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover" }} />
           </div>
-          <span style={{ fontSize: 15, fontWeight: 800, color: "#1a0a10", letterSpacing: "-0.02em" }}>MyPullScore</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: C.ink, letterSpacing: "-0.02em", fontFamily: "Syne, sans-serif" }}>MyPullScore</span>
         </Link>
-        <div style={{ display: "flex", gap: 32, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+        <div style={{ display: "flex", gap: 28, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
           {[["Features", "#features"], ["How it works", "#howitworks"], ["Pricing", "#pricing"], ["FAQ", "#faq"]].map(([l, h]) => (
-            <a key={l} href={h} style={{ fontSize: 13, color: "#777", textDecoration: "none", fontWeight: 500 }}
-              onMouseEnter={e => (e.currentTarget.style.color = "#1a0a10")} onMouseLeave={e => (e.currentTarget.style.color = "#777")}>{l}</a>
+            <a key={l} href={h} style={{ fontSize: 13, color: C.muted, fontWeight: 500, transition: "color .15s" }}
+              onMouseEnter={e => (e.currentTarget.style.color = C.ink)} onMouseLeave={e => (e.currentTarget.style.color = C.muted)}>{l}</a>
           ))}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <Link href="/login" style={{ fontSize: 13, fontWeight: 600, color: "#888", textDecoration: "none", padding: "8px 16px" }}>Sign in</Link>
-          <Link href="/register" style={{ fontSize: 13, fontWeight: 700, color: "#fff", background: "#1a0a10", padding: "9px 20px", borderRadius: 99, textDecoration: "none" }}>Get started free</Link>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Link href="/login" style={{ fontSize: 13, fontWeight: 500, color: C.muted, padding: "7px 14px" }}>Sign in</Link>
+          <Link href="/register" style={{ fontSize: 13, fontWeight: 700, color: "#fff", background: C.ink, padding: "8px 18px", borderRadius: 99 }}>Get started</Link>
         </div>
       </motion.nav>
 
-      {/* ══ LIVE BANNER ══ */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
-        style={{ position: "fixed", bottom: 28, left: 28, zIndex: 100, background: "#fff", borderRadius: 99, padding: "10px 18px", boxShadow: "0 8px 32px rgba(0,0,0,0.12), 0 1px 0 rgba(0,0,0,0.05)", display: "flex", alignItems: "center", gap: 10 }}>
-        <motion.div animate={{ scale: [1, 1.4, 1] }} transition={{ repeat: Infinity, duration: 2 }}
-          style={{ width: 8, height: 8, borderRadius: "50%", background: "#34d399", flexShrink: 0 }} />
-        <span style={{ fontSize: 12, fontWeight: 600, color: "#1a0a10" }}>{liveCount.toLocaleString()} people active right now</span>
-      </motion.div>
-
       {/* ══ HERO ══ */}
-      <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden", paddingTop: 64 }}>
-        {/* brain canvas full bg */}
-        <div style={{ position: "absolute", inset: 0, opacity: 0.55 }}>
-          <BrainCanvas />
-        </div>
-        {/* subtle gradient overlay */}
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.85) 60%, #fff 100%)", pointerEvents: "none" }} />
+      <section style={{ minHeight: "100vh", paddingTop: 60, display: "grid", position: "relative", overflow: "hidden" }}>
+        {/* morphing blob bg */}
+        <div style={{ position: "absolute", top: "5%", right: "-8%", width: 560, height: 560, background: `radial-gradient(ellipse, ${C.wine}18 0%, ${C.wine}06 50%, transparent 70%)`, animation: "morph 14s ease-in-out infinite", pointerEvents: "none", zIndex: 0 }} />
+        <div style={{ position: "absolute", bottom: "10%", left: "-5%", width: 400, height: 400, background: `radial-gradient(ellipse, ${C.gold}14 0%, transparent 70%)`, animation: "morph 18s ease-in-out 2s infinite", pointerEvents: "none", zIndex: 0 }} />
 
-        <motion.div style={{ y: heroY, opacity: heroOp, position: "relative", width: "100%", padding: "0 48px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px 6px 8px", borderRadius: 99, background: "rgba(61,14,26,0.06)", border: "1px solid rgba(61,14,26,0.1)", marginBottom: 32 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 4, background: "rgba(61,14,26,0.1)", padding: "3px 10px", borderRadius: 99 }}>
-                <HugeiconsIcon icon={SparklesIcon} size={11} style={{ color: W }} />
-                <span style={{ fontSize: 10, fontWeight: 800, color: W, letterSpacing: "0.1em", textTransform: "uppercase" }}>New</span>
+        <motion.div style={{ y: heroY, position: "relative", zIndex: 1, display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center", gap: 40, maxWidth: 1200, margin: "0 auto", padding: "80px 64px 60px", width: "100%" }} className="hero-grid">
+          {/* left */}
+          <motion.div initial="h" animate="v" variants={{ h: {}, v: { transition: { staggerChildren: 0.1 } } }}>
+            <motion.div variants={up}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 13px 5px 7px", borderRadius: 99, background: `${C.wine}0d`, border: `1px solid ${C.wine}22`, marginBottom: 28 }}>
+                <span style={{ padding: "2px 9px", borderRadius: 99, background: `${C.wine}18`, fontSize: 9, fontWeight: 700, color: C.wine, letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "Syne,sans-serif" }}>Intelligence OS</span>
+                <span style={{ fontSize: 12, color: C.muted }}>Relationship patterns now live</span>
               </div>
-              <span style={{ fontSize: 12, color: "#666" }}>Relationship intelligence now in beta</span>
-              <HugeiconsIcon icon={ArrowRight01Icon} size={12} style={{ color: "#aaa" }} />
-            </div>
-          </motion.div>
+            </motion.div>
 
-          <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
-            style={{ fontSize: "clamp(52px, 8vw, 100px)", fontWeight: 900, lineHeight: 0.95, letterSpacing: "-0.05em", maxWidth: 900, marginBottom: 28 }}>
-            <span style={{ color: "#1a0a10" }}>Know yourself</span><br />
-            <span style={{ background: `linear-gradient(135deg, ${W} 0%, #c0404f 40%, ${G} 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>at a deeper level.</span>
-          </motion.h1>
+            <motion.h1 variants={up} style={{ fontSize: "clamp(52px,5.5vw,80px)", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.045em", marginBottom: 24, textWrap: "balance" }}>
+              Know yourself<br />
+              <span style={{ background: `linear-gradient(125deg, ${C.wine} 0%, #b52340 45%, ${C.gold} 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>at a deeper level.</span>
+            </motion.h1>
 
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}
-            style={{ fontSize: 19, color: "#666", lineHeight: 1.75, maxWidth: 540, marginBottom: 44 }}>
-            Your emotional patterns, personality, and behavioural tendencies — mapped into a living intelligence profile that evolves every time you share a moment.
-          </motion.p>
+            <motion.p variants={up} style={{ fontSize: 17, color: "#666", lineHeight: 1.82, maxWidth: 460, marginBottom: 40 }}>
+              Your emotional patterns, personality, and behavioural tendencies — mapped into a living intelligence profile that evolves every time you share a moment.
+            </motion.p>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
-            style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginBottom: 56 }}>
-            <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "15px 30px", borderRadius: 99, background: "#1a0a10", color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 8px 24px rgba(26,10,16,0.25)" }}>
-              Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
-            </Link>
-            <a href="#howitworks" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "15px 30px", borderRadius: 99, border: "1.5px solid rgba(0,0,0,0.12)", color: "#444", fontSize: 15, fontWeight: 600, textDecoration: "none" }}>
-              See how it works
-            </a>
-          </motion.div>
+            <motion.div variants={up} style={{ display: "flex", gap: 11, flexWrap: "wrap", marginBottom: 44 }}>
+              <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "13px 26px", borderRadius: 99, background: C.ink, color: "#fff", fontSize: 14, fontWeight: 700, boxShadow: `0 8px 28px ${C.ink}30` }}>
+                Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
+              </Link>
+              <a href="#howitworks" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "13px 24px", borderRadius: 99, border: `1.5px solid ${C.border}`, color: "#555", fontSize: 14, fontWeight: 600 }}>
+                See how it works
+              </a>
+            </motion.div>
 
-          {/* Social proof */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
-            style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 80 }}>
-            <div style={{ display: "flex" }}>
-              {["A", "B", "C", "D", "E"].map((l, i) => (
-                <div key={l} style={{ width: 28, height: 28, borderRadius: "50%", border: "2px solid #fff", background: `hsl(${i * 40 + 340},60%,45%)`, marginLeft: i ? -8 : 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: "#fff", zIndex: 5 - i }}>{l}</div>
-              ))}
-            </div>
-            <div>
-              <div style={{ display: "flex", gap: 1 }}>
-                {[1, 2, 3, 4, 5].map(i => <span key={i} style={{ color: G, fontSize: 12 }}>★</span>)}
+            {/* social proof */}
+            <motion.div variants={up} style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div style={{ display: "flex" }}>
+                {["#9b3050","#7b2a44","#b83c60","#6d2039","#c9536e"].map((bg, i) => (
+                  <div key={i} style={{ width: 28, height: 28, borderRadius: "50%", border: "2px solid #fff", background: bg, marginLeft: i ? -8 : 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 800, color: "#fff", zIndex: 5 - i, position: "relative" }}>
+                    {["A","K","S","M","L"][i]}
+                  </div>
+                ))}
               </div>
-              <p style={{ fontSize: 12, color: "#888", marginTop: 2 }}>Trusted by 12,000+ people worldwide</p>
-            </div>
+              <div>
+                <div style={{ display: "flex", gap: 2 }}>{[1,2,3,4,5].map(i => <span key={i} style={{ color: C.gold, fontSize: 11 }}>★</span>)}</div>
+                <p style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>Trusted by <strong style={{ color: C.ink }}>12,000+</strong> people worldwide</p>
+              </div>
+            </motion.div>
           </motion.div>
+
+          {/* right — SVG brain */}
+          <div className="brain-col" ref={svgRef} style={{ position: "relative", height: 420 }}>
+            {/* outer glow ring */}
+            <motion.div initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+              style={{ position: "absolute", inset: 0, borderRadius: "50%", background: `radial-gradient(ellipse at center, ${C.wine}12 0%, transparent 70%)` }} />
+            <NeuralSVG animate={svgVisible} />
+
+            {/* floating stat cards */}
+            {[
+              { top: "4%", left: "-5%", label: "Pull Score", val: "82", sub: "+6 this month", subColor: "#34d399", delay: 0.6 },
+              { bottom: "4%", right: "-5%", label: "Archetype", val: "Quiet Strategist", sub: "84% confidence", subColor: C.muted, delay: 0.9 },
+            ].map((c, i) => (
+              <motion.div key={i} initial={{ opacity: 0, scale: 0.88 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: c.delay }}
+                style={{ position: "absolute", ...(c.top ? { top: c.top } : { bottom: c.bottom }), ...(c.left ? { left: c.left } : { right: c.right }), background: "#fff", borderRadius: 16, padding: "14px 18px", boxShadow: "0 12px 40px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.05)", border: `1px solid ${C.border}`, minWidth: 150, animation: `float ${3.5 + i}s ease-in-out ${i * 0.5}s infinite` }}>
+                <p style={{ fontSize: 9, color: C.muted, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 4 }}>{c.label}</p>
+                <p style={{ fontSize: i === 0 ? 30 : 14, fontWeight: 800, color: C.ink, letterSpacing: "-0.03em", fontFamily: "Syne,sans-serif", lineHeight: 1.1 }}>{c.val}</p>
+                <p style={{ fontSize: 11, color: c.subColor, fontWeight: 600, marginTop: 4 }}>{c.sub}</p>
+              </motion.div>
+            ))}
+
+            {/* insight bubble */}
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
+              style={{ position: "absolute", top: "42%", right: "-8%", background: C.wine, borderRadius: 14, padding: "12px 16px", maxWidth: 160, animation: "float 5s ease-in-out 1s infinite", boxShadow: `0 12px 32px ${C.wine}40` }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 6 }}>
+                <HugeiconsIcon icon={FlashIcon} size={11} style={{ color: C.gold }} />
+                <span style={{ fontSize: 9, color: C.gold, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>Insight</span>
+              </div>
+              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.85)", lineHeight: 1.55, fontWeight: 400 }}>Trust your analytical edge — it's what sets you apart.</p>
+            </motion.div>
+          </div>
         </motion.div>
-
-        {/* floating profile cards */}
-        <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-          <FloatingCard name="Amara J." score={82} archetype="The Strategist" delta="+6" style={{ top: "20%", left: "6%", opacity: 0.9 }} />
-          <FloatingCard name="Kwame B." score={74} archetype="The Empath" delta="+3" style={{ top: "55%", left: "4%", opacity: 0.8, animationDelay: "1s" }} />
-          <FloatingCard name="Sasha M." score={91} archetype="The Visionary" delta="+12" style={{ top: "18%", right: "6%", opacity: 0.9 }} />
-          <FloatingCard name="Leo T." score={68} archetype="The Explorer" delta="+4" style={{ top: "58%", right: "4%", opacity: 0.8 }} />
-        </div>
       </section>
 
       {/* ══ STATS ══ */}
-      <section style={{ padding: "80px 48px", background: "#fafafa", borderTop: "1px solid rgba(0,0,0,0.05)", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
-        <div style={{ maxWidth: 960, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0 }}>
+      <section style={{ background: C.blush, borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}`, padding: "56px 64px" }} className="section-pad">
+        <S style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
           {[
             { end: 12000, suffix: "+", label: "Active users" },
             { end: 98, suffix: "%", label: "Profile accuracy" },
             { end: 50, suffix: "+", label: "Intelligence dimensions" },
             { end: 5, suffix: " min", label: "To your first score" },
           ].map((s, i) => (
-            <div key={s.label} style={{ padding: "0 24px", borderRight: i < 3 ? "1px solid rgba(0,0,0,0.07)" : "none" }}>
-              <LiveCounter end={s.end} suffix={s.suffix} label={s.label} />
-            </div>
+            <motion.div key={s.label} variants={up} style={{ textAlign: "center", padding: "0 20px", borderRight: i < 3 ? `1px solid ${C.border}` : "none" }}>
+              <p style={{ fontSize: "clamp(36px,4vw,52px)", fontWeight: 800, color: C.ink, letterSpacing: "-0.04em", lineHeight: 1, fontFamily: "Syne,sans-serif" }}>
+                <Count end={s.end} suffix={s.suffix} />
+              </p>
+              <p style={{ fontSize: 13, color: C.muted, marginTop: 6 }}>{s.label}</p>
+            </motion.div>
           ))}
-        </div>
+        </S>
       </section>
 
-      {/* ══ BRAIN SECTION — "Your mind, mapped" ══ */}
-      <section style={{ padding: "120px 48px", background: "#fff" }}>
-        <div style={{ maxWidth: 1080, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
-          {/* left: animated brain viz */}
+      {/* ══ MIND MAPPED ══ */}
+      <section style={{ padding: "120px 64px", background: C.bg }} className="section-pad">
+        <div style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }} className="hero-grid">
           <S>
-            <motion.div variants={up} style={{ position: "relative", height: 480, borderRadius: 28, overflow: "hidden", background: "#fafafa", border: "1px solid rgba(0,0,0,0.06)", boxShadow: "0 32px 80px rgba(0,0,0,0.07)" }}>
-              <BrainCanvas />
-              {/* overlay cards */}
-              <motion.div animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 3.5 }}
-                style={{ position: "absolute", top: 20, left: 20, background: "#fff", borderRadius: 14, padding: "12px 16px", boxShadow: "0 8px 24px rgba(0,0,0,0.1)" }}>
-                <p style={{ fontSize: 10, color: "#aaa", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4 }}>Pull Score</p>
-                <p style={{ fontSize: 32, fontWeight: 900, color: "#1a0a10", letterSpacing: "-0.04em" }}>82</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                  <HugeiconsIcon icon={TrendingUpIcon} size={11} style={{ color: "#34d399" }} />
-                  <span style={{ fontSize: 11, color: "#34d399", fontWeight: 700 }}>+6 this month</span>
-                </div>
-              </motion.div>
-
-              <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 4, delay: 0.8 }}
-                style={{ position: "absolute", bottom: 20, right: 20, background: "#fff", borderRadius: 14, padding: "12px 16px", boxShadow: "0 8px 24px rgba(0,0,0,0.1)", maxWidth: 170 }}>
-                <p style={{ fontSize: 10, color: "#aaa", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4 }}>Archetype</p>
-                <p style={{ fontSize: 14, fontWeight: 800, color: "#1a0a10", marginBottom: 4 }}>The Quiet Strategist</p>
-                <div style={{ height: 3, borderRadius: 99, background: "#f0f0f0" }}>
-                  <motion.div initial={{ width: 0 }} animate={{ width: "84%" }} transition={{ duration: 1.5, delay: 1 }} style={{ height: "100%", borderRadius: 99, background: `linear-gradient(90deg, ${W}, #c0404f)` }} />
-                </div>
-                <p style={{ fontSize: 10, color: "#aaa", marginTop: 4 }}>84% confidence</p>
-              </motion.div>
-
-              <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 5, delay: 1.5 }}
-                style={{ position: "absolute", top: "50%", right: 20, transform: "translateY(-50%)", background: "#fff", borderRadius: 14, padding: "10px 14px", boxShadow: "0 8px 24px rgba(0,0,0,0.1)", maxWidth: 150 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-                  <HugeiconsIcon icon={FlashIcon} size={12} style={{ color: G }} />
-                  <span style={{ fontSize: 10, color: "#aaa", fontWeight: 700 }}>Insight</span>
-                </div>
-                <p style={{ fontSize: 11, color: "#1a0a10", lineHeight: 1.5, fontWeight: 500 }}>Trust your analytical nature — it's your edge.</p>
-              </motion.div>
+            <motion.div variants={up} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 13px", borderRadius: 99, background: `${C.wine}0d`, border: `1px solid ${C.wine}20`, marginBottom: 22 }}>
+              <HugeiconsIcon icon={AiBrain01Icon} size={11} style={{ color: C.wine }} />
+              <span style={{ fontSize: 10, fontWeight: 700, color: C.wine, letterSpacing: "0.12em", textTransform: "uppercase" }}>Intelligence Profile</span>
             </motion.div>
-          </S>
-
-          {/* right */}
-          <S>
-            <motion.div variants={up} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(61,14,26,0.05)", border: "1px solid rgba(61,14,26,0.1)", marginBottom: 24 }}>
-              <HugeiconsIcon icon={AiBrain01Icon} size={11} style={{ color: W }} />
-              <span style={{ fontSize: 11, fontWeight: 700, color: W, letterSpacing: "0.1em", textTransform: "uppercase" }}>Intelligence Profile</span>
-            </motion.div>
-            <motion.h2 variants={up} style={{ fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 900, color: "#1a0a10", letterSpacing: "-0.04em", lineHeight: 1.08, marginBottom: 20 }}>
+            <motion.h2 variants={up} style={{ fontSize: "clamp(34px,4vw,54px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.06, marginBottom: 20, textWrap: "balance" }}>
               Your mind,<br />finally mapped.
             </motion.h2>
-            <motion.p variants={up} style={{ fontSize: 16, color: "#777", lineHeight: 1.85, marginBottom: 36 }}>
-              MyPullScore builds a living model of who you are — how you communicate, react, attach, and grow. Every journal entry, every conversation with your AI coach, every reality check deepens the map.
+            <motion.p variants={up} style={{ fontSize: 16, color: "#666", lineHeight: 1.85, marginBottom: 36 }}>
+              MyPullScore builds a living model of who you are — how you communicate, react, attach, and grow. Every journal entry, every coach conversation, every reality check deepens the map.
             </motion.p>
             {[
-              { icon: Activity01Icon, label: "Real-time pattern detection across 50+ dimensions" },
-              { icon: HeartCheckIcon, label: "Emotional intelligence tracking updated daily" },
-              { icon: MymindIcon, label: "Archetype evolution as you grow and change" },
-              { icon: ShieldCheckIcon, label: "100% private — your data, your profile" },
-            ].map(item => (
-              <motion.div key={item.label} variants={up} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 10, background: "rgba(61,14,26,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <HugeiconsIcon icon={item.icon} size={14} style={{ color: W }} />
+              [Activity01Icon, "Real-time pattern detection across 50+ dimensions"],
+              [HeartCheckIcon, "Emotional intelligence tracked and updated daily"],
+              [ChartLineData03Icon, "Archetype evolution as you grow and change"],
+              [ShieldCheckIcon, "100% private — your data, your profile"],
+            ].map(([icon, label]) => (
+              <motion.div key={label as string} variants={up} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
+                <div style={{ width: 30, height: 30, borderRadius: 9, background: `${C.wine}0d`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <HugeiconsIcon icon={icon as typeof Activity01Icon} size={13} style={{ color: C.wine }} />
                 </div>
-                <span style={{ fontSize: 14, color: "#444", fontWeight: 500 }}>{item.label}</span>
+                <span style={{ fontSize: 14, color: "#444", fontWeight: 400 }}>{label as string}</span>
               </motion.div>
             ))}
             <motion.div variants={up} style={{ marginTop: 36 }}>
-              <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 26px", borderRadius: 99, background: "#1a0a10", color: "#fff", fontSize: 14, fontWeight: 700, textDecoration: "none" }}>
-                Build your profile <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
+              <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "12px 24px", borderRadius: 99, background: C.ink, color: "#fff", fontSize: 14, fontWeight: 700 }}>
+                Build your profile <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
               </Link>
+            </motion.div>
+          </S>
+
+          {/* ring chart panel */}
+          <S>
+            <motion.div variants={up} style={{ background: C.blush, borderRadius: 28, padding: "40px 36px", border: `1px solid ${C.border}` }}>
+              <p style={{ fontSize: 10, fontWeight: 700, color: C.muted, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 24 }}>Your intelligence profile</p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+                <Ring pct={82} val="82" label="Pull Score"     color={C.wine} />
+                <Ring pct={74} val="74%" label="Emotional IQ" color="#60a5fa" />
+                <Ring pct={68} val="68%" label="Comm. Style"  color={C.gold} />
+                <Ring pct={84} val="84%" label="Self-Aware"   color="#a78bfa" />
+              </div>
+              <div style={{ marginTop: 28, padding: "16px 18px", background: "#fff", borderRadius: 16, border: `1px solid ${C.border}` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 8 }}>
+                  <HugeiconsIcon icon={FlashIcon} size={12} style={{ color: C.gold }} />
+                  <span style={{ fontSize: 10, fontWeight: 700, color: C.gold, letterSpacing: "0.1em", textTransform: "uppercase" }}>Today's insight</span>
+                </div>
+                <p style={{ fontSize: 13, color: C.ink, lineHeight: 1.65 }}>Your analytical nature is your greatest asset in moments of uncertainty. Trust it more.</p>
+              </div>
             </motion.div>
           </S>
         </div>
       </section>
 
       {/* ══ FEATURES ══ */}
-      <section id="features" style={{ padding: "120px 48px", background: "#fafafa", borderTop: "1px solid rgba(0,0,0,0.05)" }}>
-        <div style={{ maxWidth: 1080, margin: "0 auto" }}>
+      <section id="features" style={{ padding: "120px 64px", background: C.blush, borderTop: `1px solid ${C.border}` }} className="section-pad">
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <S>
-            <motion.div variants={up} style={{ textAlign: "center", marginBottom: 72 }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.07)", marginBottom: 20 }}>
-                <HugeiconsIcon icon={SparklesIcon} size={11} style={{ color: "#888" }} />
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#888", letterSpacing: "0.1em", textTransform: "uppercase" }}>What you get</span>
+            <motion.div variants={up} style={{ marginBottom: 64 }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 13px", borderRadius: 99, background: "rgba(0,0,0,0.05)", border: `1px solid ${C.border}`, marginBottom: 18 }}>
+                <HugeiconsIcon icon={SparklesIcon} size={11} style={{ color: C.muted }} />
+                <span style={{ fontSize: 10, fontWeight: 700, color: C.muted, letterSpacing: "0.12em", textTransform: "uppercase" }}>What you get</span>
               </div>
-              <h2 style={{ fontSize: "clamp(32px,5vw,60px)", fontWeight: 900, color: "#1a0a10", letterSpacing: "-0.04em", lineHeight: 1.05, marginBottom: 16 }}>
-                Every tool you need<br />to understand yourself
+              <h2 style={{ fontSize: "clamp(32px,4.5vw,56px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.06, textWrap: "balance", maxWidth: 560 }}>
+                Every tool to understand yourself deeply
               </h2>
-              <p style={{ fontSize: 16, color: "#888", maxWidth: 460, margin: "0 auto", lineHeight: 1.8 }}>Built for the humans who take growth seriously.</p>
             </motion.div>
           </S>
           <S>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+            <div className="feat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
               {FEATURES.map(f => (
                 <motion.div key={f.title} variants={up}
-                  whileHover={{ y: -4, boxShadow: "0 24px 48px rgba(0,0,0,0.09)" }}
-                  style={{ borderRadius: 20, border: "1px solid rgba(0,0,0,0.07)", padding: "30px 26px", background: "#fff", cursor: "default", transition: "box-shadow 0.2s" }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 13, background: `${f.color}12`, border: `1px solid ${f.color}22`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
-                    <HugeiconsIcon icon={f.icon} size={20} style={{ color: f.color }} />
+                  whileHover={{ y: -3, boxShadow: "0 20px 44px rgba(0,0,0,0.08)" }}
+                  style={{ background: "#fff", borderRadius: 20, padding: "28px 24px", border: `1px solid ${C.border}`, cursor: "default", transition: "box-shadow .2s" }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 12, background: `${f.c}14`, border: `1px solid ${f.c}22`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
+                    <HugeiconsIcon icon={f.icon} size={18} style={{ color: f.c }} />
                   </div>
-                  <h3 style={{ fontSize: 16, fontWeight: 800, color: "#1a0a10", marginBottom: 10 }}>{f.title}</h3>
-                  <p style={{ fontSize: 13, color: "#888", lineHeight: 1.75 }}>{f.desc}</p>
+                  <h3 style={{ fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 9 }}>{f.title}</h3>
+                  <p style={{ fontSize: 13, color: "#777", lineHeight: 1.78 }}>{f.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -419,34 +496,37 @@ export default function LandingPage() {
       </section>
 
       {/* ══ HOW IT WORKS ══ */}
-      <section id="howitworks" style={{ padding: "120px 48px", background: "#1a0a10" }}>
-        <div style={{ maxWidth: 1080, margin: "0 auto" }}>
+      <section id="howitworks" style={{ padding: "120px 64px", background: C.ink }} className="section-pad">
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <S>
             <motion.div variants={up} style={{ textAlign: "center", marginBottom: 80 }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", marginBottom: 20 }}>
-                <HugeiconsIcon icon={CompassIcon} size={11} style={{ color: G }} />
-                <span style={{ fontSize: 11, fontWeight: 700, color: G, letterSpacing: "0.1em", textTransform: "uppercase" }}>How it works</span>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 13px", borderRadius: 99, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", marginBottom: 20 }}>
+                <HugeiconsIcon icon={CompassIcon} size={11} style={{ color: C.gold }} />
+                <span style={{ fontSize: 10, fontWeight: 700, color: C.gold, letterSpacing: "0.12em", textTransform: "uppercase" }}>How it works</span>
               </div>
-              <h2 style={{ fontSize: "clamp(32px,5vw,60px)", fontWeight: 900, color: "#fff", letterSpacing: "-0.04em", lineHeight: 1.05, marginBottom: 16 }}>
+              <h2 style={{ fontSize: "clamp(34px,5vw,60px)", fontWeight: 800, color: "#fff", letterSpacing: "-0.04em", lineHeight: 1.04, textWrap: "balance" }}>
                 From zero to self-aware<br />in under 10 minutes.
               </h2>
             </motion.div>
           </S>
+
+          {/* steps with SVG connector */}
           <S>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: "rgba(255,255,255,0.06)", borderRadius: 24, overflow: "hidden" }}>
+            <div className="step-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 1, background: "rgba(255,255,255,0.06)", borderRadius: 24, overflow: "hidden" }}>
               {[
-                { n: "01", icon: UserCircleIcon, title: "Create account", desc: "Sign up with email or Google. No card needed." },
-                { n: "02", icon: Activity01Icon, title: "5-minute assessment", desc: "Answer focused questions about your patterns and life." },
-                { n: "03", icon: ChartLineData03Icon, title: "Get your Pull Score", desc: "Your score and archetype generated instantly." },
-                { n: "04", icon: TrendingUpIcon, title: "Keep growing", desc: "Every journal and coach session deepens your profile." },
+                { icon: UserCircleIcon, n: "01", title: "Create account",       desc: "Sign up with email or Google. Takes under a minute." },
+                { icon: Activity01Icon,  n: "02", title: "5-min assessment",     desc: "Answer focused questions about your patterns and life." },
+                { icon: Analytics01Icon, n: "03", title: "Get your Pull Score",  desc: "Your score and archetype are generated instantly." },
+                { icon: TrendingUpIcon,  n: "04", title: "Keep growing",         desc: "Every session deepens your intelligence profile." },
               ].map((s, i) => (
-                <motion.div key={s.n} variants={up} style={{ padding: "40px 28px", background: "#1a0a10" }}>
-                  <p style={{ fontSize: 11, color: G, fontWeight: 700, letterSpacing: "0.15em", marginBottom: 18 }}>{s.n}</p>
-                  <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
-                    <HugeiconsIcon icon={s.icon} size={16} style={{ color: "rgba(255,255,255,0.6)" }} />
+                <motion.div key={s.n} variants={up} style={{ padding: "40px 28px", background: C.ink, position: "relative" }}>
+                  <span style={{ fontSize: 10, color: C.gold, fontWeight: 700, letterSpacing: "0.18em", fontFamily: "Syne,sans-serif", display: "block", marginBottom: 18 }}>{s.n}</span>
+                  <div style={{ width: 38, height: 38, borderRadius: 11, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
+                    <HugeiconsIcon icon={s.icon} size={15} style={{ color: "rgba(255,255,255,0.6)" }} />
                   </div>
-                  <p style={{ fontSize: 16, fontWeight: 800, color: "#fff", marginBottom: 10 }}>{s.title}</p>
+                  <p style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 9, fontFamily: "Syne,sans-serif" }}>{s.title}</p>
                   <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.7 }}>{s.desc}</p>
+                  {i < 3 && <span style={{ position: "absolute", top: 43, right: -10, fontSize: 16, color: "rgba(255,255,255,0.15)", zIndex: 1 }}>→</span>}
                 </motion.div>
               ))}
             </div>
@@ -454,22 +534,22 @@ export default function LandingPage() {
 
           {/* testimonials */}
           <S style={{ marginTop: 64 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+            <div className="feat-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
               {[
-                { quote: "I've been to therapy for years. MyPullScore showed me patterns in 2 weeks that took me years to see.", name: "Amara J.", role: "Therapist, Lagos" },
-                { quote: "The Reality Check feature is wild. It told me exactly what I was doing in that relationship before I could admit it.", name: "Marcus W.", role: "Entrepreneur, NYC" },
-                { quote: "My coach sessions feel like talking to someone who knows my whole life history. It's genuinely shocking how accurate it is.", name: "Sasha K.", role: "Designer, London" },
+                { q: "I've been to therapy for years. MyPullScore showed me patterns in 2 weeks that took me years to see.", name: "Amara J.", role: "Lagos, Nigeria" },
+                { q: "The Reality Check feature is wild. It told me exactly what I was doing before I could admit it.", name: "Marcus W.", role: "New York, USA" },
+                { q: "Talking to the AI coach feels like someone who knows my whole life history. Genuinely shocking.", name: "Sasha K.", role: "London, UK" },
               ].map(t => (
-                <motion.div key={t.name} variants={up} style={{ borderRadius: 20, border: "1px solid rgba(255,255,255,0.07)", padding: "28px 24px", background: "rgba(255,255,255,0.03)" }}>
-                  <div style={{ display: "flex", gap: 1, marginBottom: 16 }}>
-                    {[1,2,3,4,5].map(i => <span key={i} style={{ color: G, fontSize: 13 }}>★</span>)}
+                <motion.div key={t.name} variants={up} style={{ borderRadius: 20, border: "1px solid rgba(255,255,255,0.08)", padding: "28px 24px", background: "rgba(255,255,255,0.04)" }}>
+                  <div style={{ display: "flex", gap: 2, marginBottom: 16 }}>
+                    {[1,2,3,4,5].map(i => <span key={i} style={{ color: C.gold, fontSize: 12 }}>★</span>)}
                   </div>
-                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.7)", lineHeight: 1.75, marginBottom: 20, fontStyle: "italic" }}>&ldquo;{t.quote}&rdquo;</p>
+                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.68)", lineHeight: 1.78, marginBottom: 20, fontStyle: "italic" }}>&ldquo;{t.q}&rdquo;</p>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <div style={{ width: 32, height: 32, borderRadius: "50%", background: `linear-gradient(135deg, ${W}, #c0404f)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#fff" }}>{t.name[0]}</div>
+                    <div style={{ width: 30, height: 30, borderRadius: "50%", background: `linear-gradient(135deg, ${C.wine}, #c0404f)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "#fff" }}>{t.name[0]}</div>
                     <div>
                       <p style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{t.name}</p>
-                      <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)" }}>{t.role}</p>
+                      <p style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{t.role}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -480,44 +560,44 @@ export default function LandingPage() {
       </section>
 
       {/* ══ PRICING ══ */}
-      <section id="pricing" style={{ padding: "120px 48px", background: "#fff" }}>
-        <div style={{ maxWidth: 780, margin: "0 auto" }}>
+      <section id="pricing" style={{ padding: "120px 64px", background: C.bg }} className="section-pad">
+        <div style={{ maxWidth: 820, margin: "0 auto" }}>
           <S>
-            <motion.div variants={up} style={{ textAlign: "center", marginBottom: 64 }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.07)", marginBottom: 20 }}>
-                <HugeiconsIcon icon={StarIcon} size={11} style={{ color: "#888" }} />
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#888", letterSpacing: "0.1em", textTransform: "uppercase" }}>Pricing</span>
+            <motion.div variants={up} style={{ textAlign: "center", marginBottom: 56 }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 13px", borderRadius: 99, background: "rgba(0,0,0,0.04)", border: `1px solid ${C.border}`, marginBottom: 18 }}>
+                <HugeiconsIcon icon={StarIcon} size={11} style={{ color: C.muted }} />
+                <span style={{ fontSize: 10, fontWeight: 700, color: C.muted, letterSpacing: "0.12em", textTransform: "uppercase" }}>Pricing</span>
               </div>
-              <h2 style={{ fontSize: "clamp(32px,5vw,56px)", fontWeight: 900, color: "#1a0a10", letterSpacing: "-0.04em", lineHeight: 1.05, marginBottom: 16 }}>Start free. Go deeper.</h2>
-              <p style={{ fontSize: 16, color: "#888", lineHeight: 1.8 }}>Everything you need to understand yourself — free forever, with premium for those who want more.</p>
+              <h2 style={{ fontSize: "clamp(32px,4.5vw,56px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.06, textWrap: "balance" }}>Start free. Go deeper.</h2>
+              <p style={{ fontSize: 16, color: C.muted, marginTop: 14, lineHeight: 1.8 }}>Free forever — premium for those who want the full picture.</p>
             </motion.div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              {/* Free */}
-              <motion.div variants={up} style={{ borderRadius: 24, border: "1.5px solid rgba(0,0,0,0.08)", padding: "36px 32px" }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: "#aaa", marginBottom: 20 }}>Free</p>
-                <p style={{ fontSize: 52, fontWeight: 900, color: "#1a0a10", letterSpacing: "-0.05em", lineHeight: 1, marginBottom: 6 }}>$0</p>
-                <p style={{ fontSize: 13, color: "#aaa", marginBottom: 32 }}>Forever free</p>
-                <Link href="/register" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "13px 0", borderRadius: 99, border: "1.5px solid rgba(0,0,0,0.12)", color: "#1a0a10", fontSize: 14, fontWeight: 700, textDecoration: "none", marginBottom: 32 }}>Get started</Link>
-                {["Pull Score + Archetype", "5 Coach sessions/month", "3 Reality checks/month", "Smart Journal (10 insights/mo)", "Journey Map"].map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-                    <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} style={{ color: "#ccc", flexShrink: 0 }} />
+            <div className="price-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              {/* free */}
+              <motion.div variants={up} style={{ borderRadius: 24, border: `1.5px solid ${C.border}`, padding: "36px 32px" }}>
+                <p style={{ fontSize: 12, fontWeight: 700, color: C.muted, marginBottom: 18, letterSpacing: "0.08em", textTransform: "uppercase" }}>Free</p>
+                <p style={{ fontSize: 50, fontWeight: 800, color: C.ink, letterSpacing: "-0.05em", lineHeight: 1, marginBottom: 4, fontFamily: "Syne,sans-serif" }}>$0</p>
+                <p style={{ fontSize: 13, color: C.muted, marginBottom: 28 }}>Forever free</p>
+                <Link href="/register" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "12px 0", borderRadius: 99, border: `1.5px solid ${C.border}`, color: C.ink, fontSize: 14, fontWeight: 700, marginBottom: 28 }}>Get started</Link>
+                {["Pull Score + Archetype","5 Coach sessions/month","3 Reality checks/month","Smart Journal (10 insights/mo)","Journey Map"].map(f => (
+                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                    <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} style={{ color: "#ccc", flexShrink: 0 }} />
                     <span style={{ fontSize: 13, color: "#777" }}>{f}</span>
                   </div>
                 ))}
               </motion.div>
-              {/* Premium */}
-              <motion.div variants={up} whileHover={{ scale: 1.02 }} style={{ borderRadius: 24, background: "#1a0a10", padding: "36px 32px", position: "relative", boxShadow: "0 24px 64px rgba(26,10,16,0.2)" }}>
-                <div style={{ position: "absolute", top: 20, right: 20, padding: "4px 12px", borderRadius: 99, background: G, color: "#1a0a10", fontSize: 10, fontWeight: 900, letterSpacing: "0.06em", textTransform: "uppercase" }}>Most popular</div>
-                <p style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.4)", marginBottom: 20 }}>Premium</p>
-                <p style={{ fontSize: 52, fontWeight: 900, color: "#fff", letterSpacing: "-0.05em", lineHeight: 1, marginBottom: 6 }}>$12</p>
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", marginBottom: 32 }}>per month</p>
-                <Link href="/upgrade" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 0", borderRadius: 99, background: "#fff", color: "#1a0a10", fontSize: 14, fontWeight: 700, textDecoration: "none", marginBottom: 32 }}>
-                  Upgrade now <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
+              {/* premium */}
+              <motion.div variants={up} whileHover={{ scale: 1.015 }} style={{ borderRadius: 24, background: C.ink, padding: "36px 32px", position: "relative", boxShadow: `0 20px 60px ${C.ink}25`, transition: "box-shadow .2s" }}>
+                <div style={{ position: "absolute", top: 18, right: 18, padding: "4px 11px", borderRadius: 99, background: C.gold, color: C.ink, fontSize: 9, fontWeight: 900, letterSpacing: "0.08em", textTransform: "uppercase" }}>Most popular</div>
+                <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.35)", marginBottom: 18, letterSpacing: "0.08em", textTransform: "uppercase" }}>Premium</p>
+                <p style={{ fontSize: 50, fontWeight: 800, color: "#fff", letterSpacing: "-0.05em", lineHeight: 1, marginBottom: 4, fontFamily: "Syne,sans-serif" }}>$12</p>
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", marginBottom: 28 }}>per month</p>
+                <Link href="/upgrade" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 99, background: "#fff", color: C.ink, fontSize: 14, fontWeight: 700, marginBottom: 28 }}>
+                  Upgrade now <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
                 </Link>
-                {["Everything in Free", "Unlimited Coach sessions", "Unlimited Reality checks", "Unlimited AI journal insights", "Deep intelligence reports", "Priority support"].map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-                    <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} style={{ color: G, flexShrink: 0 }} />
-                    <span style={{ fontSize: 13, color: f === "Everything in Free" ? "#fff" : "rgba(255,255,255,0.6)", fontWeight: f === "Everything in Free" ? 700 : 400 }}>{f}</span>
+                {["Everything in Free","Unlimited Coach sessions","Unlimited Reality checks","Unlimited AI journal insights","Deep intelligence reports","Priority support"].map(f => (
+                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                    <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} style={{ color: C.gold, flexShrink: 0 }} />
+                    <span style={{ fontSize: 13, color: f === "Everything in Free" ? "#fff" : "rgba(255,255,255,0.55)", fontWeight: f === "Everything in Free" ? 700 : 400 }}>{f}</span>
                   </div>
                 ))}
               </motion.div>
@@ -527,70 +607,66 @@ export default function LandingPage() {
       </section>
 
       {/* ══ FAQ ══ */}
-      <section id="faq" style={{ padding: "120px 48px", background: "#fafafa", borderTop: "1px solid rgba(0,0,0,0.05)" }}>
-        <div style={{ maxWidth: 1080, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80 }}>
+      <section id="faq" style={{ padding: "120px 64px", background: C.blush, borderTop: `1px solid ${C.border}` }} className="section-pad">
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <S>
-            <motion.div variants={up}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.07)", marginBottom: 24 }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#888", letterSpacing: "0.1em", textTransform: "uppercase" }}>FAQ</span>
+            <div className="faq-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr", gap: 80 }}>
+              <motion.div variants={up}>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 13px", borderRadius: 99, background: "rgba(0,0,0,0.05)", border: `1px solid ${C.border}`, marginBottom: 22 }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: C.muted, letterSpacing: "0.12em", textTransform: "uppercase" }}>FAQ</span>
+                </div>
+                <h2 style={{ fontSize: "clamp(28px,3.5vw,46px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 16, textWrap: "balance" }}>Questions you&apos;re probably having</h2>
+                <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.8, marginBottom: 28 }}>Can&apos;t find what you&apos;re looking for? Reach out — we&apos;re human.</p>
+                <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 20px", borderRadius: 99, border: `1.5px solid ${C.border}`, color: "#555", fontSize: 13, fontWeight: 600, background: "#fff" }}>
+                  <HugeiconsIcon icon={Message02Icon} size={13} /> Get in touch
+                </Link>
+              </motion.div>
+              <div>
+                {FAQS.map((f, i) => (
+                  <motion.div key={i} variants={up} style={{ borderBottom: `1px solid ${C.border}` }}>
+                    <button onClick={() => setFaqOpen(faqOpen === i ? null : i)}
+                      style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 0", background: "none", border: "none", cursor: "pointer", textAlign: "left", gap: 20 }}>
+                      <span style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>{f.q}</span>
+                      <motion.span animate={{ rotate: faqOpen === i ? 45 : 0 }} transition={{ duration: 0.18 }}
+                        style={{ fontSize: 22, color: "#aaa", flexShrink: 0, lineHeight: 1, fontWeight: 300 }}>+</motion.span>
+                    </button>
+                    <AnimatePresence>
+                      {faqOpen === i && (
+                        <motion.p initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}
+                          style={{ fontSize: 14, color: "#666", lineHeight: 1.82, paddingBottom: 20, overflow: "hidden" }}>{f.a}</motion.p>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                ))}
               </div>
-              <h2 style={{ fontSize: "clamp(28px,4vw,48px)", fontWeight: 900, color: "#1a0a10", letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 16 }}>Questions you&apos;re<br />probably having</h2>
-              <p style={{ fontSize: 14, color: "#888", lineHeight: 1.8, marginBottom: 32 }}>Can&apos;t find what you&apos;re looking for? Reach out to us.</p>
-              <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 22px", borderRadius: 99, border: "1.5px solid rgba(0,0,0,0.1)", color: "#444", fontSize: 13, fontWeight: 600, textDecoration: "none" }}>
-                <HugeiconsIcon icon={Message02Icon} size={14} /> Get in touch
-              </Link>
-            </motion.div>
-          </S>
-          <S>
-            <div>
-              {FAQS.map((f, i) => (
-                <motion.div key={i} variants={up} style={{ borderBottom: "1px solid rgba(0,0,0,0.07)" }}>
-                  <button onClick={() => setFaqOpen(faqOpen === i ? null : i)}
-                    style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 0", background: "none", border: "none", cursor: "pointer", gap: 20, textAlign: "left" }}>
-                    <span style={{ fontSize: 14, fontWeight: 700, color: "#1a0a10" }}>{f.q}</span>
-                    <motion.span animate={{ rotate: faqOpen === i ? 45 : 0 }} transition={{ duration: 0.2 }} style={{ fontSize: 20, color: "#aaa", flexShrink: 0, lineHeight: 1 }}>+</motion.span>
-                  </button>
-                  <AnimatePresence>
-                    {faqOpen === i && (
-                      <motion.p initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22 }}
-                        style={{ fontSize: 14, color: "#777", lineHeight: 1.8, paddingBottom: 20, overflow: "hidden" }}>
-                        {f.a}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
             </div>
           </S>
         </div>
       </section>
 
       {/* ══ CTA ══ */}
-      <section style={{ padding: "80px 48px 80px", background: "#fff" }}>
-        <div style={{ maxWidth: 1080, margin: "0 auto" }}>
+      <section style={{ padding: "80px 64px", background: C.bg }} className="section-pad">
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <S>
-            <motion.div variants={up} style={{ borderRadius: 28, background: "#1a0a10", padding: "80px 48px", textAlign: "center", position: "relative", overflow: "hidden" }}>
-              {/* brain bg */}
-              <div style={{ position: "absolute", inset: 0, opacity: 0.15 }}>
-                <BrainCanvas />
-              </div>
-              <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(61,14,26,0.4) 0%, transparent 70%)", pointerEvents: "none" }} />
+            <motion.div variants={up} style={{ borderRadius: 28, background: C.ink, padding: "80px 56px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+              {/* animated blob bg */}
+              <div style={{ position: "absolute", top: "-20%", left: "30%", width: 400, height: 400, background: `radial-gradient(ellipse, ${C.wine}60 0%, transparent 70%)`, animation: "morph 12s ease-in-out infinite", pointerEvents: "none" }} />
+              <div style={{ position: "absolute", bottom: "-20%", right: "20%", width: 320, height: 320, background: `radial-gradient(ellipse, ${C.gold}20 0%, transparent 70%)`, animation: "morph 16s ease-in-out 3s infinite", pointerEvents: "none" }} />
               <div style={{ position: "relative" }}>
-                <p style={{ fontSize: 12, fontWeight: 700, color: G, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 20 }}>Start today — free</p>
-                <h2 style={{ fontSize: "clamp(36px,6vw,72px)", fontWeight: 900, color: "#fff", letterSpacing: "-0.05em", lineHeight: 1, marginBottom: 20 }}>
+                <p style={{ fontSize: 11, fontWeight: 700, color: C.gold, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 20, fontFamily: "Syne,sans-serif" }}>Start today — free</p>
+                <h2 style={{ fontSize: "clamp(40px,6vw,72px)", fontWeight: 800, color: "#fff", letterSpacing: "-0.05em", lineHeight: 0.97, marginBottom: 22, textWrap: "balance" }}>
                   Know yourself<br />at a deeper level.
                 </h2>
-                <p style={{ fontSize: 16, color: "rgba(255,255,255,0.45)", lineHeight: 1.8, maxWidth: 440, margin: "0 auto 44px" }}>
+                <p style={{ fontSize: 16, color: "rgba(255,255,255,0.42)", lineHeight: 1.8, maxWidth: 420, margin: "0 auto 44px" }}>
                   Join 12,000+ people building the most self-aware version of themselves with MyPullScore.
                 </p>
-                <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "16px 36px", borderRadius: 99, background: "#fff", color: "#1a0a10", fontSize: 16, fontWeight: 800, textDecoration: "none", boxShadow: "0 0 60px rgba(255,255,255,0.1)" }}>
-                  Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={16} />
+                <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 9, padding: "15px 34px", borderRadius: 99, background: "#fff", color: C.ink, fontSize: 15, fontWeight: 800, boxShadow: "0 0 60px rgba(255,255,255,0.08)" }}>
+                  Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
                 </Link>
                 <div style={{ display: "flex", justifyContent: "center", gap: 28, marginTop: 32 }}>
-                  {[{ icon: LockIcon, label: "Private by design" }, { icon: Globe02Icon, label: "Available worldwide" }, { icon: ShieldCheckIcon, label: "Encrypted end-to-end" }].map(item => (
-                    <div key={item.label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "rgba(255,255,255,0.3)" }}>
-                      <HugeiconsIcon icon={item.icon} size={12} />
-                      {item.label}
+                  {[{i: LockIcon, l: "Private by design"},{i: Globe02Icon, l: "Available worldwide"},{i: ShieldCheckIcon, l: "Encrypted end-to-end"}].map(x => (
+                    <div key={x.l} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "rgba(255,255,255,0.3)" }}>
+                      <HugeiconsIcon icon={x.i} size={12} />{x.l}
                     </div>
                   ))}
                 </div>
@@ -600,56 +676,43 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══ FOOTER ══ */}
-      <footer style={{ background: "#fafafa", borderTop: "1px solid rgba(0,0,0,0.06)", padding: "60px 48px 0" }}>
-        <div style={{ maxWidth: 1080, margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr", gap: 32, paddingBottom: 48, borderBottom: "1px solid rgba(0,0,0,0.07)" }}>
+      {/* ══ FOOTER (kept) ══ */}
+      <footer style={{ background: C.blush, borderTop: `1px solid ${C.border}`, padding: "60px 64px 0" }} className="section-pad">
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div className="foot-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr", gap: 32, paddingBottom: 48, borderBottom: `1px solid ${C.border}` }}>
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 8, overflow: "hidden", position: "relative" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 12 }}>
+                <div style={{ width: 30, height: 30, borderRadius: 7, overflow: "hidden", position: "relative" }}>
                   <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover" }} />
                 </div>
-                <span style={{ fontSize: 15, fontWeight: 800, color: "#1a0a10" }}>MyPullScore</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: C.ink, fontFamily: "Syne,sans-serif" }}>MyPullScore</span>
               </div>
-              <p style={{ fontSize: 13, color: "#aaa", lineHeight: 1.75, maxWidth: 200 }}>Your personal intelligence, finally under your control.</p>
+              <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.78, maxWidth: 190 }}>Your personal intelligence, finally under your control.</p>
             </div>
             {[
-              { title: "Product", links: ["Pull Score", "AI Coach", "Reality Check", "Journal", "Pricing"] },
-              { title: "Company", links: ["About", "Careers", "Blog", "Contact"] },
-              { title: "Resources", links: ["Docs", "Changelog", "Support", "Privacy"] },
-              { title: "Social", links: ["X.com", "LinkedIn", "Instagram"] },
+              { title: "Product", links: ["Pull Score","AI Coach","Reality Check","Journal","Pricing"] },
+              { title: "Company", links: ["About","Careers","Blog","Contact"] },
+              { title: "Resources", links: ["Docs","Changelog","Support","Privacy"] },
+              { title: "Social", links: ["X.com","LinkedIn","Instagram"] },
             ].map(col => (
               <div key={col.title}>
-                <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#bbb", marginBottom: 16 }}>{col.title}</p>
-                {col.links.map(l => (
-                  <p key={l} style={{ fontSize: 13, color: "#999", marginBottom: 10, cursor: "pointer" }}
-                    onMouseEnter={e => (e.currentTarget.style.color = "#1a0a10")} onMouseLeave={e => (e.currentTarget.style.color = "#999")}>{l}</p>
-                ))}
+                <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#bbb", marginBottom: 16 }}>{col.title}</p>
+                {col.links.map(l => <p key={l} style={{ fontSize: 13, color: C.muted, marginBottom: 10, cursor: "pointer" }}
+                  onMouseEnter={e=>(e.currentTarget.style.color=C.ink)} onMouseLeave={e=>(e.currentTarget.style.color=C.muted)}>{l}</p>)}
               </div>
             ))}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 0" }}>
             <p style={{ fontSize: 12, color: "#ccc" }}>© MyPullScore 2026 — Built for humans</p>
             <div style={{ display: "flex", gap: 20 }}>
-              {["Terms", "Privacy"].map(l => <Link key={l} href={`/${l.toLowerCase()}`} style={{ fontSize: 12, color: "#ccc", textDecoration: "none" }}>{l}</Link>)}
+              {["Terms","Privacy"].map(l => <Link key={l} href={`/${l.toLowerCase()}`} style={{ fontSize: 12, color: "#ccc" }}>{l}</Link>)}
             </div>
           </div>
         </div>
-        <p style={{ fontSize: "clamp(48px,10vw,120px)", fontWeight: 900, color: "rgba(0,0,0,0.04)", textAlign: "center", letterSpacing: "-0.05em", lineHeight: 0.8, userSelect: "none", paddingBottom: 0 }}>
+        <p style={{ fontSize: "clamp(48px,10vw,120px)", fontWeight: 900, color: "rgba(0,0,0,0.04)", textAlign: "center", letterSpacing: "-0.05em", lineHeight: 0.8, userSelect: "none" }}>
           MyPullScore
         </p>
       </footer>
-
-      <style>{`
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        @media (max-width: 768px) {
-          section, footer { padding-left: 20px !important; padding-right: 20px !important; }
-          [style*="gridTemplateColumns: 1fr 1fr 1fr"], [style*="gridTemplateColumns: repeat(3, 1fr)"], [style*="gridTemplateColumns: repeat(4, 1fr)"] { grid-template-columns: 1fr !important; }
-          [style*="gridTemplateColumns: 1fr 1fr"], [style*="gridTemplateColumns: 2fr 1fr 1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
-          [style*="position: absolute"][style*="left: 6%"], [style*="position: absolute"][style*="left: 4%"],
-          [style*="position: absolute"][style*="right: 6%"], [style*="position: absolute"][style*="right: 4%"] { display: none !important; }
-        }
-      `}</style>
     </div>
   );
 }
