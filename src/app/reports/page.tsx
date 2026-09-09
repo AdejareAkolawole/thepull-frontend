@@ -6,6 +6,7 @@ import {
   ScaleIcon, SentIcon, CheckmarkCircle01Icon,
 } from "@hugeicons/core-free-icons";
 import { runRealityCheck } from "@/lib/api";
+import { trackActivity } from "@/lib/streaks";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
@@ -40,6 +41,7 @@ export default function RealityCheckPage() {
     setError(false);
     try {
       const res = await runRealityCheck({ situation: what, thinking: means, considering: action });
+      trackActivity("reality_check");
       setResult((res as Record<string, unknown>).result as string ?? (res as Record<string, unknown>).analysis as string ?? "Check complete.");
     } catch {
       setError(true);

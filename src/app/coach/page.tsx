@@ -5,6 +5,7 @@ import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { DeliveredSentIcon, AiSparklesIcon, LockIcon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { sendCoachMessage, getDashboard, isLoggedIn } from "@/lib/api";
+import { trackActivity } from "@/lib/streaks";
 import { useRouter } from "next/navigation";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
@@ -71,6 +72,7 @@ export default function CoachPage() {
     setTyping(true);
     try {
       const res = await sendCoachMessage(text);
+      trackActivity("coach");
       setMessages(m => [...m, { id: (Date.now() + 1).toString(), role: "assistant", text: res.response }]);
       if (res.usage) {
         setUsage(prev => prev ? { ...prev, ...res.usage } : { tier: "free", limit_reached: false, ...res.usage! });

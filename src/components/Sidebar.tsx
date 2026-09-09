@@ -7,7 +7,7 @@ import {
   Home01Icon, AiBrain01Icon, BookOpen01Icon, Message02Icon,
   FlashIcon, ScaleIcon, Notification01Icon, UserCircleIcon,
   CreditCardIcon, Settings01Icon, AiSparklesIcon, CompassIcon,
-  SidebarLeft01Icon, Logout01Icon,
+  SidebarLeft01Icon, Logout01Icon, FireIcon,
 } from "@hugeicons/core-free-icons";
 import { logout } from "@/lib/api";
 
@@ -18,6 +18,7 @@ const mainNav = [
   { href: "/reports",      icon: ScaleIcon,       label: "Reality Check" },
   { href: "/journal",      icon: BookOpen01Icon,  label: "Journal" },
   { href: "/journey",      icon: CompassIcon,     label: "Journey" },
+  { href: "/streaks",      icon: FireIcon,        label: "Streaks" },
 ];
 
 const bottomNav = [

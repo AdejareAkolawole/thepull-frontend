@@ -10,6 +10,7 @@ import {
   BookOpen01Icon, Share01Icon, HelpCircleIcon, ArrowDown01Icon, CompassIcon,
 } from "@hugeicons/core-free-icons";
 import { getDashboard, isLoggedIn } from "@/lib/api";
+import { trackAppOpen } from "@/lib/streaks";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -137,6 +138,7 @@ export default function DashboardClient() {
 
   useEffect(() => {
     if (!isLoggedIn()) { router.push("/login"); return; }
+    trackAppOpen();
     getDashboard().then(res => {
       const p = (res.profile || {}) as Record<string, unknown>;
       // Redirect to onboarding if not complete

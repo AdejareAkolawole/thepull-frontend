@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Add01Icon, Calendar03Icon, AiSparklesIcon, BookOpen01Icon, Search01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { getJournalEntries, createJournalEntry, deleteJournalEntry, isLoggedIn } from "@/lib/api";
+import { trackActivity } from "@/lib/streaks";
 import { useRouter } from "next/navigation";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
@@ -62,6 +63,7 @@ export default function JournalPage() {
     setSaving(true);
     try {
       await createJournalEntry({ title: title.trim() || undefined, content });
+      trackActivity("journal");
       setTitle("");
       setContent("");
       setComposing(false);
