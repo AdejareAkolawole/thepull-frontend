@@ -231,12 +231,12 @@ const FAQS = [
 ];
 
 const FEATURES = [
-  { icon: AiBrain01Icon,      c: "#c0404f", title: "AI Coach",      desc: "Real conversations with an AI that knows your complete intelligence profile. Honest, contextual, always available." },
-  { icon: BookOpen01Icon,     c: "#60a5fa", title: "Smart Journal",  desc: "Log real moments. The AI extracts emotional signals from every entry and feeds them into your evolving profile." },
-  { icon: Analytics01Icon,    c: C.gold,    title: "Pull Score",     desc: "A composite intelligence score tracking emotional depth, communication style, and self-awareness." },
-  { icon: Target01Icon,       c: "#a78bfa", title: "Reality Check",  desc: "Pause on any situation. Get an honest AI perspective that cuts through your narratives." },
-  { icon: CompassIcon,        c: "#34d399", title: "Journey Map",    desc: "Your milestones, breakthroughs, and archetype evolution mapped on a personal timeline." },
-  { icon: EyeIcon,            c: "#f97316", title: "Auto-Detect",    desc: "Surfaces recurring behavioural signals from your journal before they become invisible habits." },
+  { icon: AiBrain01Icon,   title: "AI Coach",      desc: "Real conversations with an AI that knows your complete intelligence profile. Honest, contextual, always available." },
+  { icon: BookOpen01Icon,  title: "Smart Journal",  desc: "Log real moments. The AI extracts emotional signals from every entry and feeds them into your evolving profile." },
+  { icon: Analytics01Icon, title: "Pull Score",     desc: "A composite intelligence score tracking emotional depth, communication style, and self-awareness." },
+  { icon: Target01Icon,    title: "Reality Check",  desc: "Pause on any situation. Get an honest AI perspective that cuts through your narratives." },
+  { icon: CompassIcon,     title: "Journey Map",    desc: "Your milestones, breakthroughs, and archetype evolution mapped on a personal timeline." },
+  { icon: EyeIcon,         title: "Auto-Detect",    desc: "Surfaces recurring behavioural signals from your journal before they become invisible habits." },
 ];
 
 /* ════════════════════════ PAGE ════════════════════════ */
@@ -294,7 +294,7 @@ export default function LandingPage() {
       <motion.nav initial={{ y: -16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
         style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 60, display: "flex", alignItems: "center", padding: "0 48px", background: "rgba(255,255,255,0.88)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${C.border}` }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 9, marginRight: "auto" }}>
-          <div style={{ width: 30, height: 30, borderRadius: 7, overflow: "hidden", position: "relative" }}>
+          <div style={{ width: 32, height: 32, borderRadius: 8, overflow: "hidden", position: "relative", border: `1px solid ${C.border}`, flexShrink: 0, background: C.wine }}>
             <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover" }} />
           </div>
           <span style={{ fontSize: 14, fontWeight: 700, color: C.ink, letterSpacing: "-0.02em", fontFamily: "'Aeonik', sans-serif" }}>MyPullScore</span>
@@ -368,28 +368,6 @@ export default function LandingPage() {
               style={{ position: "absolute", inset: 0, borderRadius: "50%", background: `radial-gradient(ellipse at center, ${C.wine}12 0%, transparent 70%)` }} />
             <NeuralSVG animate={svgVisible} />
 
-            {/* floating stat cards */}
-            {[
-              { top: "4%", left: "-5%", label: "Pull Score", val: "82", sub: "+6 this month", subColor: "#34d399", delay: 0.6 },
-              { bottom: "4%", right: "-5%", label: "Archetype", val: "Quiet Strategist", sub: "84% confidence", subColor: C.muted, delay: 0.9 },
-            ].map((c, i) => (
-              <motion.div key={i} initial={{ opacity: 0, scale: 0.88 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: c.delay }}
-                style={{ position: "absolute", ...(c.top ? { top: c.top } : { bottom: c.bottom }), ...(c.left ? { left: c.left } : { right: c.right }), background: "#fff", borderRadius: 16, padding: "14px 18px", boxShadow: "0 12px 40px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.05)", border: `1px solid ${C.border}`, minWidth: 150, animation: `float ${3.5 + i}s ease-in-out ${i * 0.5}s infinite` }}>
-                <p style={{ fontSize: 9, color: C.muted, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 4 }}>{c.label}</p>
-                <p style={{ fontSize: i === 0 ? 30 : 14, fontWeight: 800, color: C.ink, letterSpacing: "-0.03em", fontFamily: "'Aeonik', sans-serif", lineHeight: 1.1 }}>{c.val}</p>
-                <p style={{ fontSize: 11, color: c.subColor, fontWeight: 600, marginTop: 4 }}>{c.sub}</p>
-              </motion.div>
-            ))}
-
-            {/* insight bubble */}
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
-              style={{ position: "absolute", top: "42%", right: "-8%", background: C.wine, borderRadius: 14, padding: "12px 16px", maxWidth: 160, animation: "float 5s ease-in-out 1s infinite", boxShadow: `0 12px 32px ${C.wine}40` }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 6 }}>
-                <HugeiconsIcon icon={FlashIcon} size={11} style={{ color: C.gold }} />
-                <span style={{ fontSize: 9, color: C.gold, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>Insight</span>
-              </div>
-              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.85)", lineHeight: 1.55, fontWeight: 400 }}>Trust your analytical edge — it's what sets you apart.</p>
-            </motion.div>
           </div>
         </motion.div>
       </section>
@@ -453,9 +431,9 @@ export default function LandingPage() {
               <p style={{ fontSize: 10, fontWeight: 700, color: C.muted, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: 24 }}>Your intelligence profile</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
                 <Ring pct={82} val="82" label="Pull Score"     color={C.wine} />
-                <Ring pct={74} val="74%" label="Emotional IQ" color="#60a5fa" />
-                <Ring pct={68} val="68%" label="Comm. Style"  color={C.gold} />
-                <Ring pct={84} val="84%" label="Self-Aware"   color="#a78bfa" />
+                <Ring pct={74} val="74%" label="Emotional IQ" color={C.wine} />
+                <Ring pct={68} val="68%" label="Comm. Style"  color={C.wine} />
+                <Ring pct={84} val="84%" label="Self-Aware"   color={C.wine} />
               </div>
               <div style={{ marginTop: 28, padding: "16px 18px", background: "#fff", borderRadius: 16, border: `1px solid ${C.border}` }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 8 }}>
@@ -489,8 +467,8 @@ export default function LandingPage() {
                 <motion.div key={f.title} variants={up}
                   whileHover={{ y: -3, boxShadow: "0 20px 44px rgba(0,0,0,0.08)" }}
                   style={{ background: "#fff", borderRadius: 20, padding: "28px 24px", border: `1px solid ${C.border}`, cursor: "default", transition: "box-shadow .2s" }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 12, background: `${f.c}14`, border: `1px solid ${f.c}22`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
-                    <HugeiconsIcon icon={f.icon} size={18} style={{ color: f.c }} />
+                  <div style={{ width: 40, height: 40, borderRadius: 12, background: `${C.wine}0d`, border: `1px solid ${C.wine}1a`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
+                    <HugeiconsIcon icon={f.icon} size={18} style={{ color: C.wine }} />
                   </div>
                   <h3 style={{ fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 9 }}>{f.title}</h3>
                   <p style={{ fontSize: 13, color: "#777", lineHeight: 1.78 }}>{f.desc}</p>
