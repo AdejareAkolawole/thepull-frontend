@@ -132,18 +132,6 @@ export default function LandingPage() {
       <section style={{ paddingTop: 58, background: "#fff", overflow: "hidden" }}>
         {/* text block */}
         <div style={{ maxWidth: 760, margin: "0 auto", padding: "80px 32px 0", textAlign: "center" }}>
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 14px 5px 8px",
-              borderRadius: 99, background: `${C.wine}0c`, border: `1px solid ${C.wine}20`, marginBottom: 32 }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#34d399",
-                display: "inline-block", position: "relative" }}>
-                <span style={{ position: "absolute", inset: 0, borderRadius: "50%",
-                  background: "#34d399", animation: "ping 2s ease-out infinite" }} />
-              </span>
-              <span style={{ fontSize: 12, color: C.wine, fontWeight: 600 }}>Intelligence OS · 12,000+ people mapped</span>
-            </div>
-          </motion.div>
-
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.08 }}
             style={{ fontSize: "clamp(52px,7.5vw,104px)", fontWeight: 800, lineHeight: 0.93,
               letterSpacing: "-0.055em", marginBottom: 28, textWrap: "balance" }}>
