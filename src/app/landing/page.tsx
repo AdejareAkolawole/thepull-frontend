@@ -1,11 +1,14 @@
 "use client";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import Image from "next/image";
 import {
   motion, useInView, AnimatePresence,
-  useScroll, useTransform, useSpring, useMotionValue,
+  useScroll, useTransform,
 } from "framer-motion";
+
+const ThreeBrain = dynamic(() => import("@/components/ThreeBrain"), { ssr: false });
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   AiBrain01Icon, BookOpen01Icon, Analytics01Icon, SparklesIcon,
@@ -280,103 +283,84 @@ export default function LandingPage() {
         }
       `}</style>
 
-      {/* ── NAV — minimal pill style like 8blocks ── */}
+      {/* ── NAV ── */}
       <motion.nav initial={{ y: -16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
-        style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px" }}>
-        {/* left pill */}
-        <Link href="/login" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 99, background: "#fff", boxShadow: "0 2px 12px rgba(0,0,0,0.10)", fontSize: 13, fontWeight: 600, color: C.ink }}>
-          ← sign in
-        </Link>
-        {/* center logo */}
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 9, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
-          <div style={{ width: 28, height: 28, borderRadius: 7, overflow: "hidden", position: "relative", flexShrink: 0, background: C.wine }}>
+        style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 60, display: "flex", alignItems: "center", padding: "0 48px", background: "rgba(255,255,255,0.88)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${C.border}` }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 9, marginRight: "auto" }}>
+          <div style={{ width: 32, height: 32, borderRadius: 8, overflow: "hidden", position: "relative", flexShrink: 0, background: C.wine }}>
             <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover" }} />
           </div>
-          <span style={{ fontSize: 15, fontWeight: 700, color: "#fff", letterSpacing: "-0.02em" }}>MyPullScore</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: C.ink, letterSpacing: "-0.02em" }}>MyPullScore</span>
         </Link>
-        {/* right pill */}
-        <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 20px", borderRadius: 99, background: "#fff", boxShadow: "0 2px 12px rgba(0,0,0,0.10)", fontSize: 13, fontWeight: 600, color: C.ink }}>
-          get started →
-        </Link>
+        <div style={{ display: "flex", gap: 28, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+          {[["Features","#features"],["How it works","#howitworks"],["Pricing","#pricing"],["FAQ","#faq"]].map(([l,h])=>(
+            <a key={l} href={h} style={{ fontSize: 13, color: C.muted, fontWeight: 500 }}
+              onMouseEnter={e=>(e.currentTarget.style.color=C.ink)} onMouseLeave={e=>(e.currentTarget.style.color=C.muted)}>{l}</a>
+          ))}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Link href="/login" style={{ fontSize: 13, fontWeight: 500, color: C.muted, padding: "7px 14px" }}>Sign in</Link>
+          <Link href="/register" style={{ fontSize: 13, fontWeight: 700, color: "#fff", background: C.ink, padding: "8px 18px", borderRadius: 99 }}>Get started</Link>
+        </div>
       </motion.nav>
 
-      {/* ══ HERO — dark rounded card, 8blocks-style ══ */}
-      <section style={{ padding: "16px", paddingTop: 16, background: C.bg, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-        {/* THE DARK CARD */}
-        <motion.div ref={svgRef} initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, ease: [0.22,1,0.36,1] as const }}
-          style={{ flex: 1, borderRadius: 28, background: "#080308", overflow: "hidden", position: "relative", minHeight: "calc(100vh - 32px)", display: "flex", flexDirection: "column" }}>
+      {/* ══ HERO ══ */}
+      <section style={{ minHeight: "100vh", paddingTop: 60, display: "flex", alignItems: "center", background: C.bg, overflow: "hidden" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "60px 64px", width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }} className="hero-grid">
 
-          {/* neural SVG bg — subtle, dark */}
-          <div style={{ position: "absolute", inset: 0, opacity: 0.45 }}>
-            <NeuralSVG animate={svgVisible} />
-          </div>
-          {/* radial vignette */}
-          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 50% 45%, rgba(61,14,26,0.55) 0%, rgba(8,3,8,0.3) 60%, rgba(8,3,8,0.9) 100%)", pointerEvents: "none" }} />
-          {/* bottom fade */}
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "45%", background: "linear-gradient(to top, #080308 0%, transparent 100%)", pointerEvents: "none" }} />
-
-          {/* CENTER HEADLINE */}
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", position: "relative", padding: "100px 48px 160px", textAlign: "center" }}>
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6 }}
-              style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 99, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", marginBottom: 32 }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#34d399", display: "inline-block", animation: "ping 2s ease-out infinite" }} />
-              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", fontWeight: 500 }}>{liveCount.toLocaleString()} people active right now</span>
+          {/* LEFT — text */}
+          <motion.div initial="h" animate="v" variants={{ h:{}, v:{ transition:{ staggerChildren:.1 } } }}>
+            <motion.div variants={up}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 13px 5px 7px", borderRadius: 99, background: `${C.wine}0d`, border: `1px solid ${C.wine}22`, marginBottom: 28 }}>
+                <span style={{ padding: "2px 9px", borderRadius: 99, background: `${C.wine}18`, fontSize: 9, fontWeight: 700, color: C.wine, letterSpacing: "0.12em", textTransform: "uppercase" }}>Intelligence OS</span>
+                <span style={{ fontSize: 12, color: C.muted }}>Relationship patterns now live</span>
+              </div>
             </motion.div>
-
-            <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.7 }}
-              style={{ fontSize: "clamp(48px,7.5vw,96px)", fontWeight: 800, lineHeight: 0.95, letterSpacing: "-0.045em", color: "#fff", textTransform: "uppercase", textWrap: "balance", marginBottom: 24, maxWidth: 900 }}>
-              Know yourself<br />at a deeper level.
+            <motion.h1 variants={up} style={{ fontSize: "clamp(48px,5.5vw,80px)", fontWeight: 800, lineHeight: 1, letterSpacing: "-0.045em", marginBottom: 24, textWrap: "balance" }}>
+              Know yourself<br />
+              <span style={{ background: `linear-gradient(125deg,${C.wine} 0%,#b52340 45%,${C.gold} 100%)`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>at a deeper level.</span>
             </motion.h1>
-
-            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65, duration: 0.6 }}
-              style={{ fontSize: 17, color: "rgba(255,255,255,0.5)", lineHeight: 1.7, maxWidth: 480, marginBottom: 40 }}>
-              Not just a profile — your complete intelligence, mapped and evolving.
+            <motion.p variants={up} style={{ fontSize: 17, color: "#666", lineHeight: 1.82, maxWidth: 440, marginBottom: 40 }}>
+              Your emotional patterns, personality, and behavioural tendencies — mapped into a living intelligence profile that evolves every time you share a moment.
             </motion.p>
-
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.75, duration: 0.5 }}
-              style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-              <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "13px 28px", borderRadius: 99, background: "#fff", color: C.ink, fontSize: 14, fontWeight: 700 }}>
+            <motion.div variants={up} style={{ display: "flex", gap: 11, flexWrap: "wrap", marginBottom: 44 }}>
+              <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "13px 26px", borderRadius: 99, background: C.ink, color: "#fff", fontSize: 14, fontWeight: 700, boxShadow: `0 8px 28px ${C.ink}30` }}>
                 Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
               </Link>
-              <a href="#features" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "13px 24px", borderRadius: 99, border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", fontSize: 14, fontWeight: 500 }}>
-                See what it does
+              <a href="#howitworks" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "13px 24px", borderRadius: 99, border: `1.5px solid ${C.border}`, color: "#555", fontSize: 14, fontWeight: 600 }}>
+                See how it works
               </a>
             </motion.div>
-          </div>
-
-          {/* BOTTOM FLOATING CARDS — like 8blocks */}
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.6 }}
-            style={{ position: "absolute", bottom: 28, left: 28, right: 28, display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16, pointerEvents: "none" }}>
-
-            {/* left card — description */}
-            <div style={{ background: "rgba(255,255,255,0.95)", backdropFilter: "blur(20px)", borderRadius: 20, padding: "20px 22px", maxWidth: 280, boxShadow: "0 8px 32px rgba(0,0,0,0.25)" }}>
-              <p style={{ fontSize: 14, color: C.ink, lineHeight: 1.72, fontWeight: 400 }}>
-                Your emotional patterns, personality, and behavioural tendencies — mapped into a living intelligence profile.
-              </p>
-            </div>
-
-            {/* right card — live archetype / social proof */}
-            <div style={{ background: "rgba(255,255,255,0.95)", backdropFilter: "blur(20px)", borderRadius: 20, padding: "18px 22px", boxShadow: "0 8px 32px rgba(0,0,0,0.25)", minWidth: 220 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                <div style={{ width: 24, height: 24, borderRadius: 6, overflow: "hidden", position: "relative", background: C.wine, flexShrink: 0 }}>
-                  <Image src="/logo.jpg" alt="" fill style={{ objectFit: "cover" }} />
-                </div>
-                <div>
-                  <p style={{ fontSize: 10, fontWeight: 700, color: C.ink, letterSpacing: "0.06em", textTransform: "uppercase" }}>MyPullScore</p>
-                  <p style={{ fontSize: 10, color: C.muted }}>Intelligence OS</p>
-                </div>
-              </div>
+            <motion.div variants={up} style={{ display: "flex", alignItems: "center", gap: 14 }}>
               <div style={{ display: "flex" }}>
-                {["#9b3050","#7b2a44","#b83c60","#6d2039","#c9536e"].map((bg, i) => (
-                  <div key={i} style={{ width: 24, height: 24, borderRadius: "50%", border: "2px solid #fff", background: bg, marginLeft: i ? -6 : 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 800, color: "#fff", position: "relative" }}>
+                {["#9b3050","#7b2a44","#b83c60","#6d2039","#c9536e"].map((bg,i)=>(
+                  <div key={i} style={{ width: 28, height: 28, borderRadius: "50%", border: "2px solid #fff", background: bg, marginLeft: i?-8:0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 800, color: "#fff", zIndex: 5-i, position: "relative" }}>
                     {["A","K","S","M","L"][i]}
                   </div>
                 ))}
-                <span style={{ fontSize: 12, color: C.muted, marginLeft: 10, alignSelf: "center", fontWeight: 500 }}>12,000+ people</span>
               </div>
-            </div>
+              <div>
+                <div style={{ display: "flex", gap: 2 }}>{[1,2,3,4,5].map(i=><span key={i} style={{ color: C.gold, fontSize: 11 }}>★</span>)}</div>
+                <p style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>Trusted by <strong style={{ color: C.ink }}>12,000+</strong> people worldwide</p>
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
+
+          {/* RIGHT — Three.js shader canvas */}
+          <motion.div className="brain-col" initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.3, ease: [0.22,1,0.36,1] as const }}
+            style={{ height: 520, borderRadius: 28, overflow: "hidden", position: "relative", boxShadow: `0 32px 80px rgba(0,0,0,0.14), 0 0 0 1px ${C.border}` }}>
+            <ThreeBrain style={{ width: "100%", height: "100%" }} />
+            {/* live badge overlay */}
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
+              style={{ position: "absolute", top: 18, left: 18, display: "flex", alignItems: "center", gap: 7, padding: "8px 14px", borderRadius: 99, background: "rgba(255,255,255,0.92)", backdropFilter: "blur(12px)", boxShadow: "0 2px 12px rgba(0,0,0,0.10)" }}>
+              <span style={{ position: "relative", width: 7, height: 7, flexShrink: 0 }}>
+                <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#34d399", animation: "ping 2s ease-out infinite" }} />
+                <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#34d399" }} />
+              </span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: C.ink }}>{liveCount.toLocaleString()} active now</span>
+            </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       {/* ══ STATS ══ */}
