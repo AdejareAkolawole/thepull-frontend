@@ -304,8 +304,8 @@ export default function DashboardClient() {
             </div>
 
             {/* View Full Profile */}
-            <Link href="/reality-check" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 18, padding: "13px 0", borderRadius: 14, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.65)", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
-              Reality Check <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
+            <Link href="/pull-profile" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 18, padding: "13px 0", borderRadius: 14, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.65)", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+              Pull Profile <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
             </Link>
           </div>
         </motion.div>
