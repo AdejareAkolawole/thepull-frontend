@@ -11,11 +11,11 @@ const MID = "#6b7280";
 
 /* ── FAQ data ── */
 const FAQS = [
-  { q: "What does ThePull actually do for me?", a: "It shows you every pattern, tendency, and blind spot you have — who you really are, why you react the way you do, and what's shaping your relationships. It learns from everything you share and warns you before a pattern becomes a problem." },
+  { q: "What does MyPullScore actually do for me?", a: "It shows you every pattern, tendency, and blind spot you have — who you really are, why you react the way you do, and what's shaping your relationships. It learns from everything you share and warns you before a pattern becomes a problem." },
   { q: "What is the Pull Score?", a: "Your Pull Score is a composite intelligence rating built from your emotional depth, communication style, self-awareness, and relationship patterns. It updates every time you journal or run a reality check." },
   { q: "Do I have to complete the assessment at once?", a: "No. You can pause and return to your onboarding assessment at any time. Your answers are saved automatically as you go." },
   { q: "What happens when my score changes?", a: "Your archetype and all dimension scores update in real time. You'll see a shift in your profile and receive an AI insight explaining what changed and why." },
-  { q: "How is ThePull different from a personality test?", a: "Personality tests give a one-time snapshot. ThePull is a living model — it evolves from your daily entries, coach conversations, and real life moments you choose to share." },
+  { q: "How is MyPullScore different from a personality test?", a: "Personality tests give a one-time snapshot. MyPullScore is a living model — it evolves from your daily entries, coach conversations, and real life moments you choose to share." },
   { q: "Is my data safe?", a: "Yes. Your data is encrypted, never sold, and only ever used to build your personal intelligence profile. You can delete everything at any time." },
 ];
 
@@ -73,7 +73,7 @@ function HowItWorks() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, flex: 1 }}>
           {/* left: logo photo */}
           <div style={{ borderRadius: 14, overflow: "hidden", position: "relative", minHeight: 220 }}>
-            <Image src="/logo.jpg" alt="ThePull" fill style={{ objectFit: "cover", opacity: 0.8 }} />
+            <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover", opacity: 0.8 }} />
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 50%, rgba(10,5,12,0.7) 100%)" }} />
           </div>
           {/* right: step detail card */}
@@ -114,11 +114,11 @@ export default function LandingPage() {
 
       {/* ── NAV ── */}
       <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(255,255,255,0.92)", backdropFilter: "blur(14px)", borderBottom: "1px solid rgba(15,10,20,0.07)", height: 60, display: "flex", alignItems: "center", padding: "0 48px", gap: 40 }}>
-        <Link href="/landing" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", marginRight: "auto" }}>
-          <div style={{ width: 28, height: 28, borderRadius: 7, background: W, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ color: G, fontWeight: 900, fontSize: 13, lineHeight: 1 }}>P</span>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", marginRight: "auto" }}>
+          <div style={{ width: 36, height: 36, borderRadius: 10, overflow: "hidden", position: "relative", flexShrink: 0 }}>
+            <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover" }} />
           </div>
-          <span style={{ fontSize: 15, fontWeight: 800, color: DK, letterSpacing: "-0.02em" }}>ThePull</span>
+          <span style={{ fontSize: 15, fontWeight: 800, color: DK, letterSpacing: "-0.02em" }}>MyPullScore</span>
         </Link>
         <div className="nav-links" style={{ display: "flex", gap: 28 }}>
           {["Features", "How it works", "FAQ"].map(l => (
@@ -141,7 +141,7 @@ export default function LandingPage() {
           Know yourself<br />at a deeper level.
         </h1>
         <p style={{ fontSize: 17, color: MID, maxWidth: 480, margin: "0 auto 40px", lineHeight: 1.75 }}>
-          ThePull maps your emotional patterns, personality, and behavioural tendencies into a living intelligence profile that grows with you.
+          MyPullScore maps your emotional patterns, personality, and behavioural tendencies into a living intelligence profile that grows with you.
         </p>
         <div style={{ display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
           <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 30px", borderRadius: 99, background: W, color: "#fff", fontSize: 14, fontWeight: 700, textDecoration: "none", boxShadow: "0 6px 24px rgba(61,14,26,0.25)" }}>
@@ -252,7 +252,7 @@ export default function LandingPage() {
                 <span style={{ fontSize: 14 }}>⚡</span>
               </div>
               <h3 style={{ fontSize: 17, fontWeight: 700, color: "#fff", marginBottom: 8, letterSpacing: "-0.01em" }}>Reality Check when you need to</h3>
-              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.7, marginBottom: 20 }}>Run a reality check on any situation directly from ThePull and pick back up when you're ready.</p>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.7, marginBottom: 20 }}>Run a reality check on any situation directly from MyPullScore and pick back up when you're ready.</p>
               {/* floating card */}
               <div style={{ background: "rgba(255,255,255,0.09)", borderRadius: 14, padding: "14px 16px", border: "1px solid rgba(255,255,255,0.12)", backdropFilter: "blur(8px)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
@@ -260,7 +260,7 @@ export default function LandingPage() {
                     <div style={{ width: 28, height: 28, borderRadius: 8, background: G, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <span style={{ fontSize: 12, color: DK, fontWeight: 900 }}>P</span>
                     </div>
-                    <span style={{ fontSize: 12, color: "#fff", fontWeight: 600 }}>Ask The Pull</span>
+                    <span style={{ fontSize: 12, color: "#fff", fontWeight: 600 }}>Ask MyPullScore</span>
                   </div>
                   <span style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>Just now</span>
                 </div>
@@ -311,7 +311,7 @@ export default function LandingPage() {
               Everything you need to<br />understand yourself
             </h2>
             <p style={{ fontSize: 15, color: MID, maxWidth: 520, margin: "0 auto", lineHeight: 1.75 }}>
-              ThePull handles the deep analysis behind the scenes, giving you the tools to detect, prepare for, understand, and reshape your recurring patterns.
+              MyPullScore handles the deep analysis behind the scenes, giving you the tools to detect, prepare for, understand, and reshape your recurring patterns.
             </p>
           </div>
 
@@ -319,7 +319,7 @@ export default function LandingPage() {
             {/* F1 — Journal */}
             <div style={{ borderRadius: 20, background: CR, border: "1px solid rgba(15,10,20,0.08)", padding: "26px 26px 0", overflow: "hidden" }}>
               <h3 style={{ fontSize: 17, fontWeight: 700, color: DK, marginBottom: 6 }}>Journal Intelligence</h3>
-              <p style={{ fontSize: 13, color: MID, lineHeight: 1.7, marginBottom: 22 }}>Keep a journal of your real moments. ThePull extracts the emotional signals behind every entry and feeds them into your profile.</p>
+              <p style={{ fontSize: 13, color: MID, lineHeight: 1.7, marginBottom: 22 }}>Keep a journal of your real moments. MyPullScore extracts the emotional signals behind every entry and feeds them into your profile.</p>
               {/* chat mockup */}
               <div style={{ background: "#fff", borderRadius: "14px 14px 0 0", padding: "18px 16px 0", border: "1px solid rgba(15,10,20,0.07)", borderBottom: "none" }}>
                 <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
@@ -340,7 +340,7 @@ export default function LandingPage() {
 
             {/* F2 — Coach */}
             <div style={{ borderRadius: 20, background: CR, border: "1px solid rgba(15,10,20,0.08)", padding: "26px 26px 0", overflow: "hidden" }}>
-              <h3 style={{ fontSize: 17, fontWeight: 700, color: DK, marginBottom: 6 }}>AI Coach — Ask The Pull</h3>
+              <h3 style={{ fontSize: 17, fontWeight: 700, color: DK, marginBottom: 6 }}>AI Coach — Ask MyPullScore</h3>
               <p style={{ fontSize: 13, color: MID, lineHeight: 1.7, marginBottom: 22 }}>Have real conversations with an AI that knows your full intelligence profile. Get honest, contextual guidance — not generic advice.</p>
               {/* frozen-style mockup */}
               <div style={{ background: "#fff", borderRadius: "14px 14px 0 0", padding: "18px 16px 0", border: "1px solid rgba(15,10,20,0.07)", borderBottom: "none" }}>
@@ -395,7 +395,7 @@ export default function LandingPage() {
 
             {/* F4 — Dark photo card */}
             <div style={{ borderRadius: 20, overflow: "hidden", position: "relative", minHeight: 360 }}>
-              <Image src="/logo.jpg" alt="ThePull" fill style={{ objectFit: "cover" }} />
+              <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover" }} />
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(160deg, rgba(15,10,20,0.55) 0%, rgba(61,14,26,0.9) 100%)" }} />
               <div style={{ position: "absolute", inset: 0, padding: "26px 26px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                 <div>
@@ -404,7 +404,7 @@ export default function LandingPage() {
                     <span style={{ fontSize: 11, fontWeight: 700, color: G, letterSpacing: "0.08em", textTransform: "uppercase" as const }}>Auto Detection</span>
                   </div>
                   <h3 style={{ fontSize: 20, fontWeight: 700, color: "#fff", lineHeight: 1.25, marginBottom: 10 }}>Automatically identifies recurring patterns before they become invisible habits</h3>
-                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 1.65 }}>ThePull detects your behavioural signals across journal entries and surfaces them before they become fixed.</p>
+                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 1.65 }}>MyPullScore detects your behavioural signals across journal entries and surfaces them before they become fixed.</p>
                 </div>
                 <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 22px", borderRadius: 99, background: G, color: DK, fontSize: 13, fontWeight: 700, textDecoration: "none", alignSelf: "flex-start" }}>
                   Get Started →
@@ -435,7 +435,7 @@ export default function LandingPage() {
               </div>
               {/* right: big photo */}
               <div style={{ borderRadius: 18, overflow: "hidden", position: "relative", minHeight: 420 }}>
-                <Image src="/logo.jpg" alt="ThePull" fill style={{ objectFit: "cover", opacity: 0.7 }} />
+                <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover", opacity: 0.7 }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 40%, rgba(10,5,12,0.85) 100%)" }} />
                 <div style={{ position: "absolute", bottom: 24, left: 20, right: 20 }}>
                   <div style={{ background: "rgba(255,255,255,0.07)", backdropFilter: "blur(14px)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 14, padding: "16px 18px" }}>
@@ -525,7 +525,7 @@ export default function LandingPage() {
             <h2 style={{ fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 800, color: DK, letterSpacing: "-0.025em", lineHeight: 1.1, marginBottom: 8 }}>
               Questions you&apos;re<br />probably having
             </h2>
-            <p style={{ fontSize: 14, color: MID, marginTop: 10 }}>Everything you need to know about ThePull</p>
+            <p style={{ fontSize: 14, color: MID, marginTop: 10 }}>Everything you need to know about MyPullScore</p>
           </div>
           <FAQ />
         </div>
@@ -543,7 +543,7 @@ export default function LandingPage() {
                 Know yourself<br />at a deeper level.
               </h2>
               <p style={{ fontSize: 14, color: MID, lineHeight: 1.8, marginBottom: 32, maxWidth: 340 }}>
-                Switch to ThePull and unlock deeper self-awareness, smarter pattern tracking, and total clarity.
+                Switch to MyPullScore and unlock deeper self-awareness, smarter pattern tracking, and total clarity.
               </p>
               <div>
                 <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 28px", borderRadius: 99, background: W, color: "#fff", fontSize: 14, fontWeight: 700, textDecoration: "none", boxShadow: "0 6px 20px rgba(61,14,26,0.25)" }}>
@@ -584,11 +584,11 @@ export default function LandingPage() {
         <div style={{ maxWidth: 1060, margin: "0 auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr", gap: 32, paddingBottom: 48, borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                <div style={{ width: 28, height: 28, borderRadius: 7, background: W, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ color: G, fontWeight: 900, fontSize: 12 }}>P</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                <div style={{ width: 34, height: 34, borderRadius: 9, overflow: "hidden", position: "relative", flexShrink: 0 }}>
+                  <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover" }} />
                 </div>
-                <span style={{ fontSize: 15, fontWeight: 800, color: "#fff" }}>ThePull</span>
+                <span style={{ fontSize: 15, fontWeight: 800, color: "#fff" }}>MyPullScore</span>
               </div>
               <p style={{ fontSize: 13, color: "rgba(255,255,255,0.3)", lineHeight: 1.75, maxWidth: 200 }}>Your personal intelligence, finally under control.</p>
             </div>
@@ -605,7 +605,7 @@ export default function LandingPage() {
             ))}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 0" }}>
-            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.2)" }}>© ThePull 2026</p>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.2)" }}>© MyPullScore 2026</p>
             <div style={{ display: "flex", gap: 20 }}>
               <Link href="/terms" style={{ fontSize: 12, color: "rgba(255,255,255,0.2)", textDecoration: "none" }}>Terms</Link>
               <Link href="/privacy" style={{ fontSize: 12, color: "rgba(255,255,255,0.2)", textDecoration: "none" }}>Privacy</Link>
@@ -613,7 +613,7 @@ export default function LandingPage() {
           </div>
         </div>
         <p style={{ fontSize: "clamp(60px, 12vw, 140px)", fontWeight: 900, color: "rgba(255,255,255,0.03)", textAlign: "center", letterSpacing: "-0.04em", lineHeight: 0.9, marginTop: 8, paddingBottom: 0, userSelect: "none" }}>
-          ThePull
+          MyPullScore
         </p>
       </footer>
 
