@@ -54,28 +54,6 @@ const up = {
   v: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] as const } },
 };
 
-/* ── text scramble ── */
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#@!%&";
-function Scramble({ text, delay = 0, style = {} }: { text: string; delay?: number; style?: React.CSSProperties }) {
-  const [display, setDisplay] = useState(() => text.split("").map(c => c === " " ? " " : CHARS[Math.floor(Math.random()*CHARS.length)]).join(""));
-  useEffect(() => {
-    const t0 = setTimeout(() => {
-      let iter = 0;
-      const total = text.length * 4;
-      const iv = setInterval(() => {
-        setDisplay(text.split("").map((ch, i) => {
-          if (ch === " " || ch === "\n") return ch;
-          if (i <= Math.floor(iter / 4)) return ch;
-          return CHARS[Math.floor(Math.random() * CHARS.length)];
-        }).join(""));
-        iter++;
-        if (iter >= total) clearInterval(iv);
-      }, 28);
-    }, delay * 1000);
-    return () => clearTimeout(t0);
-  }, [text, delay]);
-  return <span style={style}>{display}</span>;
-}
 
 function Count({ end, suffix = "" }: { end: number; suffix?: string }) {
   const [v, setV] = useState(0);
@@ -209,18 +187,27 @@ export default function LandingPage() {
 
         <div style={{ maxWidth: 800, margin: "0 auto", padding: "60px 32px 80px", textAlign: "center", position: "relative", zIndex: 2 }}>
 
-          {/* scramble headline */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
-            <h1 style={{ fontSize: "clamp(56px,8vw,112px)", fontWeight: 800, lineHeight: 0.92,
-              letterSpacing: "-0.055em", marginBottom: 32, fontFamily: "'Aeonik', system-ui, sans-serif" }}>
-              <Scramble text="Know yourself" delay={0.1} style={{ display: "block", color: C.ink }} />
-              <Scramble text="at a deeper level." delay={0.5}
+          {/* clip-reveal headline */}
+          <h1 style={{ fontSize: "clamp(56px,8vw,112px)", fontWeight: 800, lineHeight: 0.92,
+            letterSpacing: "-0.055em", marginBottom: 32, fontFamily: "'Aeonik', system-ui, sans-serif" }}>
+            <span style={{ display: "block", overflow: "hidden" }}>
+              <motion.span initial={{ y: "110%" }} animate={{ y: 0 }}
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                style={{ display: "block", color: C.ink }}>
+                Know yourself
+              </motion.span>
+            </span>
+            <span style={{ display: "block", overflow: "hidden" }}>
+              <motion.span initial={{ y: "110%" }} animate={{ y: 0 }}
+                transition={{ duration: 0.8, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 style={{ display: "block",
                   background: `linear-gradient(118deg, ${C.wine}, #c72b4a, ${C.gold}, ${C.wine})`,
                   backgroundSize: "300% 300%", WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent", animation: "gradShift 4s ease infinite" }} />
-            </h1>
-          </motion.div>
+                  WebkitTextFillColor: "transparent", animation: "gradShift 4s ease infinite" }}>
+                at a deeper level.
+              </motion.span>
+            </span>
+          </h1>
 
           {/* word-by-word subtitle */}
           <p style={{ fontSize: 18, color: "#666", lineHeight: 1.78, maxWidth: 500, margin: "0 auto 44px" }}>
