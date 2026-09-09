@@ -149,13 +149,13 @@ function NeuralSVG({ animate: doAnim }: { animate: boolean }) {
       ))}
 
       {/* hemisphere labels */}
-      <text x="182" y="64" fontSize="9" fill="rgba(61,14,26,0.35)" fontFamily="DM Sans,sans-serif" fontWeight="600" letterSpacing="0.15em" textAnchor="middle" textDecoration="none">LEFT HEMISPHERE</text>
-      <text x="378" y="64" fontSize="9" fill="rgba(61,14,26,0.35)" fontFamily="DM Sans,sans-serif" fontWeight="600" letterSpacing="0.15em" textAnchor="middle">RIGHT HEMISPHERE</text>
+      <text x="182" y="64" fontSize="9" fill="rgba(61,14,26,0.35)" fontFamily="Aeonik,sans-serif" fontWeight="600" letterSpacing="0.15em" textAnchor="middle" textDecoration="none">LEFT HEMISPHERE</text>
+      <text x="378" y="64" fontSize="9" fill="rgba(61,14,26,0.35)" fontFamily="Aeonik,sans-serif" fontWeight="600" letterSpacing="0.15em" textAnchor="middle">RIGHT HEMISPHERE</text>
       <line x1="290" y1="68" x2="290" y2="310" stroke="rgba(61,14,26,0.06)" strokeWidth="1" strokeDasharray="4 4" />
 
       {/* dimension labels */}
       {[["Emotional IQ", 80, 330],["Self-Awareness", 290, 338],["Communication", 490, 295]].map(([l, x, y]) => (
-        <text key={l} x={x} y={y} fontSize="8.5" fill="rgba(12,3,8,0.3)" fontFamily="DM Sans,sans-serif" textAnchor="middle" fontWeight="500">{l}</text>
+        <text key={l} x={x} y={y} fontSize="8.5" fill="rgba(12,3,8,0.3)" fontFamily="Aeonik,sans-serif" textAnchor="middle" fontWeight="500">{l}</text>
       ))}
     </svg>
   );
@@ -178,8 +178,8 @@ function Ring({ pct, label, val, color }: { pct: number; label: string; val: str
           transition={{ duration: 1.4, ease: "easeOut", delay: 0.2 }}
           style={{ rotate: -90, transformOrigin: "48px 48px" }}
         />
-        <text x="48" y="44" textAnchor="middle" fontSize="16" fontWeight="800" fill={C.ink} fontFamily="Syne,sans-serif">{val}</text>
-        <text x="48" y="58" textAnchor="middle" fontSize="8" fill={C.muted} fontFamily="DM Sans,sans-serif">{label}</text>
+        <text x="48" y="44" textAnchor="middle" fontSize="16" fontWeight="800" fill={C.ink} fontFamily="Aeonik,sans-serif">{val}</text>
+        <text x="48" y="58" textAnchor="middle" fontSize="8" fill={C.muted} fontFamily="Aeonik,sans-serif">{label}</text>
       </svg>
     </div>
   );
@@ -253,13 +253,19 @@ export default function LandingPage() {
   const heroY = useTransform(scrollY, [0, 500], [0, -60]);
 
   return (
-    <div style={{ fontFamily: "DM Sans, system-ui, sans-serif", background: C.bg, color: C.ink, overflowX: "hidden" }}>
+    <div style={{ fontFamily: "'Aeonik', system-ui, sans-serif", background: C.bg, color: C.ink, overflowX: "hidden" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @font-face {
+          font-family: 'Aeonik';
+          src: url('/Aeonik-Regular.ttf') format('truetype');
+          font-weight: 100 900;
+          font-style: normal;
+          font-display: swap;
+        }
         ${BLOB_KF}
         *, *::before, *::after { box-sizing: border-box; }
-        body { margin: 0; }
-        h1,h2,h3 { font-family: 'Syne', sans-serif; }
+        body { margin: 0; font-family: 'Aeonik', system-ui, sans-serif; }
+        h1,h2,h3 { font-family: 'Aeonik', system-ui, sans-serif; }
         a { text-decoration: none; }
         @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #ffffff; } }
         @media (max-width: 900px) {
@@ -291,7 +297,7 @@ export default function LandingPage() {
           <div style={{ width: 30, height: 30, borderRadius: 7, overflow: "hidden", position: "relative" }}>
             <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover" }} />
           </div>
-          <span style={{ fontSize: 14, fontWeight: 700, color: C.ink, letterSpacing: "-0.02em", fontFamily: "Syne, sans-serif" }}>MyPullScore</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: C.ink, letterSpacing: "-0.02em", fontFamily: "'Aeonik', sans-serif" }}>MyPullScore</span>
         </Link>
         <div style={{ display: "flex", gap: 28, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
           {[["Features", "#features"], ["How it works", "#howitworks"], ["Pricing", "#pricing"], ["FAQ", "#faq"]].map(([l, h]) => (
@@ -316,7 +322,7 @@ export default function LandingPage() {
           <motion.div initial="h" animate="v" variants={{ h: {}, v: { transition: { staggerChildren: 0.1 } } }}>
             <motion.div variants={up}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 13px 5px 7px", borderRadius: 99, background: `${C.wine}0d`, border: `1px solid ${C.wine}22`, marginBottom: 28 }}>
-                <span style={{ padding: "2px 9px", borderRadius: 99, background: `${C.wine}18`, fontSize: 9, fontWeight: 700, color: C.wine, letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "Syne,sans-serif" }}>Intelligence OS</span>
+                <span style={{ padding: "2px 9px", borderRadius: 99, background: `${C.wine}18`, fontSize: 9, fontWeight: 700, color: C.wine, letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "'Aeonik', sans-serif" }}>Intelligence OS</span>
                 <span style={{ fontSize: 12, color: C.muted }}>Relationship patterns now live</span>
               </div>
             </motion.div>
@@ -370,7 +376,7 @@ export default function LandingPage() {
               <motion.div key={i} initial={{ opacity: 0, scale: 0.88 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: c.delay }}
                 style={{ position: "absolute", ...(c.top ? { top: c.top } : { bottom: c.bottom }), ...(c.left ? { left: c.left } : { right: c.right }), background: "#fff", borderRadius: 16, padding: "14px 18px", boxShadow: "0 12px 40px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.05)", border: `1px solid ${C.border}`, minWidth: 150, animation: `float ${3.5 + i}s ease-in-out ${i * 0.5}s infinite` }}>
                 <p style={{ fontSize: 9, color: C.muted, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 4 }}>{c.label}</p>
-                <p style={{ fontSize: i === 0 ? 30 : 14, fontWeight: 800, color: C.ink, letterSpacing: "-0.03em", fontFamily: "Syne,sans-serif", lineHeight: 1.1 }}>{c.val}</p>
+                <p style={{ fontSize: i === 0 ? 30 : 14, fontWeight: 800, color: C.ink, letterSpacing: "-0.03em", fontFamily: "'Aeonik', sans-serif", lineHeight: 1.1 }}>{c.val}</p>
                 <p style={{ fontSize: 11, color: c.subColor, fontWeight: 600, marginTop: 4 }}>{c.sub}</p>
               </motion.div>
             ))}
@@ -398,7 +404,7 @@ export default function LandingPage() {
             { end: 5, suffix: " min", label: "To your first score" },
           ].map((s, i) => (
             <motion.div key={s.label} variants={up} style={{ textAlign: "center", padding: "0 20px", borderRight: i < 3 ? `1px solid ${C.border}` : "none" }}>
-              <p style={{ fontSize: "clamp(36px,4vw,52px)", fontWeight: 800, color: C.ink, letterSpacing: "-0.04em", lineHeight: 1, fontFamily: "Syne,sans-serif" }}>
+              <p style={{ fontSize: "clamp(36px,4vw,52px)", fontWeight: 800, color: C.ink, letterSpacing: "-0.04em", lineHeight: 1, fontFamily: "'Aeonik', sans-serif" }}>
                 <Count end={s.end} suffix={s.suffix} />
               </p>
               <p style={{ fontSize: 13, color: C.muted, marginTop: 6 }}>{s.label}</p>
@@ -520,11 +526,11 @@ export default function LandingPage() {
                 { icon: TrendingUpIcon,  n: "04", title: "Keep growing",         desc: "Every session deepens your intelligence profile." },
               ].map((s, i) => (
                 <motion.div key={s.n} variants={up} style={{ padding: "40px 28px", background: C.ink, position: "relative" }}>
-                  <span style={{ fontSize: 10, color: C.gold, fontWeight: 700, letterSpacing: "0.18em", fontFamily: "Syne,sans-serif", display: "block", marginBottom: 18 }}>{s.n}</span>
+                  <span style={{ fontSize: 10, color: C.gold, fontWeight: 700, letterSpacing: "0.18em", fontFamily: "'Aeonik', sans-serif", display: "block", marginBottom: 18 }}>{s.n}</span>
                   <div style={{ width: 38, height: 38, borderRadius: 11, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
                     <HugeiconsIcon icon={s.icon} size={15} style={{ color: "rgba(255,255,255,0.6)" }} />
                   </div>
-                  <p style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 9, fontFamily: "Syne,sans-serif" }}>{s.title}</p>
+                  <p style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 9, fontFamily: "'Aeonik', sans-serif" }}>{s.title}</p>
                   <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.7 }}>{s.desc}</p>
                   {i < 3 && <span style={{ position: "absolute", top: 43, right: -10, fontSize: 16, color: "rgba(255,255,255,0.15)", zIndex: 1 }}>→</span>}
                 </motion.div>
@@ -575,7 +581,7 @@ export default function LandingPage() {
               {/* free */}
               <motion.div variants={up} style={{ borderRadius: 24, border: `1.5px solid ${C.border}`, padding: "36px 32px" }}>
                 <p style={{ fontSize: 12, fontWeight: 700, color: C.muted, marginBottom: 18, letterSpacing: "0.08em", textTransform: "uppercase" }}>Free</p>
-                <p style={{ fontSize: 50, fontWeight: 800, color: C.ink, letterSpacing: "-0.05em", lineHeight: 1, marginBottom: 4, fontFamily: "Syne,sans-serif" }}>$0</p>
+                <p style={{ fontSize: 50, fontWeight: 800, color: C.ink, letterSpacing: "-0.05em", lineHeight: 1, marginBottom: 4, fontFamily: "'Aeonik', sans-serif" }}>$0</p>
                 <p style={{ fontSize: 13, color: C.muted, marginBottom: 28 }}>Forever free</p>
                 <Link href="/register" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "12px 0", borderRadius: 99, border: `1.5px solid ${C.border}`, color: C.ink, fontSize: 14, fontWeight: 700, marginBottom: 28 }}>Get started</Link>
                 {["Pull Score + Archetype","5 Coach sessions/month","3 Reality checks/month","Smart Journal (10 insights/mo)","Journey Map"].map(f => (
@@ -589,7 +595,7 @@ export default function LandingPage() {
               <motion.div variants={up} whileHover={{ scale: 1.015 }} style={{ borderRadius: 24, background: C.ink, padding: "36px 32px", position: "relative", boxShadow: `0 20px 60px ${C.ink}25`, transition: "box-shadow .2s" }}>
                 <div style={{ position: "absolute", top: 18, right: 18, padding: "4px 11px", borderRadius: 99, background: C.gold, color: C.ink, fontSize: 9, fontWeight: 900, letterSpacing: "0.08em", textTransform: "uppercase" }}>Most popular</div>
                 <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.35)", marginBottom: 18, letterSpacing: "0.08em", textTransform: "uppercase" }}>Premium</p>
-                <p style={{ fontSize: 50, fontWeight: 800, color: "#fff", letterSpacing: "-0.05em", lineHeight: 1, marginBottom: 4, fontFamily: "Syne,sans-serif" }}>$12</p>
+                <p style={{ fontSize: 50, fontWeight: 800, color: "#fff", letterSpacing: "-0.05em", lineHeight: 1, marginBottom: 4, fontFamily: "'Aeonik', sans-serif" }}>$12</p>
                 <p style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", marginBottom: 28 }}>per month</p>
                 <Link href="/upgrade" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 99, background: "#fff", color: C.ink, fontSize: 14, fontWeight: 700, marginBottom: 28 }}>
                   Upgrade now <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
@@ -653,7 +659,7 @@ export default function LandingPage() {
               <div style={{ position: "absolute", top: "-20%", left: "30%", width: 400, height: 400, background: `radial-gradient(ellipse, ${C.wine}60 0%, transparent 70%)`, animation: "morph 12s ease-in-out infinite", pointerEvents: "none" }} />
               <div style={{ position: "absolute", bottom: "-20%", right: "20%", width: 320, height: 320, background: `radial-gradient(ellipse, ${C.gold}20 0%, transparent 70%)`, animation: "morph 16s ease-in-out 3s infinite", pointerEvents: "none" }} />
               <div style={{ position: "relative" }}>
-                <p style={{ fontSize: 11, fontWeight: 700, color: C.gold, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 20, fontFamily: "Syne,sans-serif" }}>Start today — free</p>
+                <p style={{ fontSize: 11, fontWeight: 700, color: C.gold, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 20, fontFamily: "'Aeonik', sans-serif" }}>Start today — free</p>
                 <h2 style={{ fontSize: "clamp(40px,6vw,72px)", fontWeight: 800, color: "#fff", letterSpacing: "-0.05em", lineHeight: 0.97, marginBottom: 22, textWrap: "balance" }}>
                   Know yourself<br />at a deeper level.
                 </h2>
@@ -685,7 +691,7 @@ export default function LandingPage() {
                 <div style={{ width: 30, height: 30, borderRadius: 7, overflow: "hidden", position: "relative" }}>
                   <Image src="/logo.jpg" alt="MyPullScore" fill style={{ objectFit: "cover" }} />
                 </div>
-                <span style={{ fontSize: 14, fontWeight: 700, color: C.ink, fontFamily: "Syne,sans-serif" }}>MyPullScore</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: C.ink, fontFamily: "'Aeonik', sans-serif" }}>MyPullScore</span>
               </div>
               <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.78, maxWidth: 190 }}>Your personal intelligence, finally under your control.</p>
             </div>
