@@ -228,8 +228,8 @@ export default function DashboardClient() {
                 3 new insights ready. Your intelligence profile has evolved since your last visit.
               </p>
               <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
-                <Link href="/pull-profile" style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 18px", borderRadius: 12, background: "rgba(255,255,255,0.95)", color: "#7c2232", fontSize: 12, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 16px rgba(0,0,0,0.2)" }}>
-                  View Full Profile <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
+                <Link href="/reality-check" style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 18px", borderRadius: 12, background: "rgba(255,255,255,0.95)", color: "#7c2232", fontSize: 12, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 16px rgba(0,0,0,0.2)" }}>
+                  Reality Check <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
                 </Link>
                 <Link href="/coach" style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 18px", borderRadius: 12, background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 600, textDecoration: "none", border: "1px solid rgba(255,255,255,0.15)" }}>
                   <HugeiconsIcon icon={AiInnovation01Icon} size={12} /> Ask The Pull
