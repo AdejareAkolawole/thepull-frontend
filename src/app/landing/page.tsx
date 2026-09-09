@@ -54,22 +54,6 @@ const up = {
 };
 
 
-function Count({ end, suffix = "" }: { end: number; suffix?: string }) {
-  const [v, setV] = useState(0);
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
-  useEffect(() => {
-    if (!inView) return;
-    let cur = 0; const step = end / 70;
-    const t = setInterval(() => {
-      cur += step;
-      if (cur >= end) { setV(end); clearInterval(t); } else setV(Math.floor(cur));
-    }, 14);
-    return () => clearInterval(t);
-  }, [inView, end]);
-  return <span ref={ref}>{v.toLocaleString()}{suffix}</span>;
-}
-
 export default function LandingPage() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [cursor, setCursor] = useState({ x: 0.5, y: 0.5 });
@@ -122,14 +106,34 @@ export default function LandingPage() {
         *, *::before, *::after { box-sizing: border-box; }
         body { margin: 0; }
         a { text-decoration: none; }
+
         @media (max-width: 860px) {
-          .feat-grid  { grid-template-columns: 1fr 1fr !important; }
+          .feat-grid  { grid-template-columns: 1fr !important; }
           .step-grid  { grid-template-columns: 1fr 1fr !important; }
           .price-grid { grid-template-columns: 1fr !important; }
-          .faq-inner  { grid-template-columns: 1fr !important; }
+          .faq-inner  { grid-template-columns: 1fr !important; gap: 40px !important; }
           .foot-inner { grid-template-columns: 1fr 1fr !important; }
-          section, .pad { padding-left: 24px !important; padding-right: 24px !important; }
+          section, .pad { padding-left: 20px !important; padding-right: 20px !important; }
           .nav-mid { display: none !important; }
+          /* bento hero card full width on mobile */
+          .bento-hero { grid-column: span 1 !important; }
+          /* pricing cards */
+          .price-grid > * { width: 100% !important; }
+        }
+
+        @media (max-width: 560px) {
+          .step-grid  { grid-template-columns: 1fr !important; }
+          .foot-inner { grid-template-columns: 1fr 1fr !important; }
+          /* nav */
+          nav { padding: 0 16px !important; }
+          /* hero */
+          .hero-ctas { flex-direction: column !important; align-items: stretch !important; }
+          .hero-ctas a, .hero-ctas button { text-align: center !important; justify-content: center !important; }
+          .social-proof { flex-wrap: wrap !important; gap: 8px !important; }
+          /* sections */
+          section, .pad { padding-top: 72px !important; padding-bottom: 72px !important; }
+          /* features header row */
+          .feat-header { flex-direction: column !important; align-items: flex-start !important; }
         }
       `}</style>
 
@@ -217,6 +221,7 @@ export default function LandingPage() {
           {/* CTAs */}
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1.5 }}
+            className="hero-ctas"
             style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 52 }}>
             <Link href="/register"
               style={{ display: "inline-flex", alignItems: "center", gap: 8,
@@ -239,6 +244,7 @@ export default function LandingPage() {
 
           {/* social proof */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
+            className="social-proof"
             style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
             <div style={{ display: "flex" }}>
               {["#9b3050","#7b2a44","#b83c60","#6d2039","#c9536e"].map((bg,i)=>(
@@ -251,32 +257,30 @@ export default function LandingPage() {
               ))}
             </div>
             <div style={{ display: "flex", gap: 2 }}>{[1,2,3,4,5].map(i=><span key={i} style={{ color: C.gold, fontSize: 12 }}>★</span>)}</div>
-            <span style={{ fontSize: 13, color: C.muted }}>Trusted by <strong style={{ color: C.ink }}>12,000+</strong> worldwide</span>
+            <span style={{ fontSize: 13, color: C.muted }}>Loved by early users worldwide</span>
           </motion.div>
         </div>
       </section>
 
-      {/* ══ STATS ══ */}
+      {/* ══ TRUST BAR ══ */}
       <section style={{ background: C.blush, borderTop: `1px solid ${C.border}`,
-        borderBottom: `1px solid ${C.border}`, padding: "64px 64px" }} className="pad">
-        <S style={{ maxWidth: 1000, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
-          {[
-            { end: 12000, suffix: "+", label: "Active users", sub: "and growing daily" },
-            { end: 98,    suffix: "%", label: "Profile accuracy", sub: "across all archetypes" },
-            { end: 50,    suffix: "+", label: "Intelligence dimensions", sub: "mapped per person" },
-            { end: 5,     suffix: " min", label: "To your first score", sub: "no credit card needed" },
-          ].map((s, i) => (
-            <motion.div key={s.label} variants={up}
-              style={{ textAlign: "center", padding: "0 28px",
-                borderRight: i < 3 ? `1px solid ${C.border}` : "none" }}>
-              <p style={{ fontSize: "clamp(40px,4.5vw,64px)", fontWeight: 900, color: C.wine,
-                letterSpacing: "-0.06em", lineHeight: 1, marginBottom: 6 }}>
-                <Count end={s.end} suffix={s.suffix} />
-              </p>
-              <p style={{ fontSize: 13, fontWeight: 600, color: C.ink, marginBottom: 3 }}>{s.label}</p>
-              <p style={{ fontSize: 11, color: C.muted }}>{s.sub}</p>
-            </motion.div>
-          ))}
+        borderBottom: `1px solid ${C.border}`, padding: "28px 64px" }} className="pad">
+        <S style={{ maxWidth: 900, margin: "0 auto" }}>
+          <motion.div variants={up} style={{ display: "flex", alignItems: "center", justifyContent: "center",
+            gap: 36, flexWrap: "wrap" }}>
+            {[
+              { icon: ShieldCheckIcon, label: "Private by design" },
+              { icon: LockIcon,        label: "End-to-end encrypted" },
+              { icon: Globe02Icon,     label: "Available worldwide" },
+              { icon: SparklesIcon,    label: "No credit card required" },
+            ].map(x => (
+              <div key={x.label} style={{ display: "flex", alignItems: "center", gap: 8,
+                fontSize: 13, color: C.muted, fontWeight: 500 }}>
+                <HugeiconsIcon icon={x.icon} size={14} style={{ color: C.wine, opacity: 0.7 }} />
+                {x.label}
+              </div>
+            ))}
+          </motion.div>
         </S>
       </section>
 
@@ -309,6 +313,7 @@ export default function LandingPage() {
               {/* Hero bento card */}
               <motion.div variants={up}
                 whileHover={{ y: -4 }}
+                className="bento-hero"
                 style={{ gridColumn: "span 2", borderRadius: 24,
                   background: `linear-gradient(135deg, ${C.wine} 0%, #5c1124 100%)`,
                   padding: "40px 36px", cursor: "default", position: "relative", overflow: "hidden",
@@ -623,7 +628,7 @@ export default function LandingPage() {
                 </h2>
                 <p style={{ fontSize: 16, color: "rgba(255,255,255,0.4)", lineHeight: 1.8,
                   maxWidth: 400, margin: "0 auto 44px" }}>
-                  Join 12,000+ people building the most self-aware version of themselves.
+                  Build the most self-aware version of yourself — starting today.
                 </p>
                 <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 9,
                   padding: "15px 36px", borderRadius: 99, background: "#fff", color: C.ink,
