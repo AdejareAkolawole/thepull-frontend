@@ -21,21 +21,11 @@ const Toggle = ({ on, onClick }: { on: boolean; onClick: () => void }) => (
 );
 
 type Prefs = {
-  notif_insights: boolean;
-  notif_weekly: boolean;
-  notif_relationship: boolean;
-  notif_streak: boolean;
-  privacy_2fa: boolean;
   privacy_data_sharing: string;
   privacy_benchmarking: boolean;
 };
 
 const DEFAULTS: Prefs = {
-  notif_insights: true,
-  notif_weekly: true,
-  notif_relationship: false,
-  notif_streak: true,
-  privacy_2fa: false,
   privacy_data_sharing: "Minimal",
   privacy_benchmarking: true,
 };
@@ -51,11 +41,6 @@ export default function SettingsPage() {
     getProfile().then((p: Record<string, unknown>) => {
       const ent = (p.entitlements as Record<string, unknown>) || {};
       setPrefs({
-        notif_insights:      ent.notif_insights      !== undefined ? Boolean(ent.notif_insights)      : DEFAULTS.notif_insights,
-        notif_weekly:        ent.notif_weekly         !== undefined ? Boolean(ent.notif_weekly)         : DEFAULTS.notif_weekly,
-        notif_relationship:  ent.notif_relationship   !== undefined ? Boolean(ent.notif_relationship)   : DEFAULTS.notif_relationship,
-        notif_streak:        ent.notif_streak         !== undefined ? Boolean(ent.notif_streak)         : DEFAULTS.notif_streak,
-        privacy_2fa:         ent.privacy_2fa          !== undefined ? Boolean(ent.privacy_2fa)          : DEFAULTS.privacy_2fa,
         privacy_data_sharing: (ent.privacy_data_sharing as string) || DEFAULTS.privacy_data_sharing,
         privacy_benchmarking: ent.privacy_benchmarking !== undefined ? Boolean(ent.privacy_benchmarking) : DEFAULTS.privacy_benchmarking,
       });
@@ -66,7 +51,7 @@ export default function SettingsPage() {
     setPrefs(p => ({ ...p, [key]: !p[key] }));
   }
 
-  async function saveSection(section: "notifications" | "privacy") {
+  async function saveSection(section: "privacy") {
     setSaving(section);
     try {
       // Merge updated prefs into entitlements via a dummy profile patch
@@ -96,34 +81,18 @@ export default function SettingsPage() {
         {/* Notifications */}
         <motion.div {...f(0.08)}>
           <Card style={{ padding: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "#60a5fa15", border: "1px solid #60a5fa25" }}>
-                <HugeiconsIcon icon={Notification02Icon} size={16} style={{ color: "#60a5fa" }} />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "#60a5fa15", border: "1px solid #60a5fa25" }}>
+                  <HugeiconsIcon icon={Notification02Icon} size={16} style={{ color: "#60a5fa" }} />
+                </div>
+                <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>Notifications</p>
               </div>
-              <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>Notifications</p>
+              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", padding: "4px 10px", borderRadius: 99, background: "rgba(96,165,250,0.1)", color: "#60a5fa", border: "1px solid rgba(96,165,250,0.2)" }}>Coming Soon</span>
             </div>
-
-            {([
-              { label: "New insights available",       key: "notif_insights"     },
-              { label: "Weekly intelligence summary",  key: "notif_weekly"       },
-              { label: "Relationship report ready",    key: "notif_relationship" },
-              { label: "Streak reminders",             key: "notif_streak"       },
-            ] as { label: string; key: keyof Prefs }[]).map((row, i, arr) => (
-              <div key={row.key} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: i < arr.length - 1 ? "1px solid rgba(0,0,0,0.06)" : "none" }}>
-                <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>{row.label}</span>
-                <Toggle on={prefs[row.key] as boolean} onClick={() => toggle(row.key)} />
-              </div>
-            ))}
-
-            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}>
-              <button
-                disabled={saving === "notifications"}
-                onClick={() => saveSection("notifications")}
-                style={{ padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", border: "none", cursor: "pointer", opacity: saving === "notifications" ? 0.7 : 1 }}
-              >
-                {savedMsg === "notifications" ? "Saved!" : saving === "notifications" ? "Saving…" : "Save changes"}
-              </button>
-            </div>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
+              Email and push notifications are on the roadmap. You&apos;ll be able to get alerted when new insights are ready, your weekly summary drops, and more.
+            </p>
           </Card>
         </motion.div>
 
@@ -139,7 +108,7 @@ export default function SettingsPage() {
 
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
               <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>Two-factor authentication</span>
-              <Toggle on={prefs.privacy_2fa} onClick={() => toggle("privacy_2fa")} />
+              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", padding: "4px 10px", borderRadius: 99, background: "rgba(167,139,250,0.1)", color: "#a78bfa", border: "1px solid rgba(167,139,250,0.2)" }}>Coming Soon</span>
             </div>
 
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
