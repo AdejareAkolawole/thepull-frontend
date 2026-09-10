@@ -143,9 +143,13 @@ export default function LandingPage() {
           display: "flex", alignItems: "center", padding: "0 48px",
           background: "rgba(255,255,255,0.86)", backdropFilter: "blur(20px)",
           borderBottom: `1px solid ${C.border}` }}>
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 0, marginRight: "auto" }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, marginRight: "auto", textDecoration: "none" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.jpg" alt="MyPullScore" style={{ height: 36, width: "auto", borderRadius: 8, display: "block" }} />
+          <img src="/logo.jpg" alt="MyPullScore" style={{ height: 36, width: "auto", borderRadius: 8, display: "block", flexShrink: 0 }} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            <span style={{ fontSize: 13, fontWeight: 800, color: C.ink, letterSpacing: "-0.02em", lineHeight: 1.2 }}>MyPullScore</span>
+            <span style={{ fontSize: 9, color: C.muted, letterSpacing: "0.02em", lineHeight: 1.2 }}>Personal intelligence that grows with you.</span>
+          </div>
         </Link>
         <div className="nav-mid" style={{ display: "flex", gap: 28, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
           {[["Features","#features"],["How it works","#howitworks"],["Pricing","#pricing"],["FAQ","#faq"]].map(([l,h])=>(
@@ -154,9 +158,12 @@ export default function LandingPage() {
           ))}
         </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          <Link href="/login" style={{ fontSize: 13, color: C.muted, fontWeight: 500, padding: "6px 12px" }}>Sign in</Link>
+          <Link href="/login" style={{ fontSize: 13, color: C.muted, fontWeight: 500, padding: "6px 12px", transition: "color .18s" }}
+            onMouseEnter={e=>(e.currentTarget.style.color=C.ink)} onMouseLeave={e=>(e.currentTarget.style.color=C.muted)}>Sign in</Link>
           <Link href="/register" style={{ fontSize: 13, fontWeight: 700, color: "#fff",
-            background: C.ink, padding: "8px 18px", borderRadius: 99 }}>Get started</Link>
+            background: C.ink, padding: "8px 18px", borderRadius: 99, transition: "opacity .18s, transform .18s" }}
+            onMouseEnter={e=>{ e.currentTarget.style.opacity="0.85"; e.currentTarget.style.transform="scale(1.04)"; }}
+            onMouseLeave={e=>{ e.currentTarget.style.opacity="1"; e.currentTarget.style.transform=""; }}>Get started</Link>
         </div>
       </motion.nav>
 
@@ -503,7 +510,9 @@ export default function LandingPage() {
                 <Link href="/register" style={{ display: "flex", alignItems: "center",
                   justifyContent: "center", padding: "12px 0", borderRadius: 99,
                   border: `1.5px solid ${C.border}`, color: C.ink,
-                  fontSize: 13, fontWeight: 700, marginBottom: 28 }}>
+                  fontSize: 13, fontWeight: 700, marginBottom: 28, transition: "background .18s, border-color .18s" }}
+                  onMouseEnter={e=>{ e.currentTarget.style.background=C.ink; e.currentTarget.style.color="#fff"; e.currentTarget.style.borderColor=C.ink; }}
+                  onMouseLeave={e=>{ e.currentTarget.style.background=""; e.currentTarget.style.color=C.ink; e.currentTarget.style.borderColor=""; }}>
                   Get started free
                 </Link>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 11 }}>
@@ -543,7 +552,10 @@ export default function LandingPage() {
                   </div>
                   <Link href="/upgrade" style={{ display: "flex", alignItems: "center",
                     justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 99,
-                    background: "#fff", color: C.ink, fontSize: 13, fontWeight: 800, marginBottom: 28 }}>
+                    background: "#fff", color: C.ink, fontSize: 13, fontWeight: 800, marginBottom: 28,
+                    transition: "transform .18s, box-shadow .18s" }}
+                    onMouseEnter={e=>{ e.currentTarget.style.transform="scale(1.03)"; e.currentTarget.style.boxShadow="0 8px 24px rgba(0,0,0,0.18)"; }}
+                    onMouseLeave={e=>{ e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; }}>
                     Start Understand Me <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
                   </Link>
                   <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
@@ -578,7 +590,10 @@ export default function LandingPage() {
                   <Link href="/upgrade" style={{ display: "flex", alignItems: "center",
                     justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 99,
                     background: "linear-gradient(135deg, #b8922a, #c9a84c, #e2c36a)",
-                    color: "#1a0a10", fontSize: 13, fontWeight: 800, marginBottom: 28 }}>
+                    color: "#1a0a10", fontSize: 13, fontWeight: 800, marginBottom: 28,
+                    transition: "transform .18s, box-shadow .18s" }}
+                    onMouseEnter={e=>{ e.currentTarget.style.transform="scale(1.03)"; e.currentTarget.style.boxShadow="0 8px 24px rgba(201,168,76,0.4)"; }}
+                    onMouseLeave={e=>{ e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; }}>
                     Start Know Me <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
                   </Link>
                   <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
@@ -680,7 +695,9 @@ export default function LandingPage() {
                 </p>
                 <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 9,
                   padding: "15px 36px", borderRadius: 99, background: "#fff", color: C.ink,
-                  fontSize: 15, fontWeight: 800 }}>
+                  fontSize: 15, fontWeight: 800, transition: "transform .18s, box-shadow .18s" }}
+                  onMouseEnter={e=>{ e.currentTarget.style.transform="scale(1.05)"; e.currentTarget.style.boxShadow="0 12px 40px rgba(255,255,255,0.2)"; }}
+                  onMouseLeave={e=>{ e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; }}>
                   Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
                 </Link>
                 <div style={{ display: "flex", justifyContent: "center", gap: 28, marginTop: 32 }}>
@@ -711,7 +728,9 @@ export default function LandingPage() {
               </p>
               <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 6,
                 fontSize: 13, fontWeight: 700, color: "#fff", background: C.ink,
-                padding: "10px 18px", borderRadius: 99 }}>
+                padding: "10px 18px", borderRadius: 99, transition: "opacity .18s, transform .18s" }}
+                onMouseEnter={e=>{ e.currentTarget.style.opacity="0.82"; e.currentTarget.style.transform="scale(1.04)"; }}
+                onMouseLeave={e=>{ e.currentTarget.style.opacity="1"; e.currentTarget.style.transform=""; }}>
                 Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
               </Link>
             </div>

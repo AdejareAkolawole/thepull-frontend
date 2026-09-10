@@ -114,11 +114,94 @@ function Sparkline({ data, color = "#c0404f" }: { data: number[]; color?: string
 const scoreHistory = [68, 70, 69, 71, 72, 71, 73, 74];
 const DIMENSION_COLORS = ["#c0404f", "#60a5fa", "#f59e0b", "#a78bfa", "#34d399", "#fb923c"];
 
+function ShareFlyer({ open, onClose, name, archetype, pullScore, tagline }: {
+  open: boolean; onClose: () => void;
+  name: string; archetype: string; pullScore: number | null; tagline: string | null;
+}) {
+  if (!open) return null;
+  const score = pullScore ?? "—";
+  return (
+    <div onClick={onClose} style={{
+      position: "fixed", inset: 0, zIndex: 1000, background: "rgba(0,0,0,0.72)",
+      display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
+      backdropFilter: "blur(8px)",
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
+        {/* The flyer card */}
+        <div id="share-flyer" style={{
+          width: 360, borderRadius: 28,
+          background: "linear-gradient(160deg, #1a0509 0%, #3d0e1a 45%, #1e0c14 100%)",
+          border: "1px solid rgba(192,64,79,0.25)",
+          boxShadow: "0 32px 80px rgba(0,0,0,0.6)",
+          overflow: "hidden", position: "relative",
+          fontFamily: "system-ui, sans-serif",
+        }}>
+          {/* bg glow */}
+          <div style={{ position: "absolute", top: "-30%", right: "-20%", width: 280, height: 280, borderRadius: "50%", background: "radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 65%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: "-20%", left: "-15%", width: 220, height: 220, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.14) 0%, transparent 65%)", pointerEvents: "none" }} />
+
+          {/* Top bar */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "22px 24px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            <img src="/logo.jpg" alt="ThePull" style={{ height: 28, width: "auto", borderRadius: 6, flexShrink: 0 }} />
+            <div>
+              <p style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.9)", letterSpacing: "-0.01em" }}>MyPullScore</p>
+              <p style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", letterSpacing: "0.06em" }}>Personal intelligence that grows with you.</p>
+            </div>
+          </div>
+
+          {/* Main content */}
+          <div style={{ padding: "28px 24px" }}>
+            <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.7)", marginBottom: 6 }}>Pull Score</p>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 6 }}>
+              <span style={{ fontSize: 80, fontWeight: 900, color: "#fff", lineHeight: 0.9, letterSpacing: "-0.04em" }}>{score}</span>
+              <span style={{ fontSize: 16, color: "rgba(255,255,255,0.3)", paddingBottom: 8 }}>/100</span>
+            </div>
+            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", marginBottom: 28 }}>Composite intelligence rating</p>
+
+            <div style={{ height: 1, background: "rgba(255,255,255,0.07)", marginBottom: 24 }} />
+
+            <p style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: "rgba(192,64,79,0.7)", marginBottom: 8 }}>Primary Archetype</p>
+            <p style={{ fontSize: 20, fontWeight: 800, color: "#fff", letterSpacing: "-0.02em", marginBottom: 4 }}>{archetype}</p>
+            {tagline && <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", fontStyle: "italic", lineHeight: 1.5 }}>{tagline}</p>}
+
+            <div style={{ height: 1, background: "rgba(255,255,255,0.07)", margin: "24px 0 20px" }} />
+
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div style={{ flex: 1, height: 3, borderRadius: 99, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+                <div style={{ height: "100%", width: `${typeof score === "number" ? score : 0}%`, background: "linear-gradient(90deg, #c0404f, #c9a84c)", borderRadius: 99 }} />
+              </div>
+              <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", fontWeight: 600, whiteSpace: "nowrap" as const }}>Evolving daily</span>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div style={{ padding: "14px 24px 22px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <p style={{ fontSize: 9, color: "rgba(255,255,255,0.2)" }}>mypullscore.com</p>
+            <div style={{ display: "flex", gap: 1 }}>{[1,2,3,4,5].map(i => <span key={i} style={{ fontSize: 8, color: "rgba(201,168,76,0.5)" }}>★</span>)}</div>
+          </div>
+        </div>
+
+        <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", textAlign: "center" }}>Screenshot this card to share your Pull Score</p>
+        <button onClick={onClose} style={{
+          padding: "10px 24px", borderRadius: 99, border: "1px solid rgba(255,255,255,0.15)",
+          background: "transparent", color: "rgba(255,255,255,0.6)", fontSize: 13, fontWeight: 600,
+          cursor: "pointer", transition: "border-color .18s, color .18s",
+        }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)"; e.currentTarget.style.color = "#fff"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; e.currentTarget.style.color = "rgba(255,255,255,0.6)"; }}>
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardClient() {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
   const router = useRouter();
 
+  const [showFlyer, setShowFlyer] = useState(false);
   const [dash, setDash] = useState<{
     name: string;
     archetype: string | null;
@@ -177,6 +260,14 @@ export default function DashboardClient() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <ShareFlyer
+        open={showFlyer}
+        onClose={() => setShowFlyer(false)}
+        name={displayName}
+        archetype={archetype}
+        pullScore={pullScore}
+        tagline={archetypeTagline}
+      />
 
       {/* ── LIVING INTELLIGENCE ── */}
       <motion.div {...fade(0)}>
@@ -388,7 +479,10 @@ export default function DashboardClient() {
             background: "linear-gradient(135deg,#b8922a 0%,#c9a84c 50%,#1a0a10 100%)",
             color: "#fff", fontSize: 13, fontWeight: 800, letterSpacing: "0.01em",
             boxShadow: "0 4px 20px rgba(184,146,42,0.3)",
-          }}>
+            transition: "transform .18s, box-shadow .18s",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.03)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(184,146,42,0.45)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 4px 20px rgba(184,146,42,0.3)"; }}>
             Open Living Report <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
           </Link>
           <Link href="/journal" style={{
@@ -396,17 +490,21 @@ export default function DashboardClient() {
             padding: "13px 20px", borderRadius: 12, textDecoration: "none",
             background: "transparent", border: "1px solid rgba(15,10,20,0.12)",
             color: "rgba(15,10,20,0.65)", fontSize: 13, fontWeight: 600,
-          }}>
+            transition: "background .18s, border-color .18s, color .18s",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(15,10,20,0.06)"; e.currentTarget.style.borderColor = "rgba(15,10,20,0.22)"; e.currentTarget.style.color = "rgba(15,10,20,0.9)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "rgba(15,10,20,0.12)"; e.currentTarget.style.color = "rgba(15,10,20,0.65)"; }}>
             Continue Reading
           </Link>
-          <button style={{
-            display: "inline-flex", alignItems: "center", gap: 6,
-            padding: "13px 16px", borderRadius: 12,
-            background: "none", border: "none", cursor: "pointer",
-            color: "rgba(15,10,20,0.38)", fontSize: 13, fontWeight: 500,
-          }}>
-            <HugeiconsIcon icon={Share01Icon} size={13} />
-            Share Story
+          <button onClick={() => setShowFlyer(true)} title="Share your Pull Score" style={{
+            display: "inline-flex", alignItems: "center", justifyContent: "center",
+            width: 44, height: 44, borderRadius: 12,
+            background: "none", border: "1px solid rgba(15,10,20,0.1)", cursor: "pointer",
+            color: "rgba(15,10,20,0.45)", transition: "background .18s, border-color .18s, color .18s",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(192,64,79,0.06)"; e.currentTarget.style.borderColor = "rgba(192,64,79,0.25)"; e.currentTarget.style.color = "#c0404f"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "none"; e.currentTarget.style.borderColor = "rgba(15,10,20,0.1)"; e.currentTarget.style.color = "rgba(15,10,20,0.45)"; }}>
+            <HugeiconsIcon icon={Share01Icon} size={15} />
           </button>
         </div>
 
