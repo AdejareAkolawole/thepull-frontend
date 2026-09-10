@@ -220,12 +220,12 @@ export default function DashboardClient() {
   } | null>(null);
 
   useEffect(() => {
-    if (!isLoggedIn()) { router.push("/login"); return; }
+    if (!isLoggedIn()) { window.location.href = "/login"; return; }
     trackAppOpen();
     getDashboard().then(res => {
       const p = (res.profile || {}) as Record<string, unknown>;
       // Redirect to onboarding if not complete
-      if (!p.onboarding_complete) { router.push("/onboarding"); return; }
+      if (!p.onboarding_complete) { window.location.href = "/onboarding"; return; }
 
       const arch = res.archetype as Record<string, unknown> | null;
       const narrative = res.living_narrative as Record<string, unknown> | null;

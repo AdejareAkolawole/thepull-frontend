@@ -11,7 +11,7 @@ export default function PullRevealPage() {
   const [data, setData] = useState<{ archetype: string | null; pull_score: number | null; narrative: string | null } | null>(null);
 
   useEffect(() => {
-    if (!isLoggedIn()) { router.push("/login"); return; }
+    if (!isLoggedIn()) { window.location.href = "/login"; return; }
     getDashboard().then(res => {
       const arch = res.archetype as Record<string, unknown> | null;
       const narr = res.living_narrative as Record<string, unknown> | null;

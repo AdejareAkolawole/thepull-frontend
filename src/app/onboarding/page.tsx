@@ -91,9 +91,9 @@ export default function OnboardingPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!isLoggedIn()) { router.push("/login"); return; }
+    if (!isLoggedIn()) { window.location.href = "/login"; return; }
     getProfile().then((p: Record<string, unknown>) => {
-      if (p.onboarding_complete) { router.push("/dashboard"); return; }
+      if (p.onboarding_complete) { window.location.href = "/dashboard"; return; }
       if (p.display_name) setIntroValues(prev => ({ ...prev, display_name: p.display_name as string }));
       setPhase("intro");
     }).catch(() => setPhase("intro"));
@@ -169,7 +169,7 @@ export default function OnboardingPage() {
   }, [sessionId]);
 
   useEffect(() => {
-    if (phase === "done") router.push("/pull-reveal");
+    if (phase === "done") window.location.href = "/pull-reveal";
   }, [phase, router]);
 
   if (phase === "loading") return <LoadingScreen />;

@@ -38,7 +38,7 @@ function LoginPageInner() {
       await login(email, password);
       await refresh();
       const profile = await getProfile().catch(() => null) as Record<string, unknown> | null;
-      router.push(!profile?.onboarding_complete ? "/onboarding" : "/dashboard");
+      window.location.href = !profile?.onboarding_complete ? "/onboarding" : "/dashboard";
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {

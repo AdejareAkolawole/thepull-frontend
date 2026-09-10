@@ -62,7 +62,7 @@ export default function PullProfilePage() {
   const [expanded, setExpanded] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoggedIn()) { router.push("/login"); return; }
+    if (!isLoggedIn()) { window.location.href = "/login"; return; }
     getPullProfile().then(res => {
       setData(res as PullProfileData);
       setLoading(false);

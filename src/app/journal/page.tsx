@@ -40,7 +40,7 @@ export default function JournalPage() {
   useEffect(() => {
     if (!isLoggedIn()) {
       setLoading(false);
-      router.push("/login");
+      window.location.href = "/login";
       return;
     }
     load();

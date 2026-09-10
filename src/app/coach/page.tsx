@@ -40,7 +40,7 @@ export default function CoachPage() {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isLoggedIn()) { router.push("/login"); return; }
+    if (!isLoggedIn()) { window.location.href = "/login"; return; }
     const token = localStorage.getItem("pull_token") || "";
     Promise.all([
       getDashboard(),

@@ -23,7 +23,7 @@ export default function RegisterPage() {
     try {
       await register(email, password, name);
       await refresh();
-      router.push("/onboarding");
+      window.location.href = "/onboarding";
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Registration failed");
     } finally {

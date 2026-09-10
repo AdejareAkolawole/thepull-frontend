@@ -37,7 +37,7 @@ export default function SettingsPage() {
   const [savedMsg, setSavedMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoggedIn()) { router.push("/login"); return; }
+    if (!isLoggedIn()) { window.location.href = "/login"; return; }
     getProfile().then((p: Record<string, unknown>) => {
       const ent = (p.entitlements as Record<string, unknown>) || {};
       setPrefs({

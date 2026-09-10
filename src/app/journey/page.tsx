@@ -21,7 +21,7 @@ export default function JourneyPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isLoggedIn()) { setLoading(false); router.push("/login"); return; }
+    if (!isLoggedIn()) { setLoading(false); window.location.href = "/login"; return; }
     Promise.all([getDashboard(), getAssessmentStatus()])
       .then(([d, a]) => { setDash(d); setAssessment(a); })
       .catch(() => {})
@@ -211,7 +211,7 @@ export default function JourneyPage() {
                 </div>
               </div>
               <button
-                onClick={() => router.push(!assessmentComplete ? "/onboarding" : "/coach")}
+                onClick={() => { window.location.href = !assessmentComplete ? "/onboarding" : "/coach"; }}
                 className="cta-banner-btn" style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", border: "none", cursor: "pointer", flexShrink: 0, position: "relative", marginLeft: 16 }}>
                 Start <HugeiconsIcon icon={ArrowRight01Icon} size={10} />
               </button>

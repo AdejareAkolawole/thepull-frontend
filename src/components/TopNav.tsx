@@ -39,7 +39,7 @@ export default function TopNav() {
 
   function handleLogout() {
     logout();
-    router.push("/login");
+    window.location.href = "/login";
   }
 
   useEffect(() => {
