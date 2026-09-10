@@ -185,29 +185,50 @@ export default function DashboardClient() {
           background: "linear-gradient(135deg, #1a0e04 0%, #2a1a08 50%, #1e1206 100%)",
           border: "1px solid rgba(201,168,76,0.2)",
           boxShadow: "0 4px 24px rgba(0,0,0,0.18), inset 0 1px 0 rgba(201,168,76,0.08)",
-          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" as const,
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, flex: 1, minWidth: 0 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <HugeiconsIcon icon={AiSparklesIcon} size={18} style={{ color: "rgba(201,168,76,0.9)" }} />
-            </div>
-            <div style={{ minWidth: 0 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
-                <span style={{ fontSize: 12, fontWeight: 800, color: "rgba(201,168,76,0.95)", letterSpacing: "0.01em" }}>Living Intelligence</span>
-                <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)", color: "rgba(201,168,76,0.8)", letterSpacing: "0.08em", textTransform: "uppercase" as const }}>Active</span>
+          {/* Top row */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap" as const, gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <HugeiconsIcon icon={AiSparklesIcon} size={16} style={{ color: "rgba(201,168,76,0.9)" }} />
               </div>
-              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.42)", lineHeight: 1.4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                Your intelligence is alive and evolving with every signal you bring.
-              </p>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ fontSize: 12, fontWeight: 800, color: "rgba(201,168,76,0.95)", letterSpacing: "0.01em" }}>Living Intelligence</span>
+                  <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)", color: "rgba(201,168,76,0.8)", letterSpacing: "0.08em", textTransform: "uppercase" as const }}>Active</span>
+                </div>
+                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", marginTop: 1 }}>Your intelligence is alive and evolving with every signal you bring.</p>
+              </div>
             </div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-            <span style={{ fontSize: 11, fontWeight: 600, padding: "5px 14px", borderRadius: 99, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.22)", color: "rgba(201,168,76,0.85)" }}>
-              Confidence {confidence}%
-            </span>
-            <Link href="/journal" style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 700, padding: "6px 14px", borderRadius: 10, background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)", color: "rgba(201,168,76,0.9)", textDecoration: "none" }}>
+            <Link href="/journal" style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 700, padding: "6px 14px", borderRadius: 10, background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)", color: "rgba(201,168,76,0.9)", textDecoration: "none", flexShrink: 0 }}>
               Add a signal <HugeiconsIcon icon={ArrowRight01Icon} size={11} />
             </Link>
+          </div>
+          {/* Progress bar */}
+          <div style={{ marginBottom: 10 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.6)" }}>Intelligence Confidence</span>
+              <span style={{ fontSize: 13, fontWeight: 800, color: "rgba(201,168,76,0.95)" }}>{confidence}%</span>
+            </div>
+            <div style={{ height: 6, borderRadius: 99, background: "rgba(201,168,76,0.1)", overflow: "hidden" }}>
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${confidence}%` }}
+                transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+                style={{ height: "100%", borderRadius: 99, background: "linear-gradient(90deg, rgba(201,168,76,0.7), rgba(201,168,76,0.95))" }}
+              />
+            </div>
+          </div>
+          {/* Signal texts */}
+          <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 6, marginTop: 10 }}>
+            {[
+              "Communication pattern updated · +3 signals",
+              "Emotional Landscape · 72% confidence",
+              "Archetype alignment recalculated",
+              "Identity vector · 847 data points",
+            ].map(s => (
+              <span key={s} style={{ fontSize: 10, color: "rgba(201,168,76,0.45)", padding: "3px 10px", borderRadius: 99, background: "rgba(201,168,76,0.06)", border: "1px solid rgba(201,168,76,0.12)", whiteSpace: "nowrap" as const }}>{s}</span>
+            ))}
           </div>
         </div>
       </motion.div>

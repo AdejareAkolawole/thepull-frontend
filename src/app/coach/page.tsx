@@ -163,8 +163,8 @@ export default function CoachPage() {
             <HugeiconsIcon icon={AiSparklesIcon} size={16} style={{ color: "white" }} />
           </div>
           <div style={{ flex: 1 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>The Pull</p>
-            <p style={{ fontSize: 11, color: "var(--text-muted)" }}>Ask The Pull</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>Ask The Pull</p>
+            <p style={{ fontSize: 11, color: "var(--text-muted)" }}>Your personal intelligence coach</p>
           </div>
         </div>
 
@@ -232,7 +232,7 @@ export default function CoachPage() {
             <div style={{ width: 40, height: 40, borderRadius: 12, background: "rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
               <HugeiconsIcon icon={AiSparklesIcon} size={18} style={{ color: "white" }} />
             </div>
-            <p style={{ fontSize: 16, fontWeight: 700, color: "white", marginBottom: 6 }}>The Pull</p>
+            <p style={{ fontSize: 16, fontWeight: 700, color: "white", marginBottom: 6 }}>Ask The Pull</p>
             <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>Your personal intelligence coach with full context on your profile and dimensions.</p>
           </div>
 

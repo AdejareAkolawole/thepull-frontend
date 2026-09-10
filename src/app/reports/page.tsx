@@ -69,7 +69,7 @@ export default function RealityCheckPage() {
 
       {/* Form card */}
       <motion.div {...f(0.08)} style={{
-        background: "linear-gradient(160deg,#1a0910 0%,#26101a 65%,#1e0c14 100%)",
+        background: "linear-gradient(160deg,#4a0f1a 0%,#7c2232 65%,#5c1525 100%)",
         borderRadius: 20,
         border: "1px solid rgba(245,240,232,0.07)",
         boxShadow: "0 12px 48px rgba(0,0,0,0.3), inset 0 1px 0 rgba(245,240,232,0.07)",

@@ -249,7 +249,20 @@ export default function OnboardingPage() {
           <MessageCard text={msg} />
           {error && <p style={{ color: "#c0404f", fontSize: 13, marginBottom: 12, textAlign: "center" }}>{error}</p>}
 
-          {step.type === "text" && (
+          {step.type === "text" && step.id === "birthplace" && (
+            <>
+              <input type="text" value={inputValue || currentVal} onChange={e => setInputValue(e.target.value)}
+                placeholder={step.placeholder} style={textInput} list="city-list"
+                onKeyDown={e => e.key === "Enter" && (inputValue.trim() || currentVal) && handleIntroNext()}
+                autoFocus autoComplete="off" />
+              <datalist id="city-list">
+                {["London, UK","New York, USA","Los Angeles, USA","Lagos, Nigeria","Abuja, Nigeria","Paris, France","Berlin, Germany","Madrid, Spain","Rome, Italy","Amsterdam, Netherlands","Dubai, UAE","Abu Dhabi, UAE","Toronto, Canada","Vancouver, Canada","Sydney, Australia","Melbourne, Australia","Tokyo, Japan","Seoul, South Korea","Shanghai, China","Beijing, China","Mumbai, India","Delhi, India","Bangalore, India","São Paulo, Brazil","Rio de Janeiro, Brazil","Mexico City, Mexico","Buenos Aires, Argentina","Cairo, Egypt","Nairobi, Kenya","Johannesburg, South Africa","Cape Town, South Africa","Accra, Ghana","Addis Ababa, Ethiopia","Casablanca, Morocco","Istanbul, Turkey","Moscow, Russia","Stockholm, Sweden","Oslo, Norway","Copenhagen, Denmark","Helsinki, Finland","Vienna, Austria","Zurich, Switzerland","Brussels, Belgium","Warsaw, Poland","Prague, Czech Republic","Budapest, Hungary","Lisbon, Portugal","Athens, Greece","Singapore","Kuala Lumpur, Malaysia","Bangkok, Thailand","Jakarta, Indonesia","Manila, Philippines","Ho Chi Minh City, Vietnam","Hong Kong","Karachi, Pakistan","Dhaka, Bangladesh","Colombo, Sri Lanka","Riyadh, Saudi Arabia","Doha, Qatar","Kuwait City, Kuwait","Tel Aviv, Israel","Beirut, Lebanon","Amman, Jordan","Baghdad, Iraq","Tehran, Iran","Kabul, Afghanistan","Tashkent, Uzbekistan","Almaty, Kazakhstan","Lima, Peru","Santiago, Chile","Bogotá, Colombia","Caracas, Venezuela","Quito, Ecuador","Auckland, New Zealand","Accra, Ghana","Dar es Salaam, Tanzania","Kampala, Uganda","Kigali, Rwanda","Lusaka, Zambia"].map(c => (
+                  <option key={c} value={c} />
+                ))}
+              </datalist>
+            </>
+          )}
+          {step.type === "text" && step.id !== "birthplace" && (
             <input type="text" value={inputValue || currentVal} onChange={e => setInputValue(e.target.value)}
               placeholder={step.placeholder} style={textInput}
               onKeyDown={e => e.key === "Enter" && (inputValue.trim() || currentVal) && handleIntroNext()}
@@ -445,7 +458,7 @@ function GeneratingScreen() {
     }}>
       <LogoLoader />
       <div style={{ textAlign: "center" }}>
-        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", color: "#c9a84c", textTransform: "uppercase", marginBottom: 12 }}>Building your intelligence</p>
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", color: "#c0404f", textTransform: "uppercase", marginBottom: 12 }}>Building your intelligence</p>
         <AnimatePresence mode="wait">
           <motion.p key={step}
             initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
@@ -462,15 +475,15 @@ function GeneratingScreen() {
 function LogoLoader() {
   return (
     <div style={{ position: "relative", width: 110, height: 110, display: "flex", alignItems: "center", justifyContent: "center" }}>
-      {/* Outer spinning gold ring */}
+      {/* Outer spinning maroon ring */}
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
         style={{
           position: "absolute", inset: 0, borderRadius: "50%",
           border: "2px solid transparent",
-          borderTopColor: "#c9a84c",
-          borderRightColor: "rgba(201,168,76,0.3)",
+          borderTopColor: "#c0404f",
+          borderRightColor: "rgba(192,64,79,0.3)",
         }}
       />
       {/* Inner spinning burgundy ring (opposite direction) */}
@@ -480,8 +493,8 @@ function LogoLoader() {
         style={{
           position: "absolute", inset: 8, borderRadius: "50%",
           border: "1.5px solid transparent",
-          borderBottomColor: "#3d0e1a",
-          borderLeftColor: "rgba(61,14,26,0.2)",
+          borderBottomColor: "#7c2232",
+          borderLeftColor: "rgba(124,34,50,0.25)",
         }}
       />
       {/* Pulsing glow */}
@@ -490,7 +503,7 @@ function LogoLoader() {
         transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         style={{
           position: "absolute", inset: 14, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(201,168,76,0.25) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(192,64,79,0.2) 0%, transparent 70%)",
         }}
       />
       {/* Logo — full, no crop */}
