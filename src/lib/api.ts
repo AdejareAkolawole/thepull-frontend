@@ -185,3 +185,14 @@ export async function markNotificationRead(id: string) {
 export async function deleteAccount() {
   return request<{ status: string }>("/auth/account", { method: "DELETE" });
 }
+
+export async function getRealityCheckUsage() {
+  return request<{
+    tier: string;
+    used: number;
+    limit: number | null;
+    remaining: number | null;
+    limit_reached: boolean;
+    month: string;
+  }>("/reality-check/usage");
+}
