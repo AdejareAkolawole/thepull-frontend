@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 interface Props {
@@ -13,66 +14,52 @@ export default function LoadingScreen({ message = "Loading…", fullscreen = fal
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      minHeight: fullscreen ? "100vh" : "60vh",
-      gap: 20,
+      minHeight: fullscreen ? "100dvh" : "60vh",
+      gap: 24,
       background: fullscreen ? "var(--bg, #faf8f5)" : "transparent",
     }}>
-      {/* Animated logo */}
-      <div style={{ position: "relative", width: 72, height: 72 }}>
-        {/* Outer pulse ring */}
+      <div style={{ position: "relative", width: 110, height: 110, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        {/* Outer spinning ring */}
         <motion.div
-          animate={{ scale: [1, 1.22, 1], opacity: [0.18, 0, 0.18] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
           style={{
-            position: "absolute", inset: -10,
-            borderRadius: 22,
-            background: "radial-gradient(circle, rgba(192,64,79,0.35), transparent)",
+            position: "absolute", inset: 0, borderRadius: "50%",
+            border: "2px solid transparent",
+            borderTopColor: "#c0404f",
+            borderRightColor: "rgba(192,64,79,0.3)",
           }}
         />
-        {/* Inner glow */}
+        {/* Inner spinning ring — opposite direction */}
         <motion.div
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ rotate: -360 }}
+          transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
           style={{
-            position: "absolute", inset: 0,
-            borderRadius: 18,
-            boxShadow: "0 0 28px rgba(192,64,79,0.28)",
+            position: "absolute", inset: 8, borderRadius: "50%",
+            border: "1.5px solid transparent",
+            borderBottomColor: "#7c2232",
+            borderLeftColor: "rgba(124,34,50,0.25)",
           }}
         />
-        {/* Logo image */}
-        <motion.img
-          src="/logo.jpg"
-          alt="ThePull"
+        {/* Pulsing glow */}
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.3, 0.15] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            position: "absolute", inset: 14, borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(192,64,79,0.2) 0%, transparent 70%)",
+          }}
+        />
+        {/* Logo — contain so nothing is cropped */}
+        <motion.div
           animate={{ scale: [1, 1.04, 1] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            width: 72, height: 72,
-            borderRadius: 18,
-            display: "block",
-            objectFit: "cover",
-            position: "relative",
-            zIndex: 1,
-          }}
-        />
+          style={{ position: "relative", width: 52, height: 64, zIndex: 2 }}
+        >
+          <Image src="/logo.jpg" alt="ThePull" fill style={{ objectFit: "contain" }} priority />
+        </motion.div>
       </div>
 
-      {/* Animated dots below logo */}
-      <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-        {[0, 1, 2].map(i => (
-          <motion.span
-            key={i}
-            animate={{ opacity: [0.2, 1, 0.2], y: [0, -4, 0] }}
-            transition={{ duration: 1.1, repeat: Infinity, delay: i * 0.18, ease: "easeInOut" }}
-            style={{
-              width: 5, height: 5, borderRadius: "50%",
-              background: "rgba(192,64,79,0.7)",
-              display: "block",
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Message */}
       {message && (
         <motion.p
           initial={{ opacity: 0 }}
