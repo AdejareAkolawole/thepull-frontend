@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Notification02Icon, ShieldKeyIcon } from "@hugeicons/core-free-icons";
-import { getProfile, updateProfile, isLoggedIn } from "@/lib/api";
+import { getProfile, updateProfile, isLoggedIn, deleteAccount } from "@/lib/api";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
@@ -140,6 +140,79 @@ export default function SettingsPage() {
             </div>
           </Card>
         </motion.div>
+
+        {/* Danger Zone */}
+        <motion.div {...f(0.18)}>
+          <Card style={{ padding: 20, border: "1px solid rgba(192,64,79,0.2)" }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: "#c0404f", marginBottom: 6 }}>Danger Zone</p>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6, marginBottom: 16 }}>
+              Permanently delete your account and all associated data — your profile, scores, journal, and intelligence history. This cannot be undone.
+            </p>
+            <DeleteAccountButton />
+          </Card>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+function DeleteAccountButton() {
+  const [confirm, setConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  async function handleDelete() {
+    setDeleting(true);
+    try {
+      await deleteAccount();
+      localStorage.removeItem("pull_token");
+      window.location.href = "/login";
+    } catch {
+      setDeleting(false);
+      setConfirm(false);
+      alert("Failed to delete account. Please try again.");
+    }
+  }
+
+  if (!confirm) {
+    return (
+      <button
+        onClick={() => setConfirm(true)}
+        style={{
+          padding: "10px 20px", borderRadius: 10, border: "1px solid rgba(192,64,79,0.3)",
+          background: "rgba(192,64,79,0.06)", color: "#c0404f",
+          fontSize: 13, fontWeight: 700, cursor: "pointer",
+        }}
+      >
+        Delete my account
+      </button>
+    );
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <p style={{ fontSize: 13, fontWeight: 700, color: "#c0404f" }}>Are you sure? This is permanent.</p>
+      <div style={{ display: "flex", gap: 10 }}>
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          style={{
+            padding: "10px 20px", borderRadius: 10, border: "none",
+            background: "#c0404f", color: "#fff",
+            fontSize: 13, fontWeight: 700, cursor: "pointer", opacity: deleting ? 0.7 : 1,
+          }}
+        >
+          {deleting ? "Deleting…" : "Yes, delete everything"}
+        </button>
+        <button
+          onClick={() => setConfirm(false)}
+          style={{
+            padding: "10px 20px", borderRadius: 10, border: "1px solid var(--border)",
+            background: "var(--surface)", color: "var(--text-secondary)",
+            fontSize: 13, fontWeight: 600, cursor: "pointer",
+          }}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );

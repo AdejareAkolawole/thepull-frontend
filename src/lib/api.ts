@@ -181,3 +181,7 @@ export async function getNotifications() {
 export async function markNotificationRead(id: string) {
   return request<{ ok: boolean }>(`/notifications/${id}/read`, { method: "POST" });
 }
+
+export async function deleteAccount() {
+  return request<{ status: string }>("/auth/account", { method: "DELETE" });
+}

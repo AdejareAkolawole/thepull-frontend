@@ -267,9 +267,11 @@ export default function DashboardClient() {
   const archetype    = dash?.archetype ?? "Emerging Identity";
   const archetypeTagline = dash?.archetype_tagline ?? null;
   // LIB uses data_coverage (0-1 → 0-100%) — actual evidence accumulated, not model confidence
-  const libCoverage  = dash?.lib_data_coverage != null ? Math.round(dash.lib_data_coverage * 100) : 0;
-  const libLevel     = dash?.lib_confidence_level ?? null; // "low" | "medium" | "high"
-  const confidence   = libCoverage; // bar width driven by evidence coverage
+  const libCoverage       = dash?.lib_data_coverage != null ? Math.round(dash.lib_data_coverage * 100) : 0;
+  const libLevel          = dash?.lib_confidence_level ?? null; // "low" | "medium" | "high"
+  const confidence        = libCoverage; // LIB bar — evidence coverage only
+  const archetypeConf     = dash?.archetype_confidence ?? 0; // archetype card confidence %
+  const behaviouralConf   = dash?.archetype_confidence ?? 0; // behavioural ring (uses same source for now)
   const pullScore    = dash?.pull_score ?? null;
   const summary      = dash?.identity_summary ?? "Your intelligence profile is being built. Share a moment from your life to begin.";
   const hasIntel     = dash?.onboarding_complete ?? false;
@@ -399,7 +401,7 @@ export default function DashboardClient() {
             <div style={{ display: "flex", borderTop: "1px solid rgba(255,255,255,0.07)", borderBottom: "1px solid rgba(255,255,255,0.07)", paddingTop: 14, paddingBottom: 14, marginBottom: 16 }}>
               <div style={{ flex: 1 }}>
                 <p style={{ fontSize: 8, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.25)", marginBottom: 5 }}>Confidence</p>
-                <p style={{ fontSize: 24, fontWeight: 700, color: "#c0404f", lineHeight: 1 }}>{confidence}%</p>
+                <p style={{ fontSize: 24, fontWeight: 700, color: "#c0404f", lineHeight: 1 }}>{archetypeConf}%</p>
               </div>
               <div style={{ width: 1, background: "rgba(255,255,255,0.07)", margin: "0 20px" }} />
               <div style={{ flex: 1 }}>
@@ -561,10 +563,10 @@ export default function DashboardClient() {
               <svg viewBox="0 0 52 52" style={{ width: 52, height: 52 }}>
                 <circle cx="26" cy="26" r="20" fill="none" stroke="rgba(15,10,20,0.07)" strokeWidth="4" />
                 <circle cx="26" cy="26" r="20" fill="none" stroke="#4ade80" strokeWidth="4" strokeLinecap="round"
-                  strokeDasharray={`${((confidence) / 100) * 125.7} 125.7`} transform="rotate(-90 26 26)" />
+                  strokeDasharray={`${((behaviouralConf) / 100) * 125.7} 125.7`} transform="rotate(-90 26 26)" />
               </svg>
               <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#16a34a" }}>{confidence}</span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#16a34a" }}>{behaviouralConf}</span>
               </div>
             </div>
             <div style={{ flex: 1 }}>
