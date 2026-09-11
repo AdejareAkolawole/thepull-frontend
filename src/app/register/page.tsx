@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { register } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
@@ -8,7 +7,6 @@ import { useAuth } from "@/lib/auth-context";
 const C = { wine: "#3d0e1a", ink: "#0f0a14", muted: "#6b7280", border: "#e5e7eb" };
 
 export default function RegisterPage() {
-  const router = useRouter();
   const { refresh } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -26,7 +24,6 @@ export default function RegisterPage() {
       window.location.href = "/onboarding";
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Registration failed");
-    } finally {
       setLoading(false);
     }
   }
@@ -34,17 +31,13 @@ export default function RegisterPage() {
   return (
     <>
       <style>{`
-        @font-face {
-          font-family: 'Aeonik';
-          src: url('/Aeonik-Regular.ttf') format('truetype');
-          font-weight: 100 900; font-style: normal; font-display: swap;
-        }
         *, *::before, *::after { box-sizing: border-box; }
         body { margin: 0; }
         a { text-decoration: none; }
         .auth-wrap {
-          min-height: 100vh; display: flex;
-          font-family: 'Aeonik', system-ui, sans-serif;
+          min-height: 100dvh;
+          display: flex;
+          font-family: system-ui, -apple-system, sans-serif;
           background: #f8f7f9;
         }
         .auth-panel-img {
@@ -53,21 +46,26 @@ export default function RegisterPage() {
           padding: 24px;
         }
         .auth-panel-form {
-          flex: 1; display: flex; align-items: center; justify-content: center;
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           padding: 48px 40px;
-          min-height: 100vh;
         }
-        .auth-logo-mobile { display: none; margin-bottom: 32px; }
         @media (max-width: 720px) {
           .auth-wrap { flex-direction: column; background: #fff; }
           .auth-panel-img { display: none; }
-          .auth-panel-form { padding: 40px 24px 60px; align-items: flex-start; min-height: unset; }
-          .auth-logo-mobile { display: block; }
-          .auth-form-inner { max-width: 100% !important; }
+          .auth-panel-form {
+            padding: 48px 24px 48px;
+            align-items: flex-start;
+            width: 100%;
+          }
+          .auth-form-inner { max-width: 100% !important; width: 100% !important; }
         }
       `}</style>
+
       <div className="auth-wrap">
-        {/* Left panel */}
+        {/* Left panel — desktop only */}
         <div className="auth-panel-img">
           <div style={{
             width: "100%", height: "calc(100vh - 48px)", borderRadius: 28,
@@ -75,10 +73,14 @@ export default function RegisterPage() {
             background: "linear-gradient(160deg, #1a0a10 0%, #0c0308 100%)",
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.jpg" alt="MyPullScore" style={{ position: "absolute", inset: 0,
-              width: "100%", height: "100%", objectFit: "cover", opacity: 0.65 }} />
-            <div style={{ position: "absolute", inset: 0,
-              background: "linear-gradient(180deg, transparent 35%, rgba(10,3,8,0.88) 100%)" }} />
+            <img src="/logo.jpg" alt="MyPullScore" style={{
+              position: "absolute", inset: 0,
+              width: "100%", height: "100%", objectFit: "cover", opacity: 0.65,
+            }} />
+            <div style={{
+              position: "absolute", inset: 0,
+              background: "linear-gradient(180deg, transparent 35%, rgba(10,3,8,0.88) 100%)",
+            }} />
             <div style={{ position: "absolute", bottom: 36, left: 32, right: 32 }}>
               <p style={{ color: "rgba(255,248,242,0.9)", fontSize: 22, fontWeight: 700, lineHeight: 1.3, marginBottom: 8 }}>
                 Start knowing<br />yourself deeply.
@@ -90,24 +92,31 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* Right panel */}
+        {/* Right panel — form */}
         <div className="auth-panel-form">
           <div className="auth-form-inner" style={{ width: "100%", maxWidth: 420 }}>
-            {/* Mobile logo */}
-            <div className="auth-logo-mobile">
+
+            {/* Logo */}
+            <div style={{ marginBottom: 32, display: "flex", alignItems: "center", gap: 10 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpg" alt="MyPullScore" style={{ height: 40, width: "auto", borderRadius: 8 }} />
+              <img src="/logo.jpg" alt="MyPullScore" style={{ height: 36, width: "auto", borderRadius: 8 }} />
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 800, color: C.ink, lineHeight: 1.2 }}>MyPullScore</p>
+                <p style={{ fontSize: 10, color: C.muted, lineHeight: 1.2 }}>Personal intelligence that grows with you.</p>
+              </div>
             </div>
 
-            <h1 style={{ fontSize: "clamp(26px,6vw,34px)", fontWeight: 800, color: C.ink,
-              letterSpacing: "-0.02em", marginBottom: 8, lineHeight: 1.1 }}>
+            <h1 style={{
+              fontSize: "clamp(26px,6vw,34px)", fontWeight: 800, color: C.ink,
+              letterSpacing: "-0.02em", marginBottom: 8, lineHeight: 1.1,
+            }}>
               Create your account
             </h1>
             <p style={{ color: C.muted, fontSize: 15, marginBottom: 36, lineHeight: 1.6 }}>
               Begin your personal intelligence journey today.
             </p>
 
-            {/* Google first */}
+            {/* Google */}
             <button style={btnGoogleStyle} onClick={() => {
               window.location.href = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/auth/google`;
             }}>
@@ -117,27 +126,36 @@ export default function RegisterPage() {
 
             <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
               <div style={{ flex: 1, height: 1, background: C.border }} />
-              <span style={{ fontSize: 12, color: "#aaa", fontFamily: "inherit" }}>or sign up with email</span>
+              <span style={{ fontSize: 12, color: "#aaa" }}>or sign up with email</span>
               <div style={{ flex: 1, height: 1, background: C.border }} />
             </div>
 
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              <input type="text" placeholder="Your name" value={name}
+              <input
+                type="text" placeholder="Your name" value={name} autoComplete="name"
                 onChange={e => setName(e.target.value)} style={inputStyle}
                 onFocus={e => (e.target.style.borderColor = C.wine)}
-                onBlur={e => (e.target.style.borderColor = C.border)} />
-              <input type="email" placeholder="Email address" value={email}
+                onBlur={e => (e.target.style.borderColor = C.border)}
+              />
+              <input
+                type="email" placeholder="Email address" value={email} autoComplete="email"
                 onChange={e => setEmail(e.target.value)} required style={inputStyle}
                 onFocus={e => (e.target.style.borderColor = C.wine)}
-                onBlur={e => (e.target.style.borderColor = C.border)} />
-              <input type="password" placeholder="Password (min 8 characters)" value={password}
+                onBlur={e => (e.target.style.borderColor = C.border)}
+              />
+              <input
+                type="password" placeholder="Password (min 8 characters)" value={password} autoComplete="new-password"
                 onChange={e => setPassword(e.target.value)} required minLength={8} style={inputStyle}
                 onFocus={e => (e.target.style.borderColor = C.wine)}
-                onBlur={e => (e.target.style.borderColor = C.border)} />
+                onBlur={e => (e.target.style.borderColor = C.border)}
+              />
 
-              {error && <p style={{ color: "#c0404f", fontSize: 13 }}>{error}</p>}
+              {error && <p style={{ color: "#c0404f", fontSize: 13, margin: 0 }}>{error}</p>}
 
-              <button type="submit" disabled={loading} style={btnPrimaryStyle}>
+              <button type="submit" disabled={loading} style={{
+                ...btnPrimaryStyle,
+                opacity: loading ? 0.7 : 1,
+              }}>
                 {loading ? "Creating account…" : "Create account →"}
               </button>
             </form>
@@ -177,6 +195,7 @@ const inputStyle: React.CSSProperties = {
   background: "#fff", border: `1.5px solid ${C.border}`,
   borderRadius: 12, color: C.ink, outline: "none",
   fontFamily: "inherit", transition: "border-color 0.15s",
+  WebkitAppearance: "none",
 };
 
 const btnPrimaryStyle: React.CSSProperties = {
@@ -185,6 +204,7 @@ const btnPrimaryStyle: React.CSSProperties = {
   background: C.ink, color: "#fff",
   fontSize: 15, fontWeight: 700, letterSpacing: "0.01em",
   fontFamily: "inherit", transition: "opacity 0.15s",
+  WebkitAppearance: "none",
 };
 
 const btnGoogleStyle: React.CSSProperties = {
@@ -194,4 +214,5 @@ const btnGoogleStyle: React.CSSProperties = {
   fontSize: 15, fontWeight: 600, color: "#374151",
   fontFamily: "inherit", display: "flex",
   alignItems: "center", justifyContent: "center", gap: 10,
+  WebkitAppearance: "none",
 };
