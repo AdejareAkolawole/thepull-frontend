@@ -7,9 +7,10 @@ interface Props {
 }
 
 export default function LoadingScreen({ message = "Loading…", fullscreen = false }: Props) {
-  const SIZE = 96;
-  const R_OUTER = 64;
-  const R_INNER = 52;
+  const CENTER = 96;
+  const R_OUTER = 60;
+  const R_INNER = 48;
+  const TOTAL = CENTER + R_OUTER * 2;
 
   return (
     <div style={{
@@ -18,155 +19,104 @@ export default function LoadingScreen({ message = "Loading…", fullscreen = fal
       alignItems: "center",
       justifyContent: "center",
       minHeight: fullscreen ? "100dvh" : "60vh",
-      gap: 32,
+      gap: 28,
       background: fullscreen ? "var(--bg, #faf8f5)" : "transparent",
     }}>
-      {/* Orbital system */}
-      <div style={{ position: "relative", width: SIZE + R_OUTER, height: SIZE + R_OUTER, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ position: "relative", width: TOTAL, height: TOTAL, display: "flex", alignItems: "center", justifyContent: "center" }}>
 
-        {/* SVG orbital rings */}
-        <svg
-          width={SIZE + R_OUTER}
-          height={SIZE + R_OUTER}
-          style={{ position: "absolute", inset: 0 }}
-          viewBox={`0 0 ${SIZE + R_OUTER} ${SIZE + R_OUTER}`}
-        >
+        {/* SVG track rings */}
+        <svg width={TOTAL} height={TOTAL} viewBox={`0 0 ${TOTAL} ${TOTAL}`} style={{ position: "absolute", inset: 0 }}>
           <defs>
-            <linearGradient id="arc1" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#c0404f" stopOpacity="0" />
-              <stop offset="40%" stopColor="#c0404f" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#7c2232" stopOpacity="0.2" />
+            <linearGradient id="arc-a" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#c0404f" stopOpacity="0.9" />
+              <stop offset="60%" stopColor="#7c2232" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#c0404f" stopOpacity="0" />
             </linearGradient>
-            <linearGradient id="arc2" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#7c2232" stopOpacity="0.7" />
-              <stop offset="100%" stopColor="#c0404f" stopOpacity="0.05" />
+            <linearGradient id="arc-b" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#7c2232" stopOpacity="0.65" />
+              <stop offset="100%" stopColor="#c0404f" stopOpacity="0" />
             </linearGradient>
           </defs>
-
-          {/* Outer ring track */}
-          <circle
-            cx={(SIZE + R_OUTER) / 2}
-            cy={(SIZE + R_OUTER) / 2}
-            r={R_OUTER}
-            fill="none"
-            stroke="rgba(192,64,79,0.08)"
-            strokeWidth="1.5"
-          />
-          {/* Inner ring track */}
-          <circle
-            cx={(SIZE + R_OUTER) / 2}
-            cy={(SIZE + R_OUTER) / 2}
-            r={R_INNER}
-            fill="none"
-            stroke="rgba(124,34,50,0.07)"
-            strokeWidth="1"
-          />
+          {/* Track — outer */}
+          <circle cx={TOTAL/2} cy={TOTAL/2} r={TOTAL/2 - 2} fill="none" stroke="rgba(192,64,79,0.07)" strokeWidth="1.5" />
+          {/* Track — inner */}
+          <circle cx={TOTAL/2} cy={TOTAL/2} r={R_INNER + CENTER/2} fill="none" stroke="rgba(124,34,50,0.06)" strokeWidth="1" />
         </svg>
 
         {/* Outer arc — clockwise */}
-        <motion.div
+        <motion.svg
           animate={{ rotate: 360 }}
           transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+          width={TOTAL} height={TOTAL} viewBox={`0 0 ${TOTAL} ${TOTAL}`}
           style={{ position: "absolute", inset: 0 }}
         >
-          <svg width={SIZE + R_OUTER} height={SIZE + R_OUTER} viewBox={`0 0 ${SIZE + R_OUTER} ${SIZE + R_OUTER}`}>
-            <circle
-              cx={(SIZE + R_OUTER) / 2}
-              cy={(SIZE + R_OUTER) / 2}
-              r={R_OUTER}
-              fill="none"
-              stroke="url(#arc1)"
-              strokeWidth="2"
-              strokeDasharray={`${R_OUTER * 1.5} ${R_OUTER * 4}`}
-              strokeLinecap="round"
-            />
-          </svg>
-        </motion.div>
+          <circle
+            cx={TOTAL/2} cy={TOTAL/2} r={TOTAL/2 - 2}
+            fill="none" stroke="url(#arc-a)" strokeWidth="2.5"
+            strokeDasharray={`${(TOTAL/2 - 2) * 1.4} ${(TOTAL/2 - 2) * 5}`}
+            strokeLinecap="round"
+          />
+        </motion.svg>
 
         {/* Inner arc — counter-clockwise */}
-        <motion.div
+        <motion.svg
           animate={{ rotate: -360 }}
           transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+          width={TOTAL} height={TOTAL} viewBox={`0 0 ${TOTAL} ${TOTAL}`}
           style={{ position: "absolute", inset: 0 }}
         >
-          <svg width={SIZE + R_OUTER} height={SIZE + R_OUTER} viewBox={`0 0 ${SIZE + R_OUTER} ${SIZE + R_OUTER}`}>
-            <circle
-              cx={(SIZE + R_OUTER) / 2}
-              cy={(SIZE + R_OUTER) / 2}
-              r={R_INNER}
-              fill="none"
-              stroke="url(#arc2)"
-              strokeWidth="1.5"
-              strokeDasharray={`${R_INNER} ${R_INNER * 3.5}`}
-              strokeLinecap="round"
-            />
-          </svg>
-        </motion.div>
+          <circle
+            cx={TOTAL/2} cy={TOTAL/2} r={R_INNER + CENTER/2}
+            fill="none" stroke="url(#arc-b)" strokeWidth="1.5"
+            strokeDasharray={`${(R_INNER + CENTER/2) * 1.2} ${(R_INNER + CENTER/2) * 4}`}
+            strokeLinecap="round"
+          />
+        </motion.svg>
 
-        {/* Orbiting dot on outer ring */}
+        {/* Orbiting dot */}
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-          }}
+          style={{ position: "absolute", inset: 0, display: "flex", alignItems: "flex-start", justifyContent: "center" }}
         >
           <div style={{
-            width: 9, height: 9,
-            borderRadius: "50%",
+            width: 9, height: 9, borderRadius: "50%",
             background: "#c0404f",
-            boxShadow: "0 0 12px rgba(192,64,79,0.9), 0 0 4px rgba(192,64,79,0.6)",
-            marginTop: (SIZE + R_OUTER) / 2 - R_OUTER - 4.5,
+            boxShadow: "0 0 10px rgba(192,64,79,0.8), 0 0 4px rgba(192,64,79,0.5)",
+            marginTop: 0,
           }} />
         </motion.div>
 
-        {/* Centre logo mark */}
+        {/* Logo — white circle so mix-blend-mode:multiply removes white bg */}
         <motion.div
           animate={{ scale: [1, 1.03, 1] }}
           transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
           style={{
-            width: SIZE,
-            height: SIZE,
+            width: CENTER,
+            height: CENTER,
             borderRadius: "50%",
-            background: "linear-gradient(145deg, #2d0f18, #1a0810)",
-            border: "1px solid rgba(192,64,79,0.25)",
-            boxShadow: "0 0 40px rgba(192,64,79,0.12), inset 0 1px 0 rgba(255,255,255,0.04)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            background: "#ffffff",
+            overflow: "hidden",
             position: "relative",
             zIndex: 5,
+            boxShadow: "0 4px 24px rgba(0,0,0,0.1), 0 0 0 1px rgba(192,64,79,0.15)",
           }}
         >
-          {/* Glow behind letter */}
-          <div style={{
-            position: "absolute",
-            width: 50, height: 50,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(192,64,79,0.22), transparent 70%)",
-          }} />
-          <span style={{
-            fontSize: 38,
-            fontWeight: 800,
-            color: "#fff",
-            letterSpacing: "-0.04em",
-            lineHeight: 1,
-            fontFamily: "'Aeonik', system-ui, sans-serif",
-            position: "relative",
-            zIndex: 1,
-            background: "linear-gradient(160deg, #fff 30%, rgba(192,64,79,0.85) 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}>P</span>
+          <img
+            src="/logo.jpg"
+            alt="ThePull"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+              mixBlendMode: "multiply",
+            }}
+          />
         </motion.div>
 
       </div>
 
-      {/* Message */}
       {message && (
         <motion.p
           initial={{ opacity: 0 }}
