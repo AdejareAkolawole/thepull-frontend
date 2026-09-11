@@ -88,10 +88,10 @@ export default function SettingsPage() {
                 </div>
                 <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>Notifications</p>
               </div>
-              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", padding: "4px 10px", borderRadius: 99, background: "rgba(96,165,250,0.1)", color: "#60a5fa", border: "1px solid rgba(96,165,250,0.2)" }}>Coming Soon</span>
+              <a href="/notifications" style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", padding: "4px 10px", borderRadius: 99, background: "rgba(96,165,250,0.1)", color: "#60a5fa", border: "1px solid rgba(96,165,250,0.2)", textDecoration: "none" }}>View →</a>
             </div>
             <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
-              Email and push notifications are on the roadmap. You&apos;ll be able to get alerted when new insights are ready, your weekly summary drops, and more.
+              Your Pull activity, insights, streaks, and achievements — all in one place.
             </p>
           </Card>
         </motion.div>
