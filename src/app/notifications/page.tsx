@@ -1,12 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Notification01Icon, AiSparklesIcon, FireIcon, CheckmarkCircle01Icon,
-  InformationCircleIcon, AiBrain01Icon, Target01Icon, Analytics01Icon,
+  Notification01Icon, FireIcon, CheckmarkCircle01Icon,
+  InformationCircleIcon, AiBrain01Icon,
   Delete02Icon, Tick01Icon,
 } from "@hugeicons/core-free-icons";
+import { getNotifications, isLoggedIn } from "@/lib/api";
 
 const f = (d = 0) => ({
   initial: { opacity: 0, y: 14 },
@@ -26,81 +27,6 @@ type Notif = {
   read: boolean;
 };
 
-const SEED: Notif[] = [
-  {
-    id: "n1",
-    category: "insight",
-    title: "New insight unlocked",
-    body: "Your emotional regulation patterns show a 12% improvement this week. Your Living Intelligence updated your Pull Profile.",
-    time: "2026-09-09T08:14:00",
-    timeLabel: "Today · 8:14 AM",
-    read: false,
-  },
-  {
-    id: "n2",
-    category: "streak",
-    title: "3-day journal streak 🔥",
-    body: "You've journalled 3 days in a row. Consistency like this strengthens your behavioural baseline.",
-    time: "2026-09-09T07:00:00",
-    timeLabel: "Today · 7:00 AM",
-    read: false,
-  },
-  {
-    id: "n3",
-    category: "achievement",
-    title: "Achievement unlocked: First Pull",
-    body: "You completed your first Pull Score assessment. Your identity baseline has been set.",
-    time: "2026-09-08T20:31:00",
-    timeLabel: "Yesterday · 8:31 PM",
-    read: true,
-  },
-  {
-    id: "n4",
-    category: "insight",
-    title: "Pull Score update",
-    body: "Your Pull Score moved from 68 → 74. Your Decisiveness and Emotional Range dimensions drove the shift.",
-    time: "2026-09-08T14:05:00",
-    timeLabel: "Yesterday · 2:05 PM",
-    read: true,
-  },
-  {
-    id: "n5",
-    category: "system",
-    title: "Welcome to MyPullScore",
-    body: "Your personal intelligence platform is ready. Complete your onboarding to set your identity baseline and begin tracking your Pull Score.",
-    time: "2026-09-08T10:00:00",
-    timeLabel: "Yesterday · 10:00 AM",
-    read: true,
-  },
-  {
-    id: "n6",
-    category: "insight",
-    title: "Archetype signal detected",
-    body: "New signal: your journal entries consistently reflect high-structure decision-making — aligning with your Architect archetype.",
-    time: "2026-09-07T16:22:00",
-    timeLabel: "Sep 7 · 4:22 PM",
-    read: true,
-  },
-  {
-    id: "n7",
-    category: "streak",
-    title: "Reality Check streak",
-    body: "You've run 2 Reality Checks this week. The Pull AI is learning your reasoning patterns.",
-    time: "2026-09-07T11:10:00",
-    timeLabel: "Sep 7 · 11:10 AM",
-    read: true,
-  },
-  {
-    id: "n8",
-    category: "achievement",
-    title: "Achievement unlocked: Deep Diver",
-    body: "You explored 5 dimensions in a single session. Your curiosity is one of your highest Pull signals.",
-    time: "2026-09-06T19:45:00",
-    timeLabel: "Sep 6 · 7:45 PM",
-    read: true,
-  },
-];
-
 const CATEGORIES: { key: Category; label: string }[] = [
   { key: "all", label: "All" },
   { key: "insight", label: "Insights" },
@@ -110,10 +36,10 @@ const CATEGORIES: { key: Category; label: string }[] = [
 ];
 
 const CAT_META: Record<Exclude<Category, "all">, { icon: any; color: string; bg: string; border: string }> = {
-  insight: { icon: AiBrain01Icon,         color: "#3b82f6", bg: "rgba(59,130,246,0.08)",  border: "rgba(59,130,246,0.18)" },
-  streak:  { icon: FireIcon,              color: "#f59e0b", bg: "rgba(245,158,11,0.08)",  border: "rgba(245,158,11,0.18)" },
-  achievement: { icon: CheckmarkCircle01Icon, color: "#c9a84c", bg: "rgba(201,168,76,0.08)", border: "rgba(201,168,76,0.22)" },
-  system:  { icon: InformationCircleIcon, color: "#6b7280", bg: "rgba(107,114,128,0.08)", border: "rgba(107,114,128,0.15)" },
+  insight:     { icon: AiBrain01Icon,           color: "#3b82f6", bg: "rgba(59,130,246,0.08)",  border: "rgba(59,130,246,0.18)" },
+  streak:      { icon: FireIcon,                color: "#f59e0b", bg: "rgba(245,158,11,0.08)",  border: "rgba(245,158,11,0.18)" },
+  achievement: { icon: CheckmarkCircle01Icon,   color: "#c9a84c", bg: "rgba(201,168,76,0.08)",  border: "rgba(201,168,76,0.22)" },
+  system:      { icon: InformationCircleIcon,   color: "#6b7280", bg: "rgba(107,114,128,0.08)", border: "rgba(107,114,128,0.15)" },
 };
 
 function timeGroup(n: Notif): string {
@@ -124,8 +50,17 @@ function timeGroup(n: Notif): string {
 }
 
 export default function NotificationsPage() {
-  const [notifs, setNotifs] = useState<Notif[]>(SEED);
+  const [notifs, setNotifs] = useState<Notif[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Category>("all");
+
+  useEffect(() => {
+    if (!isLoggedIn()) { window.location.href = "/login"; return; }
+    getNotifications()
+      .then(data => setNotifs(data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
   const filtered = filter === "all" ? notifs : notifs.filter(n => n.category === filter);
   const unread = notifs.filter(n => !n.read).length;
@@ -213,8 +148,23 @@ export default function NotificationsPage() {
         })}
       </motion.div>
 
+      {/* Loading state */}
+      {loading && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {[1, 2, 3].map(i => (
+            <div key={i} style={{
+              height: 80, borderRadius: 14,
+              background: "var(--surface)", border: "1px solid var(--border)",
+              animation: "pulse 1.5s ease-in-out infinite",
+              opacity: 1 - i * 0.15,
+            }} />
+          ))}
+          <style>{`@keyframes pulse { 0%,100%{opacity:0.6}50%{opacity:1} }`}</style>
+        </div>
+      )}
+
       {/* Notification groups */}
-      {filtered.length === 0 ? (
+      {!loading && filtered.length === 0 ? (
         <motion.div {...f(0.1)} style={{
           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
           padding: "64px 24px", gap: 12,
@@ -226,7 +176,7 @@ export default function NotificationsPage() {
           <p style={{ fontSize: 15, fontWeight: 700, color: "var(--text-primary)" }}>All clear</p>
           <p style={{ fontSize: 13, color: "var(--text-muted)", textAlign: "center" }}>No notifications in this category yet.</p>
         </motion.div>
-      ) : (
+      ) : !loading ? (
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <AnimatePresence mode="popLayout">
             {groups.map((group, gi) => (
@@ -245,7 +195,7 @@ export default function NotificationsPage() {
             ))}
           </AnimatePresence>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
@@ -281,7 +231,6 @@ function NotifCard({ n, delay, onRead, onDismiss }: {
         boxShadow: hovered ? "0 2px 12px rgba(0,0,0,0.06)" : "none",
       }}
     >
-      {/* Unread dot */}
       {!n.read && (
         <span style={{
           position: "absolute", top: 14, right: 14,
@@ -290,7 +239,6 @@ function NotifCard({ n, delay, onRead, onDismiss }: {
         }} />
       )}
 
-      {/* Icon */}
       <div style={{
         width: 38, height: 38, borderRadius: 11, flexShrink: 0,
         background: meta.bg, border: `1px solid ${meta.border}`,
@@ -299,7 +247,6 @@ function NotifCard({ n, delay, onRead, onDismiss }: {
         <HugeiconsIcon icon={meta.icon} size={18} style={{ color: meta.color }} />
       </div>
 
-      {/* Content */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3, flexWrap: "wrap" }}>
           <span style={{ fontSize: 13.5, fontWeight: n.read ? 500 : 700, color: "var(--text-primary)" }}>{n.title}</span>
@@ -311,7 +258,6 @@ function NotifCard({ n, delay, onRead, onDismiss }: {
         <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{n.timeLabel}</span>
       </div>
 
-      {/* Actions */}
       <div style={{ display: "flex", flexDirection: "column", gap: 4, flexShrink: 0, opacity: hovered ? 1 : 0, transition: "opacity 0.15s" }}>
         {!n.read && (
           <button

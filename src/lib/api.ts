@@ -165,3 +165,19 @@ export async function createCheckout(planKey: string) {
 export async function getBillingPortal() {
   return request<{ portal_url: string }>("/upgrade/portal", { method: "POST" });
 }
+
+export async function getNotifications() {
+  return request<Array<{
+    id: string;
+    category: "insight" | "streak" | "achievement" | "system";
+    title: string;
+    body: string;
+    time: string;
+    timeLabel: string;
+    read: boolean;
+  }>>("/notifications");
+}
+
+export async function markNotificationRead(id: string) {
+  return request<{ ok: boolean }>(`/notifications/${id}/read`, { method: "POST" });
+}
