@@ -14,102 +14,87 @@ export default function LoadingScreen({ message = "Loading…", fullscreen = fal
       alignItems: "center",
       justifyContent: "center",
       minHeight: fullscreen ? "100dvh" : "60vh",
-      gap: 24,
+      gap: 28,
       background: fullscreen ? "var(--bg, #faf8f5)" : "transparent",
     }}>
-      {/* Logo + orbiting circles */}
-      <div style={{ position: "relative", width: 100, height: 100 }}>
+      <div style={{ position: "relative", width: 88, height: 88 }}>
 
-        {/* Outer rotating ring — dashed arc */}
+        {/* Outer ring — clockwise */}
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 3.2, repeat: Infinity, ease: "linear" }}
           style={{
             position: "absolute",
-            inset: -14,
+            inset: -16,
             borderRadius: "50%",
             border: "2px solid transparent",
-            borderTopColor: "rgba(192,64,79,0.75)",
-            borderRightColor: "rgba(192,64,79,0.25)",
+            borderTopColor: "rgba(192,64,79,0.85)",
+            borderRightColor: "rgba(192,64,79,0.2)",
+            borderBottomColor: "transparent",
+            borderLeftColor: "rgba(192,64,79,0.1)",
           }}
         />
 
-        {/* Middle rotating ring — counter-clockwise, slower */}
+        {/* Inner ring — counter-clockwise */}
         <motion.div
           animate={{ rotate: -360 }}
-          transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 4.8, repeat: Infinity, ease: "linear" }}
           style={{
             position: "absolute",
-            inset: -6,
+            inset: -7,
             borderRadius: "50%",
             border: "1.5px solid transparent",
-            borderTopColor: "rgba(124,34,50,0.55)",
-            borderBottomColor: "rgba(192,64,79,0.3)",
+            borderTopColor: "rgba(124,34,50,0.6)",
+            borderLeftColor: "rgba(192,64,79,0.25)",
+            borderBottomColor: "rgba(192,64,79,0.08)",
+            borderRightColor: "transparent",
           }}
         />
 
-        {/* Orbiting dot 1 */}
+        {/* Orbiting dot */}
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "linear" }}
-          style={{ position: "absolute", inset: -16, borderRadius: "50%" }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", inset: -18, borderRadius: "50%" }}
         >
           <div style={{
             position: "absolute",
-            top: "50%",
-            left: 0,
+            top: "50%", left: 0,
             transform: "translateY(-50%)",
-            width: 7, height: 7,
+            width: 8, height: 8,
             borderRadius: "50%",
             background: "#c0404f",
-            boxShadow: "0 0 8px rgba(192,64,79,0.6)",
+            boxShadow: "0 0 10px rgba(192,64,79,0.7), 0 0 4px rgba(192,64,79,0.5)",
           }} />
         </motion.div>
 
-        {/* Orbiting dot 2 — offset 180deg, slower */}
+        {/* Logo container — dark circle so JPG white bg vanishes */}
         <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 3.4, repeat: Infinity, ease: "linear", delay: 0 }}
-          style={{ position: "absolute", inset: -10, borderRadius: "50%" }}
-        >
-          <div style={{
-            position: "absolute",
-            top: 0,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 5, height: 5,
+          animate={{ scale: [1, 1.035, 1] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            width: 88, height: 88,
             borderRadius: "50%",
-            background: "rgba(192,64,79,0.5)",
-          }} />
-        </motion.div>
-
-        {/* Inner glow pulse */}
-        <motion.div
-          animate={{ opacity: [0.3, 0.7, 0.3], scale: [0.95, 1.05, 0.95] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            position: "absolute", inset: 2,
-            borderRadius: 20,
-            background: "radial-gradient(circle, rgba(192,64,79,0.18), transparent 70%)",
-          }}
-        />
-
-        {/* Logo */}
-        <motion.img
-          src="/logo.jpg"
-          alt="ThePull"
-          animate={{ scale: [1, 1.03, 1] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            width: 100, height: 100,
-            borderRadius: 22,
-            display: "block",
-            objectFit: "cover",
+            overflow: "hidden",
             position: "relative",
             zIndex: 2,
-            boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
+            background: "#1a0810",
+            boxShadow: "0 0 0 1px rgba(192,64,79,0.2), 0 4px 24px rgba(0,0,0,0.25)",
           }}
-        />
+        >
+          <img
+            src="/logo.jpg"
+            alt="ThePull"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              mixBlendMode: "multiply",
+              display: "block",
+            }}
+          />
+        </motion.div>
+
       </div>
 
       {/* Message */}
@@ -117,12 +102,13 @@ export default function LoadingScreen({ message = "Loading…", fullscreen = fal
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.35 }}
           style={{
-            fontSize: 13,
-            color: "var(--text-muted, rgba(15,10,20,0.45))",
+            fontSize: 12,
+            color: "var(--text-muted, rgba(15,10,20,0.42))",
             fontWeight: 500,
-            letterSpacing: "0.02em",
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
           }}
         >
           {message}
