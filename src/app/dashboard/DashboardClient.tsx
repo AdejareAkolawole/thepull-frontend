@@ -12,7 +12,6 @@ import {
 import { getDashboard, isLoggedIn } from "@/lib/api";
 import { trackAppOpen } from "@/lib/streaks";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 const achievementIconMap: Record<string, any> = {
   brain: AiBrain01Icon,
@@ -199,7 +198,6 @@ function ShareFlyer({ open, onClose, name, archetype, pullScore, tagline }: {
 export default function DashboardClient() {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
-  const router = useRouter();
 
   const [showFlyer, setShowFlyer] = useState(false);
   const [showSignals, setShowSignals] = useState(false);
@@ -227,8 +225,11 @@ export default function DashboardClient() {
     trackAppOpen();
     getDashboard().then(res => {
       const p = (res.profile || {}) as Record<string, unknown>;
-      // Redirect to onboarding if not complete
-      if (!p.onboarding_complete) { window.location.href = "/onboarding"; return; }
+      // Only redirect to onboarding if profile explicitly says not complete
+      if (res.profile && p.onboarding_complete === false) {
+        window.location.href = "/onboarding";
+        return;
+      }
 
       const arch = res.archetype as Record<string, unknown> | null;
       const narrative = res.living_narrative as Record<string, unknown> | null;
@@ -251,8 +252,15 @@ export default function DashboardClient() {
         lib_data_coverage: narrative?.data_coverage != null ? (narrative.data_coverage as number) : null,
         lib_confidence_level: (narrative?.confidence_level as string) ?? null,
       });
-    }).catch(() => {});
-  }, [router]);
+    }).catch((err: any) => {
+      // 401 = token expired/invalid → force re-login
+      if (err?.status === 401) {
+        localStorage.removeItem("pull_token");
+        window.location.href = "/login";
+      }
+      // Any other error: stay on dashboard showing defaults (no infinite redirect)
+    });
+  }, []);
 
   // Derived display values — real data when available, neutral defaults otherwise
   const displayName  = dash?.name ?? "—";
