@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import LoadingScreen from "@/components/LoadingScreen";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowUp01Icon, ArrowDown01Icon, Share01Icon, FavouriteIcon,
@@ -97,11 +98,7 @@ export default function PullProfilePage() {
       ];
 
   if (loading) {
-    return (
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
-        <p style={{ color: MID, fontSize: 14 }}>Loading your intelligence profile…</p>
-      </div>
-    );
+    return <LoadingScreen message="Loading your intelligence profile…" />;
   }
 
   return (

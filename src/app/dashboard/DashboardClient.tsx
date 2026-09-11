@@ -305,13 +305,13 @@ export default function DashboardClient() {
             </button>
           </div>
 
-          {/* Bar — cream fill, no surrounding border */}
-          <div style={{ height: 8, borderRadius: 99, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+          {/* Bar — wine fill */}
+          <div style={{ height: 8, borderRadius: 99, background: "rgba(192,64,79,0.15)", overflow: "hidden" }}>
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${confidence}%` }}
               transition={{ duration: 1.4, ease: "easeOut", delay: 0.2 }}
-              style={{ height: "100%", borderRadius: 99, background: "linear-gradient(90deg, #d4c5a9, #f0e6d3)" }}
+              style={{ height: "100%", borderRadius: 99, background: "linear-gradient(90deg, #7c2232, #c0404f)" }}
             />
           </div>
 

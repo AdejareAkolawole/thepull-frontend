@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import LoadingScreen from "@/components/LoadingScreen";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { CheckmarkCircle02Icon, AddCircleIcon, FlashIcon, Target01Icon, ArrowRight01Icon, Calendar03Icon } from "@hugeicons/core-free-icons";
 import { getDashboard, getAssessmentStatus, isLoggedIn } from "@/lib/api";
@@ -57,7 +58,7 @@ export default function JourneyPage() {
   const pct = Math.round((done / milestones.length) * 100);
 
   if (loading) {
-    return <div style={{ textAlign: "center", padding: 60, color: "var(--text-muted)", fontSize: 13 }}>Loading your journey…</div>;
+    return <LoadingScreen message="Loading your journey…" />;
   }
 
   return (

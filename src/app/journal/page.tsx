@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Add01Icon, Calendar03Icon, AiSparklesIcon, BookOpen01Icon, Search01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { getJournalEntries, createJournalEntry, deleteJournalEntry, isLoggedIn } from "@/lib/api";
+import LoadingScreen from "@/components/LoadingScreen";
 import { trackActivity } from "@/lib/streaks";
 import { useRouter } from "next/navigation";
 
@@ -153,10 +154,7 @@ export default function JournalPage() {
         </motion.div>
       )}
 
-      {/* Loading */}
-      {loading && (
-        <div style={{ textAlign: "center", padding: 40, color: "var(--text-muted)", fontSize: 13 }}>Loading entries…</div>
-      )}
+      {loading && <LoadingScreen message="Loading your journal…" />}
 
       {/* Empty state */}
       {!loading && filtered.length === 0 && (
