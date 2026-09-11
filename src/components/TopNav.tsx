@@ -73,7 +73,7 @@ export default function TopNav() {
             <img src="/logo.jpg" alt="THEPULL" style={{ height: 30, width: "auto", display: "block", borderRadius: 7 }} />
             <div>
               <p style={{ fontSize: 13, fontWeight: 800, color: "#0f0a14", lineHeight: 1.2, letterSpacing: "-0.02em" }}>MyPullScore</p>
-              <p className="nav-logo-tagline" style={{ fontSize: 9, color: "rgba(15,10,20,0.38)", lineHeight: 1.2 }}>Personal intelligence that grows with you.</p>
+              <p className="nav-logo-tagline" style={{ fontSize: 9, color: "rgba(15,10,20,0.55)", lineHeight: 1.2 }}>Personal intelligence that grows with you.</p>
             </div>
           </Link>
 

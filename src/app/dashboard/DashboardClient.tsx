@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -202,6 +202,7 @@ export default function DashboardClient() {
   const router = useRouter();
 
   const [showFlyer, setShowFlyer] = useState(false);
+  const [showSignals, setShowSignals] = useState(false);
   const [dash, setDash] = useState<{
     name: string;
     archetype: string | null;
@@ -271,56 +272,55 @@ export default function DashboardClient() {
 
       {/* ── LIVING INTELLIGENCE ── */}
       <motion.div {...fade(0)}>
-        <div style={{
-          borderRadius: 18, padding: "18px 22px",
-          background: "linear-gradient(135deg, #1a0e04 0%, #2a1a08 50%, #1e1206 100%)",
-          border: "1px solid rgba(201,168,76,0.2)",
-          boxShadow: "0 4px 24px rgba(0,0,0,0.18), inset 0 1px 0 rgba(201,168,76,0.08)",
-        }}>
-          {/* Top row */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap" as const, gap: 10 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <HugeiconsIcon icon={AiSparklesIcon} size={16} style={{ color: "rgba(201,168,76,0.9)" }} />
-              </div>
-              <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontSize: 12, fontWeight: 800, color: "rgba(201,168,76,0.95)", letterSpacing: "0.01em" }}>Living Intelligence</span>
-                  <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)", color: "rgba(201,168,76,0.8)", letterSpacing: "0.08em", textTransform: "uppercase" as const }}>Active</span>
-                </div>
-                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", marginTop: 1 }}>Your intelligence is alive and evolving with every signal you bring.</p>
-              </div>
+        <div style={{ padding: "4px 2px 2px" }}>
+          {/* Label row */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+              <HugeiconsIcon icon={AiSparklesIcon} size={13} style={{ color: "rgba(201,168,76,0.8)" }} />
+              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "var(--text-muted)" }}>Living Intelligence</span>
+              <span style={{ fontSize: 12, fontWeight: 800, color: "rgba(201,168,76,0.9)" }}>{confidence}%</span>
             </div>
-            <Link href="/journal" style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 700, padding: "6px 14px", borderRadius: 10, background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)", color: "rgba(201,168,76,0.9)", textDecoration: "none", flexShrink: 0 }}>
-              Add a signal <HugeiconsIcon icon={ArrowRight01Icon} size={11} />
-            </Link>
+            <button
+              onClick={() => setShowSignals(s => !s)}
+              style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 600, color: "var(--text-muted)", background: "none", border: "none", cursor: "pointer", padding: "2px 0", opacity: 0.7 }}
+            >
+              {showSignals ? "Hide" : "Signals"}
+              <HugeiconsIcon icon={ArrowDown01Icon} size={12} style={{ transform: showSignals ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
+            </button>
           </div>
-          {/* Progress bar */}
-          <div style={{ marginBottom: 10 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.6)" }}>Intelligence Confidence</span>
-              <span style={{ fontSize: 13, fontWeight: 800, color: "rgba(201,168,76,0.95)" }}>{confidence}%</span>
-            </div>
-            <div style={{ height: 6, borderRadius: 99, background: "rgba(201,168,76,0.1)", overflow: "hidden" }}>
+
+          {/* Bar — cream fill, no surrounding border */}
+          <div style={{ height: 8, borderRadius: 99, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${confidence}%` }}
+              transition={{ duration: 1.4, ease: "easeOut", delay: 0.2 }}
+              style={{ height: "100%", borderRadius: 99, background: "linear-gradient(90deg, #d4c5a9, #f0e6d3)" }}
+            />
+          </div>
+
+          {/* Dropdown signals */}
+          <AnimatePresence>
+            {showSignals && (
               <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${confidence}%` }}
-                transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-                style={{ height: "100%", borderRadius: 99, background: "linear-gradient(90deg, rgba(201,168,76,0.7), rgba(201,168,76,0.95))" }}
-              />
-            </div>
-          </div>
-          {/* Signal texts */}
-          <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 6, marginTop: 10 }}>
-            {[
-              "Communication pattern updated · +3 signals",
-              "Emotional Landscape · 72% confidence",
-              "Archetype alignment recalculated",
-              "Identity vector · 847 data points",
-            ].map(s => (
-              <span key={s} style={{ fontSize: 10, color: "rgba(201,168,76,0.45)", padding: "3px 10px", borderRadius: 99, background: "rgba(201,168,76,0.06)", border: "1px solid rgba(201,168,76,0.12)", whiteSpace: "nowrap" as const }}>{s}</span>
-            ))}
-          </div>
+                key="signals"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.22, ease: "easeInOut" }}
+                style={{ overflow: "hidden" }}
+              >
+                <div style={{ paddingTop: 12, display: "flex", flexWrap: "wrap" as const, gap: 6 }}>
+                  {(dash?.archetype_primary_signals && dash.archetype_primary_signals.length > 0
+                    ? dash.archetype_primary_signals.map(s => `${s.label} · ${s.pct}%`)
+                    : ["Complete check-ins to see your live signal data.", "Each journal entry grows your intelligence profile."]
+                  ).map(s => (
+                    <span key={s} style={{ fontSize: 10, color: "var(--text-muted)", padding: "4px 11px", borderRadius: 99, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", whiteSpace: "nowrap" as const }}>{s}</span>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
 
