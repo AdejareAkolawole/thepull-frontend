@@ -218,6 +218,8 @@ export default function DashboardClient() {
     plan: string;
     onboarding_complete: boolean;
     dimension_scores: Record<string, number> | null;
+    lib_data_coverage: number | null;
+    lib_confidence_level: string | null;
   } | null>(null);
 
   useEffect(() => {
@@ -246,6 +248,8 @@ export default function DashboardClient() {
         plan: (p.subscription_tier as string) || "free",
         onboarding_complete: (p.onboarding_complete as boolean) ?? false,
         dimension_scores: res.dimension_scores as Record<string, number> | null,
+        lib_data_coverage: narrative?.data_coverage != null ? (narrative.data_coverage as number) : null,
+        lib_confidence_level: (narrative?.confidence_level as string) ?? null,
       });
     }).catch(() => {});
   }, [router]);
@@ -254,7 +258,10 @@ export default function DashboardClient() {
   const displayName  = dash?.name ?? "—";
   const archetype    = dash?.archetype ?? "Emerging Identity";
   const archetypeTagline = dash?.archetype_tagline ?? null;
-  const confidence   = dash?.archetype_confidence ?? 0;
+  // LIB uses data_coverage (0-1 → 0-100%) — actual evidence accumulated, not model confidence
+  const libCoverage  = dash?.lib_data_coverage != null ? Math.round(dash.lib_data_coverage * 100) : 0;
+  const libLevel     = dash?.lib_confidence_level ?? null; // "low" | "medium" | "high"
+  const confidence   = libCoverage; // bar width driven by evidence coverage
   const pullScore    = dash?.pull_score ?? null;
   const summary      = dash?.identity_summary ?? "Your intelligence profile is being built. Share a moment from your life to begin.";
   const hasIntel     = dash?.onboarding_complete ?? false;
@@ -279,6 +286,7 @@ export default function DashboardClient() {
               <HugeiconsIcon icon={AiSparklesIcon} size={13} style={{ color: "rgba(201,168,76,0.8)" }} />
               <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "var(--text-muted)" }}>Living Intelligence</span>
               <span style={{ fontSize: 12, fontWeight: 800, color: "rgba(201,168,76,0.9)" }}>{confidence}%</span>
+              {libLevel && <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.55)", padding: "2px 7px", borderRadius: 99, border: "1px solid rgba(201,168,76,0.2)" }}>{libLevel}</span>}
             </div>
             <button
               onClick={() => setShowSignals(s => !s)}
