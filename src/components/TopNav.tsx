@@ -151,8 +151,8 @@ export default function TopNav() {
                 overflow: "hidden",
                 maxWidth: active ? 140 : 44,
               }}>
-                <HugeiconsIcon icon={Icon} size={20} style={{ color: active ? "#c0404f" : "rgba(255,255,255,0.45)", flexShrink: 0 }} />
-                {active && <span style={{ fontSize: 12, fontWeight: 700, color: "#c0404f" }}>{label}</span>}
+                <HugeiconsIcon icon={Icon} size={20} style={{ color: active ? "#fff" : "rgba(255,255,255,0.45)", flexShrink: 0 }} />
+                {active && <span style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>{label}</span>}
               </Link>
             );
           })}

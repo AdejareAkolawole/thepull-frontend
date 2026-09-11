@@ -89,8 +89,9 @@ export default function LoadingScreen({ message = "Loading…", fullscreen = fal
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              mixBlendMode: "multiply",
               display: "block",
+              filter: "invert(1) brightness(1.8)",
+              mixBlendMode: "screen",
             }}
           />
         </motion.div>
