@@ -17,7 +17,10 @@ async function getLivingReport() {
   const res = await fetch(`${BASE}/living-report`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!res.ok) throw new Error("Failed");
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body?.detail || body?.type || `HTTP ${res.status}`);
+  }
   return res.json();
 }
 
