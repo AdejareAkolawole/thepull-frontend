@@ -491,7 +491,7 @@ export default function DashboardClient() {
 
         {/* ── Action buttons ── */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, flexWrap: "wrap" as const }}>
-          <Link href="/pull-profile" style={{
+          <Link href="/living-report" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             padding: "13px 22px", borderRadius: 12, textDecoration: "none",
             background: "linear-gradient(135deg,#b8922a 0%,#c9a84c 50%,#1a0a10 100%)",
