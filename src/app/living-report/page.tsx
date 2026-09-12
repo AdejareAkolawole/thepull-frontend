@@ -55,6 +55,7 @@ type ReportData = {
   pull_score: number | null;
   gravity_label: string;
   gravity_description: string;
+  has_assessment: boolean;
   current_version: VersionData | null;
   versions: VersionData[];
   archetype: ArchetypeData | null;
@@ -84,8 +85,8 @@ type ArchetypeData = {
   what_it_is: string;
   defining_characteristics: string[];
   growth_edges: string[];
-  why_identified: string;
-  identity_vector: Record<string, number>;
+  growth_recommendations: string[];
+  primary_signals: string[];
 };
 
 const DIM_LABELS: Record<string, string> = {
@@ -114,7 +115,7 @@ export default function LivingReportPage() {
 
   if (loading) return <LoadingScreen message="Loading your living report…" />;
 
-  if (!data?.current_version) {
+  if (!data?.has_assessment) {
     return (
       <div style={{ maxWidth: 560, margin: "0 auto", padding: "48px 24px", textAlign: "center" }}>
         <div style={{ fontSize: 40, marginBottom: 16 }}>📖</div>
@@ -127,7 +128,7 @@ export default function LivingReportPage() {
     );
   }
 
-  const v = activeVersion!;
+  const v = activeVersion;
 
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "0 0 60px", fontFamily: "Aeonik, system-ui, sans-serif" }}>
@@ -230,14 +231,16 @@ export default function LivingReportPage() {
       )}
 
       {/* Narrative */}
-      {v.narrative && (
+      {(v?.narrative || data.archetype?.what_it_is) && (
         <motion.div {...f(0.12)}>
           <Card style={{ marginBottom: 14 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
               <HugeiconsIcon icon={BookOpen01Icon} size={14} style={{ color: GOLD }} />
               <Label>Your Living Narrative</Label>
             </div>
-            <p style={{ fontSize: 15, color: DARK, lineHeight: 1.85, whiteSpace: "pre-wrap" }}>{v.narrative}</p>
+            <p style={{ fontSize: 15, color: DARK, lineHeight: 1.85, whiteSpace: "pre-wrap" }}>
+              {v?.narrative || data.archetype?.what_it_is}
+            </p>
           </Card>
         </motion.div>
       )}
@@ -325,13 +328,18 @@ export default function LivingReportPage() {
                 </ul>
               </>
             )}
-            {data.archetype.why_identified && (
-              <>
-                <div style={{ borderTop: "1px solid rgba(45,26,20,0.08)", paddingTop: 14, marginTop: 4 }}>
-                  <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: GOLD, marginBottom: 8 }}>Why you were identified with this archetype</p>
-                  <p style={{ fontSize: 13, color: MID, lineHeight: 1.7 }}>{data.archetype.why_identified}</p>
-                </div>
-              </>
+            {data.archetype.growth_recommendations?.length > 0 && (
+              <div style={{ borderTop: "1px solid rgba(45,26,20,0.08)", paddingTop: 14, marginTop: 4 }}>
+                <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: GOLD, marginBottom: 8 }}>Growth Recommendations</p>
+                <ul style={{ listStyle: "none", padding: 0 }}>
+                  {data.archetype.growth_recommendations.map((r, i) => (
+                    <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 6 }}>
+                      <HugeiconsIcon icon={CheckmarkCircle01Icon} size={12} style={{ color: GOLD, flexShrink: 0, marginTop: 2 }} />
+                      <span style={{ fontSize: 13, color: DARK, lineHeight: 1.6 }}>{r}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
           </Card>
         </motion.div>
