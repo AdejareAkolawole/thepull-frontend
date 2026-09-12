@@ -100,6 +100,7 @@ const DIM_LABELS: Record<string, string> = {
 export default function LivingReportPage() {
   const [data, setData] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [activeVersion, setActiveVersion] = useState<VersionData | null>(null);
 
   useEffect(() => {
@@ -109,11 +110,21 @@ export default function LivingReportPage() {
         setData(d);
         setActiveVersion(d.current_version);
       })
-      .catch(() => {})
+      .catch((e) => setApiError(e?.message || "Failed to load"))
       .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <LoadingScreen message="Loading your living report…" />;
+
+  if (apiError) {
+    return (
+      <div style={{ maxWidth: 560, margin: "0 auto", padding: "48px 24px", textAlign: "center" }}>
+        <p style={{ fontSize: 14, color: "#c0404f", marginBottom: 8 }}>Could not load your Living Report.</p>
+        <p style={{ fontSize: 12, color: MID, marginBottom: 16 }}>{apiError}</p>
+        <button onClick={() => window.location.reload()} style={{ padding: "10px 20px", borderRadius: 10, background: "#c0404f", color: "#fff", border: "none", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>Retry</button>
+      </div>
+    );
+  }
 
   if (!data?.has_assessment) {
     return (
