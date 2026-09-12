@@ -15,7 +15,7 @@ const navItems = [
   { href: "/dashboard", icon: Home01Icon, label: "Home" },
   { href: "/pull-profile", icon: AiSparklesIcon, label: "Pull Profile" },
   { href: "/coach", icon: AiBrain01Icon, label: "Ask The Pull" },
-  { href: "/journey", icon: CompassIcon, label: "Journey" },
+  { href: "/reports", icon: ScaleIcon, label: "Reality Check" },
   { href: "/settings", icon: Settings01Icon, label: "Settings" },
 ];
 
