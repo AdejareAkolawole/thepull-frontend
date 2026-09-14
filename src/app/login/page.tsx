@@ -1,21 +1,22 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { login } from "@/lib/api";
-import { useAuth } from "@/lib/auth-context";
+import { getGoogleAuthUrl, login } from "@/lib/api";
 
 const C = { wine: "#3d0e1a", ink: "#0f0a14", muted: "#6b7280", border: "#e5e7eb" };
 
 const GOOGLE_ERROR_MESSAGES: Record<string, string> = {
   google_cancelled: "Google sign-in was cancelled.",
   google_token_failed: "Could not complete Google sign-in. Please try again.",
+  google_userinfo_failed: "Google did not return your account details. Please try again.",
+  google_profile_invalid: "Google returned an incomplete account profile. Please try again.",
+  google_provider_unavailable: "Google sign-in is temporarily unavailable. Please try again.",
   google_no_email: "Google account has no email address.",
   account_suspended: "This account has been suspended.",
   google_not_configured: "Google sign-in is not available yet.",
 };
 
 export default function LoginPage() {
-  const { refresh } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -131,7 +132,7 @@ export default function LoginPage() {
 
             {/* Google */}
             <button style={btnGoogleStyle} onClick={() => {
-              window.location.href = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/auth/google`;
+              window.location.assign(getGoogleAuthUrl());
             }}>
               <GoogleIcon />
               Continue with Google

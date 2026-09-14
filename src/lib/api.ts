@@ -1,4 +1,8 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/+$/, "");
+
+export function getGoogleAuthUrl(): string {
+  return `${BASE_URL}/auth/google`;
+}
 
 function getToken(): string | null {
   if (typeof window === "undefined") return null;

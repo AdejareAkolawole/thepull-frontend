@@ -5,11 +5,14 @@ export default function AuthCallbackPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
-    const next = params.get("next") || "/dashboard";
+    const requestedNext = params.get("next");
+    const next = requestedNext && requestedNext.startsWith("/") && !requestedNext.startsWith("//")
+      ? requestedNext
+      : "/dashboard";
     const error = params.get("error");
 
     if (error) {
-      window.location.replace(`/login?error=${error}`);
+      window.location.replace(`/login?error=${encodeURIComponent(error)}`);
       return;
     }
 
@@ -17,7 +20,7 @@ export default function AuthCallbackPage() {
       localStorage.setItem("pull_token", token);
       window.location.replace(next);
     } else {
-      window.location.replace("/login?error=google_token_missing");
+      window.location.replace("/login/?error=google_token_missing");
     }
   }, []);
 

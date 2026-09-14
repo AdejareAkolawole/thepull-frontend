@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { register } from "@/lib/api";
+import { getGoogleAuthUrl, register } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 
 const C = { wine: "#3d0e1a", ink: "#0f0a14", muted: "#6b7280", border: "#e5e7eb" };
@@ -118,7 +118,7 @@ export default function RegisterPage() {
 
             {/* Google */}
             <button style={btnGoogleStyle} onClick={() => {
-              window.location.href = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/auth/google`;
+              window.location.assign(getGoogleAuthUrl());
             }}>
               <GoogleIcon />
               Continue with Google
