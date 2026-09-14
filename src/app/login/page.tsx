@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { login, getProfile } from "@/lib/api";
+import { login } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 
 const C = { wine: "#3d0e1a", ink: "#0f0a14", muted: "#6b7280", border: "#e5e7eb" };
@@ -35,10 +35,7 @@ export default function LoginPage() {
     try {
       await login(email, password);
       await refresh();
-      const profile = await getProfile().catch(() => null) as Record<string, unknown> | null;
-      // Only redirect to onboarding if we explicitly know it's not complete
-      // (mirrors the dashboard's own strict === false guard)
-      window.location.href = profile?.onboarding_complete === false ? "/onboarding" : "/dashboard";
+      window.location.href = "/dashboard";
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed");
       setLoading(false);
