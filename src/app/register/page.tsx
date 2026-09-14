@@ -13,20 +13,17 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false);
-  const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
+  const [consentAccepted, setConsentAccepted] = useState(false);
   const [showSignupOptions, setShowSignupOptions] = useState(false);
 
-  const consentComplete = termsAccepted && privacyAcknowledged;
-
   function continueToSignup() {
-    if (!consentComplete) return;
+    if (!consentAccepted) return;
     setError("");
     setShowSignupOptions(true);
   }
 
   function handleGoogleSignup() {
-    if (!consentComplete) {
+    if (!consentAccepted) {
       setError("Please agree to the Terms and acknowledge the Privacy Policy first.");
       return;
     }
@@ -35,7 +32,7 @@ export default function RegisterPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!consentComplete) {
+    if (!consentAccepted) {
       setError("Please agree to the Terms and acknowledge the Privacy Policy first.");
       return;
     }
@@ -154,8 +151,8 @@ export default function RegisterPage() {
                 <label style={consentLabelStyle}>
                   <input
                     type="checkbox"
-                    checked={termsAccepted}
-                    onChange={e => setTermsAccepted(e.target.checked)}
+                    checked={consentAccepted}
+                    onChange={e => setConsentAccepted(e.target.checked)}
                     style={checkboxStyle}
                   />
                   <span>
@@ -163,19 +160,7 @@ export default function RegisterPage() {
                     <Link href="/terms" target="_blank" rel="noreferrer" style={consentLinkStyle}>
                       Terms of Service
                     </Link>
-                    .
-                  </span>
-                </label>
-
-                <label style={consentLabelStyle}>
-                  <input
-                    type="checkbox"
-                    checked={privacyAcknowledged}
-                    onChange={e => setPrivacyAcknowledged(e.target.checked)}
-                    style={checkboxStyle}
-                  />
-                  <span>
-                    I acknowledge the{" "}
+                    {" "}and acknowledge the{" "}
                     <Link href="/privacy" target="_blank" rel="noreferrer" style={consentLinkStyle}>
                       Privacy Policy
                     </Link>
@@ -186,12 +171,12 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={continueToSignup}
-                  disabled={!consentComplete}
+                  disabled={!consentAccepted}
                   style={{
                     ...btnPrimaryStyle,
                     marginTop: 18,
-                    opacity: consentComplete ? 1 : 0.45,
-                    cursor: consentComplete ? "pointer" : "not-allowed",
+                    opacity: consentAccepted ? 1 : 0.45,
+                    cursor: consentAccepted ? "pointer" : "not-allowed",
                   }}
                 >
                   Continue to sign up →

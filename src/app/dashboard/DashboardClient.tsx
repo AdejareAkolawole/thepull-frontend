@@ -740,9 +740,9 @@ export default function DashboardClient() {
                 <HugeiconsIcon icon={AiInnovation01Icon} size={14} style={{ color: "white" }} />
               </div>
               <p style={{ fontSize: 12, fontWeight: 700, color: "white", marginBottom: 4 }}>Ask The Pull</p>
-              <p style={{ fontSize: 10, color: "rgba(255,255,255,0.42)", lineHeight: 1.5, marginBottom: 12 }}>Your AI coach is ready with full profile context.</p>
+              <p style={{ fontSize: 10, color: "rgba(255,255,255,0.42)", lineHeight: 1.5, marginBottom: 12 }}>Ask The Pull is ready with full profile context.</p>
               <Link href="/coach" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 5, padding: "8px 0", borderRadius: 10, background: "rgba(255,255,255,0.14)", color: "white", fontSize: 11, fontWeight: 700, textDecoration: "none", border: "1px solid rgba(255,255,255,0.12)" }}>
-                Start session <HugeiconsIcon icon={ArrowRight01Icon} size={10} />
+                Open Ask The Pull <HugeiconsIcon icon={ArrowRight01Icon} size={10} />
               </Link>
             </div>
           </motion.div>
@@ -755,7 +755,7 @@ export default function DashboardClient() {
           <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", marginBottom: 10 }}>Quick Actions</p>
           <div className="dash-quick-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 7, marginBottom: 8 }}>
             {[
-              { label: "AI Coach", href: "/coach", icon: AiInnovation01Icon, color: "#2563eb", bg: "rgba(37,99,235,0.07)" },
+              { label: "Ask The Pull", href: "/coach", icon: AiInnovation01Icon, color: "#2563eb", bg: "rgba(37,99,235,0.07)" },
               { label: "Reports", href: "/reports", icon: PresentationLineChart01Icon, color: "#7c3aed", bg: "rgba(124,58,237,0.07)" },
               { label: "Journey", href: "/journey", icon: Target01Icon, color: "#d97706", bg: "rgba(217,119,6,0.07)" },
               { label: "Journal", href: "/journal", icon: FlashIcon, color: "#c0404f", bg: "rgba(192,64,79,0.07)" },

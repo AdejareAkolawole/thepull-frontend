@@ -51,7 +51,7 @@ const STREAMS: StreamConfig[] = [
   },
   {
     key: "coach",
-    label: "Coach Sessions",
+    label: "Ask The Pull Sessions",
     desc: "Talk to the Pull AI daily",
     icon: AiBrain01Icon,
     color: "#a78bfa",

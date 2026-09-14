@@ -52,12 +52,12 @@ export default function CoachPage() {
       if (u?.limit_reached) setLimitReached(true);
       setMessages([{
         id: "1", role: "assistant",
-        text: `Hey ${n} — I'm The Pull, your personal intelligence coach. I have full context on your profile, your assessments, and your dimensions.\n\nWhat's on your mind today?`,
+        text: `Hey ${n} — I'm The Pull, your personal intelligence assistant. I have full context on your profile, your assessments, and your dimensions.\n\nWhat's on your mind today?`,
       }]);
     }).catch(() => {
       setMessages([{
         id: "1", role: "assistant",
-        text: "Hey — I'm The Pull, your personal intelligence coach.\n\nWhat's on your mind today?",
+        text: "Hey — I'm The Pull, your personal intelligence assistant.\n\nWhat's on your mind today?",
       }]);
     });
   }, [router]);
@@ -85,7 +85,7 @@ export default function CoachPage() {
         setUsage(prev => prev ? { ...prev, limit_reached: true, remaining: 0, used: FREE_LIMIT } : null);
         setMessages(m => [...m, {
           id: (Date.now() + 1).toString(), role: "assistant",
-          text: `You've used all ${FREE_LIMIT} coach sessions for this month. Upgrade to Premium for unlimited access.`,
+          text: `You've used all ${FREE_LIMIT} Ask The Pull sessions for this month. Upgrade to Premium for unlimited access.`,
         }]);
       } else {
         setMessages(m => [...m, { id: (Date.now() + 1).toString(), role: "assistant", text: "Something went wrong. Please try again." }]);
@@ -137,7 +137,7 @@ export default function CoachPage() {
       </div>
       <p style={{ fontSize: 15, fontWeight: 700, color: "white", marginBottom: 6 }}>Monthly limit reached</p>
       <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, marginBottom: 16 }}>
-        You've used all {FREE_LIMIT} free coach sessions this month. Upgrade for unlimited access to The Pull.
+        You've used all {FREE_LIMIT} free Ask The Pull sessions this month. Upgrade for unlimited access to The Pull.
       </p>
       <Link href="/upgrade" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 22px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", textDecoration: "none" }}>
         Upgrade to Premium <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
@@ -164,7 +164,7 @@ export default function CoachPage() {
           </div>
           <div style={{ flex: 1 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>Ask The Pull</p>
-            <p style={{ fontSize: 11, color: "var(--text-muted)" }}>Your personal intelligence coach</p>
+            <p style={{ fontSize: 11, color: "var(--text-muted)" }}>Your personal intelligence assistant</p>
           </div>
         </div>
 
@@ -233,7 +233,7 @@ export default function CoachPage() {
               <HugeiconsIcon icon={AiSparklesIcon} size={18} style={{ color: "white" }} />
             </div>
             <p style={{ fontSize: 16, fontWeight: 700, color: "white", marginBottom: 6 }}>Ask The Pull</p>
-            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>Your personal intelligence coach with full context on your profile and dimensions.</p>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>Ask The Pull with full context on your profile and dimensions.</p>
           </div>
 
           <UsageBar />

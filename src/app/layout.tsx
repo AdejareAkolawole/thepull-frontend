@@ -5,7 +5,7 @@ import AppShell from "@/components/AppShell";
 
 export const metadata: Metadata = {
   title: "MyPullScore — Personal Intelligence",
-  description: "Intelligence for understanding yourself and your relationships. Pull Score, AI Coach, Reality Check — a living profile that grows with you.",
+  description: "Intelligence for understanding yourself and your relationships. Pull Score, Ask The Pull, Reality Check — a living profile that grows with you.",
   metadataBase: new URL("https://mypullscore.com"),
   icons: {
     icon: [
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     url: "https://mypullscore.com",
     siteName: "MyPullScore",
     title: "MyPullScore — Personal Intelligence",
-    description: "Intelligence for understanding yourself and your relationships. Pull Score, AI Coach, Reality Check — a living profile that grows with you.",
+    description: "Intelligence for understanding yourself and your relationships. Pull Score, Ask The Pull, Reality Check — a living profile that grows with you.",
     images: [
       {
         url: "/og-image.png",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     site: "@mypullscore",
     creator: "@mypullscore",
     title: "MyPullScore — Personal Intelligence",
-    description: "Intelligence for understanding yourself and your relationships. Pull Score, AI Coach, Reality Check — a living profile that grows with you.",
+    description: "Intelligence for understanding yourself and your relationships. Pull Score, Ask The Pull, Reality Check — a living profile that grows with you.",
     images: ["/og-image.png"],
   },
 };

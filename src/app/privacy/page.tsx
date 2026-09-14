@@ -83,7 +83,7 @@ export default function PrivacyPage() {
           <Bullet><strong>Profile:</strong> your display name, birth date, birth time, birthplace, location/timezone context, relationship status, and the goals and concerns you share.</Bullet>
           <Bullet><strong>Assessment and intelligence:</strong> your question responses, assessment state, evidence, intelligence results, and fusion/archetype outputs that The Pull generates from your responses.</Bullet>
           <Bullet><strong>Relationships and Vault:</strong> the people you add, including nicknames, relationship type and status, birth data, notes, and photos you choose to store.</Bullet>
-          <Bullet><strong>Reflective entries:</strong> your journal entries, no-contact entries, and AI Coach conversation information and memory.</Bullet>
+          <Bullet><strong>Reflective entries:</strong> your journal entries, no-contact entries, and Ask The Pull conversation information and memory.</Bullet>
           <Bullet><strong>Billing:</strong> subscription and entitlement metadata (plan, status, usage), and payment processing handled by our payment provider, Stripe.</Bullet>
           <Bullet><strong>Support:</strong> the communications you send us when you request help.</Bullet>
           <Bullet><strong>Security and audit:</strong> the limited metadata necessary for security and integrity, such as audit records of significant account actions.</Bullet>
@@ -108,7 +108,7 @@ export default function PrivacyPage() {
 
         <Section title="How it is shared">
           <p>
-            Your assessment responses, intelligence results, profile, Vault, journal, and AI Coach information are private to your account.
+            Your assessment responses, intelligence results, profile, Vault, journal, and Ask The Pull information are private to your account.
             Other users cannot see your profiles, results, or reflections.
           </p>
           <p style={{ marginTop: 10 }}>

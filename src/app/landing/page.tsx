@@ -24,13 +24,13 @@ const C = {
 const FAQS = [
   { q: "What does MyPullScore actually do?", a: "It maps every pattern, tendency, and blind spot in your personality into a living intelligence profile — updated every time you share a moment with it." },
   { q: "What is the Pull Score?", a: "A composite intelligence rating built from emotional depth, communication style, self-awareness, and relationship patterns. It evolves as you use the app." },
-  { q: "How is this different from a personality test?", a: "Tests give a one-time snapshot. MyPullScore is a living model — it deepens from daily entries, coach conversations, and real moments you choose to share." },
+  { q: "How is this different from a personality test?", a: "Tests give a one-time snapshot. MyPullScore is a living model — it deepens from daily entries, Ask The Pull conversations, and real moments you choose to share." },
   { q: "Is my data private and secure?", a: "Yes. Your data is encrypted end-to-end, never sold, and only used to build your personal intelligence profile. You can delete everything at any time." },
-  { q: "Can I start for free?", a: "Yes. The free plan gives you your Pull Score, primary archetype, and 5 monthly coach sessions — no credit card required." },
+  { q: "Can I start for free?", a: "Yes. The free plan gives you your Pull Score, primary archetype, and 5 monthly Ask The Pull sessions — no credit card required." },
 ];
 
 const FEATURES = [
-  { icon: AiBrain01Icon,   title: "AI Coach",      desc: "Real conversations with an AI that knows your complete intelligence profile. Honest, contextual, always available." },
+  { icon: AiBrain01Icon,   title: "Ask The Pull", desc: "Real conversations with an intelligence assistant that knows your complete profile. Honest, contextual, always available." },
   { icon: BookOpen01Icon,  title: "Smart Journal",  desc: "Log real moments. The AI extracts emotional signals from every entry and feeds them into your evolving profile." },
   { icon: Analytics01Icon, title: "Pull Score",     desc: "A composite intelligence score tracking emotional depth, communication style, and self-awareness." },
   { icon: Target01Icon,    title: "Reality Check",  desc: "Pause on any situation. Get an honest AI perspective that cuts through your narratives." },
@@ -309,7 +309,7 @@ export default function LandingPage() {
             </motion.div>
           </S>
           <S>
-            {/* Hero AI Coach card — full width */}
+              {/* Hero Ask The Pull card — full width */}
             <motion.div variants={up} whileHover={{ y: -3 }}
               style={{ borderRadius: 24, marginBottom: 12,
                 background: `linear-gradient(135deg, ${C.wine} 0%, #5c1124 100%)`,
@@ -324,7 +324,7 @@ export default function LandingPage() {
                     justifyContent: "center", marginBottom: 20 }}>
                     <HugeiconsIcon icon={AiBrain01Icon} size={22} style={{ color: "#fff" }} />
                   </div>
-                  <h3 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 12, letterSpacing: "-0.02em" }}>AI Coach</h3>
+                  <h3 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 12, letterSpacing: "-0.02em" }}>Ask The Pull</h3>
                   <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.8, margin: 0 }}>
                     Real conversations with an AI that knows your complete intelligence profile. Honest, contextual, always available.
                   </p>
@@ -424,7 +424,7 @@ export default function LandingPage() {
               {[
                 { q: "I've been to therapy for years. MyPullScore showed me patterns in 2 weeks that took me years to see.", name: "Amara J.", role: "Lagos, Nigeria", color: "#9b3050" },
                 { q: "The Reality Check feature is wild. It told me exactly what I was doing before I could admit it.", name: "Marcus W.", role: "New York, USA", color: "#4a6fa5" },
-                { q: "Talking to the AI coach feels like someone who knows my whole life history. Genuinely shocking.", name: "Sasha K.", role: "London, UK", color: "#5a8a5a" },
+                { q: "Talking to Ask The Pull feels like someone who knows my whole life history. Genuinely shocking.", name: "Sasha K.", role: "London, UK", color: "#5a8a5a" },
               ].map(t => (
                 <motion.div key={t.name} variants={up}
                   whileHover={{ y: -3 }}
@@ -736,7 +736,7 @@ export default function LandingPage() {
             </div>
             {/* Link cols */}
             {[
-              { title: "Product",   links: [{ label: "Pull Score", href: null },{ label: "AI Coach", href: null },{ label: "Reality Check", href: null },{ label: "Journal", href: null },{ label: "Pricing", href: null }] },
+              { title: "Product",   links: [{ label: "Pull Score", href: null },{ label: "Ask The Pull", href: null },{ label: "Reality Check", href: null },{ label: "Journal", href: null },{ label: "Pricing", href: null }] },
               { title: "Company",   links: [{ label: "About", href: null },{ label: "Blog", href: null },{ label: "Contact", href: null }] },
               { title: "Legal",     links: [{ label: "Privacy", href: "/privacy" },{ label: "Terms", href: "/terms" },{ label: "Security", href: null }] },
             ].map(col => (

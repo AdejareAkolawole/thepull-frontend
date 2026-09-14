@@ -49,7 +49,7 @@ export default function JourneyPage() {
   const steps = [
     { label: "Complete your assessment", description: "Answer questions to build your intelligence", done: assessmentComplete },
     { label: "Review your Pull Profile", description: "Understand your archetype and dimensions", done: hasArchetype },
-    { label: "Session with AI Coach", description: "Get personalised insights from your coach", done: false },
+    { label: "Ask The Pull", description: "Get personalised insights from your personal intelligence assistant", done: false },
     { label: "Run a Reality Check", description: "Test a situation against your intelligence", done: false },
     { label: "Write your first journal entry", description: "Reflect on your patterns and growth", done: false },
   ];
@@ -204,10 +204,10 @@ export default function JourneyPage() {
                 </div>
                 <div>
                   <p style={{ fontSize: 12, fontWeight: 700, color: "white" }}>
-                    {!assessmentComplete ? "Next: Complete Assessment" : !hasScore ? "Next: Generate Intelligence" : "Next: Coach Session"}
+                    {!assessmentComplete ? "Next: Complete Assessment" : !hasScore ? "Next: Generate Intelligence" : "Next: Ask The Pull"}
                   </p>
                   <p style={{ fontSize: 10, marginTop: 2, color: "rgba(255,255,255,0.4)" }}>
-                    {!assessmentComplete ? "Answer the onboarding questions" : !hasScore ? "Build your Pull Score" : "Talk to your AI coach"}
+                    {!assessmentComplete ? "Answer the onboarding questions" : !hasScore ? "Build your Pull Score" : "Ask The Pull about your insights"}
                   </p>
                 </div>
               </div>
