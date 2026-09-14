@@ -736,17 +736,19 @@ export default function LandingPage() {
             </div>
             {/* Link cols */}
             {[
-              { title: "Product",   links: ["Pull Score","AI Coach","Reality Check","Journal","Pricing"] },
-              { title: "Company",   links: ["About","Blog","Contact"] },
-              { title: "Legal",     links: ["Privacy","Terms","Security"] },
+              { title: "Product",   links: [{ label: "Pull Score", href: null },{ label: "AI Coach", href: null },{ label: "Reality Check", href: null },{ label: "Journal", href: null },{ label: "Pricing", href: null }] },
+              { title: "Company",   links: [{ label: "About", href: null },{ label: "Blog", href: null },{ label: "Contact", href: null }] },
+              { title: "Legal",     links: [{ label: "Privacy", href: "/privacy" },{ label: "Terms", href: "/terms" },{ label: "Security", href: null }] },
             ].map(col => (
               <div key={col.title}>
                 <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.14em",
                   textTransform: "uppercase", color: "#bbb", marginBottom: 16 }}>{col.title}</p>
                 {col.links.map(l => (
-                  <p key={l} style={{ fontSize: 13, color: C.muted, marginBottom: 11, cursor: "pointer", transition: "color .18s" }}
-                    onMouseEnter={e=>(e.currentTarget.style.color=C.ink)}
-                    onMouseLeave={e=>(e.currentTarget.style.color=C.muted)}>{l}</p>
+                  l.href
+                    ? <Link key={l.label} href={l.href} style={{ display: "block", fontSize: 13, color: C.muted, marginBottom: 11, textDecoration: "none", transition: "color .18s" }}
+                        onMouseEnter={e=>(e.currentTarget.style.color=C.ink)}
+                        onMouseLeave={e=>(e.currentTarget.style.color=C.muted)}>{l.label}</Link>
+                    : <p key={l.label} style={{ fontSize: 13, color: C.muted, marginBottom: 11, cursor: "default" }}>{l.label}</p>
                 ))}
               </div>
             ))}
