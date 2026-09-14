@@ -13,9 +13,32 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
+  const [showSignupOptions, setShowSignupOptions] = useState(false);
+
+  const consentComplete = termsAccepted && privacyAcknowledged;
+
+  function continueToSignup() {
+    if (!consentComplete) return;
+    setError("");
+    setShowSignupOptions(true);
+  }
+
+  function handleGoogleSignup() {
+    if (!consentComplete) {
+      setError("Please agree to the Terms and acknowledge the Privacy Policy first.");
+      return;
+    }
+    window.location.assign(getGoogleAuthUrl());
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!consentComplete) {
+      setError("Please agree to the Terms and acknowledge the Privacy Policy first.");
+      return;
+    }
     setError("");
     setLoading(true);
     try {
@@ -116,56 +139,121 @@ export default function RegisterPage() {
               Begin your personal intelligence journey today.
             </p>
 
-            {/* Google */}
-            <button style={btnGoogleStyle} onClick={() => {
-              window.location.assign(getGoogleAuthUrl());
-            }}>
-              <GoogleIcon />
-              Continue with Google
-            </button>
-
-            <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
-              <div style={{ flex: 1, height: 1, background: C.border }} />
-              <span style={{ fontSize: 12, color: "#aaa" }}>or sign up with email</span>
-              <div style={{ flex: 1, height: 1, background: C.border }} />
-            </div>
-
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              <input
-                type="text" placeholder="Your name" value={name} autoComplete="name"
-                onChange={e => setName(e.target.value)} style={inputStyle}
-                onFocus={e => (e.target.style.borderColor = C.wine)}
-                onBlur={e => (e.target.style.borderColor = C.border)}
-              />
-              <input
-                type="email" placeholder="Email address" value={email} autoComplete="email"
-                onChange={e => setEmail(e.target.value)} required style={inputStyle}
-                onFocus={e => (e.target.style.borderColor = C.wine)}
-                onBlur={e => (e.target.style.borderColor = C.border)}
-              />
-              <input
-                type="password" placeholder="Password (min 8 characters)" value={password} autoComplete="new-password"
-                onChange={e => setPassword(e.target.value)} required minLength={8} style={inputStyle}
-                onFocus={e => (e.target.style.borderColor = C.wine)}
-                onBlur={e => (e.target.style.borderColor = C.border)}
-              />
-
-              {error && <p style={{ color: "#c0404f", fontSize: 13, margin: 0 }}>{error}</p>}
-
-              <button type="submit" disabled={loading} style={{
-                ...btnPrimaryStyle,
-                opacity: loading ? 0.7 : 1,
+            {!showSignupOptions ? (
+              <div style={{
+                border: `1px solid ${C.border}`, borderRadius: 16,
+                background: "#fff", padding: 20,
               }}>
-                {loading ? "Creating account…" : "Create account →"}
-              </button>
-            </form>
+                <p style={{ color: C.ink, fontSize: 15, fontWeight: 700, marginBottom: 6 }}>
+                  Before you begin
+                </p>
+                <p style={{ color: C.muted, fontSize: 13, lineHeight: 1.6, marginBottom: 18 }}>
+                  Please review and confirm how you agree to use MyPullScore.
+                </p>
 
-            <p style={{ fontSize: 12, color: "#aaa", marginTop: 16, lineHeight: 1.6, textAlign: "center" }}>
-              By signing up you agree to our{" "}
-              <Link href="/terms" style={{ color: C.muted }}>Terms</Link>
-              {" "}and{" "}
-              <Link href="/privacy" style={{ color: C.muted }}>Privacy Policy</Link>.
-            </p>
+                <label style={consentLabelStyle}>
+                  <input
+                    type="checkbox"
+                    checked={termsAccepted}
+                    onChange={e => setTermsAccepted(e.target.checked)}
+                    style={checkboxStyle}
+                  />
+                  <span>
+                    I agree to the{" "}
+                    <Link href="/terms" target="_blank" rel="noreferrer" style={consentLinkStyle}>
+                      Terms of Service
+                    </Link>
+                    .
+                  </span>
+                </label>
+
+                <label style={consentLabelStyle}>
+                  <input
+                    type="checkbox"
+                    checked={privacyAcknowledged}
+                    onChange={e => setPrivacyAcknowledged(e.target.checked)}
+                    style={checkboxStyle}
+                  />
+                  <span>
+                    I acknowledge the{" "}
+                    <Link href="/privacy" target="_blank" rel="noreferrer" style={consentLinkStyle}>
+                      Privacy Policy
+                    </Link>
+                    .
+                  </span>
+                </label>
+
+                <button
+                  type="button"
+                  onClick={continueToSignup}
+                  disabled={!consentComplete}
+                  style={{
+                    ...btnPrimaryStyle,
+                    marginTop: 18,
+                    opacity: consentComplete ? 1 : 0.45,
+                    cursor: consentComplete ? "pointer" : "not-allowed",
+                  }}
+                >
+                  Continue to sign up →
+                </button>
+              </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setShowSignupOptions(false)}
+                  style={backToConsentStyle}
+                >
+                  ← Review consent
+                </button>
+
+                {/* Google */}
+                <button style={btnGoogleStyle} onClick={handleGoogleSignup}>
+                  <GoogleIcon />
+                  Continue with Google
+                </button>
+
+                <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
+                  <div style={{ flex: 1, height: 1, background: C.border }} />
+                  <span style={{ fontSize: 12, color: "#aaa" }}>or sign up with email</span>
+                  <div style={{ flex: 1, height: 1, background: C.border }} />
+                </div>
+
+                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  <input
+                    type="text" placeholder="Your name" value={name} autoComplete="name"
+                    onChange={e => setName(e.target.value)} style={inputStyle}
+                    onFocus={e => (e.target.style.borderColor = C.wine)}
+                    onBlur={e => (e.target.style.borderColor = C.border)}
+                  />
+                  <input
+                    type="email" placeholder="Email address" value={email} autoComplete="email"
+                    onChange={e => setEmail(e.target.value)} required style={inputStyle}
+                    onFocus={e => (e.target.style.borderColor = C.wine)}
+                    onBlur={e => (e.target.style.borderColor = C.border)}
+                  />
+                  <input
+                    type="password" placeholder="Password (min 8 characters)" value={password} autoComplete="new-password"
+                    onChange={e => setPassword(e.target.value)} required minLength={8} style={inputStyle}
+                    onFocus={e => (e.target.style.borderColor = C.wine)}
+                    onBlur={e => (e.target.style.borderColor = C.border)}
+                  />
+
+                  {error && <p style={{ color: "#c0404f", fontSize: 13, margin: 0 }}>{error}</p>}
+
+                  <button type="submit" disabled={loading} style={{
+                    ...btnPrimaryStyle,
+                    opacity: loading ? 0.7 : 1,
+                  }}>
+                    {loading ? "Creating account…" : "Create account →"}
+                  </button>
+                </form>
+
+                <p style={{ fontSize: 12, color: "#aaa", marginTop: 16, lineHeight: 1.6, textAlign: "center" }}>
+                  Your consent is required before creating an account.
+                </p>
+              </>
+            )}
 
             <p style={{ color: C.muted, fontSize: 14, marginTop: 24, textAlign: "center" }}>
               Already have an account?{" "}
@@ -196,6 +284,28 @@ const inputStyle: React.CSSProperties = {
   borderRadius: 12, color: C.ink, outline: "none",
   fontFamily: "inherit", transition: "border-color 0.15s",
   WebkitAppearance: "none",
+};
+
+const consentLabelStyle: React.CSSProperties = {
+  display: "flex", alignItems: "flex-start", gap: 10,
+  color: "#374151", fontSize: 13, lineHeight: 1.55,
+  cursor: "pointer", marginBottom: 12,
+};
+
+const checkboxStyle: React.CSSProperties = {
+  width: 17, height: 17, margin: "1px 0 0", flexShrink: 0,
+  accentColor: C.wine, cursor: "pointer",
+};
+
+const consentLinkStyle: React.CSSProperties = {
+  color: C.wine, fontWeight: 700, textDecoration: "underline",
+  textUnderlineOffset: 2,
+};
+
+const backToConsentStyle: React.CSSProperties = {
+  display: "block", margin: "0 0 14px", padding: 0,
+  border: "none", background: "transparent", color: C.muted,
+  fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
 };
 
 const btnPrimaryStyle: React.CSSProperties = {
