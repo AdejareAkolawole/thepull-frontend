@@ -1,0 +1,6 @@
+{
+  "name": "mypullscore",
+  "buildCommand": "npm run build",
+  "outputDirectory": "out",
+  "installCommand": "npm install"
+}
