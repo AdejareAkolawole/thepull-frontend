@@ -1,5 +1,10 @@
 const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/+$/, "");
 
+export interface ApiError extends Error {
+  status?: number;
+  detail?: unknown;
+}
+
 export function getGoogleAuthUrl(): string {
   return `${BASE_URL}/auth/google`;
 }
@@ -20,7 +25,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
-    const error: any = new Error(typeof err.detail === "string" ? err.detail : `HTTP ${res.status}`);
+    const error = new Error(typeof err.detail === "string" ? err.detail : `HTTP ${res.status}`) as ApiError;
     error.status = res.status;
     error.detail = err.detail;
     throw error;

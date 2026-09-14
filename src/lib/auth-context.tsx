@@ -35,9 +35,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const me = await getMe();
       setUser(me);
-    } catch {
+    } catch (error: unknown) {
       setUser(null);
-      apiLogout();
+      // Keep a valid token through transient API/network failures. Only a
+      // confirmed 401 means the session is actually invalid or expired.
+      if ((error as { status?: number })?.status === 401) {
+        apiLogout();
+      }
     } finally {
       setLoading(false);
     }
