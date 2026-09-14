@@ -36,7 +36,9 @@ export default function LoginPage() {
       await login(email, password);
       await refresh();
       const profile = await getProfile().catch(() => null) as Record<string, unknown> | null;
-      window.location.href = profile?.onboarding_complete ? "/dashboard" : "/onboarding";
+      // Only redirect to onboarding if we explicitly know it's not complete
+      // (mirrors the dashboard's own strict === false guard)
+      window.location.href = profile?.onboarding_complete === false ? "/onboarding" : "/dashboard";
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed");
       setLoading(false);
