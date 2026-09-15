@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Home01Icon, AiBrain01Icon, Message02Icon, BookOpen01Icon,
+  Home01Icon, AiBrain01Icon, BookOpen01Icon,
   FlashIcon, Settings01Icon, AiSparklesIcon, ScaleIcon, CompassIcon,
   Logout01Icon,
 } from "@hugeicons/core-free-icons";
@@ -39,7 +39,7 @@ export default function TopNav() {
 
   function handleLogout() {
     logout();
-    window.location.href = "/login";
+    router.push("/login");
   }
 
   useEffect(() => {

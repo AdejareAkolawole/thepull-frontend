@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Home01Icon, AiBrain01Icon, BookOpen01Icon, Message02Icon,
-  FlashIcon, ScaleIcon, Notification01Icon, UserCircleIcon,
+  Home01Icon, AiBrain01Icon, BookOpen01Icon,
+  ScaleIcon, Notification01Icon, UserCircleIcon,
   CreditCardIcon, Settings01Icon, AiSparklesIcon, CompassIcon,
   SidebarLeft01Icon, Logout01Icon, FireIcon,
 } from "@hugeicons/core-free-icons";
@@ -35,12 +35,12 @@ export default function Sidebar() {
 
   function handleLogout() {
     logout();
-    window.location.href = "/login";
+    router.push("/login");
   }
 
   useEffect(() => {
     const saved = localStorage.getItem("sb");
-    if (saved === "0") setOpen(false);
+    if (saved === "0") queueMicrotask(() => setOpen(false));
   }, []);
 
   useEffect(() => {

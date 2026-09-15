@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
+import type { IconSvgElement } from "@hugeicons/react";
 import {
   FireIcon, BookOpen01Icon, AiBrain01Icon, ScaleIcon,
   CompassIcon, CheckmarkCircle01Icon, TrophyIcon, Target01Icon,
@@ -18,7 +19,7 @@ type StreamConfig = {
   key: StreakType;
   label: string;
   desc: string;
-  icon: any;
+  icon: IconSvgElement;
   color: string;
   bg: string;
   border: string;
@@ -137,7 +138,8 @@ export default function StreaksPage() {
   const [streaks, setStreaks] = useState<Record<StreakType, StreakData> | null>(null);
 
   useEffect(() => {
-    setStreaks(getAllStreaks());
+    const timer = window.setTimeout(() => setStreaks(getAllStreaks()), 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   if (!streaks) return null;

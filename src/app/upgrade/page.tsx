@@ -5,7 +5,7 @@ import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   CheckmarkCircle01Icon, AiSparklesIcon, ArrowRight01Icon,
-  LockIcon, FlashIcon, StarIcon,
+  LockIcon, StarIcon,
 } from "@hugeicons/core-free-icons";
 
 const WINE  = "#3d0e1a";

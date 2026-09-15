@@ -1,15 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import LoadingScreen from "@/components/LoadingScreen";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowUp01Icon, ArrowDown01Icon, Share01Icon, FavouriteIcon,
-  AiSparklesIcon, AiBrain01Icon, Analytics01Icon,
-  EyeIcon, FireIcon, Target01Icon,
-  ArrowRight01Icon, HeartIcon, Message02Icon,
-  ShieldIcon, Activity01Icon,
+  AiSparklesIcon,
 } from "@hugeicons/core-free-icons";
 import { getPullProfile, isLoggedIn } from "@/lib/api";
 
@@ -258,7 +255,7 @@ export default function PullProfilePage() {
         {!data?.pull_index && (
           <motion.div {...f(0.1)} style={{ background: CREAM, borderRadius: 24, padding: "48px 28px", textAlign: "center", marginBottom: 32 }}>
             <p style={{ fontSize: 20, fontWeight: 700, color: DARK, marginBottom: 12 }}>Complete your assessment</p>
-            <p style={{ fontSize: 14, color: MID, lineHeight: 1.7 }}>Your Pull Profile will appear here once you've finished your onboarding assessment.</p>
+            <p style={{ fontSize: 14, color: MID, lineHeight: 1.7 }}>Your Pull Profile will appear here once you&apos;ve finished your onboarding assessment.</p>
           </motion.div>
         )}
       </div>

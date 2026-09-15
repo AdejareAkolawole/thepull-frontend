@@ -36,7 +36,7 @@ export function useDashboard(): DashboardData {
 
   useEffect(() => {
     if (!isLoggedIn()) {
-      setData(prev => ({ ...prev, loading: false, unauthenticated: true }));
+      queueMicrotask(() => setData(prev => ({ ...prev, loading: false, unauthenticated: true })));
       return;
     }
 

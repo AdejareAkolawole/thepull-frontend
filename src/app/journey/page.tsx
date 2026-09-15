@@ -3,26 +3,25 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import LoadingScreen from "@/components/LoadingScreen";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { CheckmarkCircle02Icon, AddCircleIcon, FlashIcon, Target01Icon, ArrowRight01Icon, Calendar03Icon } from "@hugeicons/core-free-icons";
+import type { CSSProperties, ReactNode } from "react";
+import { CheckmarkCircle02Icon, AddCircleIcon, FlashIcon, Target01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { getDashboard, getAssessmentStatus, isLoggedIn } from "@/lib/api";
-import { useRouter } from "next/navigation";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
-const Card = ({ children, style = {} }: any) => (
+const Card = ({ children, style = {} }: { children: ReactNode; style?: CSSProperties }) => (
   <div style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", borderRadius: 16, boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style }}>
     {children}
   </div>
 );
 
 export default function JourneyPage() {
-  const router = useRouter();
-  const [dash, setDash] = useState<any>(null);
-  const [assessment, setAssessment] = useState<any>(null);
+  const [dash, setDash] = useState<Awaited<ReturnType<typeof getDashboard>> | null>(null);
+  const [assessment, setAssessment] = useState<Awaited<ReturnType<typeof getAssessmentStatus>> | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isLoggedIn()) { setLoading(false); window.location.href = "/login"; return; }
+    if (!isLoggedIn()) { window.location.href = "/login"; return; }
     Promise.all([getDashboard(), getAssessmentStatus()])
       .then(([d, a]) => { setDash(d); setAssessment(a); })
       .catch(() => {})
@@ -31,7 +30,6 @@ export default function JourneyPage() {
 
   const hasScore = !!dash?.pull_score;
   const hasArchetype = !!dash?.archetype;
-  const hasAssessment = assessment?.has_session;
   const assessmentComplete = assessment?.status === "complete";
   const hasPullProfile = !!dash?.profile;
 
@@ -184,7 +182,7 @@ export default function JourneyPage() {
                   </div>
                   <div>
                     <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>Pull Score: {dash?.pull_score}</p>
-                    <p style={{ fontSize: 11, color: "var(--text-muted)" }}>{(dash?.archetype as any)?.name ?? "Archetype unlocked"}</p>
+                    <p style={{ fontSize: 11, color: "var(--text-muted)" }}>{(dash?.archetype?.name as string) ?? "Archetype unlocked"}</p>
                   </div>
                 </div>
                 <div style={{ height: 6, borderRadius: 99, background: "rgba(0,0,0,0.06)", overflow: "hidden", marginTop: 8 }}>

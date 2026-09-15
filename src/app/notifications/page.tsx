@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LoadingScreen from "@/components/LoadingScreen";
 import { HugeiconsIcon } from "@hugeicons/react";
+import type { IconSvgElement } from "@hugeicons/react";
 import {
   Notification01Icon, FireIcon, CheckmarkCircle01Icon,
   InformationCircleIcon, AiBrain01Icon,
   Delete02Icon, Tick01Icon,
 } from "@hugeicons/core-free-icons";
-import { getNotifications, isLoggedIn } from "@/lib/api";
+import { getNotifications, isLoggedIn, markNotificationRead } from "@/lib/api";
 
 const f = (d = 0) => ({
   initial: { opacity: 0, y: 14 },
@@ -36,7 +37,7 @@ const CATEGORIES: { key: Category; label: string }[] = [
   { key: "system", label: "System" },
 ];
 
-const CAT_META: Record<Exclude<Category, "all">, { icon: any; color: string; bg: string; border: string }> = {
+const CAT_META: Record<Exclude<Category, "all">, { icon: IconSvgElement; color: string; bg: string; border: string }> = {
   insight:     { icon: AiBrain01Icon,           color: "#3b82f6", bg: "rgba(59,130,246,0.08)",  border: "rgba(59,130,246,0.18)" },
   streak:      { icon: FireIcon,                color: "#f59e0b", bg: "rgba(245,158,11,0.08)",  border: "rgba(245,158,11,0.18)" },
   achievement: { icon: CheckmarkCircle01Icon,   color: "#c9a84c", bg: "rgba(201,168,76,0.08)",  border: "rgba(201,168,76,0.22)" },
@@ -74,12 +75,23 @@ export default function NotificationsPage() {
     groups[groups.length - 1].items.push(n);
   }
 
-  function markRead(id: string) {
+  async function markRead(id: string) {
     setNotifs(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+    try {
+      await markNotificationRead(id);
+    } catch {
+      setNotifs(prev => prev.map(n => n.id === id ? { ...n, read: false } : n));
+    }
   }
 
-  function markAllRead() {
+  async function markAllRead() {
+    const unreadIds = notifs.filter(n => !n.read).map(n => n.id);
     setNotifs(prev => prev.map(n => ({ ...n, read: true })));
+    const results = await Promise.allSettled(unreadIds.map(id => markNotificationRead(id)));
+    const failedIds = unreadIds.filter((_, index) => results[index].status === "rejected");
+    if (failedIds.length > 0) {
+      setNotifs(prev => prev.map(n => failedIds.includes(n.id) ? { ...n, read: false } : n));
+    }
   }
 
   function dismiss(id: string) {

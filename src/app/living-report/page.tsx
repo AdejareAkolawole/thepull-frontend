@@ -142,7 +142,21 @@ export default function LivingReportPage() {
     );
   }
 
-  const v = activeVersion;
+  const v = activeVersion ?? data.current_version ?? data.versions[0] ?? null;
+
+  if (!v) {
+    return (
+      <div style={{ maxWidth: 560, margin: "0 auto", padding: "48px 24px", textAlign: "center" }}>
+        <p style={{ fontSize: 14, color: DARK, marginBottom: 8 }}>Your Living Report is still forming.</p>
+        <p style={{ fontSize: 12, color: MID, lineHeight: 1.7, marginBottom: 16 }}>
+          Your assessment is complete, but the first report version is not available yet. Please check back shortly.
+        </p>
+        <a href="/dashboard" style={{ display: "inline-block", padding: "10px 20px", borderRadius: 10, background: WINE, color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+          Back to Dashboard
+        </a>
+      </div>
+    );
+  }
 
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "0 0 60px", fontFamily: "Aeonik, system-ui, sans-serif" }}>

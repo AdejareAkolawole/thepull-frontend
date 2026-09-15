@@ -26,7 +26,7 @@ export default function LoginPage() {
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
     const e = p.get("error");
-    if (e) setError(GOOGLE_ERROR_MESSAGES[e] || "An error occurred. Please try again.");
+    if (e) queueMicrotask(() => setError(GOOGLE_ERROR_MESSAGES[e] || "An error occurred. Please try again."));
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {

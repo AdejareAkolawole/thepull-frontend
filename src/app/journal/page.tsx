@@ -6,11 +6,20 @@ import { Add01Icon, Calendar03Icon, AiSparklesIcon, BookOpen01Icon, Search01Icon
 import { getJournalEntries, createJournalEntry, deleteJournalEntry, isLoggedIn } from "@/lib/api";
 import LoadingScreen from "@/components/LoadingScreen";
 import { trackActivity } from "@/lib/streaks";
-import { useRouter } from "next/navigation";
+import type { CSSProperties, ReactNode } from "react";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
-const Card = ({ children, style = {} }: any) => (
+type JournalEntry = {
+  id: string;
+  title: string | null;
+  content: string;
+  entry_type: string;
+  created_at: string;
+  updated_at?: string;
+};
+
+const Card = ({ children, style = {} }: { children: ReactNode; style?: CSSProperties }) => (
   <div style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", borderRadius: 16, boxShadow: "0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)", ...style }}>
     {children}
   </div>
@@ -29,8 +38,7 @@ function wordCount(text: string) {
 }
 
 export default function JournalPage() {
-  const router = useRouter();
-  const [entries, setEntries] = useState<any[]>([]);
+  const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [composing, setComposing] = useState(false);
   const [title, setTitle] = useState("");
@@ -40,18 +48,17 @@ export default function JournalPage() {
 
   useEffect(() => {
     if (!isLoggedIn()) {
-      setLoading(false);
       window.location.href = "/login";
       return;
     }
     load();
-  }, [router]);
+  }, []);
 
   async function load() {
     setLoading(true);
     try {
       const res = await getJournalEntries();
-      setEntries((res as any).entries ?? []);
+      setEntries((res.entries as JournalEntry[]) ?? []);
     } catch {
       setEntries([]);
     } finally {
@@ -83,8 +90,8 @@ export default function JournalPage() {
     !search || (e.title ?? "").toLowerCase().includes(search.toLowerCase()) || (e.content ?? "").toLowerCase().includes(search.toLowerCase())
   );
 
-  const totalWords = entries.reduce((a: number, e: any) => a + wordCount(e.content ?? ""), 0);
-  const thisMonth = entries.filter((e: any) => {
+  const totalWords = entries.reduce((a, e) => a + wordCount(e.content ?? ""), 0);
+  const thisMonth = entries.filter(e => {
     try { return new Date(e.created_at).getMonth() === new Date().getMonth(); } catch { return false; }
   }).length;
 
@@ -166,7 +173,7 @@ export default function JournalPage() {
       {/* Entries grid */}
       {!loading && filtered.length > 0 && (
         <div data-cols="3">
-          {filtered.map((e: any, i: number) => (
+          {filtered.map((e, i) => (
             <motion.div key={e.id} {...f(0.08 + i * 0.04)}>
               <div style={{
                 display: "flex", flexDirection: "column", height: "100%",

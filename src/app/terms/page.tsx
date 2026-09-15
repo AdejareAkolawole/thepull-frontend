@@ -77,7 +77,7 @@ export default function TermsPage() {
           </p>
           <p style={{ marginTop: 10 }}>
             You agree not to misuse the service, including not to reverse-engineer, scrape, or attempt to access data that is not yours,
-            and not to interfere with the service's operation.
+            and not to interfere with the service&apos;s operation.
           </p>
         </Section>
 
@@ -154,7 +154,7 @@ export default function TermsPage() {
 
         <Section title="Limitations">
           <p>
-            The Pull is provided "as is." To the fullest extent permitted by law, GravityPullIndex, Inc. is not liable for indirect,
+            The Pull is provided &quot;as is.&quot; To the fullest extent permitted by law, GravityPullIndex, Inc. is not liable for indirect,
             incidental, or consequential damages, or for any loss arising from your reliance on outputs or your inability to use the service.
           </p>
         </Section>

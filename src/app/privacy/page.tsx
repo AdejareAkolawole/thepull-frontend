@@ -128,8 +128,8 @@ export default function PrivacyPage() {
           </p>
           <Note>
             <strong>Unresolved item for verification:</strong> Whether language-model providers (Anthropic, OpenAI, Google) use submitted content
-            to train their models, and their retention of submitted content, depends on each provider's current API terms and configuration.
-            We have not independently verified a definitive "we never use your data to train AI models" assurance.
+            to train their models, and their retention of submitted content, depends on each provider&apos;s current API terms and configuration.
+            We have not independently verified a definitive &quot;we never use your data to train AI models&quot; assurance.
             Please contact us for the current status before relying on any such assurance.
           </Note>
         </Section>
@@ -177,7 +177,7 @@ export default function PrivacyPage() {
           <p>
             The Pull is operated by GravityPullIndex, Inc. and uses Railway and Stripe for processing.
             Your information may be processed outside your country of residence through these providers.
-            We do not assert a specific processing jurisdiction beyond what these providers' documentation confirms.
+            We do not assert a specific processing jurisdiction beyond what these providers&apos; documentation confirms.
           </p>
         </Section>
 

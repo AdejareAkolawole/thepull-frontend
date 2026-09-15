@@ -6,7 +6,6 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { DeliveredSentIcon, AiSparklesIcon, LockIcon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { sendCoachMessage, getDashboard, isLoggedIn } from "@/lib/api";
 import { trackActivity } from "@/lib/streaks";
-import { useRouter } from "next/navigation";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 const FREE_LIMIT = 5;
@@ -21,6 +20,52 @@ const suggestions = [
 type Message = { id: string; role: "assistant" | "user"; text: string };
 type Usage = { used: number; limit: number; remaining: number; limit_reached: boolean; tier: string } | null;
 
+function UsageBar({ usage }: { usage: Usage }) {
+  if (!usage || usage.tier !== "free") return null;
+  const pct = (usage.used / FREE_LIMIT) * 100;
+  const color = usage.remaining === 0 ? "#ef4444" : usage.remaining <= 1 ? "#f97316" : "#c0404f";
+  return (
+    <div style={{ padding: "10px 14px", borderRadius: 12, background: "rgba(0,0,0,0.03)", border: "1px solid rgba(0,0,0,0.07)", marginBottom: 8 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+        <span style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)" }}>Monthly sessions</span>
+        <span style={{ fontSize: 11, fontWeight: 700, color }}>
+          {usage.used}/{FREE_LIMIT} used
+        </span>
+      </div>
+      <div style={{ height: 4, borderRadius: 99, background: "rgba(0,0,0,0.08)" }}>
+        <div style={{ height: "100%", width: `${Math.min(pct, 100)}%`, borderRadius: 99, background: color, transition: "width 0.4s ease" }} />
+      </div>
+      {usage.remaining <= 1 && !usage.limit_reached && (
+        <p style={{ fontSize: 10, marginTop: 6, color: "#f97316" }}>
+          {usage.remaining === 1 ? "1 session left this month." : "0 sessions left."}{" "}
+          <Link href="/upgrade" style={{ color: "#f97316", fontWeight: 700 }}>Upgrade →</Link>
+        </p>
+      )}
+    </div>
+  );
+}
+
+function LimitWall() {
+  return (
+    <div style={{
+      borderRadius: 16, padding: "24px 20px", textAlign: "center",
+      background: "linear-gradient(135deg, #1c0810 0%, #2d1020 100%)",
+      border: "1px solid rgba(192,64,79,0.2)",
+    }}>
+      <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(192,64,79,0.12)", border: "1px solid rgba(192,64,79,0.25)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
+        <HugeiconsIcon icon={LockIcon} size={20} style={{ color: "#c0404f" }} />
+      </div>
+      <p style={{ fontSize: 15, fontWeight: 700, color: "white", marginBottom: 6 }}>Monthly limit reached</p>
+      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, marginBottom: 16 }}>
+        You&apos;ve used all {FREE_LIMIT} free Ask The Pull sessions this month. Upgrade for unlimited access to The Pull.
+      </p>
+      <Link href="/upgrade" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 22px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", textDecoration: "none" }}>
+        Upgrade to Premium <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
+      </Link>
+    </div>
+  );
+}
+
 async function fetchUsage(token: string): Promise<Usage> {
   try {
     const r = await fetch(`${BASE_URL}/coach/usage`, { headers: { Authorization: `Bearer ${token}` } });
@@ -30,14 +75,13 @@ async function fetchUsage(token: string): Promise<Usage> {
 }
 
 export default function CoachPage() {
-  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
-  const [name, setName] = useState("there");
   const [usage, setUsage] = useState<Usage>(null);
   const [limitReached, setLimitReached] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const messageIdRef = useRef(2);
 
   useEffect(() => {
     if (!isLoggedIn()) { window.location.href = "/login"; return; }
@@ -47,7 +91,6 @@ export default function CoachPage() {
       fetchUsage(token),
     ]).then(([res, u]) => {
       const n = (res.profile as Record<string, unknown>)?.display_name as string || res.user.email.split("@")[0];
-      setName(n);
       setUsage(u);
       if (u?.limit_reached) setLimitReached(true);
       setMessages([{
@@ -60,35 +103,36 @@ export default function CoachPage() {
         text: "Hey — I'm The Pull, your personal intelligence assistant.\n\nWhat's on your mind today?",
       }]);
     });
-  }, [router]);
+  }, []);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, typing]);
 
   const send = async (text: string) => {
     if (!text.trim() || typing || limitReached) return;
-    const userMsg: Message = { id: Date.now().toString(), role: "user", text };
+    const userMsg: Message = { id: String(messageIdRef.current++), role: "user", text };
     setMessages(m => [...m, userMsg]);
     setInput("");
     setTyping(true);
     try {
       const res = await sendCoachMessage(text);
       trackActivity("coach");
-      setMessages(m => [...m, { id: (Date.now() + 1).toString(), role: "assistant", text: res.response }]);
+      setMessages(m => [...m, { id: String(messageIdRef.current++), role: "assistant", text: res.response }]);
       if (res.usage) {
         setUsage(prev => prev ? { ...prev, ...res.usage } : { tier: "free", limit_reached: false, ...res.usage! });
         if (res.usage.remaining <= 0) setLimitReached(true);
       }
-    } catch (err: any) {
-      const detail = err?.detail;
-      if (detail?.code === "coach_limit_reached" || err?.status === 429) {
+    } catch (err: unknown) {
+      const apiError = err as { detail?: { code?: string }; status?: number };
+      const detail = apiError.detail;
+      if (detail?.code === "coach_limit_reached" || apiError.status === 429) {
         setLimitReached(true);
         setUsage(prev => prev ? { ...prev, limit_reached: true, remaining: 0, used: FREE_LIMIT } : null);
         setMessages(m => [...m, {
-          id: (Date.now() + 1).toString(), role: "assistant",
-          text: `You've used all ${FREE_LIMIT} Ask The Pull sessions for this month. Upgrade to Premium for unlimited access.`,
+          id: String(messageIdRef.current++), role: "assistant",
+          text: `You\'ve used all ${FREE_LIMIT} Ask The Pull sessions for this month. Upgrade to Premium for unlimited access.`,
         }]);
       } else {
-        setMessages(m => [...m, { id: (Date.now() + 1).toString(), role: "assistant", text: "Something went wrong. Please try again." }]);
+        setMessages(m => [...m, { id: String(messageIdRef.current++), role: "assistant", text: "Something went wrong. Please try again." }]);
       }
     } finally {
       setTyping(false);
@@ -100,50 +144,6 @@ export default function CoachPage() {
     color: m.role === "user" ? "white" : "var(--text-secondary)",
     border: m.role === "assistant" ? "1px solid rgba(0,0,0,0.07)" : "none",
   });
-
-  const UsageBar = () => {
-    if (!usage || usage.tier !== "free") return null;
-    const pct = ((usage.used) / FREE_LIMIT) * 100;
-    const color = usage.remaining === 0 ? "#ef4444" : usage.remaining <= 1 ? "#f97316" : "#c0404f";
-    return (
-      <div style={{ padding: "10px 14px", borderRadius: 12, background: "rgba(0,0,0,0.03)", border: "1px solid rgba(0,0,0,0.07)", marginBottom: 8 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-          <span style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)" }}>Monthly sessions</span>
-          <span style={{ fontSize: 11, fontWeight: 700, color }}>
-            {usage.used}/{FREE_LIMIT} used
-          </span>
-        </div>
-        <div style={{ height: 4, borderRadius: 99, background: "rgba(0,0,0,0.08)" }}>
-          <div style={{ height: "100%", width: `${Math.min(pct, 100)}%`, borderRadius: 99, background: color, transition: "width 0.4s ease" }} />
-        </div>
-        {usage.remaining <= 1 && !usage.limit_reached && (
-          <p style={{ fontSize: 10, marginTop: 6, color: "#f97316" }}>
-            {usage.remaining === 1 ? "1 session left this month." : "0 sessions left."}{" "}
-            <Link href="/upgrade" style={{ color: "#f97316", fontWeight: 700 }}>Upgrade →</Link>
-          </p>
-        )}
-      </div>
-    );
-  };
-
-  const LimitWall = () => (
-    <div style={{
-      borderRadius: 16, padding: "24px 20px", textAlign: "center",
-      background: "linear-gradient(135deg, #1c0810 0%, #2d1020 100%)",
-      border: "1px solid rgba(192,64,79,0.2)",
-    }}>
-      <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(192,64,79,0.12)", border: "1px solid rgba(192,64,79,0.25)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
-        <HugeiconsIcon icon={LockIcon} size={20} style={{ color: "#c0404f" }} />
-      </div>
-      <p style={{ fontSize: 15, fontWeight: 700, color: "white", marginBottom: 6 }}>Monthly limit reached</p>
-      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, marginBottom: 16 }}>
-        You've used all {FREE_LIMIT} free Ask The Pull sessions this month. Upgrade for unlimited access to The Pull.
-      </p>
-      <Link href="/upgrade" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 22px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", textDecoration: "none" }}>
-        Upgrade to Premium <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
-      </Link>
-    </div>
-  );
 
   return (
     <>
@@ -168,7 +168,7 @@ export default function CoachPage() {
           </div>
         </div>
 
-        <UsageBar />
+        <UsageBar usage={usage} />
 
         <div style={{ flex: 1, overflowY: "auto", borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", gap: 16, marginBottom: 12, background: "var(--surface)", border: "1px solid rgba(0,0,0,0.07)" }}>
           {messages.map(m => (
@@ -236,7 +236,7 @@ export default function CoachPage() {
             <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>Ask The Pull with full context on your profile and dimensions.</p>
           </div>
 
-          <UsageBar />
+          <UsageBar usage={usage} />
 
           {!limitReached && (
             <div style={{ background: "var(--surface)", borderRadius: 18, padding: "18px", border: "1px solid rgba(0,0,0,0.07)" }}>

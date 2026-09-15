@@ -3,17 +3,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  TrendingUpIcon, ArrowRight01Icon, AiSparklesIcon,
+  ArrowRight01Icon, AiSparklesIcon,
   AiInnovation01Icon, Activity01Icon,
   FlashIcon, PresentationLineChart01Icon, Calendar03Icon, Target01Icon,
-  AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, CheckmarkCircle01Icon, LockIcon,
-  BookOpen01Icon, Share01Icon, HelpCircleIcon, ArrowDown01Icon, CompassIcon,
+  AiBrain01Icon, EyeIcon, Analytics01Icon, FavouriteIcon, FireIcon, LockIcon,
+  BookOpen01Icon, Share01Icon, ArrowDown01Icon, CompassIcon,
 } from "@hugeicons/core-free-icons";
 import { getDashboard, isLoggedIn } from "@/lib/api";
 import { trackAppOpen } from "@/lib/streaks";
-import { useEffect, useState } from "react";
+import type { IconSvgElement } from "@hugeicons/react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 
-const achievementIconMap: Record<string, any> = {
+const achievementIconMap: Record<string, IconSvgElement> = {
   brain: AiBrain01Icon,
   eye: EyeIcon,
   chart: Analytics01Icon,
@@ -28,7 +29,7 @@ const fade = (delay = 0) => ({
   transition: { duration: 0.5, delay, ease: "easeOut" as const },
 });
 
-const Card = ({ children, className = "", style = {} }: any) => (
+const Card = ({ children, className = "", style = {} }: { children: ReactNode; className?: string; style?: CSSProperties }) => (
   <div className={`rounded-2xl ${className}`} style={{
     background: "#ffffff",
     border: "1px solid rgba(0,0,0,0.07)",
@@ -87,35 +88,11 @@ function RadarChart({ dimensions, pullScore }: { dimensions: Array<{ label: stri
   );
 }
 
-function Sparkline({ data, color = "#c0404f" }: { data: number[]; color?: string }) {
-  const w = 100, h = 32;
-  const min = Math.min(...data), max = Math.max(...data);
-  const pts = data.map((v, i) => {
-    const x = (i / (data.length - 1)) * w;
-    const y = h - ((v - min) / (max - min || 1)) * (h - 4) - 2;
-    return `${x},${y}`;
-  });
-  const area = `${pts.join(" ")} ${w},${h} 0,${h}`;
-  return (
-    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: h }}>
-      <defs>
-        <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.12" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <polygon points={area} fill="url(#sg)" />
-      <polyline points={pts.join(" ")} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-const scoreHistory = [68, 70, 69, 71, 72, 71, 73, 74];
 const DIMENSION_COLORS = ["#c0404f", "#60a5fa", "#f59e0b", "#a78bfa", "#34d399", "#fb923c"];
 
-function ShareFlyer({ open, onClose, name, archetype, pullScore, tagline }: {
+function ShareFlyer({ open, onClose, archetype, pullScore, tagline }: {
   open: boolean; onClose: () => void;
-  name: string; archetype: string; pullScore: number | null; tagline: string | null;
+  archetype: string; pullScore: number | null; tagline: string | null;
 }) {
   if (!open) return null;
   const score = pullScore ?? "—";
@@ -252,9 +229,9 @@ export default function DashboardClient() {
         lib_data_coverage: narrative?.data_coverage != null ? (narrative.data_coverage as number) : null,
         lib_confidence_level: (narrative?.confidence_level as string) ?? null,
       });
-    }).catch((err: any) => {
+    }).catch((err: unknown) => {
       // 401 = token expired/invalid → force re-login
-      if (err?.status === 401) {
+      if ((err as { status?: number })?.status === 401) {
         localStorage.removeItem("pull_token");
         window.location.href = "/login";
       }
@@ -281,7 +258,6 @@ export default function DashboardClient() {
       <ShareFlyer
         open={showFlyer}
         onClose={() => setShowFlyer(false)}
-        name={displayName}
         archetype={archetype}
         pullScore={pullScore}
         tagline={archetypeTagline}
@@ -771,7 +747,7 @@ export default function DashboardClient() {
           <div style={{ padding: "10px 12px", borderRadius: 12, background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.05)", display: "flex", alignItems: "flex-start", gap: 9 }}>
             <HugeiconsIcon icon={Calendar03Icon} size={13} style={{ color: "var(--text-muted)", flexShrink: 0, marginTop: 1 }} />
             <div>
-              <p style={{ fontSize: 11, fontWeight: 700, color: "var(--text-primary)" }}>Today's focus</p>
+              <p style={{ fontSize: 11, fontWeight: 700, color: "var(--text-primary)" }}>Today&apos;s focus</p>
               <p style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2, lineHeight: 1.4 }}>Complete your Emotional Landscape assessment</p>
             </div>
           </div>
