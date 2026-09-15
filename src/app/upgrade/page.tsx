@@ -66,7 +66,7 @@ export default function UpgradePage() {
           {/* Label + headline */}
           <div style={{ textAlign: "center", marginBottom: 72 }}>
             <p style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.34em", textTransform: "uppercase" as const, color: WINE2, marginBottom: 22 }}>Choose Your Depth</p>
-            <h2 style={{ fontSize: 52, fontWeight: 800, color: T1, letterSpacing: "-0.04em", lineHeight: 1.06, marginBottom: 16 }}>
+            <h2 className="upgrade-depth-title" style={{ fontSize: 52, fontWeight: 800, color: T1, letterSpacing: "-0.04em", lineHeight: 1.06, marginBottom: 16 }}>
               The Pull doesn&apos;t just assess you once.
             </h2>
             <p style={{ fontSize: 18, color: T2, marginBottom: 14, fontWeight: 500 }}>It gets to know you. Choose how deeply.</p>
@@ -77,7 +77,7 @@ export default function UpgradePage() {
           </div>
 
           {/* 3-tier cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 72 }}>
+          <div className="upgrade-plan-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 72 }}>
             {[
               { tag: "Learn",      name: "LEARN ME",       sub: "Start understanding yourself.",       bg: "rgba(61,14,26,0.04)",   border: "rgba(61,14,26,0.1)",  tc: WINE },
               { tag: "Understand", name: "UNDERSTAND ME",  sub: "Understand yourself more deeply.",    bg: "#fdf8f0",               border: "rgba(184,146,42,0.2)", tc: "#b8922a" },
@@ -102,10 +102,10 @@ export default function UpgradePage() {
           <div style={{ borderTop: "1px solid rgba(15,10,20,0.07)", paddingTop: 72 }}>
             <div style={{ textAlign: "center", marginBottom: 56 }}>
               <p style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.3em", textTransform: "uppercase" as const, color: T3, marginBottom: 22 }}>Why The Pull Gets More Valuable With Time</p>
-              <h3 style={{ fontSize: 42, fontWeight: 800, color: T1, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 4 }}>
+              <h3 className="upgrade-why-title" style={{ fontSize: 42, fontWeight: 800, color: T1, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 4 }}>
                 Most assessments tell you who you are once.
               </h3>
-              <p style={{ fontSize: 42, fontWeight: 800, color: "#b8922a", letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 32 }}>
+              <p className="upgrade-why-highlight" style={{ fontSize: 42, fontWeight: 800, color: "#b8922a", letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 32 }}>
                 The Pull keeps learning.
               </p>
               <p style={{ fontSize: 14, color: T2, lineHeight: 1.85, maxWidth: 580, margin: "0 auto" }}>
@@ -114,7 +114,7 @@ export default function UpgradePage() {
             </div>
 
             {/* 5-step */}
-            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", marginBottom: 72, flexWrap: "wrap" as const }}>
+            <div className="upgrade-steps" style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", marginBottom: 72, flexWrap: "wrap" as const }}>
               {[
                 { n: 1, label: "Foundation",          sub: "Who you are, today",               c: WINE2,    bg: "rgba(192,64,79,0.08)",   br: "rgba(192,64,79,0.2)" },
                 { n: 2, label: "Experience",          sub: "You live, you share",              c: WINE2,    bg: "rgba(192,64,79,0.05)",   br: "rgba(192,64,79,0.14)" },
@@ -128,13 +128,13 @@ export default function UpgradePage() {
                     <p style={{ fontSize: 12, fontWeight: 700, color: T1, marginBottom: 4 }}>{step.label}</p>
                     <p style={{ fontSize: 10, color: T3, lineHeight: 1.55 }}>{step.sub}</p>
                   </div>
-                  {i < 4 && <div style={{ width: 28, flexShrink: 0, display: "flex", justifyContent: "center", paddingBottom: 32 }}><HugeiconsIcon icon={ArrowRight01Icon} size={12} style={{ color: "rgba(15,10,20,0.15)" }} /></div>}
+                  {i < 4 && <div className="upgrade-step-connector" style={{ width: 28, flexShrink: 0, display: "flex", justifyContent: "center", paddingBottom: 32 }}><HugeiconsIcon icon={ArrowRight01Icon} size={12} style={{ color: "rgba(15,10,20,0.15)" }} /></div>}
                 </div>
               ))}
             </div>
 
             {/* 3-col footer */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", borderTop: "1px solid rgba(15,10,20,0.07)", paddingTop: 40 }}>
+            <div className="upgrade-why-footer" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", borderTop: "1px solid rgba(15,10,20,0.07)", paddingTop: 40 }}>
               {[
                 { tag: "Pull Score",          q: "What is my current intelligence profile?" },
                 { tag: "Living Intelligence", q: "What has The Pull learned about me over time?" },
@@ -155,7 +155,7 @@ export default function UpgradePage() {
 
       {/* ── FOUNDING 500 CARD ───────────────────────────────── */}
       <motion.div {...f(0)} style={{ padding: "32px 24px 0", maxWidth: 840, margin: "0 auto" }}>
-        <div style={{
+        <div className="upgrade-know-card" style={{
           position: "relative", overflow: "hidden", borderRadius: 24,
           background: "linear-gradient(135deg,rgba(26,10,16,0.92) 0%,rgba(42,16,26,0.88) 100%)",
           backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
@@ -392,7 +392,7 @@ export default function UpgradePage() {
             </p>
 
             {/* Pricing */}
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 16, marginBottom: 14 }}>
+            <div className="upgrade-know-pricing" style={{ display: "flex", alignItems: "flex-end", gap: 16, marginBottom: 14 }}>
               <div style={{ display: "flex", alignItems: "flex-end", gap: 4 }}>
                 <span style={{ fontSize: 40, fontWeight: 800, color: "#fff", lineHeight: 1, letterSpacing: "-0.03em" }}>$69</span>
                 <span style={{ fontSize: 13, color: "rgba(245,240,232,0.35)", paddingBottom: 5 }}>.99/month</span>

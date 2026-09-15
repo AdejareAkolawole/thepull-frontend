@@ -191,7 +191,7 @@ function DeleteAccountButton() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       <p style={{ fontSize: 13, fontWeight: 700, color: "#c0404f" }}>Are you sure? This is permanent.</p>
-      <div style={{ display: "flex", gap: 10 }}>
+      <div className="danger-actions" style={{ display: "flex", gap: 10 }}>
         <button
           onClick={handleDelete}
           disabled={deleting}

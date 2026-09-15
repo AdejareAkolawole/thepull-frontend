@@ -196,7 +196,7 @@ export default function LivingReportPage() {
       {/* Version metadata */}
       <motion.div {...f(0.08)}>
         <Card style={{ marginBottom: 14 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px 20px" }}>
+          <div className="living-report-metadata" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px 20px" }}>
             <div>
               <Label>Version</Label>
               <p style={{ fontSize: 22, fontWeight: 800, color: DARK }}>{v.label}</p>

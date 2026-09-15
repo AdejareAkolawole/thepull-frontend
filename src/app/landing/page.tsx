@@ -134,21 +134,38 @@ export default function LandingPage() {
           .foot-inner { grid-template-columns: 1fr 1fr !important; }
           .foot-brand { grid-column: span 2 !important; }
           .foot-bottom { flex-direction: column !important; gap: 10px !important; align-items: flex-start !important; }
+          .landing-nav { padding-left: 16px !important; padding-right: 16px !important; }
+          .landing-nav-tagline { display: none !important; }
+          .landing-nav-actions { gap: 3px !important; }
+          .landing-nav-signin { padding-left: 6px !important; padding-right: 6px !important; }
+          .landing-nav-start { padding-left: 13px !important; padding-right: 13px !important; }
+          .landing-hero-inner { padding: 48px 20px 64px !important; }
+          .landing-hero-title { font-size: clamp(46px, 14vw, 64px) !important; line-height: 0.96 !important; letter-spacing: -0.045em !important; }
+          .landing-cta-meta { flex-wrap: wrap !important; gap: 12px !important; }
+          .landing-cursor-glow { display: none !important; }
+        }
+
+        @media (max-width: 380px) {
+          .landing-nav { padding-left: 10px !important; padding-right: 10px !important; }
+          .landing-nav-logo { gap: 7px !important; }
+          .landing-nav-signin { padding-left: 4px !important; padding-right: 4px !important; font-size: 12px !important; }
+          .landing-nav-start { padding-left: 10px !important; padding-right: 10px !important; font-size: 12px !important; }
         }
       `}</style>
 
       {/* NAV */}
       <motion.nav initial={{ y: -14, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
+        className="landing-nav"
         style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 58,
           display: "flex", alignItems: "center", padding: "0 48px",
           background: "rgba(255,255,255,0.86)", backdropFilter: "blur(20px)",
           borderBottom: `1px solid ${C.border}` }}>
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, marginRight: "auto", textDecoration: "none" }}>
+        <Link href="/" className="landing-nav-logo" style={{ display: "flex", alignItems: "center", gap: 10, marginRight: "auto", textDecoration: "none" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.jpg" alt="MyPullScore" style={{ height: 36, width: "auto", borderRadius: 8, display: "block", flexShrink: 0 }} />
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             <span style={{ fontSize: 13, fontWeight: 800, color: C.ink, letterSpacing: "-0.02em", lineHeight: 1.2 }}>MyPullScore</span>
-            <span style={{ fontSize: 9, color: C.muted, letterSpacing: "0.02em", lineHeight: 1.2 }}>Personal intelligence that grows with you.</span>
+            <span className="landing-nav-tagline" style={{ fontSize: 9, color: C.muted, letterSpacing: "0.02em", lineHeight: 1.2 }}>Personal intelligence that grows with you.</span>
           </div>
         </Link>
         <div className="nav-mid" style={{ display: "flex", gap: 28, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
@@ -157,10 +174,10 @@ export default function LandingPage() {
               onMouseEnter={e=>(e.currentTarget.style.color=C.ink)} onMouseLeave={e=>(e.currentTarget.style.color=C.muted)}>{l}</a>
           ))}
         </div>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          <Link href="/login" style={{ fontSize: 13, color: C.muted, fontWeight: 500, padding: "6px 12px", transition: "color .18s" }}
+        <div className="landing-nav-actions" style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <Link href="/login" className="landing-nav-signin" style={{ fontSize: 13, color: C.muted, fontWeight: 500, padding: "6px 12px", transition: "color .18s" }}
             onMouseEnter={e=>(e.currentTarget.style.color=C.ink)} onMouseLeave={e=>(e.currentTarget.style.color=C.muted)}>Sign in</Link>
-          <Link href="/register" style={{ fontSize: 13, fontWeight: 700, color: "#fff",
+          <Link href="/register" className="landing-nav-start" style={{ fontSize: 13, fontWeight: 700, color: "#fff",
             background: C.ink, padding: "8px 18px", borderRadius: 99, transition: "opacity .18s, transform .18s" }}
             onMouseEnter={e=>{ e.currentTarget.style.opacity="0.85"; e.currentTarget.style.transform="scale(1.04)"; }}
             onMouseLeave={e=>{ e.currentTarget.style.opacity="1"; e.currentTarget.style.transform=""; }}>Get started</Link>
@@ -182,7 +199,7 @@ export default function LandingPage() {
             background: `radial-gradient(ellipse, ${C.wineMid}10 0%, transparent 65%)`,
             filter: "blur(1px)", animation: "drift3 26s ease-in-out infinite, morph 20s ease-in-out 6s infinite" }} />
           {/* cursor glow */}
-          <div style={{
+          <div className="landing-cursor-glow" style={{
             position: "fixed", width: 480, height: 480, borderRadius: "50%",
             background: `radial-gradient(ellipse, ${C.wine}0d 0%, transparent 60%)`,
             left: `${cursor.x * 100}vw`, top: `${cursor.y * 100}vh`,
@@ -192,10 +209,10 @@ export default function LandingPage() {
           }} />
         </div>
 
-        <div style={{ maxWidth: 800, margin: "0 auto", padding: "60px 32px 80px", textAlign: "center", position: "relative", zIndex: 2 }}>
+        <div className="landing-hero-inner" style={{ maxWidth: 800, margin: "0 auto", padding: "60px 32px 80px", textAlign: "center", position: "relative", zIndex: 2 }}>
 
           {/* clip-reveal headline */}
-          <h1 style={{ fontSize: "clamp(56px,8vw,112px)", fontWeight: 800, lineHeight: 0.92,
+          <h1 className="landing-hero-title" style={{ fontSize: "clamp(56px,8vw,112px)", fontWeight: 800, lineHeight: 0.92,
             letterSpacing: "-0.055em", marginBottom: 32, fontFamily: "'Aeonik', system-ui, sans-serif" }}>
             <span style={{ display: "block", overflow: "hidden" }}>
               <motion.span initial={{ y: "110%" }} animate={{ y: 0 }}
@@ -700,7 +717,7 @@ export default function LandingPage() {
                   onMouseLeave={e=>{ e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; }}>
                   Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
                 </Link>
-                <div style={{ display: "flex", justifyContent: "center", gap: 28, marginTop: 32 }}>
+                <div className="landing-cta-meta" style={{ display: "flex", justifyContent: "center", gap: 28, marginTop: 32 }}>
                   {[{i: LockIcon, l: "Private by design"},{i: Globe02Icon, l: "Available worldwide"},{i: ShieldCheckIcon, l: "Encrypted end-to-end"}].map(x => (
                     <div key={x.l} style={{ display: "flex", alignItems: "center", gap: 6,
                       fontSize: 12, color: "rgba(255,255,255,0.28)" }}>

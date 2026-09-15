@@ -50,6 +50,19 @@ html, body, h1, h2, h3, h4, h5, h6, p, span, div, button, input, textarea, a, la
   font-family: 'Aeonik', system-ui, sans-serif;
 }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+main, .with-sidebar, [data-cols] > * {
+  min-width: 0;
+}
+
+main {
+  width: 100%;
+}
+
 body {
   background: var(--bg);
   color: var(--text-primary);
@@ -178,4 +191,48 @@ body {
 
   /* TopNav logo tagline — hide on very small screens */
   .nav-logo-tagline { display: none !important; }
+
+  /* Dashboard cards and actions */
+  .share-flyer-dialog { padding: 16px !important; }
+  .share-flyer-content, .share-flyer-card { max-width: calc(100vw - 32px) !important; }
+  .share-flyer-card { width: 360px !important; }
+  .dash-hero-actions { flex-wrap: wrap !important; }
+  .dash-hero-actions a { flex: 1 1 132px; justify-content: center !important; min-width: 0; }
+  .dash-coverage-card { flex-direction: column !important; align-items: flex-start !important; gap: 14px !important; }
+  .dash-coverage-value { text-align: left !important; }
+  .dash-archetype-card { min-width: 0; }
+  .dash-vector-row > span:first-child { width: min(130px, 34vw) !important; }
+  .dash-lens-card { align-items: flex-start !important; }
+  .dash-lens-heading { flex-wrap: wrap !important; }
+
+  /* Pull Profile, Journey, and Living Report */
+  .profile-2col { grid-template-columns: 1fr !important; }
+  .journey-hero-inner { align-items: flex-start !important; gap: 24px !important; }
+  .journey-hero-copy { flex: 1 1 100% !important; min-width: 0 !important; }
+  .journey-hero-stats { flex-wrap: wrap !important; gap: 14px !important; }
+  .journey-hero-ring { margin: 0 auto; }
+  .journey-item-copy { min-width: 0 !important; }
+  .living-report-metadata { grid-template-columns: 1fr !important; }
+
+  /* Chat and journal inputs should remain usable beside the mobile nav. */
+  .coach-mobile { min-width: 0; }
+  .coach-mobile input { min-width: 0; font-size: 16px !important; }
+  .coach-message-row { min-width: 0; }
+  .coach-message-bubble { max-width: calc(100% - 36px) !important; overflow-wrap: anywhere; }
+  .journal-compose-footer { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; }
+  .journal-compose-footer button { width: 100%; }
+
+  /* Upgrade page has a few editorial grids that are not shared app grids. */
+  .upgrade-depth-title { font-size: 36px !important; }
+  .upgrade-why-title, .upgrade-why-highlight { font-size: 30px !important; }
+  .upgrade-plan-grid, .upgrade-know-card { grid-template-columns: 1fr !important; }
+  .upgrade-steps { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 20px 8px !important; }
+  .upgrade-step-connector { display: none !important; }
+  .upgrade-why-footer { grid-template-columns: 1fr !important; padding-top: 20px !important; }
+  .upgrade-why-footer > div { border-left: none !important; border-top: 1px solid rgba(15,10,20,0.07); padding: 20px 0 !important; }
+  .upgrade-why-footer > div:first-child { border-top: none !important; }
+  .upgrade-know-card { gap: 24px !important; padding: 28px 24px !important; }
+  .upgrade-know-pricing { flex-wrap: wrap !important; align-items: flex-start !important; }
+
+  .danger-actions { flex-wrap: wrap !important; }
 }

@@ -172,13 +172,13 @@ export default function CoachPage() {
 
         <div style={{ flex: 1, overflowY: "auto", borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", gap: 16, marginBottom: 12, background: "var(--surface)", border: "1px solid rgba(0,0,0,0.07)" }}>
           {messages.map(m => (
-            <div key={m.id} style={{ display: "flex", gap: 8, flexDirection: m.role === "user" ? "row-reverse" : "row" }}>
+            <div key={m.id} className="coach-message-row" style={{ display: "flex", gap: 8, flexDirection: m.role === "user" ? "row-reverse" : "row" }}>
               {m.role === "assistant" && (
                 <div style={{ width: 28, height: 28, borderRadius: 8, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #7c2232, #b03040)" }}>
                   <HugeiconsIcon icon={AiSparklesIcon} size={12} style={{ color: "white" }} />
                 </div>
               )}
-              <div style={{ maxWidth: "80%", padding: "10px 14px", borderRadius: 16, fontSize: 13, lineHeight: 1.6, whiteSpace: "pre-line", ...bubble(m) }}>{m.text}</div>
+              <div className="coach-message-bubble" style={{ maxWidth: "80%", padding: "10px 14px", borderRadius: 16, fontSize: 13, lineHeight: 1.6, whiteSpace: "pre-line", ...bubble(m) }}>{m.text}</div>
             </div>
           ))}
           {typing && (

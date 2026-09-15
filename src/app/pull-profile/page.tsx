@@ -179,7 +179,7 @@ export default function PullProfilePage() {
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px" }}>
 
         {(strengths.length > 0 || blindSpots.length > 0) && (
-          <motion.div {...f(0.1)} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+          <motion.div {...f(0.1)} className="profile-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
             {strengths.length > 0 && (
               <div style={{ background: CREAM, borderRadius: 24, padding: "24px 28px", boxShadow: "0 4px 24px rgba(45,26,20,0.08)" }}>
                 <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase", color: MID, fontWeight: 700, marginBottom: 16 }}>Your Strengths</p>
@@ -265,7 +265,7 @@ export default function PullProfilePage() {
           .profile-score-pad { padding: 32px 20px 0 !important; }
           .profile-forces-pad { padding: 0 20px !important; }
           .profile-reading-pad { margin: 24px 20px 0 !important; }
-          [style*="gridTemplateColumns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+          .profile-2col { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>

@@ -97,14 +97,14 @@ function ShareFlyer({ open, onClose, archetype, pullScore, tagline }: {
   if (!open) return null;
   const score = pullScore ?? "—";
   return (
-    <div onClick={onClose} style={{
+    <div onClick={onClose} className="share-flyer-dialog" style={{
       position: "fixed", inset: 0, zIndex: 1000, background: "rgba(0,0,0,0.72)",
       display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
       backdropFilter: "blur(8px)",
     }}>
-      <div onClick={e => e.stopPropagation()} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
+      <div onClick={e => e.stopPropagation()} className="share-flyer-content" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
         {/* The flyer card */}
-        <div id="share-flyer" style={{
+        <div id="share-flyer" className="share-flyer-card" style={{
           width: 360, borderRadius: 28,
           background: "linear-gradient(160deg, #1a0509 0%, #3d0e1a 45%, #1e0c14 100%)",
           border: "1px solid rgba(192,64,79,0.25)",
@@ -335,7 +335,7 @@ export default function DashboardClient() {
               <p style={{ fontSize: 13, color: "rgba(255,255,255,0.48)", lineHeight: 1.6, maxWidth: 340 }}>
                 3 new insights ready. Your intelligence profile has evolved since your last visit.
               </p>
-              <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
+              <div className="dash-hero-actions" style={{ display: "flex", gap: 8, marginTop: 20 }}>
                 <Link href="/reality-check" style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 18px", borderRadius: 12, background: "rgba(255,255,255,0.95)", color: "#7c2232", fontSize: 12, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 16px rgba(0,0,0,0.2)" }}>
                   Reality Check <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
                 </Link>
@@ -349,7 +349,7 @@ export default function DashboardClient() {
 
         {/* Archetype card — matches screenshot exactly */}
         <motion.div {...fade(0.06)}>
-          <div style={{
+          <div className="dash-archetype-card" style={{
             borderRadius: 22, padding: "18px 18px 16px",
             background: "#000",
             height: "100%", display: "flex", flexDirection: "column",
@@ -401,7 +401,7 @@ export default function DashboardClient() {
                 const colors = ["#c0404f", "#60a5fa", "#f59e0b", "#a78bfa"];
                 return { ...v, color: colors[i % colors.length] };
               }).map(v => (
-                <div key={v.label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div key={v.label} className="dash-vector-row" style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.65)", width: 130, flexShrink: 0 }}>{v.label}</span>
                   <div style={{ flex: 1, height: 3, borderRadius: 99, background: "rgba(255,255,255,0.07)" }}>
                     <div style={{ height: "100%", width: `${v.pct}%`, borderRadius: 99, background: v.color }} />
@@ -427,7 +427,7 @@ export default function DashboardClient() {
         </div>
 
         {/* ── Archetype card ── */}
-        <div style={{
+        <div className="dash-lens-card" style={{
           borderRadius: 20, padding: "20px 22px", marginBottom: 12,
           background: "linear-gradient(135deg,#0d0d0d 0%,#1a0a10 60%,#0a1a0d 100%)",
           border: "1px solid rgba(255,255,255,0.07)",
@@ -438,7 +438,7 @@ export default function DashboardClient() {
             <HugeiconsIcon icon={CompassIcon} size={26} style={{ color: "#4ade80" }} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
+            <div className="dash-lens-heading" style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
               <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.35)" }}>Your Current Lens</p>
               <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", padding: "3px 9px", borderRadius: 99, background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.1)" }}>Emerging Identity</span>
             </div>
@@ -503,13 +503,13 @@ export default function DashboardClient() {
         </div>
 
         {/* Identity Coverage banner */}
-        <div style={{ borderRadius: 24, padding: "22px 28px", background: "#ffffff", border: "1px solid rgba(15,10,20,0.08)", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div className="dash-coverage-card" style={{ borderRadius: 24, padding: "22px 28px", background: "#ffffff", border: "1px solid rgba(15,10,20,0.08)", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
             <p style={{ fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "#c9a84c", fontWeight: 700, marginBottom: 6 }}>Identity Coverage</p>
             <p style={{ fontSize: 24, fontWeight: 700, color: "#c9a84c", letterSpacing: "-0.02em" }}>Foundation Complete</p>
             <p style={{ fontSize: 12, color: "rgba(15,10,20,0.42)", marginTop: 4 }}>Your {hasIntel ? 7 : 0} core dimensions are complete.</p>
           </div>
-          <div style={{ textAlign: "right" as const }}>
+          <div className="dash-coverage-value" style={{ textAlign: "right" as const }}>
             <p style={{ fontSize: 36, fontWeight: 700, color: "#0f0a14", letterSpacing: "-0.03em" }}>
               {hasIntel ? 11 : 0}<span style={{ fontSize: 18, fontWeight: 400, color: "rgba(15,10,20,0.3)" }}>/{12}</span>
             </p>

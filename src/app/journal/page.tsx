@@ -148,7 +148,7 @@ export default function JournalPage() {
             <textarea value={content} onChange={e => setContent(e.target.value)}
               placeholder="Write what's on your mind — your relationships, patterns, growth, moments…"
               rows={6} style={{ display: "block", width: "100%", fontSize: 13, background: "transparent", border: "none", outline: "none", resize: "none", lineHeight: 1.7, color: "var(--text-secondary)" }} />
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 16, paddingTop: 16, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+            <div className="journal-compose-footer" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 16, paddingTop: 16, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
               <p style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--text-muted)" }}>
                 <HugeiconsIcon icon={AiSparklesIcon} size={12} style={{ color: "var(--brand)" }} />
                 The Pull will analyse patterns in your entry

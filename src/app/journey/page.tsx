@@ -71,8 +71,8 @@ export default function JourneyPage() {
       <motion.div {...f(0.05)} style={{ borderRadius: 20, position: "relative", overflow: "hidden", minHeight: 200 }}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #3d0e1a 0%, #6b1c2b 45%, #a03040 100%)" }} />
         <div style={{ position: "absolute", top: -64, left: -64, width: 320, height: 320, borderRadius: "50%", background: "radial-gradient(circle, rgba(192,64,79,0.3), transparent)", filter: "blur(40px)" }} />
-        <div className="hero-pad" style={{ position: "relative", zIndex: 1, padding: "32px 40px", display: "flex", alignItems: "center", gap: 48, flexWrap: "wrap" }}>
-          <div style={{ flex: 1, minWidth: 200 }}>
+        <div className="hero-pad journey-hero-inner" style={{ position: "relative", zIndex: 1, padding: "32px 40px", display: "flex", alignItems: "center", gap: 48, flexWrap: "wrap" }}>
+          <div className="journey-hero-copy" style={{ flex: 1, minWidth: 200 }}>
             <p style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 8 }}>Journey Progress</p>
             <p className="font-display" style={{ fontSize: 48, fontWeight: 600, color: "white", lineHeight: 1 }}>
               {done}<span style={{ fontSize: 24, fontWeight: 300, color: "rgba(255,255,255,0.35)" }}>/{milestones.length}</span>
@@ -83,7 +83,7 @@ export default function JourneyPage() {
                 initial={{ width: 0 }} animate={{ width: `${pct}%` }}
                 transition={{ duration: 1.2, delay: 0.4 }} />
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 24, marginTop: 20 }}>
+            <div className="journey-hero-stats" style={{ display: "flex", alignItems: "center", gap: 24, marginTop: 20 }}>
               {[
                 { label: "Complete", value: done },
                 { label: "Remaining", value: milestones.length - done },
@@ -100,7 +100,7 @@ export default function JourneyPage() {
             </div>
           </div>
           {/* Ring */}
-          <div style={{ position: "relative", width: 112, height: 112, flexShrink: 0 }}>
+          <div className="journey-hero-ring" style={{ position: "relative", width: 112, height: 112, flexShrink: 0 }}>
             <svg viewBox="0 0 112 112" style={{ width: 112, height: 112 }}>
               <circle cx="56" cy="56" r="46" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="5" />
               <circle cx="56" cy="56" r="46" fill="none" stroke="url(#jg)" strokeWidth="5"
@@ -129,12 +129,12 @@ export default function JourneyPage() {
               <div style={{ position: "absolute", left: 18, top: 0, bottom: 0, width: 1, background: "rgba(0,0,0,0.07)" }} />
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 {milestones.map((m, i) => (
-                  <motion.div key={m.label} {...f(0.12 + i * 0.04)} style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
+                  <motion.div key={m.label} {...f(0.12 + i * 0.04)} className="journey-milestone-row" style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
                     <div style={{ flexShrink: 0, zIndex: 1, width: 36, display: "flex", justifyContent: "center" }}>
                       <HugeiconsIcon icon={m.done ? CheckmarkCircle02Icon : AddCircleIcon} size={20}
                         style={{ color: m.done ? "#34d399" : "rgba(0,0,0,0.15)" }} />
                     </div>
-                    <div style={{ flex: 1 }}>
+                    <div className="journey-item-copy" style={{ flex: 1 }}>
                       <p style={{ fontSize: 13, fontWeight: 600, color: m.done ? "var(--text-primary)" : "var(--text-muted)" }}>{m.label}</p>
                     </div>
                     {m.done && (
@@ -161,7 +161,7 @@ export default function JourneyPage() {
                     <div style={{ width: 28, height: 28, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 11, fontWeight: 700, background: s.done ? "rgba(224,80,96,0.15)" : "rgba(0,0,0,0.04)", color: s.done ? "var(--brand)" : "var(--text-muted)", border: `1px solid ${s.done ? "rgba(224,80,96,0.25)" : "rgba(0,0,0,0.08)"}` }}>
                       {i + 1}
                     </div>
-                    <div style={{ flex: 1 }}>
+                    <div className="journey-item-copy" style={{ flex: 1 }}>
                       <p style={{ fontSize: 13, fontWeight: 600, color: s.done ? "var(--text-primary)" : "var(--text-muted)" }}>{s.label}</p>
                       <p style={{ fontSize: 11, color: "var(--text-muted)" }}>{s.description}</p>
                     </div>
