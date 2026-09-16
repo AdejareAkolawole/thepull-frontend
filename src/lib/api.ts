@@ -171,6 +171,47 @@ export async function createCheckout(planKey: string) {
   });
 }
 
+export async function getFoundingAvailability() {
+  return request<{
+    limit: number;
+    spots_claimed: number;
+    spots_reserved: number;
+    spots_remaining: number;
+    available: boolean;
+    price: number;
+    currency: string;
+  }>("/upgrade/founding-availability");
+}
+
+export async function getFoundingMember() {
+  return request<{
+    is_founding_member: boolean;
+    founder_number?: number;
+    identity_label?: string;
+    badge_label?: string;
+    status?: string;
+    founding_price?: number;
+    price_locked?: boolean;
+    member_since?: string | null;
+    early_access?: { enabled: boolean; features: string[] };
+    certificate?: {
+      title: string;
+      recipient: string;
+      identity_label: string;
+      issued_at: string | null;
+    };
+    availability?: {
+      limit: number;
+      spots_claimed: number;
+      spots_reserved: number;
+      spots_remaining: number;
+      available: boolean;
+      price: number;
+      currency: string;
+    };
+  }>("/profile/founding-member");
+}
+
 export async function getBillingPortal() {
   return request<{ portal_url: string }>("/upgrade/portal", { method: "POST" });
 }

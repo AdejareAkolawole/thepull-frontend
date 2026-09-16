@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { CheckmarkCircle02Icon, Logout01Icon, CreditCardIcon, Edit01Icon, Tick01Icon } from "@hugeicons/core-free-icons";
-import { getDashboard, getProfile, updateProfile, logout, isLoggedIn } from "@/lib/api";
+import { CheckmarkCircle02Icon, Logout01Icon, CreditCardIcon, Edit01Icon, Tick01Icon, StarIcon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { getDashboard, updateProfile, logout, isLoggedIn } from "@/lib/api";
 
 const f = (d = 0) => ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: d, ease: "easeOut" as const } });
 
@@ -19,6 +20,9 @@ export default function ProfilePage() {
   const [dash, setDash] = useState<{
     name: string; email: string; initials: string; pull_score: number | null;
     archetype: string | null; plan: string;
+    is_founding_member: boolean; founder_number: number | null;
+    founding_price: number | null; founder_pricing_locked: boolean;
+    founding_member_status: string | null;
   } | null>(null);
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState("");
@@ -39,6 +43,11 @@ export default function ProfilePage() {
         pull_score: res.pull_score as number | null,
         archetype: (arch?.name as string) ?? null,
         plan: (p.subscription_tier as string) || "free",
+        is_founding_member: p.is_founding_member === true,
+        founder_number: typeof p.founder_number === "number" ? p.founder_number : null,
+        founding_price: typeof p.founding_price === "number" ? p.founding_price : null,
+        founder_pricing_locked: p.founder_pricing_locked === true,
+        founding_member_status: (p.founding_member_status as string) || null,
       });
       setNameInput(name);
     }).catch(() => {});
@@ -72,6 +81,32 @@ export default function ProfilePage() {
         <h1 className="font-display" style={{ fontSize: 36, fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.1 }}>My Profile</h1>
         <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>Your identity and account details</p>
       </motion.div>
+
+      {dash?.is_founding_member && dash.founder_number && (
+        <motion.div {...f(0.08)}>
+          <Card style={{ maxWidth: 480, padding: 24, background: "linear-gradient(135deg, #1a0a10 0%, #3d0e1a 100%)", border: "1px solid rgba(201,168,76,0.28)", boxShadow: "0 8px 28px rgba(61,14,26,0.18)" }}>
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(201,168,76,0.13)", border: "1px solid rgba(201,168,76,0.3)" }}>
+                  <HugeiconsIcon icon={StarIcon} size={21} style={{ color: "#e2c36a" }} />
+                </div>
+                <div>
+                  <p style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(226,195,106,0.7)", marginBottom: 5 }}>Permanent Founding 500 Badge</p>
+                  <p style={{ fontSize: 20, fontWeight: 800, color: "#fff", letterSpacing: "-0.02em" }}>Founder #{String(dash.founder_number).padStart(3, "0")}</p>
+                </div>
+              </div>
+              <span style={{ fontSize: 9, fontWeight: 700, padding: "4px 9px", borderRadius: 99, color: dash.founding_member_status === "active" ? "#4ade80" : "rgba(255,255,255,0.55)", background: dash.founding_member_status === "active" ? "rgba(74,222,128,0.12)" : "rgba(255,255,255,0.08)", whiteSpace: "nowrap" as const }}>{dash.founding_member_status === "active" ? "ACTIVE" : "FOUNDING MEMBER"}</span>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 18 }}>
+              {dash.founder_pricing_locked && <span style={{ fontSize: 11, color: "rgba(245,240,232,0.7)", padding: "5px 10px", borderRadius: 99, background: "rgba(255,255,255,0.07)" }}>${dash.founding_price?.toFixed(2) ?? "19.99"}/month locked while subscribed</span>}
+              <span style={{ fontSize: 11, color: "rgba(245,240,232,0.7)", padding: "5px 10px", borderRadius: 99, background: "rgba(255,255,255,0.07)" }}>Early access included</span>
+            </div>
+            <Link href="/founder-certificate" style={{ display: "inline-flex", alignItems: "center", gap: 7, marginTop: 20, color: "#e2c36a", fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
+              View Founder Certificate <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
+            </Link>
+          </Card>
+        </motion.div>
+      )}
 
       <motion.div {...f(0.06)}>
         <Card style={{ padding: 32, maxWidth: 480 }}>

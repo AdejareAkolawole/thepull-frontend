@@ -10,6 +10,7 @@ import {
   EyeIcon, Activity01Icon, StarIcon, CompassIcon, LockIcon,
   Globe02Icon, TrendingUpIcon, Message02Icon,
 } from "@hugeicons/core-free-icons";
+import { getFoundingAvailability } from "@/lib/api";
 
 const C = {
   wine: "#3d0e1a",
@@ -57,11 +58,24 @@ const up = {
 export default function LandingPage() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [cursor, setCursor] = useState({ x: 0.5, y: 0.5 });
+  const [foundingAvailability, setFoundingAvailability] = useState<{
+    limit: number;
+    spots_claimed: number;
+    spots_remaining: number;
+  } | null>(null);
   useEffect(() => {
     const onMove = (e: MouseEvent) => setCursor({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
+
+  useEffect(() => {
+    getFoundingAvailability().then(setFoundingAvailability).catch(() => setFoundingAvailability(null));
+  }, []);
+
+  const foundingProgress = foundingAvailability
+    ? Math.min(100, (foundingAvailability.spots_claimed / foundingAvailability.limit) * 100)
+    : 0;
 
   return (
     <div style={{ fontFamily: "'Aeonik', system-ui, sans-serif", background: "#fff", color: C.ink, overflowX: "hidden" }}>
@@ -502,12 +516,12 @@ export default function LandingPage() {
                     textTransform: "uppercase" as const, color: C.gold }}>Founding 500</span>
                 </div>
                 <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>
-                  Lock in <strong style={{ color: C.gold }}>$19.99/month</strong> for life — 153 spots remaining
+                  Lock in <strong style={{ color: C.gold }}>$19.99/month</strong> while continuously subscribed — {foundingAvailability ? `${foundingAvailability.spots_remaining} spots remaining` : "limited founding spots"}
                 </p>
               </div>
               <div style={{ height: 4, borderRadius: 99, background: "rgba(255,255,255,0.06)",
                 overflow: "hidden", width: 160, flexShrink: 0 }}>
-                <div style={{ height: "100%", width: "69%", borderRadius: 99,
+                <div style={{ height: "100%", width: `${foundingProgress}%`, borderRadius: 99,
                   background: "linear-gradient(90deg, rgba(201,168,76,0.5), rgba(201,168,76,0.9))" }} />
               </div>
             </motion.div>
@@ -565,7 +579,7 @@ export default function LandingPage() {
                   <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 24,
                     padding: "4px 10px", borderRadius: 99, background: `rgba(201,168,76,0.12)`,
                     border: "1px solid rgba(201,168,76,0.25)" }}>
-                    <span style={{ fontSize: 9, fontWeight: 700, color: C.gold }}>Founding 500 · $19.99 locked</span>
+                    <span style={{ fontSize: 9, fontWeight: 700, color: C.gold }}>Founding 500 · $19.99 locked while subscribed</span>
                   </div>
                   <Link href="/upgrade" style={{ display: "flex", alignItems: "center",
                     justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 99,
@@ -629,7 +643,7 @@ export default function LandingPage() {
             </div>
 
             <motion.div variants={up} style={{ textAlign: "center", marginTop: 20 }}>
-              <p style={{ fontSize: 12, color: C.muted }}>Cancel any time · No surprise charges · Founding 500 rate locked for life</p>
+              <p style={{ fontSize: 12, color: C.muted }}>Cancel any time · No surprise charges · Founding 500 rate locked while subscribed</p>
             </motion.div>
           </S>
         </div>

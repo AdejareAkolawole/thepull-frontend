@@ -195,6 +195,8 @@ export default function DashboardClient() {
     dimension_scores: Record<string, number> | null;
     lib_data_coverage: number | null;
     lib_confidence_level: string | null;
+    is_founding_member: boolean;
+    founder_number: number | null;
   } | null>(null);
 
   useEffect(() => {
@@ -228,6 +230,8 @@ export default function DashboardClient() {
         dimension_scores: res.dimension_scores as Record<string, number> | null,
         lib_data_coverage: narrative?.data_coverage != null ? (narrative.data_coverage as number) : null,
         lib_confidence_level: (narrative?.confidence_level as string) ?? null,
+        is_founding_member: p.is_founding_member === true,
+        founder_number: typeof p.founder_number === "number" ? p.founder_number : null,
       });
     }).catch((err: unknown) => {
       // 401 = token expired/invalid → force re-login
@@ -273,6 +277,11 @@ export default function DashboardClient() {
               <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "var(--text-muted)" }}>Living Intelligence</span>
               <span style={{ fontSize: 12, fontWeight: 800, color: "rgba(201,168,76,0.9)" }}>{confidence}%</span>
               {libLevel && <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "rgba(201,168,76,0.55)", padding: "2px 7px", borderRadius: 99, border: "1px solid rgba(201,168,76,0.2)" }}>{libLevel}</span>}
+              {dash?.is_founding_member && dash.founder_number && (
+                <Link href="/founder-certificate" style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.08em", color: "#e2c36a", padding: "3px 8px", borderRadius: 99, border: "1px solid rgba(201,168,76,0.28)", background: "rgba(201,168,76,0.08)", textDecoration: "none" }}>
+                  FOUNDER #{String(dash.founder_number).padStart(3, "0")}
+                </Link>
+              )}
             </div>
             <button
               onClick={() => setShowSignals(s => !s)}

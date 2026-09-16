@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -7,6 +8,7 @@ import {
   CheckmarkCircle01Icon, AiSparklesIcon, ArrowRight01Icon,
   LockIcon, StarIcon,
 } from "@hugeicons/core-free-icons";
+import { createCheckout, getFoundingAvailability, isLoggedIn } from "@/lib/api";
 
 const WINE  = "#3d0e1a";
 const WINE2 = "#c0404f";
@@ -52,10 +54,47 @@ const PRO_FEATURES = [
 ];
 
 export default function UpgradePage() {
+  const router = useRouter();
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
+  const [foundingAvailability, setFoundingAvailability] = useState<{
+    limit: number;
+    spots_claimed: number;
+    spots_reserved: number;
+    spots_remaining: number;
+    available: boolean;
+  } | null>(null);
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState("");
 
   const price  = billing === "monthly" ? "24.99" : "249.99";
   const period = billing === "monthly" ? "/month" : "/year";
+
+  useEffect(() => {
+    getFoundingAvailability()
+      .then(setFoundingAvailability)
+      .catch(() => setFoundingAvailability(null));
+  }, []);
+
+  async function handleCheckout(planKey: string) {
+    if (!isLoggedIn()) {
+      router.push("/login?next=/upgrade");
+      return;
+    }
+
+    setCheckoutError("");
+    setCheckoutLoading(planKey);
+    try {
+      const result = await createCheckout(planKey);
+      window.location.href = result.checkout_url;
+    } catch (error) {
+      setCheckoutError(error instanceof Error ? error.message : "Could not start checkout. Please try again.");
+      setCheckoutLoading(null);
+    }
+  }
+
+  const foundingProgress = foundingAvailability
+    ? Math.min(100, (foundingAvailability.spots_claimed / foundingAvailability.limit) * 100)
+    : 0;
 
   return (
     <div style={{ minHeight: "100vh", marginTop: -20, paddingBottom: 100 }}>
@@ -178,7 +217,7 @@ export default function UpgradePage() {
                   You&apos;re early. Make it count.
                 </h2>
                 <p style={{ fontSize: 12, color: "rgba(245,240,232,0.4)", lineHeight: 1.6 }}>
-                  Lock in <span style={{ color: "rgba(201,168,76,0.9)", fontWeight: 600 }}>$19.99/month</span> for life · Regular $24.99/month
+                  Lock in <span style={{ color: "rgba(201,168,76,0.9)", fontWeight: 600 }}>$19.99/month</span> while continuously subscribed · Regular $24.99/month
                 </p>
                 <p style={{ fontSize: 12, color: "rgba(245,240,232,0.55)", lineHeight: 1.7, marginTop: 10 }}>
                   Join the first 500 members of The Pull and lock in{" "}
@@ -188,6 +227,18 @@ export default function UpgradePage() {
                 <p style={{ fontSize: 11, color: "rgba(245,240,232,0.28)", lineHeight: 1.6, marginTop: 8 }}>
                   Regular price: $24.99/month. Founding Members also receive 7-day early access to Living Mastery when it launches.
                 </p>
+                <div style={{ display: "grid", gap: 8, marginTop: 16 }}>
+                  {[
+                    "Permanent Founding 500 badge + numbered Founder identity",
+                    "Founder certificate",
+                    "Early access to selected new features",
+                  ].map((benefit) => (
+                    <div key={benefit} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <HugeiconsIcon icon={CheckmarkCircle01Icon} size={13} style={{ color: "rgba(201,168,76,0.8)", flexShrink: 0 }} />
+                      <span style={{ fontSize: 11, color: "rgba(245,240,232,0.62)" }}>{benefit}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
               {/* Price badge */}
               <div style={{ textAlign: "right" as const, flexShrink: 0 }}>
@@ -202,11 +253,15 @@ export default function UpgradePage() {
             {/* Progress bar */}
             <div style={{ marginBottom: 20 }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                <span style={{ fontSize: 10, color: "rgba(245,240,232,0.3)" }}>347 spots claimed</span>
-                <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(201,168,76,0.7)" }}>153 remaining</span>
+                <span style={{ fontSize: 10, color: "rgba(245,240,232,0.3)" }}>
+                  {foundingAvailability ? `${foundingAvailability.spots_claimed} spots claimed` : "Checking availability…"}
+                </span>
+                <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(201,168,76,0.7)" }}>
+                  {foundingAvailability ? `${foundingAvailability.spots_remaining} remaining` : ""}
+                </span>
               </div>
               <div style={{ height: 4, borderRadius: 99, background: "rgba(245,240,232,0.06)", overflow: "hidden" }}>
-                <div style={{ height: "100%", width: "69.4%", borderRadius: 99, background: "linear-gradient(90deg,rgba(201,168,76,0.5),rgba(201,168,76,0.85))" }} />
+                <div style={{ height: "100%", width: `${foundingProgress}%`, borderRadius: 99, background: "linear-gradient(90deg,rgba(201,168,76,0.5),rgba(201,168,76,0.85))" }} />
               </div>
             </div>
 
@@ -216,7 +271,11 @@ export default function UpgradePage() {
                 <HugeiconsIcon icon={LockIcon} size={10} style={{ color: "rgba(245,240,232,0.22)" }} />
                 <span style={{ fontSize: 10, color: "rgba(245,240,232,0.28)", fontStyle: "italic" }}>Rate locked while continuously subscribed</span>
               </div>
-              <button style={{
+              <button
+                type="button"
+                disabled={foundingAvailability?.available === false || checkoutLoading !== null}
+                onClick={() => handleCheckout("founding_500_monthly")}
+                style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
                 padding: "10px 22px", borderRadius: 99,
                 background: "linear-gradient(135deg,#b8922a,#c9a84c,#e2c36a)",
@@ -224,11 +283,13 @@ export default function UpgradePage() {
                 fontSize: 12, fontWeight: 800, color: "#1a0a10",
                 boxShadow: "0 4px 20px rgba(201,168,76,0.3)",
                 flexShrink: 0,
+                opacity: foundingAvailability?.available === false || checkoutLoading !== null ? 0.55 : 1,
               }}>
                 <HugeiconsIcon icon={AiSparklesIcon} size={12} />
-                Claim Founding Membership
+                {foundingAvailability?.available === false ? "Founding 500 Sold Out" : checkoutLoading === "founding_500_monthly" ? "Opening Checkout…" : "Claim Founding Membership"}
               </button>
             </div>
+            {checkoutError && <p style={{ marginTop: 12, fontSize: 11, color: "#fca5a5" }}>{checkoutError}</p>}
           </div>
         </div>
       </motion.div>
@@ -350,16 +411,21 @@ export default function UpgradePage() {
               ))}
             </div>
 
-            <button style={{
+            <button
+              type="button"
+              disabled={checkoutLoading !== null}
+              onClick={() => handleCheckout(billing === "annual" ? "understand_me_annual" : "understand_me_monthly")}
+              style={{
               width: "100%", padding: "15px", borderRadius: 14,
               background: WINE2, border: "none",
               color: "#fff", fontSize: 14, fontWeight: 800,
               cursor: "pointer", letterSpacing: "0.03em",
               display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
               boxShadow: "0 4px 20px rgba(192,64,79,0.4)",
+              opacity: checkoutLoading !== null ? 0.65 : 1,
             }}>
               <HugeiconsIcon icon={AiSparklesIcon} size={15} />
-              Start Understand Me{billing === "annual" ? " · Annual" : ""}
+              {checkoutLoading === (billing === "annual" ? "understand_me_annual" : "understand_me_monthly") ? "Opening Checkout…" : `Start Understand Me${billing === "annual" ? " · Annual" : ""}`}
             </button>
           </div>
         </motion.div>
@@ -422,7 +488,11 @@ export default function UpgradePage() {
               ))}
             </div>
             <p style={{ fontSize: 11, color: "rgba(245,240,232,0.2)", fontStyle: "italic", marginBottom: 16 }}>The deepest understanding for those who want it all.</p>
-            <button style={{
+            <button
+              type="button"
+              disabled={checkoutLoading !== null}
+              onClick={() => handleCheckout(billing === "annual" ? "know_me_annual" : "know_me_monthly")}
+              style={{
               display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
               padding: "14px", borderRadius: 14,
               background: "linear-gradient(135deg,#b8922a,#c9a84c,#e2c36a)",
@@ -431,9 +501,10 @@ export default function UpgradePage() {
               fontSize: 13, fontWeight: 800, cursor: "pointer",
               boxShadow: "0 4px 24px rgba(201,168,76,0.25)",
               letterSpacing: "0.01em",
+              opacity: checkoutLoading !== null ? 0.65 : 1,
             }}>
               <HugeiconsIcon icon={AiSparklesIcon} size={13} />
-              START KNOW ME · {billing === "annual" ? "Annual" : "Monthly"}
+              {checkoutLoading === (billing === "annual" ? "know_me_annual" : "know_me_monthly") ? "OPENING CHECKOUT…" : `START KNOW ME · ${billing === "annual" ? "Annual" : "Monthly"}`}
             </button>
           </div>
         </div>
@@ -441,7 +512,7 @@ export default function UpgradePage() {
 
       {/* TRUST */}
       <motion.div {...f(0.3)} style={{ textAlign: "center", marginTop: 24, paddingBottom: 80 }}>
-        <p style={{ fontSize: 12, color: T3 }}>Cancel any time · Founding 500 price locked forever · No surprise charges</p>
+        <p style={{ fontSize: 12, color: T3 }}>Cancel any time · Founding 500 price locked while continuously subscribed · No surprise charges</p>
       </motion.div>
 
       {/* BOTTOM CTA */}
