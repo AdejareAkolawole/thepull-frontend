@@ -138,7 +138,7 @@ export default function ProfilePage() {
                 onClick={() => window.location.href = "/upgrade"}
                 style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "12px 0", borderRadius: 12, fontSize: 14, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", border: "none", cursor: "pointer", boxShadow: "0 4px 12px rgba(192,64,79,0.25)" }}
               >
-                <HugeiconsIcon icon={CreditCardIcon} size={15} /> Upgrade to Premium
+                <HugeiconsIcon icon={CreditCardIcon} size={15} /> Upgrade to Understand Me
               </button>
             )}
             <button

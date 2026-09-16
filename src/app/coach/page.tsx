@@ -60,7 +60,7 @@ function LimitWall() {
         You&apos;ve used all {FREE_LIMIT} free Ask The Pull sessions this month. Upgrade for unlimited access to The Pull.
       </p>
       <Link href="/upgrade" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 22px", borderRadius: 12, fontSize: 13, fontWeight: 700, color: "white", background: "linear-gradient(135deg, #7c2232, #c0404f)", textDecoration: "none" }}>
-        Upgrade to Premium <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
+        Upgrade to Understand Me <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
       </Link>
     </div>
   );
@@ -129,7 +129,7 @@ export default function CoachPage() {
         setUsage(prev => prev ? { ...prev, limit_reached: true, remaining: 0, used: FREE_LIMIT } : null);
         setMessages(m => [...m, {
           id: String(messageIdRef.current++), role: "assistant",
-          text: `You\'ve used all ${FREE_LIMIT} Ask The Pull sessions for this month. Upgrade to Premium for unlimited access.`,
+          text: `You\'ve used all ${FREE_LIMIT} Ask The Pull sessions for this month. Upgrade to Understand Me for unlimited access.`,
         }]);
       } else {
         setMessages(m => [...m, { id: String(messageIdRef.current++), role: "assistant", text: "Something went wrong. Please try again." }]);
