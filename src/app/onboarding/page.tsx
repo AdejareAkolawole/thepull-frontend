@@ -30,6 +30,13 @@ const INTRO_STEPS = [
     message: () => "When were you born?\n\nThis unlocks deeper layers of your intelligence.",
   },
   {
+    id: "birth_time",
+    field: "birth_time",
+    type: "time",
+    optional: true,
+    message: () => "Do you know what time you were born?\n\nIt helps add context to your symbolic profile, but you can skip this if you’re not sure.",
+  },
+  {
     id: "birthplace",
     field: "birthplace",
     type: "text",
@@ -100,9 +107,10 @@ export default function OnboardingPage() {
   }, [router]);
 
   const saveProfileFields = useCallback(async (values: Record<string, string>) => {
-    const allowed = ["display_name", "birth_date", "birthplace", "main_concern", "main_goal"];
-    const patch: Record<string, string> = {};
+    const allowed = ["display_name", "birth_date", "birth_time", "birthplace", "main_concern", "main_goal"];
+    const patch: Record<string, unknown> = {};
     for (const k of allowed) if (values[k]) patch[k] = values[k];
+    if (values.birth_time) patch.birth_time_known = true;
     if (Object.keys(patch).length) await updateProfile(patch);
   }, []);
 
@@ -272,6 +280,10 @@ export default function OnboardingPage() {
             <input type="date" value={inputValue || currentVal} onChange={e => setInputValue(e.target.value)}
               style={textInput} autoFocus />
           )}
+          {step.type === "time" && (
+            <input type="time" value={inputValue || currentVal} onChange={e => setInputValue(e.target.value)}
+              style={textInput} autoFocus />
+          )}
           {step.type === "textarea" && (
             <textarea value={inputValue || currentVal} onChange={e => setInputValue(e.target.value)}
               placeholder={step.placeholder} rows={4} style={{ ...textInput, resize: "none" }} autoFocus />
@@ -299,11 +311,12 @@ export default function OnboardingPage() {
               !isMessageOnly &&
               step.type !== "message" &&
               step.type !== "card_select" &&
+              !step.optional &&
               !inputValue.trim() && !currentVal
             ) || (step.type === "card_select" && !selectedCard)}
             label={isMessageOnly
               ? introStep === 0 ? "I'm ready →" : "Let's continue →"
-              : submitting ? "Saving…" : introStep === INTRO_STEPS.length - 1 ? "Begin the conversation →" : "Continue →"}
+              : submitting ? "Saving…" : step.optional && !inputValue.trim() && !currentVal ? "Skip for now →" : introStep === INTRO_STEPS.length - 1 ? "Begin the conversation →" : "Continue →"}
           />
         </motion.div>
       </AnimatePresence>
