@@ -245,7 +245,7 @@ export default function DashboardClient() {
 
   // Derived display values — real data when available, neutral defaults otherwise
   const displayName  = dash?.name ?? "—";
-  const archetype    = dash?.archetype ?? "Emerging Identity";
+  const archetype    = dash?.archetype ?? null;
   const archetypeTagline = dash?.archetype_tagline ?? null;
   // LIB uses data_coverage (0-1 → 0-100%) — actual evidence accumulated, not model confidence
   const libCoverage       = dash?.lib_data_coverage != null ? Math.round(dash.lib_data_coverage * 100) : 0;
@@ -254,7 +254,7 @@ export default function DashboardClient() {
   const archetypeConf     = dash?.archetype_confidence ?? 0; // archetype card confidence %
   const behaviouralConf   = dash?.archetype_confidence ?? 0; // behavioural ring (uses same source for now)
   const pullScore    = dash?.pull_score ?? null;
-  const summary      = dash?.identity_summary ?? "Your intelligence profile is being built. Share a moment from your life to begin.";
+  const summary      = dash?.identity_summary ?? null;
   const hasIntel     = dash?.onboarding_complete ?? false;
 
   return (
@@ -262,7 +262,7 @@ export default function DashboardClient() {
       <ShareFlyer
         open={showFlyer}
         onClose={() => setShowFlyer(false)}
-        archetype={archetype}
+        archetype={archetype ?? "No archetype generated yet"}
         pullScore={pullScore}
         tagline={archetypeTagline}
       />
@@ -368,7 +368,7 @@ export default function DashboardClient() {
               <div>
                 <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.7)", fontWeight: 700, marginBottom: 10 }}>Primary Archetype</p>
                 <div style={{ display: "inline-flex", alignItems: "center", padding: "4px 12px", borderRadius: 99, background: "rgba(192,64,79,0.15)", border: "1px solid rgba(192,64,79,0.3)" }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, color: "#c0404f" }}>Emerging Identity</span>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: "#c0404f" }}>{dash?.identity_state ?? "Profile stage unavailable"}</span>
                 </div>
               </div>
               <div style={{ width: 44, height: 44, borderRadius: 13, background: "rgba(192,64,79,0.18)", border: "1px solid rgba(192,64,79,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -377,9 +377,9 @@ export default function DashboardClient() {
             </div>
 
             {/* Name + desc */}
-            <p style={{ fontSize: 21, fontWeight: 700, color: "#fff", lineHeight: 1.15, marginBottom: 6, letterSpacing: "-0.02em" }}>{archetype}</p>
+            <p style={{ fontSize: 21, fontWeight: 700, color: "#fff", lineHeight: 1.15, marginBottom: 6, letterSpacing: "-0.02em" }}>{archetype ?? "No archetype generated yet"}</p>
             <p style={{ fontSize: 12, color: "rgba(255,255,255,0.32)", lineHeight: 1.6, marginBottom: 16 }}>
-              {archetypeTagline ?? "Your identity is being shaped from your signals. Keep sharing moments from your life."}
+              {archetypeTagline ?? "No archetype insight available yet."}
             </p>
 
             {/* Confidence / Version */}
@@ -449,9 +449,9 @@ export default function DashboardClient() {
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="dash-lens-heading" style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
               <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.35)" }}>Your Current Lens</p>
-              <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", padding: "3px 9px", borderRadius: 99, background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.1)" }}>Emerging Identity</span>
+              <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", padding: "3px 9px", borderRadius: 99, background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.1)" }}>{dash?.identity_state ?? "Profile stage unavailable"}</span>
             </div>
-            <p style={{ fontSize: 22, fontWeight: 700, color: "#fff", letterSpacing: "-0.02em", marginBottom: 3 }}>{archetype}</p>
+            <p style={{ fontSize: 22, fontWeight: 700, color: "#fff", letterSpacing: "-0.02em", marginBottom: 3 }}>{archetype ?? "No archetype generated yet"}</p>
             <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>The map is not the territory. Keep walking.</p>
           </div>
         </div>
@@ -470,7 +470,7 @@ export default function DashboardClient() {
           <p style={{ fontSize: 14, color: "rgba(15,10,20,0.72)", lineHeight: 1.8 }}>
             {summary
               ? summary.slice(0, 260) + (summary.length > 260 ? "…" : "")
-              : "You are a multifaceted explorer — someone who seeks the unknown while holding the people you love close. Your intelligence is still emerging, and every moment you share sharpens what The Pull can see in you…"}
+              : "No identity narrative has been generated yet."}
           </p>
         </div>
 

@@ -157,7 +157,7 @@ export default function ProfilePage() {
             {[
               { label: "Pull Score", value: dash?.pull_score ?? "—", color: "var(--brand)" },
               { label: "Plan", value: isPremium ? "Premium" : "Free", color: "var(--brand)" },
-              { label: "Archetype", value: dash?.archetype ?? "Emerging", color: "var(--text-primary)" },
+              { label: "Archetype", value: dash?.archetype ?? "Not generated yet", color: "var(--text-primary)" },
             ].map(item => (
               <div key={item.label} style={{ display: "flex", justifyContent: "space-between", fontSize: 14 }}>
                 <span style={{ color: "var(--text-muted)" }}>{item.label}</span>

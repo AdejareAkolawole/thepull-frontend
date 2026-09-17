@@ -57,7 +57,7 @@ export default function PullRevealPage() {
         <motion.h1
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6 }}
           style={{ fontSize: 38, fontWeight: 800, color: "#0f0a14", letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 16 }}>
-          {data?.archetype ?? "Your Archetype is Emerging"}
+          {data?.archetype ?? "Your Pull Profile"}
         </motion.h1>
 
         {/* Pull score chip */}

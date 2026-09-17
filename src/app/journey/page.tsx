@@ -182,7 +182,7 @@ export default function JourneyPage() {
                   </div>
                   <div>
                     <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>Pull Score: {dash?.pull_score}</p>
-                    <p style={{ fontSize: 11, color: "var(--text-muted)" }}>{(dash?.archetype?.name as string) ?? "Archetype unlocked"}</p>
+                    <p style={{ fontSize: 11, color: "var(--text-muted)" }}>{(dash?.archetype?.name as string) ?? "Not generated yet"}</p>
                   </div>
                 </div>
                 <div style={{ height: 6, borderRadius: 99, background: "rgba(0,0,0,0.06)", overflow: "hidden", marginTop: 8 }}>

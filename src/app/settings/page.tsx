@@ -54,11 +54,7 @@ export default function SettingsPage() {
   async function saveSection(section: "privacy") {
     setSaving(section);
     try {
-      // Merge updated prefs into entitlements via a dummy profile patch
-      // Backend stores arbitrary keys in entitlements — we pass them as extra JSON
-      // We use a workaround: fetch current profile, merge, re-save via entitlements field
-      // Since PATCH /profile only accepts known fields, we store prefs in entitlements
-      // by calling a dedicated approach: store in entitlements via the backend
+      // Save privacy preferences through the dedicated backend endpoint.
       await savePrefsToBackend(prefs);
       setSavedMsg(section);
       setTimeout(() => setSavedMsg(null), 2000);

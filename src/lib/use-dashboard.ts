@@ -6,7 +6,7 @@ export interface DashboardData {
   user: {
     name: string;
     initials: string;
-    archetype: string;
+    archetype: string | null;
     archetype_key: string;
     archetype_confidence: number;
     archetype_stage: string;
@@ -60,7 +60,7 @@ export function useDashboard(): DashboardData {
           user: {
             name: displayName,
             initials,
-            archetype: (arch?.name as string) || "Emerging Identity",
+            archetype: (arch?.name as string) || null,
             archetype_key: "",
             archetype_confidence: arch?.confidence != null ? Math.round((arch.confidence as number) * 100) : (res.behavioural_confidence as number) ?? 0,
             archetype_stage: "emerging",

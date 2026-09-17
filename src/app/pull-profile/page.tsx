@@ -69,8 +69,8 @@ export default function PullProfilePage() {
 
   const pullScore     = data?.pull_index?.overall_index ?? null;
   const confidence    = data?.archetype?.confidence_score != null ? Math.round(data.archetype.confidence_score * 100) : 0;
-  const archetype     = data?.archetype?.name ?? "Emerging Identity";
-  const archetypeStage = data?.pull_index ? "Emerging Identity" : "—";
+  const archetype     = data?.archetype?.name ?? null;
+  const archetypeStage = data?.living_narrative?.identity_state ?? "—";
   const narrative     = data?.living_narrative?.narrative ?? null;
   const strengths     = data?.archetype?.strengths ?? [];
   const blindSpots    = data?.archetype?.blind_spots ?? [];
@@ -118,13 +118,15 @@ export default function PullProfilePage() {
                 <HugeiconsIcon icon={FavouriteIcon} size={11} style={{ color: WINE }} />
                 <span style={{ fontSize: 11, color: WINE }}>Confidence <strong>{confidence}%</strong></span>
               </div>
-              <p style={{ fontSize: 15, fontStyle: "italic", color: MID, lineHeight: 1.65, marginBottom: 28 }}>
-                {data?.archetype?.description ?? "The first strokes of a clearer picture are forming."}
-              </p>
+              {data?.archetype?.description && (
+                <p style={{ fontSize: 15, fontStyle: "italic", color: MID, lineHeight: 1.65, marginBottom: 28 }}>
+                  {data.archetype.description}
+                </p>
+              )}
 
               {/* Archetype name */}
               <p style={{ fontSize: 28, fontWeight: 800, color: DARK, letterSpacing: "-0.02em", marginBottom: 40 }}>
-                {archetype}
+                {archetype ?? "No archetype generated yet"}
               </p>
             </div>
 
