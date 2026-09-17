@@ -49,6 +49,8 @@ type PullProfileData = {
     confidence_level: string;
     data_coverage: number;
   } | null;
+  engine_registry: Array<{ engine_id: string; engine_name: string; source: string }>;
+  intelligence_results: Array<{ engine_id: string; engine_name: string; result_payload: Record<string, unknown> }>;
   domains_covered: number;
   domains_total: number;
 };
@@ -77,6 +79,10 @@ export default function PullProfilePage() {
   const growthRecs    = data?.archetype?.growth_recommendations ?? [];
   const dimensions    = data?.pull_index?.score_dimensions ?? {};
   const identityVector = data?.archetype?.primary_signals ?? [];
+  const engineRegistry = data?.engine_registry ?? [];
+  const seededEngines = new Set((data?.intelligence_results ?? [])
+    .filter(result => result.result_payload?.status !== "ready" && result.result_payload?.status !== "awaiting_birth_date")
+    .map(result => result.engine_id));
 
   // Build forces from real dimension scores
   const dimensionEntries = Object.entries(dimensions);
@@ -176,6 +182,31 @@ export default function PullProfilePage() {
           </div>
         </motion.div>
       </div>
+
+      {engineRegistry.length > 0 && (
+        <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px" }}>
+          <motion.div {...f(0.08)} style={{ background: CREAM, borderRadius: 24, padding: "24px 28px", boxShadow: "0 4px 24px rgba(45,26,20,0.08)" }}>
+            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, marginBottom: 16 }}>
+              <div>
+                <p style={{ fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase", color: MID, fontWeight: 700, marginBottom: 5 }}>Intelligence engine map</p>
+                <p style={{ fontSize: 13, color: MID }}>QIE routes evidence into the domain engines that shape your profile.</p>
+              </div>
+              <span style={{ fontSize: 12, fontWeight: 700, color: WINE }}>{data?.domains_covered ?? 0}/{data?.domains_total ?? engineRegistry.length} active</span>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>
+              {engineRegistry.map(engine => (
+                <div key={engine.engine_id} style={{ padding: "10px 12px", borderRadius: 12, border: "1px solid rgba(45,26,20,0.1)", background: "rgba(255,255,255,0.52)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: seededEngines.has(engine.engine_id) ? "#34a853" : "#c9a84c", flexShrink: 0 }} />
+                    <span style={{ fontSize: 11, fontWeight: 800, color: DARK, letterSpacing: "0.05em" }}>{engine.engine_id.toUpperCase()}</span>
+                  </div>
+                  <p style={{ fontSize: 11, color: MID, lineHeight: 1.35 }}>{engine.engine_name}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       {/* ── STRENGTHS & BLIND SPOTS ── */}
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px" }}>
