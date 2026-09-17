@@ -10,6 +10,7 @@ import {
   SidebarLeft01Icon, Logout01Icon, FireIcon,
 } from "@hugeicons/core-free-icons";
 import { logout } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 
 const mainNav = [
   { href: "/dashboard",    icon: Home01Icon,      label: "Home" },
@@ -31,7 +32,13 @@ const bottomNav = [
 export default function Sidebar() {
   const path = usePathname();
   const router = useRouter();
+  const { user } = useAuth();
   const [open, setOpen] = useState(true);
+
+  const accountEmail = user?.email || "";
+  const accountInitials = accountEmail
+    ? accountEmail.split("@", 1)[0].slice(0, 2).toUpperCase()
+    : "—";
 
   function handleLogout() {
     logout();
@@ -149,10 +156,10 @@ export default function Sidebar() {
               background: "linear-gradient(135deg,#7c2232,#c0404f)",
               display: "flex", alignItems: "center", justifyContent: "center",
               fontSize: 10, fontWeight: 800, color: "#fff",
-            }}>AA</div>
+            }}>{accountInitials}</div>
             <div style={{ overflow: "hidden" }}>
               <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)", whiteSpace: "nowrap" }}>Good Morning 👋</p>
-              <p style={{ fontSize: 10, color: "var(--text-muted)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 148 }}>adejare.akolawole@gmail.com</p>
+              <p style={{ fontSize: 10, color: "var(--text-muted)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 148 }}>{accountEmail || "Loading account…"}</p>
             </div>
           </div>
         )}
@@ -162,7 +169,7 @@ export default function Sidebar() {
             background: "linear-gradient(135deg,#7c2232,#c0404f)",
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 10, fontWeight: 800, color: "#fff",
-          }}>AA</div>
+          }}>{accountInitials}</div>
         )}
 
         {bottomNav.map(({ href, icon, label }) => {
