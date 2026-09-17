@@ -225,11 +225,36 @@ export async function getNotifications() {
     time: string;
     timeLabel: string;
     read: boolean;
+    actionHref?: string;
   }>>("/notifications");
 }
 
 export async function markNotificationRead(id: string) {
   return request<{ ok: boolean }>(`/notifications/${id}/read`, { method: "POST" });
+}
+
+export type AdaptiveProbe = {
+  id: string;
+  trait_key: string;
+  title: string;
+  text: string;
+  reason: string;
+  response_type: "multiple_choice" | "likert" | string;
+  scale: { min?: number; max?: number; labels?: Record<string, string> };
+  options: string[];
+  priority: number;
+  created_at: string;
+};
+
+export async function getAdaptiveProbes() {
+  return request<{ miqb_version: string; master_question_count: number; pending_count: number; probes: AdaptiveProbe[] }>("/assessment/probes");
+}
+
+export async function answerAdaptiveProbe(id: string, responseValue: Record<string, unknown>) {
+  return request<{ status: string; pending_count: number }>(`/assessment/probes/${id}/answer`, {
+    method: "POST",
+    body: JSON.stringify({ response_value: responseValue }),
+  });
 }
 
 export async function deleteAccount() {

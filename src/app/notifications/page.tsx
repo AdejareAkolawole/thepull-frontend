@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LoadingScreen from "@/components/LoadingScreen";
+import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { IconSvgElement } from "@hugeicons/react";
 import {
@@ -26,6 +27,7 @@ type Notif = {
   body: string;
   time: string;
   timeLabel: string;
+  actionHref?: string;
   read: boolean;
 };
 
@@ -255,6 +257,11 @@ function NotifCard({ n, delay, onRead, onDismiss }: {
           </span>
         </div>
         <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5, marginBottom: 6 }}>{n.body}</p>
+        {n.actionHref && (
+          <Link href={n.actionHref} onClick={e => e.stopPropagation()} style={{ display: "inline-block", fontSize: 12, fontWeight: 700, color: "var(--brand)", textDecoration: "none", marginBottom: 6 }}>
+            Answer now →
+          </Link>
+        )}
         <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{n.timeLabel}</span>
       </div>
 
