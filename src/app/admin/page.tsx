@@ -18,6 +18,8 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  PanelLeftClose,
+  PanelLeftOpen,
   RefreshCw,
   Search,
   ShieldCheck,
@@ -66,6 +68,7 @@ export default function AdminPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const loadCore = useCallback(async (soft = false) => {
     if (soft) setRefreshing(true); else setLoading(true);
@@ -133,31 +136,48 @@ export default function AdminPage() {
   if (loading) return <AdminLoading />;
   if (error && !overview) return <AdminDenied message={error} onBack={() => router.push("/dashboard")} />;
 
+  const platformStats = overview?.stats || {};
+  const livePeople = platformStats.active_users ?? platformStats.total_users ?? 0;
+  const foundingMembers = platformStats.founding_members ?? 0;
+  const seatsLeft = Math.max(0, 500 - foundingMembers);
+
   return (
-    <div className="admin-shell">
-      <aside className={`admin-sidebar ${mobileNavOpen ? "is-open" : ""}`}>
+    <div className={`admin-shell ${sidebarCollapsed ? "sidebar-is-collapsed" : ""}`}>
+      <aside className={`admin-sidebar view-${view} ${mobileNavOpen ? "is-open" : ""} ${sidebarCollapsed ? "is-collapsed" : ""}`}>
         <div className="admin-brand">
           <div className="admin-brand-mark"><Image src="/logo.jpg" alt="MyPullScore" width={28} height={28} priority /></div>
-          <div>
+          <div className="admin-brand-copy">
             <div className="admin-brand-name">MyPullScore</div>
             <div className="admin-brand-sub">Operator workspace</div>
           </div>
+          <button className="admin-collapse-btn" onClick={() => setSidebarCollapsed(value => !value)} aria-label={sidebarCollapsed ? "Expand navigation" : "Collapse navigation"} title={sidebarCollapsed ? "Expand navigation" : "Collapse navigation"}>
+            {sidebarCollapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
+          </button>
           <button className="admin-icon-btn admin-mobile-close" onClick={() => setMobileNavOpen(false)} aria-label="Close navigation"><X size={18} /></button>
         </div>
 
         <div className="admin-sidebar-label">Workspace</div>
         <nav className="admin-nav">
-          {navItems.map(item => {
+          {navItems.map((item, index) => {
             const Icon = item.icon;
+            const badge = item.id === "users" ? String(usersTotal) : item.id === "founding" ? `${foundingMembers}/500` : item.id === "intelligence" ? String(platformStats.intelligence_runs_30d ?? 0) : "LIVE";
             return (
-              <button key={item.id} className={`admin-nav-item ${view === item.id ? "active" : ""}`} onClick={() => selectView(item.id)}>
+              <button key={item.id} className={`admin-nav-item ${view === item.id ? "active" : ""}`} onClick={() => selectView(item.id)} title={sidebarCollapsed ? item.label : undefined}>
+                <span className="admin-nav-index">0{index + 1}</span>
                 <span className="admin-nav-icon"><Icon size={17} /></span>
                 <span className="admin-nav-copy"><strong>{item.label}</strong><small>{item.hint}</small></span>
+                <span className="admin-nav-badge">{badge}</span>
                 {view === item.id && <ChevronRight size={15} className="admin-nav-chevron" />}
               </button>
             );
           })}
         </nav>
+
+        <div className="admin-live-card">
+          <div className="admin-live-card-heading"><span><i className="admin-live-orb" /> Live signal</span><small>just now</small></div>
+          <div className="admin-live-card-main"><strong>{livePeople}</strong><span>people in your system</span></div>
+          <div className="admin-live-card-metrics"><span>{seatsLeft}<small>founding seats left</small></span><span>{platformStats.completed_onboarding ?? 0}<small>onboarded</small></span></div>
+        </div>
 
         <div className="admin-side-spacer" />
         <div className="admin-side-status">

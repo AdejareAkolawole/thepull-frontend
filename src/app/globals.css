@@ -350,6 +350,48 @@ body {
 .admin-loader-mark img { width: 100%; height: 100%; object-fit: contain; border-radius: 9px; position: relative; z-index: 1; }
 .admin-loader-mark.warning { background: #fff; }
 
+/* Dynamic operator rail: live counters, collapse mode, and view-specific signal colour. */
+.admin-shell.sidebar-is-collapsed .admin-sidebar { width: 84px; }
+.admin-sidebar { transition: width .28s cubic-bezier(.22,1,.36,1), background .25s ease; }
+.admin-brand { position: relative; }
+.admin-brand-copy { min-width: 0; transition: opacity .18s ease, transform .28s ease; }
+.admin-collapse-btn { width: 28px; height: 28px; margin-left: auto; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.08); border-radius: 9px; color: rgba(255,255,255,.42); background: rgba(255,255,255,.035); cursor: pointer; transition: .18s ease; }
+.admin-collapse-btn:hover { color: #fff; border-color: rgba(226,160,111,.4); background: rgba(226,160,111,.12); }
+.admin-nav-item { position: relative; }
+.admin-nav-index { width: 17px; color: rgba(255,255,255,.22); font-size: 8px; font-weight: 800; letter-spacing: .04em; transition: .18s ease; }
+.admin-nav-item.active .admin-nav-index { color: #e4ae79; }
+.admin-nav-badge { min-width: 25px; color: rgba(255,255,255,.28); font-size: 8px; font-weight: 800; text-align: right; transition: .18s ease; }
+.admin-nav-item.active .admin-nav-badge { color: rgba(255,255,255,.72); }
+.admin-live-card { margin: 26px 2px 0; padding: 13px; border: 1px solid rgba(255,255,255,.08); border-radius: 15px; background: linear-gradient(145deg, rgba(255,255,255,.07), rgba(255,255,255,.02)); box-shadow: inset 0 1px 0 rgba(255,255,255,.04); transition: opacity .18s ease, transform .28s ease, padding .28s ease; }
+.admin-live-card-heading, .admin-live-card-heading span, .admin-live-card-metrics { display: flex; align-items: center; }
+.admin-live-card-heading { justify-content: space-between; color: rgba(255,255,255,.68); font-size: 9px; text-transform: uppercase; letter-spacing: .1em; }
+.admin-live-card-heading small { color: rgba(255,255,255,.25); font-size: 8px; text-transform: none; letter-spacing: 0; }
+.admin-live-orb { width: 6px; height: 6px; margin-right: 7px; border-radius: 50%; background: #63e3a5; box-shadow: 0 0 0 4px rgba(99,227,165,.1), 0 0 15px rgba(99,227,165,.65); animation: admin-pulse 1.8s ease-in-out infinite; }
+.admin-live-card-main { display: flex; align-items: baseline; gap: 7px; margin: 15px 0 12px; }
+.admin-live-card-main strong { color: #fff; font-size: 25px; letter-spacing: -.06em; }
+.admin-live-card-main span { color: rgba(255,255,255,.38); font-size: 9px; }
+.admin-live-card-metrics { gap: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.08); }
+.admin-live-card-metrics > span { color: #edbd82; font-size: 12px; font-weight: 800; }
+.admin-live-card-metrics small { display: block; margin-top: 3px; color: rgba(255,255,255,.3); font-size: 8px; font-weight: 400; white-space: nowrap; }
+.admin-sidebar.view-users .admin-live-orb { background: #91b9ff; box-shadow: 0 0 0 4px rgba(145,185,255,.1), 0 0 15px rgba(145,185,255,.65); }
+.admin-sidebar.view-intelligence .admin-live-orb { background: #d8a8ff; box-shadow: 0 0 0 4px rgba(216,168,255,.1), 0 0 15px rgba(216,168,255,.65); }
+.admin-sidebar.view-founding .admin-live-orb { background: #edbd82; box-shadow: 0 0 0 4px rgba(237,189,130,.1), 0 0 15px rgba(237,189,130,.65); }
+.admin-shell.sidebar-is-collapsed .admin-brand { justify-content: center; padding-left: 0; padding-right: 0; }
+.admin-shell.sidebar-is-collapsed .admin-brand-copy, .admin-shell.sidebar-is-collapsed .admin-sidebar-label, .admin-shell.sidebar-is-collapsed .admin-nav-copy, .admin-shell.sidebar-is-collapsed .admin-nav-index, .admin-shell.sidebar-is-collapsed .admin-nav-badge, .admin-shell.sidebar-is-collapsed .admin-nav-chevron, .admin-shell.sidebar-is-collapsed .admin-live-card, .admin-shell.sidebar-is-collapsed .admin-side-status, .admin-shell.sidebar-is-collapsed .admin-back-link, .admin-shell.sidebar-is-collapsed .admin-logout { opacity: 0; pointer-events: none; transform: translateX(-7px); }
+.admin-shell.sidebar-is-collapsed .admin-collapse-btn { position: absolute; top: 3px; right: -1px; }
+.admin-shell.sidebar-is-collapsed .admin-nav-item { justify-content: center; padding-left: 8px; padding-right: 8px; }
+.admin-shell.sidebar-is-collapsed .admin-nav-icon { width: 34px; height: 34px; }
+.admin-shell.sidebar-is-collapsed .admin-side-spacer { min-height: 0; }
+@keyframes admin-pulse { 0%, 100% { opacity: .72; transform: scale(.9); } 50% { opacity: 1; transform: scale(1.15); } }
+
+@media (max-width: 760px) {
+  .admin-collapse-btn { display: none; }
+  .admin-shell.sidebar-is-collapsed .admin-sidebar { width: 264px; }
+  .admin-shell.sidebar-is-collapsed .admin-brand { justify-content: flex-start; padding-left: 10px; padding-right: 10px; }
+  .admin-shell.sidebar-is-collapsed .admin-brand-copy, .admin-shell.sidebar-is-collapsed .admin-sidebar-label, .admin-shell.sidebar-is-collapsed .admin-nav-copy, .admin-shell.sidebar-is-collapsed .admin-nav-index, .admin-shell.sidebar-is-collapsed .admin-nav-badge, .admin-shell.sidebar-is-collapsed .admin-nav-chevron, .admin-shell.sidebar-is-collapsed .admin-live-card, .admin-shell.sidebar-is-collapsed .admin-side-status, .admin-shell.sidebar-is-collapsed .admin-back-link, .admin-shell.sidebar-is-collapsed .admin-logout { opacity: 1; pointer-events: auto; transform: none; }
+  .admin-shell.sidebar-is-collapsed .admin-nav-item { justify-content: flex-start; padding-left: 10px; padding-right: 10px; }
+}
+
 /* Refined operator navigation: quieter, tighter, and more intentional. */
 .admin-sidebar {
   width: 264px;
