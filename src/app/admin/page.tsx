@@ -7,6 +7,8 @@ import {
   Activity,
   AlertTriangle,
   ArrowUpRight,
+  ArrowLeft,
+  ArrowRight,
   BrainCircuit,
   CheckCircle2,
   ChevronRight,
@@ -14,7 +16,10 @@ import {
   Clock3,
   Crown,
   Database,
+  Download,
   Filter,
+  Keyboard,
+  Command as CommandIcon,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -58,6 +63,7 @@ export default function AdminPage() {
   const [overview, setOverview] = useState<AdminOverview | null>(null);
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [usersTotal, setUsersTotal] = useState(0);
+  const [userOffset, setUserOffset] = useState(0);
   const [intelligence, setIntelligence] = useState<AdminIntelligence | null>(null);
   const [founding, setFounding] = useState<AdminFounding | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -69,18 +75,20 @@ export default function AdminPage() {
   const [error, setError] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [commandOpen, setCommandOpen] = useState(false);
 
-  const loadCore = useCallback(async (soft = false) => {
+  const loadCore = useCallback(async (soft = false, offset = 0) => {
     if (soft) setRefreshing(true); else setLoading(true);
     setError("");
     try {
       const [nextOverview, nextUsers] = await Promise.all([
         getAdminOverview(),
-        getAdminUsers({ limit: 50 }),
+        getAdminUsers({ limit: 50, offset }),
       ]);
       setOverview(nextOverview);
       setUsers(nextUsers.users);
       setUsersTotal(nextUsers.total);
+      setUserOffset(nextUsers.offset);
     } catch (caught: unknown) {
       const status = (caught as { status?: number })?.status;
       if (status === 401) {
@@ -102,6 +110,18 @@ export default function AdminPage() {
     return () => window.clearTimeout(timer);
   }, [loadCore]);
 
+  useEffect(() => {
+    function handleShortcut(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setCommandOpen(true);
+      }
+      if (event.key === "Escape") setCommandOpen(false);
+    }
+    window.addEventListener("keydown", handleShortcut);
+    return () => window.removeEventListener("keydown", handleShortcut);
+  }, []);
+
   const loadView = useCallback(async (nextView: View) => {
     try {
       if (nextView === "intelligence" && !intelligence) setIntelligence(await getAdminIntelligence());
@@ -118,9 +138,13 @@ export default function AdminPage() {
   }
 
   async function refreshAll() {
-    await loadCore(true);
+    await loadCore(true, userOffset);
     if (view === "intelligence") setIntelligence(await getAdminIntelligence());
     if (view === "founding") setFounding(await getAdminFounding());
+  }
+
+  function changeUserPage(nextOffset: number) {
+    void loadCore(true, Math.max(0, nextOffset));
   }
 
   const filteredUsers = useMemo(() => {
@@ -195,6 +219,7 @@ export default function AdminPage() {
           <button className="admin-icon-btn admin-menu-trigger" onClick={() => setMobileNavOpen(true)} aria-label="Open navigation"><Menu size={20} /></button>
           <div className="admin-breadcrumb"><span>Admin</span><ChevronRight size={14} /><strong>{navItems.find(item => item.id === view)?.label}</strong></div>
           <div className="admin-top-actions">
+            <button className="admin-command-trigger" onClick={() => setCommandOpen(true)}><CommandIcon size={14} /><span>Command</span><kbd>⌘K</kbd></button>
             <span className="admin-env-pill"><span className="admin-live-dot" /> Production</span>
             <button className="admin-icon-btn" onClick={() => void refreshAll()} aria-label="Refresh data"><RefreshCw size={16} className={refreshing ? "spin" : ""} /></button>
             <div className="admin-avatar">AD</div>
@@ -216,19 +241,20 @@ export default function AdminPage() {
 
           {error && <div className="admin-alert"><AlertTriangle size={16} /><span>{error}</span><button onClick={() => setError("")}><X size={14} /></button></div>}
 
-          {view === "overview" && overview && <OverviewView overview={overview} onUsers={() => selectView("users")} onSelectUser={setSelectedUserId} />}
-          {view === "users" && <UsersView users={filteredUsers} total={usersTotal} search={search} setSearch={setSearch} statusFilter={statusFilter} setStatusFilter={setStatusFilter} tierFilter={tierFilter} setTierFilter={setTierFilter} onSelectUser={setSelectedUserId} />}
+          {view === "overview" && overview && <OverviewView overview={overview} onUsers={() => selectView("users")} onIntelligence={() => selectView("intelligence")} onFounding={() => selectView("founding")} onSelectUser={setSelectedUserId} />}
+          {view === "users" && <UsersView users={filteredUsers} total={usersTotal} offset={userOffset} search={search} setSearch={setSearch} statusFilter={statusFilter} setStatusFilter={setStatusFilter} tierFilter={tierFilter} setTierFilter={setTierFilter} onPageChange={changeUserPage} onSelectUser={setSelectedUserId} />}
           {view === "intelligence" && <IntelligenceView data={intelligence} />}
           {view === "founding" && <FoundingView data={founding} />}
         </section>
       </main>
 
+      {commandOpen && <AdminCommandPalette view={view} onClose={() => setCommandOpen(false)} onNavigate={nextView => { setCommandOpen(false); selectView(nextView); }} onRefresh={() => { setCommandOpen(false); void refreshAll(); }} />}
       {selectedUserId && <UserDrawer userId={selectedUserId} onClose={() => setSelectedUserId(null)} onUpdated={() => { setSelectedUserId(null); void refreshAll(); }} />}
     </div>
   );
 }
 
-function OverviewView({ overview, onUsers, onSelectUser }: { overview: AdminOverview; onUsers: () => void; onSelectUser: (id: string) => void }) {
+function OverviewView({ overview, onUsers, onIntelligence, onFounding, onSelectUser }: { overview: AdminOverview; onUsers: () => void; onIntelligence: () => void; onFounding: () => void; onSelectUser: (id: string) => void }) {
   const stats = overview.stats;
   return (
     <>
@@ -283,21 +309,32 @@ function OverviewView({ overview, onUsers, onSelectUser }: { overview: AdminOver
         <SystemCheck label="Intelligence" value={overview.system.ai_configured ? "Connected" : "Needs key"} ok={overview.system.ai_configured} />
         <SystemCheck label="Billing" value={overview.system.stripe_configured ? "Connected" : "Needs key"} ok={overview.system.stripe_configured} />
       </div>
+
+      <div className="admin-command-deck">
+        <div><p className="panel-kicker">Operator shortcuts</p><h2>Move with intent.</h2><span>Jump straight into the work that needs attention.</span></div>
+        <div className="admin-command-actions">
+          <button onClick={onUsers}><Users size={15} /><span><strong>Review people</strong><small>{stats.active_users} active accounts</small></span><ArrowRight size={14} /></button>
+          <button onClick={onIntelligence}><BrainCircuit size={15} /><span><strong>Inspect intelligence</strong><small>{stats.intelligence_runs_30d} runs in 30 days</small></span><ArrowRight size={14} /></button>
+          <button onClick={onFounding}><Crown size={15} /><span><strong>Watch founding seats</strong><small>{Math.max(0, 500 - stats.founding_members)} remaining</small></span><ArrowRight size={14} /></button>
+        </div>
+      </div>
     </>
   );
 }
 
-function UsersView({ users, total, search, setSearch, statusFilter, setStatusFilter, tierFilter, setTierFilter, onSelectUser }: { users: AdminUser[]; total: number; search: string; setSearch: (value: string) => void; statusFilter: string; setStatusFilter: (value: string) => void; tierFilter: string; setTierFilter: (value: string) => void; onSelectUser: (id: string) => void }) {
+function UsersView({ users, total, offset, search, setSearch, statusFilter, setStatusFilter, tierFilter, setTierFilter, onPageChange, onSelectUser }: { users: AdminUser[]; total: number; offset: number; search: string; setSearch: (value: string) => void; statusFilter: string; setStatusFilter: (value: string) => void; tierFilter: string; setTierFilter: (value: string) => void; onPageChange: (offset: number) => void; onSelectUser: (id: string) => void }) {
   return (
     <Panel className="admin-table-panel users-panel">
       <div className="panel-heading users-panel-heading"><div><p className="panel-kicker">Directory · {total} total</p><h2>Every person, one clear view</h2></div><span className="admin-mini-label"><Database size={13} /> Live records</span></div>
       <div className="admin-toolbar">
-        <div className="admin-search"><Search size={16} /><input value={search} onChange={event => setSearch(event.target.value)} placeholder="Search name or email" /></div>
+        <div className="admin-search"><Search size={16} /><input value={search} onChange={event => setSearch(event.target.value)} placeholder="Search name or email" /><kbd>⌘K</kbd></div>
         <label className="admin-select"><Filter size={14} /><select value={statusFilter} onChange={event => setStatusFilter(event.target.value)}><option value="all">All statuses</option><option value="active">Active</option><option value="suspended">Suspended</option></select></label>
         <label className="admin-select"><Crown size={14} /><select value={tierFilter} onChange={event => setTierFilter(event.target.value)}><option value="all">All tiers</option><option value="free">Learn Me</option><option value="understand_me">Understand Me</option><option value="know_me">Know Me</option></select></label>
+        <button className="admin-export-button" onClick={() => exportUsersCsv(users)}><Download size={14} /> Export</button>
       </div>
       <UserTable users={users} onSelectUser={onSelectUser} />
       {!users.length && <EmptyState icon={Users} title="No people match that filter" copy="Try a different name, email, tier, or status." />}
+      <div className="admin-pagination"><span>Showing {users.length ? offset + 1 : 0}–{Math.min(offset + users.length, total)} of {total}</span><div><button onClick={() => onPageChange(offset - 50)} disabled={offset === 0}><ArrowLeft size={14} /> Previous</button><button onClick={() => onPageChange(offset + 50)} disabled={offset + 50 >= total}>Next <ArrowRight size={14} /></button></div></div>
     </Panel>
   );
 }
@@ -365,6 +402,28 @@ function Metric({ label, value }: { label: string; value: string }) { return <di
 function Fact({ label, value }: { label: string; value: string }) { return <div><span>{label}</span><strong>{value}</strong></div>; }
 function LoadingCard({ label }: { label: string }) { return <div className="admin-loading-card"><RefreshCw size={18} className="spin" /><span>{label}</span></div>; }
 function EmptyState({ icon: Icon, title, copy }: { icon: IconType; title: string; copy: string }) { return <div className="admin-empty"><Icon size={20} /><strong>{title}</strong><span>{copy}</span></div>; }
+function AdminCommandPalette({ view, onClose, onNavigate, onRefresh }: { view: View; onClose: () => void; onNavigate: (view: View) => void; onRefresh: () => void }) {
+  const [query, setQuery] = useState("");
+  const actions = [
+    { id: "overview" as View, label: "Open command centre", hint: "Platform pulse", icon: LayoutDashboard },
+    { id: "users" as View, label: "Review people", hint: "Users and access", icon: Users },
+    { id: "intelligence" as View, label: "Inspect intelligence", hint: "Pipeline health", icon: BrainCircuit },
+    { id: "founding" as View, label: "Watch founding 500", hint: "Claims and seats", icon: Crown },
+  ].filter(action => `${action.label} ${action.hint}`.toLowerCase().includes(query.toLowerCase()));
+  return <div className="command-layer"><button className="command-scrim" onClick={onClose} aria-label="Close command palette" /><section className="command-palette" role="dialog" aria-modal="true" aria-label="Admin command palette"><div className="command-heading"><div><p className="panel-kicker">Operator command</p><h2>What are you looking for?</h2></div><button className="admin-icon-btn" onClick={onClose} aria-label="Close"><X size={16} /></button></div><div className="command-search"><Search size={16} /><input autoFocus value={query} onChange={event => setQuery(event.target.value)} placeholder="Search a view or action" /><kbd>esc</kbd></div><div className="command-list">{actions.map(action => { const Icon = action.icon; return <button key={action.id} className={`command-item ${view === action.id ? "current" : ""}`} onClick={() => onNavigate(action.id)}><span className="command-item-icon"><Icon size={16} /></span><span><strong>{action.label}</strong><small>{action.hint}</small></span><ArrowRight size={14} /></button>; })}{!actions.length && <EmptyState icon={Search} title="No command found" copy="Try a different search." />}</div><div className="command-footer"><button onClick={onRefresh}><RefreshCw size={13} /> Refresh live data</button><span><Keyboard size={13} /> Use ⌘K anytime</span></div></section></div>;
+}
+function exportUsersCsv(users: AdminUser[]) {
+  const headers = ["Name", "Email", "Role", "Status", "Tier", "Onboarding", "Founding member", "Founder number", "Pull score", "Joined"];
+  const escape = (value: unknown) => `"${String(value ?? "").replaceAll('"', '""')}"`;
+  const rows = users.map(user => [user.name, user.email, user.role, user.account_status, user.tier, user.onboarding_complete ? "Complete" : "Incomplete", user.founding_member ? "Yes" : "No", user.founder_number ?? "", user.pull_score ?? "", user.created_at ?? ""].map(escape).join(","));
+  const blob = new Blob([[headers.map(escape).join(","), ...rows].join("\n")], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `mypullscore-users-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
 function AdminLogo() { return <Image src="/favicon-32.png" alt="MyPullScore" width={58} height={58} priority />; }
 function AdminLoading() { return <div className="admin-loading-screen"><div className="admin-loader-mark"><AdminLogo /></div><strong>Opening command centre…</strong><span>Checking your operator access</span></div>; }
 function AdminDenied({ message, onBack }: { message: string; onBack: () => void }) { return <div className="admin-loading-screen"><div className="admin-loader-mark warning"><AdminLogo /></div><strong>Admin access required</strong><span>{message}</span><button className="admin-button primary" onClick={onBack}>Return to MyPullScore</button></div>; }
