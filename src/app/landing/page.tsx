@@ -11,6 +11,7 @@ import {
   Globe02Icon, TrendingUpIcon, Message02Icon,
 } from "@hugeicons/core-free-icons";
 import { getFoundingAvailability } from "@/lib/api";
+import AdminPage from "../admin/page";
 
 const C = {
   wine: "#3d0e1a",
@@ -56,6 +57,21 @@ const up = {
 
 
 export default function LandingPage() {
+  const [operatorPath, setOperatorPath] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const path = window.location.pathname.replace(/\/$/, "");
+      setOperatorPath(path === "/admin" || path === "/command-centre");
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  if (operatorPath) return <AdminPage />;
+  return <LandingExperience />;
+}
+
+function LandingExperience() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [cursor, setCursor] = useState({ x: 0.5, y: 0.5 });
   const [foundingAvailability, setFoundingAvailability] = useState<{
