@@ -53,8 +53,8 @@ html, body, h1, h2, h3, h4, h5, h6, p, span, div, button, input, textarea, a, la
 html, body {
   max-width: 100%;
   min-height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 main, .with-sidebar, [data-cols] > * {
@@ -70,10 +70,9 @@ body {
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
+  min-height: 100dvh;
   overscroll-behavior-y: auto;
-  touch-action: pan-y;
-  -webkit-overflow-scrolling: touch;
+  touch-action: auto;
 }
 
 .font-display {

@@ -94,7 +94,7 @@ function LandingExperience() {
     : 0;
 
   return (
-    <div style={{ fontFamily: "'Aeonik', system-ui, sans-serif", background: "#fff", color: C.ink, overflowX: "hidden" }}>
+    <div className="landing-page" style={{ fontFamily: "'Aeonik', system-ui, sans-serif", background: "#fff", color: C.ink, minHeight: "100dvh", overflowX: "clip" }}>
       <style>{`
         @font-face {
           font-family: 'Aeonik';
