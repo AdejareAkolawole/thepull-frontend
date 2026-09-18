@@ -341,3 +341,11 @@ body {
 
   .danger-actions { flex-wrap: wrap !important; }
 }
+
+/* Keep the operator workspace branded with the real MyPullScore mark. */
+.admin-brand-mark { overflow: hidden; padding: 3px; background: #fff; }
+.admin-brand-mark img { width: 100%; height: 100%; object-fit: contain; border-radius: 7px; }
+.admin-loader-mark { position: relative; overflow: visible; padding: 9px; background: #fff; }
+.admin-loader-mark::before { content: ""; position: absolute; inset: -7px; border: 2px solid rgba(192,64,79,.18); border-top-color: #c0404f; border-right-color: #d89955; border-radius: 23px; animation: admin-spin 1.1s linear infinite; }
+.admin-loader-mark img { width: 100%; height: 100%; object-fit: contain; border-radius: 9px; position: relative; z-index: 1; }
+.admin-loader-mark.warning { background: #fff; }

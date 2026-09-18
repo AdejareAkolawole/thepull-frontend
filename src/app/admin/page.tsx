@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -136,7 +137,7 @@ export default function AdminPage() {
     <div className="admin-shell">
       <aside className={`admin-sidebar ${mobileNavOpen ? "is-open" : ""}`}>
         <div className="admin-brand">
-          <div className="admin-brand-mark"><Sparkles size={16} /></div>
+          <div className="admin-brand-mark"><Image src="/logo.jpg" alt="MyPullScore" width={28} height={28} priority /></div>
           <div>
             <div className="admin-brand-name">MyPullScore</div>
             <div className="admin-brand-sub">Operator workspace</div>
@@ -344,8 +345,9 @@ function Metric({ label, value }: { label: string; value: string }) { return <di
 function Fact({ label, value }: { label: string; value: string }) { return <div><span>{label}</span><strong>{value}</strong></div>; }
 function LoadingCard({ label }: { label: string }) { return <div className="admin-loading-card"><RefreshCw size={18} className="spin" /><span>{label}</span></div>; }
 function EmptyState({ icon: Icon, title, copy }: { icon: IconType; title: string; copy: string }) { return <div className="admin-empty"><Icon size={20} /><strong>{title}</strong><span>{copy}</span></div>; }
-function AdminLoading() { return <div className="admin-loading-screen"><div className="admin-loader-mark"><Sparkles size={20} /></div><strong>Opening command centre…</strong><span>Checking your operator access</span></div>; }
-function AdminDenied({ message, onBack }: { message: string; onBack: () => void }) { return <div className="admin-loading-screen"><div className="admin-loader-mark warning"><ShieldCheck size={20} /></div><strong>Admin access required</strong><span>{message}</span><button className="admin-button primary" onClick={onBack}>Return to MyPullScore</button></div>; }
+function AdminLogo() { return <Image src="/logo.jpg" alt="MyPullScore" width={58} height={58} priority />; }
+function AdminLoading() { return <div className="admin-loading-screen"><div className="admin-loader-mark"><AdminLogo /></div><strong>Opening command centre…</strong><span>Checking your operator access</span></div>; }
+function AdminDenied({ message, onBack }: { message: string; onBack: () => void }) { return <div className="admin-loading-screen"><div className="admin-loader-mark warning"><AdminLogo /></div><strong>Admin access required</strong><span>{message}</span><button className="admin-button primary" onClick={onBack}>Return to MyPullScore</button></div>; }
 function sectionDescription(view: View) { return { overview: "", users: "Search people, check access, and keep the membership experience healthy.", intelligence: "Watch the intelligence pipeline from question evidence to living profile.", founding: "A single source of truth for the first 500 members." }[view]; }
 function percent(value: number, total: number) { return total ? Math.round((value / total) * 100) : 0; }
 function initials(value: string) { return value.split(/\s+/).map(part => part[0]).join("").slice(0, 2).toUpperCase() || "—"; }
