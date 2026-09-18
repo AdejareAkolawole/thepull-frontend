@@ -31,7 +31,6 @@ import {
   getAdminOverview,
   getAdminUser,
   getAdminUsers,
-  getMe,
   logout,
   updateAdminUser,
   type AdminFounding,
@@ -71,15 +70,10 @@ export default function AdminPage() {
     if (soft) setRefreshing(true); else setLoading(true);
     setError("");
     try {
-      const [me, nextOverview, nextUsers] = await Promise.all([
-        getMe(),
+      const [nextOverview, nextUsers] = await Promise.all([
         getAdminOverview(),
         getAdminUsers({ limit: 50 }),
       ]);
-      if (!me || !["admin", "superadmin"].includes(me.role)) {
-        setError("This account does not have administrator access.");
-        return;
-      }
       setOverview(nextOverview);
       setUsers(nextUsers.users);
       setUsersTotal(nextUsers.total);
