@@ -384,11 +384,30 @@ body {
 .admin-shell.sidebar-is-collapsed .admin-side-spacer { min-height: 0; }
 @keyframes admin-pulse { 0%, 100% { opacity: .72; transform: scale(.9); } 50% { opacity: 1; transform: scale(1.15); } }
 
+/* Collapsed rail must remove hidden flex children from layout, not only fade them. */
+.admin-shell.sidebar-is-collapsed .admin-brand-copy,
+.admin-shell.sidebar-is-collapsed .admin-sidebar-label,
+.admin-shell.sidebar-is-collapsed .admin-nav-copy,
+.admin-shell.sidebar-is-collapsed .admin-nav-index,
+.admin-shell.sidebar-is-collapsed .admin-nav-badge,
+.admin-shell.sidebar-is-collapsed .admin-nav-chevron,
+.admin-shell.sidebar-is-collapsed .admin-live-card,
+.admin-shell.sidebar-is-collapsed .admin-side-status,
+.admin-shell.sidebar-is-collapsed .admin-back-link,
+.admin-shell.sidebar-is-collapsed .admin-logout { display: none; }
+.admin-shell.sidebar-is-collapsed .admin-nav-icon { margin: 0 auto; }
+
 @media (max-width: 760px) {
   .admin-collapse-btn { display: none; }
   .admin-shell.sidebar-is-collapsed .admin-sidebar { width: 264px; }
   .admin-shell.sidebar-is-collapsed .admin-brand { justify-content: flex-start; padding-left: 10px; padding-right: 10px; }
-  .admin-shell.sidebar-is-collapsed .admin-brand-copy, .admin-shell.sidebar-is-collapsed .admin-sidebar-label, .admin-shell.sidebar-is-collapsed .admin-nav-copy, .admin-shell.sidebar-is-collapsed .admin-nav-index, .admin-shell.sidebar-is-collapsed .admin-nav-badge, .admin-shell.sidebar-is-collapsed .admin-nav-chevron, .admin-shell.sidebar-is-collapsed .admin-live-card, .admin-shell.sidebar-is-collapsed .admin-side-status, .admin-shell.sidebar-is-collapsed .admin-back-link, .admin-shell.sidebar-is-collapsed .admin-logout { opacity: 1; pointer-events: auto; transform: none; }
+  .admin-shell.sidebar-is-collapsed .admin-brand-copy { display: block; opacity: 1; pointer-events: auto; transform: none; }
+  .admin-shell.sidebar-is-collapsed .admin-sidebar-label { display: block; opacity: 1; pointer-events: auto; transform: none; }
+  .admin-shell.sidebar-is-collapsed .admin-nav-copy { display: flex; opacity: 1; pointer-events: auto; transform: none; }
+  .admin-shell.sidebar-is-collapsed .admin-nav-index, .admin-shell.sidebar-is-collapsed .admin-nav-badge, .admin-shell.sidebar-is-collapsed .admin-nav-chevron { display: inline; opacity: 1; pointer-events: auto; transform: none; }
+  .admin-shell.sidebar-is-collapsed .admin-live-card { display: block; opacity: 1; pointer-events: auto; transform: none; }
+  .admin-shell.sidebar-is-collapsed .admin-side-status { display: flex; opacity: 1; pointer-events: auto; transform: none; }
+  .admin-shell.sidebar-is-collapsed .admin-back-link, .admin-shell.sidebar-is-collapsed .admin-logout { display: flex; opacity: 1; pointer-events: auto; transform: none; }
   .admin-shell.sidebar-is-collapsed .admin-nav-item { justify-content: flex-start; padding-left: 10px; padding-right: 10px; }
 }
 

@@ -145,7 +145,7 @@ export default function AdminPage() {
     <div className={`admin-shell ${sidebarCollapsed ? "sidebar-is-collapsed" : ""}`}>
       <aside className={`admin-sidebar view-${view} ${mobileNavOpen ? "is-open" : ""} ${sidebarCollapsed ? "is-collapsed" : ""}`}>
         <div className="admin-brand">
-          <div className="admin-brand-mark"><Image src="/logo.jpg" alt="MyPullScore" width={28} height={28} priority /></div>
+          <div className="admin-brand-mark"><Image src="/favicon-32.png" alt="MyPullScore" width={28} height={28} priority /></div>
           <div className="admin-brand-copy">
             <div className="admin-brand-name">MyPullScore</div>
             <div className="admin-brand-sub">Operator workspace</div>
@@ -365,7 +365,7 @@ function Metric({ label, value }: { label: string; value: string }) { return <di
 function Fact({ label, value }: { label: string; value: string }) { return <div><span>{label}</span><strong>{value}</strong></div>; }
 function LoadingCard({ label }: { label: string }) { return <div className="admin-loading-card"><RefreshCw size={18} className="spin" /><span>{label}</span></div>; }
 function EmptyState({ icon: Icon, title, copy }: { icon: IconType; title: string; copy: string }) { return <div className="admin-empty"><Icon size={20} /><strong>{title}</strong><span>{copy}</span></div>; }
-function AdminLogo() { return <Image src="/logo.jpg" alt="MyPullScore" width={58} height={58} priority />; }
+function AdminLogo() { return <Image src="/favicon-32.png" alt="MyPullScore" width={58} height={58} priority />; }
 function AdminLoading() { return <div className="admin-loading-screen"><div className="admin-loader-mark"><AdminLogo /></div><strong>Opening command centre…</strong><span>Checking your operator access</span></div>; }
 function AdminDenied({ message, onBack }: { message: string; onBack: () => void }) { return <div className="admin-loading-screen"><div className="admin-loader-mark warning"><AdminLogo /></div><strong>Admin access required</strong><span>{message}</span><button className="admin-button primary" onClick={onBack}>Return to MyPullScore</button></div>; }
 function sectionDescription(view: View) { return { overview: "", users: "Search people, check access, and keep the membership experience healthy.", intelligence: "Watch the intelligence pipeline from question evidence to living profile.", founding: "A single source of truth for the first 500 members." }[view]; }
