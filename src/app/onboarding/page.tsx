@@ -1,12 +1,12 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import {
   getProfile, updateProfile,
   startAssessment, submitAnswer, completeAssessment,
-  isLoggedIn,
+  isLoggedIn, searchLocations, type LocationSuggestion,
 } from "@/lib/api";
 
 const INTRO_STEPS = [
@@ -88,6 +88,11 @@ export default function OnboardingPage() {
   const [introValues, setIntroValues] = useState<Record<string, string>>({});
   const [inputValue, setInputValue] = useState("");
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<LocationSuggestion | null>(null);
+  const [locationSuggestions, setLocationSuggestions] = useState<LocationSuggestion[]>([]);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationActiveIndex, setLocationActiveIndex] = useState(0);
+  const locationRequestRef = useRef(0);
 
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<Record<string, unknown> | null>(null);
@@ -102,33 +107,98 @@ export default function OnboardingPage() {
     getProfile().then((p: Record<string, unknown>) => {
       if (p.onboarding_complete) { window.location.href = "/dashboard"; return; }
       if (p.display_name) setIntroValues(prev => ({ ...prev, display_name: p.display_name as string }));
+      if (p.birthplace) setIntroValues(prev => ({ ...prev, birthplace: p.birthplace as string }));
+      if (p.birthplace_canonical && typeof p.birthplace_latitude === "number" && typeof p.birthplace_longitude === "number") {
+        setSelectedLocation({
+          place_id: String(p.birthplace_place_id || p.birthplace_canonical),
+          label: String(p.birthplace || p.birthplace_canonical),
+          canonical_name: String(p.birthplace_canonical),
+          city: String(p.birthplace_city || p.birthplace || ""),
+          region: p.birthplace_region as string | null | undefined,
+          country: String(p.birthplace_country || ""),
+          country_code: p.birthplace_country_code as string | null | undefined,
+          latitude: p.birthplace_latitude,
+          longitude: p.birthplace_longitude,
+        });
+      }
       setPhase("intro");
     }).catch(() => setPhase("intro"));
   }, [router]);
 
-  const saveProfileFields = useCallback(async (values: Record<string, string>) => {
+  useEffect(() => {
+    if (INTRO_STEPS[introStep]?.id !== "birthplace") return;
+    const requestId = ++locationRequestRef.current;
+    const query = inputValue.trim();
+    if (query.length < 2 || selectedLocation?.label === query) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setLocationLoading(true);
+      searchLocations(query)
+        .then(results => {
+          if (requestId !== locationRequestRef.current) return;
+          setLocationSuggestions(results);
+          setLocationActiveIndex(0);
+        })
+        .catch(() => {
+          if (requestId === locationRequestRef.current) setLocationSuggestions([]);
+        })
+        .finally(() => {
+          if (requestId === locationRequestRef.current) setLocationLoading(false);
+        });
+    }, 350);
+    return () => window.clearTimeout(timer);
+  }, [introStep, inputValue, selectedLocation]);
+
+  const selectLocation = useCallback((location: LocationSuggestion) => {
+    setSelectedLocation(location);
+    setInputValue(location.label);
+    setLocationSuggestions([]);
+    setLocationActiveIndex(0);
+    setError("");
+  }, []);
+
+  const saveProfileFields = useCallback(async (values: Record<string, string>, location: LocationSuggestion | null) => {
     const allowed = ["display_name", "birth_date", "birth_time", "birthplace", "main_concern", "main_goal"];
     const patch: Record<string, unknown> = {};
     for (const k of allowed) if (values[k]) patch[k] = values[k];
     if (values.birth_time) patch.birth_time_known = true;
+    if (location) {
+      patch.birthplace = location.label;
+      patch.birthplace_canonical = location.canonical_name;
+      patch.birthplace_city = location.city;
+      patch.birthplace_region = location.region;
+      patch.birthplace_country = location.country;
+      patch.birthplace_country_code = location.country_code;
+      patch.birthplace_place_id = location.place_id;
+      patch.birthplace_latitude = location.latitude;
+      patch.birthplace_longitude = location.longitude;
+    }
     if (Object.keys(patch).length) await updateProfile(patch);
   }, []);
 
   const handleIntroNext = useCallback(async () => {
     setError("");
     const step = INTRO_STEPS[introStep];
+    if (step.id === "birthplace" && !selectedLocation) {
+      setError("Choose a location from the suggestions so we can save its exact coordinates.");
+      return;
+    }
     const newValues = { ...introValues };
     if (step.field && inputValue.trim()) newValues[step.field] = inputValue.trim();
+    if (step.id === "birthplace" && selectedLocation) newValues.birthplace = selectedLocation.label;
     if (step.field === "core_values" && selectedCard) newValues.core_values = selectedCard;
     setIntroValues(newValues);
     setInputValue("");
     setSelectedCard(null);
+    setLocationSuggestions([]);
 
     const nextStep = introStep + 1;
     if (nextStep >= INTRO_STEPS.length) {
       setSubmitting(true);
       try {
-        await saveProfileFields(newValues);
+        await saveProfileFields(newValues, selectedLocation);
         const res = await startAssessment();
         setSessionId(res.session_id);
         setCurrentQuestion(res.next_question as Record<string, unknown>);
@@ -142,7 +212,7 @@ export default function OnboardingPage() {
     } else {
       setIntroStep(nextStep);
     }
-  }, [introStep, introValues, inputValue, selectedCard, saveProfileFields]);
+  }, [introStep, introValues, inputValue, selectedCard, selectedLocation, saveProfileFields]);
 
   const handleAnswer = useCallback(async (answer: string) => {
     if (!sessionId || !currentQuestion) return;
@@ -258,17 +328,80 @@ export default function OnboardingPage() {
           {error && <p style={{ color: "#c0404f", fontSize: 13, marginBottom: 12, textAlign: "center" }}>{error}</p>}
 
           {step.type === "text" && step.id === "birthplace" && (
-            <>
-              <input type="text" value={inputValue || currentVal} onChange={e => setInputValue(e.target.value)}
-                placeholder={step.placeholder} style={textInput} list="city-list"
-                onKeyDown={e => e.key === "Enter" && (inputValue.trim() || currentVal) && handleIntroNext()}
-                autoFocus autoComplete="off" />
-              <datalist id="city-list">
-                {["London, UK","New York, USA","Los Angeles, USA","Lagos, Nigeria","Abuja, Nigeria","Paris, France","Berlin, Germany","Madrid, Spain","Rome, Italy","Amsterdam, Netherlands","Dubai, UAE","Abu Dhabi, UAE","Toronto, Canada","Vancouver, Canada","Sydney, Australia","Melbourne, Australia","Tokyo, Japan","Seoul, South Korea","Shanghai, China","Beijing, China","Mumbai, India","Delhi, India","Bangalore, India","São Paulo, Brazil","Rio de Janeiro, Brazil","Mexico City, Mexico","Buenos Aires, Argentina","Cairo, Egypt","Nairobi, Kenya","Johannesburg, South Africa","Cape Town, South Africa","Accra, Ghana","Addis Ababa, Ethiopia","Casablanca, Morocco","Istanbul, Turkey","Moscow, Russia","Stockholm, Sweden","Oslo, Norway","Copenhagen, Denmark","Helsinki, Finland","Vienna, Austria","Zurich, Switzerland","Brussels, Belgium","Warsaw, Poland","Prague, Czech Republic","Budapest, Hungary","Lisbon, Portugal","Athens, Greece","Singapore","Kuala Lumpur, Malaysia","Bangkok, Thailand","Jakarta, Indonesia","Manila, Philippines","Ho Chi Minh City, Vietnam","Hong Kong","Karachi, Pakistan","Dhaka, Bangladesh","Colombo, Sri Lanka","Riyadh, Saudi Arabia","Doha, Qatar","Kuwait City, Kuwait","Tel Aviv, Israel","Beirut, Lebanon","Amman, Jordan","Baghdad, Iraq","Tehran, Iran","Kabul, Afghanistan","Tashkent, Uzbekistan","Almaty, Kazakhstan","Lima, Peru","Santiago, Chile","Bogotá, Colombia","Caracas, Venezuela","Quito, Ecuador","Auckland, New Zealand","Accra, Ghana","Dar es Salaam, Tanzania","Kampala, Uganda","Kigali, Rwanda","Lusaka, Zambia"].map(c => (
-                  <option key={c} value={c} />
-                ))}
-              </datalist>
-            </>
+            <div style={{ position: "relative", marginBottom: 16 }}>
+              <input
+                type="text"
+                value={inputValue || currentVal}
+                onChange={e => {
+                  setInputValue(e.target.value);
+                  setSelectedLocation(null);
+                  setLocationSuggestions([]);
+                  setLocationLoading(false);
+                  setLocationActiveIndex(0);
+                }}
+                placeholder={step.placeholder}
+                style={{ ...textInput, marginBottom: 0 }}
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded={locationSuggestions.length > 0}
+                aria-controls="birthplace-suggestions"
+                onKeyDown={e => {
+                  if (e.key === "ArrowDown" && locationSuggestions.length) {
+                    e.preventDefault();
+                    setLocationActiveIndex(i => Math.min(i + 1, locationSuggestions.length - 1));
+                  } else if (e.key === "ArrowUp" && locationSuggestions.length) {
+                    e.preventDefault();
+                    setLocationActiveIndex(i => Math.max(i - 1, 0));
+                  } else if (e.key === "Enter") {
+                    e.preventDefault();
+                    if (locationSuggestions[locationActiveIndex]) selectLocation(locationSuggestions[locationActiveIndex]);
+                    else if (selectedLocation) void handleIntroNext();
+                  } else if (e.key === "Escape") {
+                    setLocationSuggestions([]);
+                  }
+                }}
+                autoFocus
+                autoComplete="off"
+                spellCheck={false}
+              />
+              {locationLoading && (
+                <p style={{ color: "#9ca3af", fontSize: 12, margin: "8px 4px 0" }}>Searching places…</p>
+              )}
+              {locationSuggestions.length > 0 && (
+                <div
+                  id="birthplace-suggestions"
+                  role="listbox"
+                  style={{
+                    position: "absolute", top: "calc(100% + 8px)", left: 0, right: 0, zIndex: 20,
+                    maxHeight: 280, overflowY: "auto", padding: 6, borderRadius: 16,
+                    background: "#fff", border: "1px solid #e5e7eb",
+                    boxShadow: "0 14px 35px rgba(15,10,20,0.14)",
+                  }}
+                >
+                  {locationSuggestions.map((location, index) => (
+                    <button
+                      key={location.place_id}
+                      type="button"
+                      role="option"
+                      aria-selected={index === locationActiveIndex}
+                      onMouseDown={e => e.preventDefault()}
+                      onClick={() => selectLocation(location)}
+                      style={{
+                        display: "block", width: "100%", minHeight: 52, textAlign: "left",
+                        border: 0, borderRadius: 12, padding: "10px 12px",
+                        background: index === locationActiveIndex ? "#f8f1ed" : "transparent",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <span style={{ display: "block", fontWeight: 700, fontSize: 14, color: "#1a1a2e" }}>{location.city}</span>
+                      <span style={{ display: "block", fontSize: 12, color: "#6b7280", marginTop: 2 }}>
+                        {[location.region, location.country].filter(Boolean).join(", ")}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
           {step.type === "text" && step.id !== "birthplace" && (
             <input type="text" value={inputValue || currentVal} onChange={e => setInputValue(e.target.value)}
@@ -313,7 +446,7 @@ export default function OnboardingPage() {
               step.type !== "card_select" &&
               !step.optional &&
               !inputValue.trim() && !currentVal
-            ) || (step.type === "card_select" && !selectedCard)}
+            ) || (step.type === "card_select" && !selectedCard) || (step.id === "birthplace" && !selectedLocation)}
             label={isMessageOnly
               ? introStep === 0 ? "I'm ready →" : "Let's continue →"
               : submitting ? "Saving…" : step.optional && !inputValue.trim() && !currentVal ? "Skip for now →" : introStep === INTRO_STEPS.length - 1 ? "Begin the conversation →" : "Continue →"}
@@ -329,10 +462,10 @@ export default function OnboardingPage() {
 function Screen({ children }: { children: React.ReactNode }) {
   return (
     <div style={{
-      minHeight: "100vh", background: "#fafafa",
+      minHeight: "100dvh", background: "#fafafa",
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
       padding: "32px 24px", fontFamily: "Aeonik, system-ui, sans-serif",
-      position: "relative", overflow: "hidden",
+      position: "relative", overflowX: "hidden", overflowY: "auto",
     }}>
       {/* Subtle background orbs */}
       <div style={{

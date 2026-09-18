@@ -87,6 +87,22 @@ export async function updateProfile(data: Record<string, unknown>) {
   return request("/profile", { method: "PATCH", body: JSON.stringify(data) });
 }
 
+export type LocationSuggestion = {
+  place_id: string;
+  label: string;
+  canonical_name: string;
+  city: string;
+  region?: string | null;
+  country: string;
+  country_code?: string | null;
+  latitude: number;
+  longitude: number;
+};
+
+export async function searchLocations(query: string) {
+  return request<LocationSuggestion[]>(`/profile/locations/search?q=${encodeURIComponent(query)}`);
+}
+
 // Pull Profile
 export async function getPullProfile() {
   return request<Record<string, unknown>>("/pull-profile");
