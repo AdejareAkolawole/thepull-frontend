@@ -1,6 +1,6 @@
 {
   "name": "mypullscore",
-  "buildCommand": "npm run build",
+  "buildCommand": "true",
   "outputDirectory": "out",
-  "installCommand": "npm ci --ignore-scripts --no-audit --no-fund"
+  "installCommand": "true"
 }
