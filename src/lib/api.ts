@@ -64,6 +64,125 @@ export async function getMe() {
   return request<{ id: string; email: string; role: string }>("/auth/me");
 }
 
+export type AdminUser = {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  account_status: string;
+  tier: string;
+  onboarding_complete: boolean;
+  founding_member: boolean;
+  founder_number?: number | null;
+  pull_score?: number | null;
+  confidence?: number | null;
+  last_login?: string | null;
+  created_at?: string | null;
+};
+
+export type AdminOverview = {
+  stats: Record<string, number>;
+  tier_breakdown: Record<string, number>;
+  signup_trend: Array<{ date: string; count: number }>;
+  recent_users: AdminUser[];
+  activity: Array<{
+    id: string;
+    kind: string;
+    title: string;
+    detail: string;
+    status?: string;
+    confidence?: number;
+    created_at?: string | null;
+  }>;
+  system: {
+    api: string;
+    database: string;
+    ai_configured: boolean;
+    stripe_configured: boolean;
+    environment: string;
+  };
+};
+
+export async function getAdminOverview() {
+  return request<AdminOverview>("/admin/overview");
+}
+
+export async function getAdminUsers(params: { q?: string; status?: string; tier?: string; offset?: number; limit?: number } = {}) {
+  const query = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== "") query.set(key, String(value));
+  });
+  return request<{ users: AdminUser[]; total: number; offset: number; limit: number }>(`/admin/users?${query.toString()}`);
+}
+
+export async function getAdminUser(id: string) {
+  return request<{
+    user: AdminUser;
+    profile: Record<string, unknown>;
+    intelligence: {
+      archetype: { name?: string | null; title?: string | null; confidence?: number | null } | null;
+      profile_status?: string | null;
+      narrative_state?: string | null;
+    };
+    founding_claim: { founder_number: number; status: string; reserved_at?: string | null; claimed_at?: string | null } | null;
+    assessment_sessions: Array<Record<string, unknown>>;
+    counts: Record<string, number>;
+  }>(`/admin/users/${id}`);
+}
+
+export async function updateAdminUser(id: string, data: { account_status?: string; subscription_tier?: string; role?: string }) {
+  return request<{ ok: boolean; user_id: string }>(`/admin/users/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+export type AdminIntelligence = {
+  engines: Array<{ engine_id: string; engine_name: string; runs: number }>;
+  average_confidence: number;
+  profile_status: Record<string, number>;
+  latest: Array<{
+    id: string;
+    engine_id: string;
+    engine_name: string;
+    status: string;
+    confidence: number;
+    source: string;
+    user_name: string;
+    generated_at?: string | null;
+  }>;
+};
+
+export async function getAdminIntelligence() {
+  return request<AdminIntelligence>("/admin/intelligence");
+}
+
+export type AdminFounding = {
+  availability: {
+    limit: number;
+    spots_claimed: number;
+    spots_reserved: number;
+    spots_remaining: number;
+    available: boolean;
+    price: number;
+    currency: string;
+  };
+  claims: Array<{
+    id: string;
+    founder_number: number;
+    name: string;
+    email: string;
+    status: string;
+    reserved_at?: string | null;
+    claimed_at?: string | null;
+    expires_at?: string | null;
+  }>;
+};
+
+export async function getAdminFounding() {
+  return request<AdminFounding>("/admin/founding");
+}
+
 // Dashboard
 export async function getDashboard() {
   return request<{
