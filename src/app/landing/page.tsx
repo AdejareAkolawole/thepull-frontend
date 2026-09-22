@@ -92,6 +92,9 @@ function LandingExperience() {
   const foundingProgress = foundingAvailability
     ? Math.min(100, (foundingAvailability.spots_claimed / foundingAvailability.limit) * 100)
     : 0;
+  const foundingTickerStatus = foundingAvailability
+    ? `${foundingAvailability.spots_claimed}/${foundingAvailability.limit} claimed`
+    : "500 seats available";
 
   return (
     <div className="landing-page" style={{ fontFamily: "'Aeonik', system-ui, sans-serif", background: "#fff", color: C.ink, minHeight: "100dvh", overflowX: "clip" }}>
@@ -133,9 +136,27 @@ function LandingExperience() {
         @keyframes lineGrow {
           from{width:0} to{width:100%}
         }
+        @keyframes foundingTicker {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @keyframes foundingDot {
+          0%, 100% { opacity: .35; transform: scale(.85); }
+          50% { opacity: 1; transform: scale(1); }
+        }
         *, *::before, *::after { box-sizing: border-box; }
         body { margin: 0; }
         a { text-decoration: none; }
+
+        .founding-ticker { width: min(100%, 720px); margin: 0 auto 44px; overflow: hidden; border: 1px solid rgba(201,168,76,.22); border-radius: 999px; background: linear-gradient(90deg, rgba(61,14,26,.04), rgba(201,168,76,.1), rgba(61,14,26,.04)); }
+        .founding-ticker-track { display: flex; width: max-content; animation: foundingTicker 26s linear infinite; }
+        .founding-ticker-group { display: flex; align-items: center; gap: 18px; padding: 10px 18px; white-space: nowrap; }
+        .founding-ticker-item { display: inline-flex; align-items: center; gap: 7px; color: ${C.wine}; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+        .founding-ticker-item strong { color: ${C.gold}; }
+        .founding-ticker-dot { width: 5px; height: 5px; border-radius: 50%; background: ${C.gold}; animation: foundingDot 1.8s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .founding-ticker-track, .founding-ticker-dot { animation: none !important; }
+        }
 
         @media (max-width: 860px) {
           .feat-grid  { grid-template-columns: 1fr 1fr !important; }
@@ -172,6 +193,7 @@ function LandingExperience() {
           .landing-hero-inner { padding: 48px 20px 64px !important; }
           .landing-hero-title { font-size: clamp(46px, 14vw, 64px) !important; line-height: 0.96 !important; letter-spacing: -0.045em !important; }
           .landing-cta-meta { flex-wrap: wrap !important; gap: 12px !important; }
+          .founding-ticker { border-radius: 16px; margin-bottom: 32px; }
           .landing-cursor-glow { display: none !important; }
         }
 
@@ -276,28 +298,44 @@ function LandingExperience() {
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1.5 }}
             className="hero-ctas"
-            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, justifyContent: "center", marginBottom: 52 }}>
+            style={{ display: "flex", alignItems: "center", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 16 }}>
             <Link href="/register"
-              style={{ display: "inline-flex", alignItems: "center", gap: 8,
-                padding: "15px 32px", borderRadius: 99, background: C.ink, color: "#fff",
+              className="hero-cta-button"
+              style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+                minWidth: 230, padding: "15px 28px", borderRadius: 99, background: C.ink, color: "#fff",
                 fontSize: 15, fontWeight: 700, boxShadow: `0 16px 48px ${C.ink}28`,
                 transition: "transform .18s, box-shadow .18s" }}
               onMouseEnter={e=>{ const el = e.currentTarget as HTMLElement; el.style.transform="scale(1.05)"; el.style.boxShadow=`0 22px 60px ${C.ink}40`; }}
               onMouseLeave={e=>{ const el = e.currentTarget as HTMLElement; el.style.transform=""; el.style.boxShadow=`0 16px 48px ${C.ink}28`; }}>
               Start My Pull Profile — Free <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
             </Link>
-            <span style={{ fontSize: 13, color: C.muted }}>About 5 minutes • No credit card required</span>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8, flexWrap: "wrap", justifyContent: "center" }}>
-              <span style={{ fontSize: 13, color: C.muted }}>Already know you want more?</span>
-              <Link href="/upgrade"
-                style={{ display: "inline-flex", alignItems: "center", gap: 5, color: C.wineMid,
-                  fontSize: 13, fontWeight: 800, transition: "color .18s" }}
-                onMouseEnter={e=>{ e.currentTarget.style.color=C.gold; }}
-                onMouseLeave={e=>{ e.currentTarget.style.color=C.wineMid; }}>
-                Become a Founding Member <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
-              </Link>
-            </div>
+            <Link href="/upgrade"
+              className="hero-cta-button"
+              style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+                minWidth: 230, padding: "15px 28px", borderRadius: 99, background: C.wineMid, color: "#fff",
+                fontSize: 15, fontWeight: 700, boxShadow: `0 16px 48px ${C.wineMid}28`,
+                transition: "transform .18s, box-shadow .18s" }}
+              onMouseEnter={e=>{ const el = e.currentTarget as HTMLElement; el.style.transform="scale(1.05)"; el.style.boxShadow=`0 22px 60px ${C.wineMid}40`; }}
+              onMouseLeave={e=>{ const el = e.currentTarget as HTMLElement; el.style.transform=""; el.style.boxShadow=`0 16px 48px ${C.wineMid}28`; }}>
+              Become a Founding Member <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
+            </Link>
+            <span style={{ flexBasis: "100%", fontSize: 13, color: C.muted, textAlign: "center" }}>About 5 minutes • No credit card required</span>
           </motion.div>
+
+          {/* Founding 500 launch ticker */}
+          <div className="founding-ticker" aria-label={`Founding 500: ${foundingTickerStatus}. Launching October 1. Lock in $19.99 per month while continuously subscribed.`}>
+            <div className="founding-ticker-track">
+              {[0, 1].map(copy => (
+                <div className="founding-ticker-group" aria-hidden={copy === 1} key={copy}>
+                  <span className="founding-ticker-item"><span className="founding-ticker-dot" />Founding 500</span>
+                  <span className="founding-ticker-item"><strong>{foundingTickerStatus}</strong></span>
+                  <span className="founding-ticker-item">Launching October 1</span>
+                  <span className="founding-ticker-item"><strong>Lock $19.99/month</strong></span>
+                  <span className="founding-ticker-item">While continuously subscribed</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
           {/* social proof */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
