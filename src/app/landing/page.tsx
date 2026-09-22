@@ -258,14 +258,14 @@ function LandingExperience() {
                   background: `linear-gradient(118deg, ${C.wine}, #c72b4a, ${C.gold}, ${C.wine})`,
                   backgroundSize: "300% 300%", WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent", animation: "gradShift 4s ease infinite" }}>
-                at a deeper level.
+                beyond what you think you know
               </motion.span>
             </span>
           </h1>
 
           {/* word-by-word subtitle */}
           <p style={{ fontSize: 18, color: "#666", lineHeight: 1.78, maxWidth: 500, margin: "0 auto 44px" }}>
-            {"Your emotional patterns, personality, and behavioural tendencies — mapped into a living intelligence profile.".split(" ").map((word, i) => (
+            {"MyPullScore builds a living intelligence of you — learning from your patterns, responses and evidence over time to reveal how you actually operate.".split(" ").map((word, i) => (
               <span key={i} style={{ display: "inline-block", marginRight: "0.28em",
                 opacity: 0, animation: "wordIn 0.5s ease forwards",
                 animationDelay: `${0.9 + i * 0.05}s` }}>{word}</span>
@@ -276,7 +276,7 @@ function LandingExperience() {
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1.5 }}
             className="hero-ctas"
-            style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 52 }}>
+            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, justifyContent: "center", marginBottom: 52 }}>
             <Link href="/register"
               style={{ display: "inline-flex", alignItems: "center", gap: 8,
                 padding: "15px 32px", borderRadius: 99, background: C.ink, color: "#fff",
@@ -284,16 +284,19 @@ function LandingExperience() {
                 transition: "transform .18s, box-shadow .18s" }}
               onMouseEnter={e=>{ const el = e.currentTarget as HTMLElement; el.style.transform="scale(1.05)"; el.style.boxShadow=`0 22px 60px ${C.ink}40`; }}
               onMouseLeave={e=>{ const el = e.currentTarget as HTMLElement; el.style.transform=""; el.style.boxShadow=`0 16px 48px ${C.ink}28`; }}>
-              Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
+              Start My Pull Profile — Free <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
             </Link>
-            <a href="#howitworks"
-              style={{ display: "inline-flex", alignItems: "center", padding: "15px 28px",
-                borderRadius: 99, border: `1.5px solid ${C.border}`, color: "#666",
-                fontSize: 15, fontWeight: 600, transition: "border-color .18s, color .18s" }}
-              onMouseEnter={e=>{ const el = e.currentTarget as HTMLElement; el.style.borderColor=C.wine+"50"; el.style.color=C.wine; }}
-              onMouseLeave={e=>{ const el = e.currentTarget as HTMLElement; el.style.borderColor=""; el.style.color="#666"; }}>
-              See how it works
-            </a>
+            <span style={{ fontSize: 13, color: C.muted }}>About 5 minutes • No credit card required</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8, flexWrap: "wrap", justifyContent: "center" }}>
+              <span style={{ fontSize: 13, color: C.muted }}>Already know you want more?</span>
+              <Link href="/upgrade"
+                style={{ display: "inline-flex", alignItems: "center", gap: 5, color: C.wineMid,
+                  fontSize: 13, fontWeight: 800, transition: "color .18s" }}
+                onMouseEnter={e=>{ e.currentTarget.style.color=C.gold; }}
+                onMouseLeave={e=>{ e.currentTarget.style.color=C.wineMid; }}>
+                Become a Founding Member <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
+              </Link>
+            </div>
           </motion.div>
 
           {/* social proof */}
