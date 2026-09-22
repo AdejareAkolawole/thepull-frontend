@@ -92,9 +92,9 @@ function LandingExperience() {
   const foundingProgress = foundingAvailability
     ? Math.min(100, (foundingAvailability.spots_claimed / foundingAvailability.limit) * 100)
     : 0;
-  const foundingTickerStatus = foundingAvailability
-    ? `${foundingAvailability.spots_claimed}/${foundingAvailability.limit} claimed`
-    : "500 seats available";
+  const foundingRemainingStatus = foundingAvailability
+    ? `${foundingAvailability.spots_remaining} of ${foundingAvailability.limit} remaining`
+    : "500 of 500 remaining";
 
   return (
     <div className="landing-page" style={{ fontFamily: "'Aeonik', system-ui, sans-serif", background: "#fff", color: C.ink, minHeight: "100dvh", overflowX: "clip" }}>
@@ -148,12 +148,14 @@ function LandingExperience() {
         body { margin: 0; }
         a { text-decoration: none; }
 
-        .founding-ticker { width: min(100%, 720px); margin: 0 auto 44px; overflow: hidden; border: 1px solid rgba(201,168,76,.22); border-radius: 999px; background: linear-gradient(90deg, rgba(61,14,26,.04), rgba(201,168,76,.1), rgba(61,14,26,.04)); }
+        .founding-ticker { width: min(100%, 1120px); margin: 0 auto 44px; overflow: hidden; border: 1px solid rgba(201,168,76,.22); border-radius: 999px; background: linear-gradient(90deg, rgba(61,14,26,.04), rgba(201,168,76,.1), rgba(61,14,26,.04)); }
         .founding-ticker-track { display: flex; width: max-content; animation: foundingTicker 26s linear infinite; }
         .founding-ticker-group { display: flex; align-items: center; gap: 18px; padding: 10px 18px; white-space: nowrap; }
-        .founding-ticker-item { display: inline-flex; align-items: center; gap: 7px; color: ${C.wine}; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+        .founding-ticker-item { display: inline-flex; align-items: center; gap: 7px; color: ${C.wine}; font-size: 10px; font-weight: 800; letter-spacing: .07em; }
         .founding-ticker-item strong { color: ${C.gold}; }
         .founding-ticker-dot { width: 5px; height: 5px; border-radius: 50%; background: ${C.gold}; animation: foundingDot 1.8s ease-in-out infinite; }
+        .founding-ticker-cta { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; padding: 8px 15px; border-radius: 999px; background: ${C.wineMid}; color: #fff; font-size: 10px; font-weight: 800; letter-spacing: .01em; transition: background .18s, transform .18s; }
+        .founding-ticker-cta:hover { background: ${C.wine}; transform: translateY(-1px); }
         @media (prefers-reduced-motion: reduce) {
           .founding-ticker-track, .founding-ticker-dot { animation: none !important; }
         }
@@ -196,6 +198,8 @@ function LandingExperience() {
           .landing-hero-title { font-size: clamp(46px, 14vw, 64px) !important; line-height: 0.96 !important; letter-spacing: -0.045em !important; }
           .landing-cta-meta { flex-wrap: wrap !important; gap: 12px !important; }
           .founding-ticker { border-radius: 16px; margin-bottom: 32px; }
+          .founding-ticker-group { gap: 13px; padding-left: 14px; padding-right: 14px; }
+          .founding-ticker-cta { padding: 8px 12px; font-size: 9px; }
           .landing-cursor-glow { display: none !important; }
         }
 
@@ -241,15 +245,15 @@ function LandingExperience() {
       {/* ══ FOUNDING 500 ANNOUNCEMENT ══ */}
       <div style={{ padding: "70px 20px 12px", background: "#fff" }}>
         <div className="founding-ticker" style={{ margin: "0 auto" }}
-          aria-label={`Founding 500: ${foundingTickerStatus}. Launching October 1. Lock in $19.99 per month while continuously subscribed.`}>
+          aria-label={`FOUNDING 500. Launching October 1. ${foundingRemainingStatus}. Lock in $19.99 per month while continuously subscribed. Join the Founding 500.`}>
           <div className="founding-ticker-track">
             {[0, 1].map(copy => (
               <div className="founding-ticker-group" aria-hidden={copy === 1} key={copy}>
-                <span className="founding-ticker-item"><span className="founding-ticker-dot" />Founding 500</span>
-                <span className="founding-ticker-item"><strong>{foundingTickerStatus}</strong></span>
+                <span className="founding-ticker-item"><span className="founding-ticker-dot" />FOUNDING 500</span>
                 <span className="founding-ticker-item">Launching October 1</span>
-                <span className="founding-ticker-item"><strong>Lock $19.99/month</strong></span>
-                <span className="founding-ticker-item">While continuously subscribed</span>
+                <span className="founding-ticker-item"><strong>{foundingRemainingStatus}</strong></span>
+                <span className="founding-ticker-item">Lock in $19.99/mo <span aria-hidden="true">→</span></span>
+                <Link href="/upgrade" className="founding-ticker-cta">Join the Founding 500 <span aria-hidden="true">→</span></Link>
               </div>
             ))}
           </div>
