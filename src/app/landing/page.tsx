@@ -263,6 +263,21 @@ function LandingExperience() {
 
         <div className="landing-hero-inner" style={{ maxWidth: 800, margin: "0 auto", padding: "60px 32px 80px", textAlign: "center", position: "relative", zIndex: 2 }}>
 
+          {/* Founding 500 launch ticker — lead with the founding-member offer */}
+          <div className="founding-ticker" aria-label={`Founding 500: ${foundingTickerStatus}. Launching October 1. Lock in $19.99 per month while continuously subscribed.`}>
+            <div className="founding-ticker-track">
+              {[0, 1].map(copy => (
+                <div className="founding-ticker-group" aria-hidden={copy === 1} key={copy}>
+                  <span className="founding-ticker-item"><span className="founding-ticker-dot" />Founding 500</span>
+                  <span className="founding-ticker-item"><strong>{foundingTickerStatus}</strong></span>
+                  <span className="founding-ticker-item">Launching October 1</span>
+                  <span className="founding-ticker-item"><strong>Lock $19.99/month</strong></span>
+                  <span className="founding-ticker-item">While continuously subscribed</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* clip-reveal headline */}
           <h1 className="landing-hero-title" style={{ fontSize: "clamp(56px,8vw,112px)", fontWeight: 800, lineHeight: 0.92,
             letterSpacing: "-0.055em", marginBottom: 32, fontFamily: "'Aeonik', system-ui, sans-serif" }}>
@@ -321,21 +336,6 @@ function LandingExperience() {
             </Link>
             <span style={{ flexBasis: "100%", fontSize: 13, color: C.muted, textAlign: "center" }}>About 5 minutes • No credit card required</span>
           </motion.div>
-
-          {/* Founding 500 launch ticker */}
-          <div className="founding-ticker" aria-label={`Founding 500: ${foundingTickerStatus}. Launching October 1. Lock in $19.99 per month while continuously subscribed.`}>
-            <div className="founding-ticker-track">
-              {[0, 1].map(copy => (
-                <div className="founding-ticker-group" aria-hidden={copy === 1} key={copy}>
-                  <span className="founding-ticker-item"><span className="founding-ticker-dot" />Founding 500</span>
-                  <span className="founding-ticker-item"><strong>{foundingTickerStatus}</strong></span>
-                  <span className="founding-ticker-item">Launching October 1</span>
-                  <span className="founding-ticker-item"><strong>Lock $19.99/month</strong></span>
-                  <span className="founding-ticker-item">While continuously subscribed</span>
-                </div>
-              ))}
-            </div>
-          </div>
 
           {/* social proof */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
