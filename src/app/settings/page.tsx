@@ -220,7 +220,7 @@ function DeleteAccountButton() {
 async function savePrefsToBackend(prefs: Prefs) {
   const token = typeof window !== "undefined" ? localStorage.getItem("pull_token") : null;
   if (!token) return;
-  const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  const base = process.env.NEXT_PUBLIC_API_URL || "https://thepull-backend-production.up.railway.app";
   await fetch(`${base}/profile/preferences`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },

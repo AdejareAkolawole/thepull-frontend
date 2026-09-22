@@ -7,7 +7,7 @@ import { DeliveredSentIcon, AiSparklesIcon, LockIcon, ArrowRight01Icon } from "@
 import { sendCoachMessage, getDashboard, isLoggedIn } from "@/lib/api";
 import { trackActivity } from "@/lib/streaks";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://thepull-backend-production.up.railway.app";
 const FREE_LIMIT = 5;
 
 const suggestions = [

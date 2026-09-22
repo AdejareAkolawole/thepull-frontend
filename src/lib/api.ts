@@ -1,4 +1,4 @@
-const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/+$/, "");
+const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "https://thepull-backend-production.up.railway.app").replace(/\/+$/, "");
 
 export interface ApiError extends Error {
   status?: number;

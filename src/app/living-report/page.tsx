@@ -10,7 +10,7 @@ import {
 import { isLoggedIn } from "@/lib/api";
 import LoadingScreen from "@/components/LoadingScreen";
 
-const BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const BASE = process.env.NEXT_PUBLIC_API_URL || "https://thepull-backend-production.up.railway.app";
 
 async function getLivingReport() {
   const token = typeof window !== "undefined" ? localStorage.getItem("pull_token") : null;
