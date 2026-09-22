@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  AiBrain01Icon, BookOpen01Icon, Analytics01Icon, SparklesIcon,
+  AiBrain01Icon, AiSparklesIcon, BookOpen01Icon, Analytics01Icon, SparklesIcon,
   ShieldCheckIcon, ArrowRight01Icon, CheckmarkCircle02Icon,
   UserCircleIcon, Target01Icon,
   EyeIcon, Activity01Icon, StarIcon, CompassIcon, LockIcon,
@@ -161,6 +161,8 @@ function LandingExperience() {
         @media (max-width: 860px) {
           .feat-grid  { grid-template-columns: 1fr 1fr !important; }
           .step-grid  { grid-template-columns: 1fr 1fr !important; }
+          .proof-grid, .feature-split { grid-template-columns: 1fr !important; gap: 36px !important; }
+          .discover-grid, .testimonial-grid { grid-template-columns: 1fr !important; }
           .price-grid { grid-template-columns: 1fr !important; gap: 12px !important; max-width: 480px !important; margin-left: auto !important; margin-right: auto !important; }
           .faq-inner  { grid-template-columns: 1fr !important; gap: 40px !important; }
           section, .pad { padding-left: 24px !important; padding-right: 24px !important; }
@@ -221,7 +223,7 @@ function LandingExperience() {
           </div>
         </Link>
         <div className="nav-mid" style={{ display: "flex", gap: 28, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
-          {[["Features","#features"],["How it works","#howitworks"],["Pricing","#pricing"],["FAQ","#faq"]].map(([l,h])=>(
+          {[["Discover","#discover"],["How it gets smarter","#howitworks"],["Pricing","#pricing"],["FAQ","#faq"]].map(([l,h])=>(
             <a key={l} href={h} style={{ fontSize: 13, color: C.muted, fontWeight: 500, transition: "color .18s" }}
               onMouseEnter={e=>(e.currentTarget.style.color=C.ink)} onMouseLeave={e=>(e.currentTarget.style.color=C.muted)}>{l}</a>
           ))}
@@ -236,8 +238,26 @@ function LandingExperience() {
         </div>
       </motion.nav>
 
+      {/* ══ FOUNDING 500 ANNOUNCEMENT ══ */}
+      <div style={{ padding: "70px 20px 12px", background: "#fff" }}>
+        <div className="founding-ticker" style={{ margin: "0 auto" }}
+          aria-label={`Founding 500: ${foundingTickerStatus}. Launching October 1. Lock in $19.99 per month while continuously subscribed.`}>
+          <div className="founding-ticker-track">
+            {[0, 1].map(copy => (
+              <div className="founding-ticker-group" aria-hidden={copy === 1} key={copy}>
+                <span className="founding-ticker-item"><span className="founding-ticker-dot" />Founding 500</span>
+                <span className="founding-ticker-item"><strong>{foundingTickerStatus}</strong></span>
+                <span className="founding-ticker-item">Launching October 1</span>
+                <span className="founding-ticker-item"><strong>Lock $19.99/month</strong></span>
+                <span className="founding-ticker-item">While continuously subscribed</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* ══ HERO ══ */}
-      <section style={{ paddingTop: 58, background: "#fff", overflow: "hidden", position: "relative", minHeight: "92vh", display: "flex", alignItems: "center" }}>
+      <section style={{ paddingTop: 24, background: "#fff", overflow: "hidden", position: "relative", minHeight: "92vh", display: "flex", alignItems: "center" }}>
 
         {/* drifting gradient orbs */}
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
@@ -262,21 +282,6 @@ function LandingExperience() {
         </div>
 
         <div className="landing-hero-inner" style={{ maxWidth: 800, margin: "0 auto", padding: "60px 32px 80px", textAlign: "center", position: "relative", zIndex: 2 }}>
-
-          {/* Founding 500 launch ticker — lead with the founding-member offer */}
-          <div className="founding-ticker" aria-label={`Founding 500: ${foundingTickerStatus}. Launching October 1. Lock in $19.99 per month while continuously subscribed.`}>
-            <div className="founding-ticker-track">
-              {[0, 1].map(copy => (
-                <div className="founding-ticker-group" aria-hidden={copy === 1} key={copy}>
-                  <span className="founding-ticker-item"><span className="founding-ticker-dot" />Founding 500</span>
-                  <span className="founding-ticker-item"><strong>{foundingTickerStatus}</strong></span>
-                  <span className="founding-ticker-item">Launching October 1</span>
-                  <span className="founding-ticker-item"><strong>Lock $19.99/month</strong></span>
-                  <span className="founding-ticker-item">While continuously subscribed</span>
-                </div>
-              ))}
-            </div>
-          </div>
 
           {/* clip-reveal headline */}
           <h1 className="landing-hero-title" style={{ fontSize: "clamp(56px,8vw,112px)", fontWeight: 800, lineHeight: 0.92,
@@ -357,6 +362,65 @@ function LandingExperience() {
         </div>
       </section>
 
+      {/* ══ IMMEDIATE VISUAL PROOF ══ */}
+      <section style={{ padding: "96px 64px", background: C.blush, borderTop: `1px solid ${C.border}` }} className="pad">
+        <div className="proof-grid" style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "0.82fr 1.18fr", gap: 56, alignItems: "center" }}>
+          <S>
+            <motion.div variants={up}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 13px", borderRadius: 99, background: `${C.wine}0d`, border: `1px solid ${C.wine}18`, marginBottom: 18 }}>
+                <HugeiconsIcon icon={AiBrain01Icon} size={11} style={{ color: C.wine }} />
+                <span style={{ fontSize: 10, fontWeight: 700, color: C.wine, letterSpacing: "0.12em", textTransform: "uppercase" }}>Inside your Pull Profile</span>
+              </div>
+              <h2 style={{ fontSize: "clamp(30px,4.5vw,54px)", fontWeight: 800, letterSpacing: "-0.045em", lineHeight: 1.02, margin: "0 0 18px", textWrap: "balance" }}>
+                See the intelligence taking shape.
+              </h2>
+              <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.8, maxWidth: 390, marginBottom: 26 }}>
+                Your first dashboard brings together the score, archetype, dimensions, and living story that your evidence is building.
+              </p>
+              <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 20px", borderRadius: 99, background: C.ink, color: "#fff", fontSize: 13, fontWeight: 700 }}>
+                Build my profile <HugeiconsIcon icon={ArrowRight01Icon} size={14} />
+              </Link>
+            </motion.div>
+          </S>
+
+          <S>
+            <motion.div variants={up} style={{ borderRadius: 26, background: "#fff", border: `1px solid ${C.border}`, boxShadow: "0 20px 70px rgba(61,14,26,0.12)", overflow: "hidden" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 22px", borderBottom: `1px solid ${C.border}` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                  <img src="/logo.jpg" alt="" style={{ width: 24, height: 24, borderRadius: 6 }} />
+                  <span style={{ fontSize: 12, fontWeight: 800, color: C.ink }}>MyPullScore</span>
+                </div>
+                <span style={{ fontSize: 9, color: C.muted, letterSpacing: "0.14em", textTransform: "uppercase" }}>Living intelligence</span>
+              </div>
+              <div style={{ padding: 24 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "0.85fr 1.15fr", gap: 12, marginBottom: 12 }}>
+                  <div style={{ borderRadius: 18, padding: "20px 18px", background: C.ink, color: "#fff", minHeight: 154 }}>
+                    <p style={{ fontSize: 9, color: C.gold, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 18 }}>Your Pull Score</p>
+                    <p style={{ fontSize: 64, fontWeight: 900, lineHeight: 0.9, letterSpacing: "-0.05em", marginBottom: 12 }}>78</p>
+                    <p style={{ fontSize: 10, color: "rgba(255,255,255,0.45)" }}>Composite intelligence rating</p>
+                  </div>
+                  <div style={{ borderRadius: 18, padding: "20px 18px", background: C.blush, border: `1px solid ${C.border}`, minHeight: 154 }}>
+                    <p style={{ fontSize: 9, color: C.wine, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 18 }}>Your Pull Archetype</p>
+                    <p style={{ fontSize: 24, fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.03em", marginBottom: 10 }}>Emerging profile</p>
+                    <p style={{ fontSize: 11, color: C.muted, lineHeight: 1.5 }}>A pattern becomes clearer as evidence accumulates.</p>
+                  </div>
+                </div>
+                <div style={{ borderRadius: 18, padding: "18px", background: "#faf9f7", border: `1px solid ${C.border}` }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 12 }}>
+                    <p style={{ fontSize: 9, color: C.wine, letterSpacing: "0.18em", textTransform: "uppercase" }}>Your Living Story</p>
+                    <span style={{ fontSize: 10, color: C.muted }}>Evolving daily</span>
+                  </div>
+                  <p style={{ fontSize: 13, color: C.ink, lineHeight: 1.6, marginBottom: 14 }}>A clearer picture of how you feel, decide, connect, and respond.</p>
+                  <div style={{ display: "flex", gap: 6 }}>
+                    {[72, 56, 84, 64, 76].map((height, i) => <span key={i} style={{ display: "block", flex: 1, height: 4, borderRadius: 99, background: i === 2 ? C.gold : `${C.wine}30` }} />)}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </S>
+        </div>
+      </section>
+
       {/* ══ TRUST BAR ══ */}
       <section style={{ background: C.blush, borderTop: `1px solid ${C.border}`,
         borderBottom: `1px solid ${C.border}`, padding: "28px 64px" }} className="pad">
@@ -379,8 +443,142 @@ function LandingExperience() {
         </S>
       </section>
 
+      {/* ══ WHAT WILL I DISCOVER? ══ */}
+      <section id="discover" style={{ padding: "110px 64px", background: "#fff" }} className="pad">
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <S>
+            <motion.div variants={up} style={{ maxWidth: 620, marginBottom: 54 }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 13px", borderRadius: 99, background: `${C.wine}0d`, border: `1px solid ${C.wine}18`, marginBottom: 18 }}>
+                <HugeiconsIcon icon={SparklesIcon} size={11} style={{ color: C.wine }} />
+                <span style={{ fontSize: 10, fontWeight: 700, color: C.wine, letterSpacing: "0.12em", textTransform: "uppercase" }}>What will I discover?</span>
+              </div>
+              <h2 style={{ fontSize: "clamp(32px,5vw,58px)", fontWeight: 800, letterSpacing: "-0.05em", lineHeight: 1.02, margin: 0, textWrap: "balance" }}>A clearer read on how you actually operate.</h2>
+            </motion.div>
+          </S>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }} className="discover-grid">
+            {[
+              { icon: Analytics01Icon, label: "Pull Score", title: "Your pattern in motion.", text: "A living composite of emotional depth, communication, self-awareness, and behaviour." },
+              { icon: AiSparklesIcon, label: "Pull Archetype", title: "The shape beneath the surface.", text: "A nuanced identity model that explains your recurring strengths, tensions, and blind spots." },
+              { icon: BookOpen01Icon, label: "Living Story", title: "A profile that keeps learning.", text: "Your intelligence becomes more precise as new evidence changes what the system understands." },
+            ].map(card => (
+              <motion.div key={card.label} variants={up} whileHover={{ y: -4 }} style={{ borderRadius: 22, padding: "30px 26px", background: C.blush, border: `1px solid ${C.border}`, transition: "transform .2s" }}>
+                <div style={{ width: 42, height: 42, borderRadius: 13, display: "flex", alignItems: "center", justifyContent: "center", background: "#fff", border: `1px solid ${C.border}`, marginBottom: 28 }}>
+                  <HugeiconsIcon icon={card.icon} size={18} style={{ color: C.wine }} />
+                </div>
+                <p style={{ fontSize: 10, color: C.gold, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 12 }}>{card.label}</p>
+                <h3 style={{ fontSize: 21, color: C.ink, fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.12, marginBottom: 12 }}>{card.title}</h3>
+                <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.75, margin: 0 }}>{card.text}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ ASK THE PULL ══ */}
+      <section id="ask" style={{ padding: "110px 64px", background: C.wine }} className="pad">
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div className="feature-split" style={{ display: "grid", gridTemplateColumns: "0.9fr 1.1fr", gap: 72, alignItems: "center" }}>
+            <S>
+              <motion.div variants={up}>
+                <div style={{ width: 52, height: 52, borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.16)", marginBottom: 24 }}>
+                  <HugeiconsIcon icon={AiBrain01Icon} size={24} style={{ color: C.gold }} />
+                </div>
+                <p style={{ fontSize: 10, color: C.gold, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 16 }}>Ask The Pull</p>
+                <h2 style={{ fontSize: "clamp(32px,4.5vw,54px)", color: "#fff", fontWeight: 800, lineHeight: 1.02, letterSpacing: "-0.045em", marginBottom: 18 }}>Ask better questions because it knows your context.</h2>
+                <p style={{ fontSize: 15, color: "rgba(255,255,255,0.58)", lineHeight: 1.8, maxWidth: 420, marginBottom: 26 }}>Talk to an intelligence assistant that has your evolving profile in view. Get honest, contextual answers instead of generic advice.</p>
+                <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 20px", borderRadius: 99, background: "#fff", color: C.ink, fontSize: 13, fontWeight: 800 }}>Meet Ask The Pull <HugeiconsIcon icon={ArrowRight01Icon} size={14} /></Link>
+              </motion.div>
+            </S>
+            <S>
+              <motion.div variants={up} style={{ borderRadius: 24, padding: 22, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, paddingBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.09)", marginBottom: 18 }}>
+                  <img src="/logo.jpg" alt="" style={{ width: 28, height: 28, borderRadius: 7 }} />
+                  <div><p style={{ fontSize: 12, fontWeight: 800, color: "#fff", margin: 0 }}>Ask The Pull</p><p style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", margin: 0 }}>Your intelligence profile is in context</p></div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  <div style={{ alignSelf: "flex-end", maxWidth: "78%", padding: "12px 14px", borderRadius: "16px 16px 4px 16px", background: "rgba(201,168,76,0.16)", color: "rgba(255,255,255,0.8)", fontSize: 12, lineHeight: 1.6 }}>Why do I keep going quiet when something matters?</div>
+                  <div style={{ maxWidth: "86%", padding: "14px 16px", borderRadius: "16px 16px 16px 4px", background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.68)", fontSize: 12, lineHeight: 1.7 }}>Your profile is learning a pattern around pressure and self-protection. Let&apos;s look at the moment before you go quiet.</div>
+                </div>
+              </motion.div>
+            </S>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ REALITY CHECK ══ */}
+      <section id="reality-check" style={{ padding: "110px 64px", background: C.blush }} className="pad">
+        <div className="feature-split" style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 72, alignItems: "center" }}>
+          <S>
+            <motion.div variants={up} style={{ borderRadius: 24, background: "#fff", border: `1px solid ${C.border}`, padding: 28, boxShadow: "0 18px 60px rgba(61,14,26,0.08)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}><span style={{ fontSize: 10, color: C.wine, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase" }}>Reality Check</span><HugeiconsIcon icon={Target01Icon} size={18} style={{ color: C.gold }} /></div>
+              <p style={{ fontSize: 22, color: C.ink, fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.2, marginBottom: 20 }}>Pause the story. See the pattern.</p>
+              <div style={{ height: 1, background: C.border, marginBottom: 20 }} />
+              {["What happened", "What you felt", "What you might be protecting", "What to try next"].map((label, i) => <div key={label} style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 0", borderBottom: i < 3 ? `1px solid ${C.border}` : "none" }}><span style={{ width: 7, height: 7, borderRadius: "50%", background: i === 2 ? C.gold : `${C.wine}50` }} /><span style={{ fontSize: 12, color: C.muted }}>{label}</span><span style={{ marginLeft: "auto", fontSize: 10, color: C.wine }}>{i === 2 ? "signal found" : "mapped"}</span></div>)}
+            </motion.div>
+          </S>
+          <S>
+            <motion.div variants={up}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 13px", borderRadius: 99, background: "#fff", border: `1px solid ${C.border}`, marginBottom: 18 }}><HugeiconsIcon icon={Target01Icon} size={11} style={{ color: C.wine }} /><span style={{ fontSize: 10, fontWeight: 700, color: C.wine, letterSpacing: "0.12em", textTransform: "uppercase" }}>Reality Check</span></div>
+              <h2 style={{ fontSize: "clamp(32px,4.5vw,54px)", color: C.ink, fontWeight: 800, lineHeight: 1.02, letterSpacing: "-0.045em", marginBottom: 18 }}>Clarity when your own narrative gets loud.</h2>
+              <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.8, maxWidth: 410 }}>Bring a situation, a reaction, or a decision. Reality Check helps separate the facts from the story you are carrying about them.</p>
+            </motion.div>
+          </S>
+        </div>
+      </section>
+
+      {/* ══ HOW LIVING INTELLIGENCE GETS SMARTER ══ */}
+      <section id="howitworks" style={{ padding: "110px 64px", background: C.ink }} className="pad">
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <S>
+            <motion.div variants={up} style={{ textAlign: "center", maxWidth: 650, margin: "0 auto 58px" }}>
+              <p style={{ fontSize: 10, color: C.gold, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 18 }}>How living intelligence gets smarter</p>
+              <h2 style={{ fontSize: "clamp(34px,5vw,60px)", color: "#fff", fontWeight: 800, lineHeight: 1.04, letterSpacing: "-0.05em", marginBottom: 16 }}>Every answer becomes better evidence.</h2>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.45)", lineHeight: 1.8 }}>Your profile is not a finished test. It is a living model that updates as your real life gives it more to understand.</p>
+            </motion.div>
+          </S>
+          <div className="step-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+            {[
+              { n: "01", title: "You share", text: "Answer a question, write a moment, or bring a situation to The Pull." },
+              { n: "02", title: "QIE structures it", text: "Your response becomes organised trait evidence instead of an isolated answer." },
+              { n: "03", title: "Engines learn", text: "Relevant intelligence engines update their evidence and confidence states." },
+              { n: "04", title: "Your profile evolves", text: "Score, archetype, story, and next questions become more precise." },
+            ].map((step, i) => <motion.div key={step.n} variants={up} style={{ padding: "28px 22px", borderRadius: 20, background: "rgba(255,255,255,0.045)", border: "1px solid rgba(255,255,255,0.08)" }}><div style={{ width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%", background: C.wineMid, color: "#fff", fontSize: 11, fontWeight: 900, marginBottom: 24 }}>{step.n}</div><h3 style={{ fontSize: 16, color: "#fff", marginBottom: 9 }}>{step.title}</h3><p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.42)", lineHeight: 1.7, margin: 0 }}>{step.text}</p>{i < 3 && <div style={{ display: "none" }} />}</motion.div>)}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ FOUNDING 500 OFFER ══ */}
+      <section id="founding" style={{ padding: "86px 64px", background: "#fff" }} className="pad">
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <S>
+            <motion.div variants={up} style={{ borderRadius: 28, padding: "46px 50px", background: "linear-gradient(135deg, #1a0a10 0%, #3d0e1a 62%, #210b12 100%)", border: "1px solid rgba(201,168,76,0.28)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 34, flexWrap: "wrap", position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", right: "-8%", top: "-55%", width: 360, height: 360, borderRadius: "50%", background: `radial-gradient(circle, ${C.gold}22 0%, transparent 65%)`, pointerEvents: "none" }} />
+              <div style={{ position: "relative", maxWidth: 590 }}>
+                <p style={{ fontSize: 10, color: C.gold, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 14 }}>Founding 500</p>
+                <h2 style={{ fontSize: "clamp(28px,4vw,46px)", color: "#fff", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, marginBottom: 14 }}>Get in early. Keep the rate.</h2>
+                <p style={{ fontSize: 14, color: "rgba(255,255,255,0.58)", lineHeight: 1.75, marginBottom: 18 }}>Founding members receive permanent founding identity, early access, and the locked <strong style={{ color: C.gold }}>$19.99/month</strong> rate while continuously subscribed.</p>
+                <div style={{ display: "flex", alignItems: "center", gap: 9, color: "rgba(255,255,255,0.45)", fontSize: 11 }}><span className="founding-ticker-dot" />Launching October 1 · {foundingAvailability ? `${foundingAvailability.spots_remaining} spots remaining` : "500 seats available"}</div>
+              </div>
+              <Link href="/upgrade" style={{ position: "relative", display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 22px", borderRadius: 99, background: C.gold, color: C.ink, fontSize: 13, fontWeight: 900, whiteSpace: "nowrap" }}>Become a Founding Member <HugeiconsIcon icon={ArrowRight01Icon} size={14} /></Link>
+            </motion.div>
+          </S>
+        </div>
+      </section>
+
+      {/* ══ TESTIMONIALS / SOCIAL PROOF ══ */}
+      <section id="testimonials" style={{ padding: "100px 64px", background: C.blush }} className="pad">
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <S>
+            <motion.div variants={up} style={{ textAlign: "center", marginBottom: 48 }}><p style={{ fontSize: 10, color: C.wine, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 16 }}>What people are saying</p><h2 style={{ fontSize: "clamp(30px,4vw,50px)", fontWeight: 800, letterSpacing: "-0.045em", margin: 0 }}>Recognition feels different when it is personal.</h2></motion.div>
+          </S>
+          <div className="testimonial-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+            {[{ q: "MyPullScore showed me patterns I had been feeling but could not name.", name: "Amara J.", role: "Lagos, Nigeria", color: "#9b3050" }, { q: "Reality Check gave me the pause I needed before making the same choice again.", name: "Marcus W.", role: "New York, USA", color: "#4a6fa5" }, { q: "Ask The Pull feels contextual in a way ordinary advice never has.", name: "Sasha K.", role: "London, UK", color: "#5a8a5a" }].map(t => <motion.div key={t.name} variants={up} style={{ borderRadius: 20, padding: "28px 24px", background: "#fff", border: `1px solid ${C.border}` }}><div style={{ display: "flex", gap: 2, marginBottom: 18 }}>{[1,2,3,4,5].map(i => <span key={i} style={{ color: C.gold, fontSize: 11 }}>★</span>)}</div><p style={{ fontSize: 14, color: C.ink, lineHeight: 1.8, marginBottom: 24 }}>“{t.q}”</p><div style={{ display: "flex", alignItems: "center", gap: 10 }}><div style={{ width: 32, height: 32, borderRadius: "50%", background: t.color, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 11, fontWeight: 800 }}>{t.name[0]}</div><div><p style={{ fontSize: 12, fontWeight: 800, margin: 0 }}>{t.name}</p><p style={{ fontSize: 10, color: C.muted, margin: 0 }}>{t.role}</p></div></div></motion.div>)}
+          </div>
+        </div>
+      </section>
+
       {/* ══ FEATURES ══ */}
-      <section id="features" style={{ padding: "110px 64px", background: "#fff" }} className="pad">
+      <section id="features" style={{ display: "none", padding: "110px 64px", background: "#fff" }} className="pad">
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <S>
             <motion.div variants={up} style={{ marginBottom: 56 }}>
@@ -452,7 +650,7 @@ function LandingExperience() {
       </section>
 
       {/* ══ HOW IT WORKS ══ */}
-      <section id="howitworks" style={{ padding: "110px 64px", background: C.ink }} className="pad">
+      <section id="legacy-howitworks" style={{ display: "none", padding: "110px 64px", background: C.ink }} className="pad">
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <S>
             <motion.div variants={up} style={{ textAlign: "center", marginBottom: 80 }}>
