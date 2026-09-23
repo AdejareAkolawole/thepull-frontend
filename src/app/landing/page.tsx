@@ -212,7 +212,6 @@ function LandingExperience() {
           .foot-brand { grid-column: span 2 !important; }
           .foot-bottom { flex-direction: column !important; gap: 10px !important; align-items: flex-start !important; }
           .landing-nav { padding-left: 16px !important; padding-right: 16px !important; }
-          .landing-nav { top: 34px !important; }
           .landing-nav-tagline { display: none !important; }
           .landing-nav-actions { gap: 3px !important; }
           .landing-nav-signin { padding-left: 6px !important; padding-right: 6px !important; }
@@ -248,7 +247,7 @@ function LandingExperience() {
       {/* NAV */}
       <motion.nav initial={{ y: -14, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
         className="landing-nav"
-        style={{ position: "fixed", top: 38, left: 0, right: 0, zIndex: 200, height: 58,
+        style={{ position: "sticky", top: 0, zIndex: 200, height: 58,
           display: "flex", alignItems: "center", padding: "0 48px",
           background: "rgba(255,255,255,0.86)", backdropFilter: "blur(20px)",
           borderBottom: `1px solid ${C.border}` }}>
