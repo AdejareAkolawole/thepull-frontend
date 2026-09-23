@@ -80,6 +80,7 @@ const INTRO_STEPS = [
 ];
 
 type Phase = "loading" | "intro" | "questions" | "ending" | "generating" | "done";
+type AssessmentHistoryEntry = { question: Record<string, unknown>; answer: string };
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -98,6 +99,7 @@ export default function OnboardingPage() {
   const [currentQuestion, setCurrentQuestion] = useState<Record<string, unknown> | null>(null);
   const [totalQuestions, setTotalQuestions] = useState(12);
   const [answeredCount, setAnsweredCount] = useState(0);
+  const [assessmentHistory, setAssessmentHistory] = useState<AssessmentHistoryEntry[]>([]);
 
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -203,6 +205,8 @@ export default function OnboardingPage() {
         setSessionId(res.session_id);
         setCurrentQuestion(res.next_question as Record<string, unknown>);
         setTotalQuestions(res.total_questions);
+        setAnsweredCount(Math.round((res.progress / 100) * res.total_questions));
+        setAssessmentHistory([]);
         setPhase("questions");
       } catch (e: unknown) {
         setError(e instanceof Error ? e.message : "Something went wrong");
@@ -221,6 +225,13 @@ export default function OnboardingPage() {
     try {
       const questionKey = (currentQuestion.key || currentQuestion.id) as string;
       const res = await submitAnswer(sessionId, questionKey, { answer, value: answer });
+      setAssessmentHistory(prev => {
+        const existingIndex = prev.findIndex(item => String(item.question.key || item.question.id) === questionKey);
+        if (existingIndex === -1) return [...prev, { question: currentQuestion, answer }];
+        const next = [...prev];
+        next[existingIndex] = { question: currentQuestion, answer };
+        return next;
+      });
       setAnsweredCount(prev => prev + 1);
       if (res.complete) {
         setPhase("ending");
@@ -234,6 +245,16 @@ export default function OnboardingPage() {
       setSubmitting(false);
     }
   }, [sessionId, currentQuestion]);
+
+  const handleAssessmentBack = useCallback(() => {
+    if (submitting || assessmentHistory.length === 0) return;
+    const previous = assessmentHistory[assessmentHistory.length - 1];
+    setCurrentQuestion(previous.question);
+    setInputValue(previous.answer);
+    setAssessmentHistory(history => history.slice(0, -1));
+    setAnsweredCount(count => Math.max(0, count - 1));
+    setError("");
+  }, [assessmentHistory, submitting]);
 
   const handleGenerateIntelligence = useCallback(async () => {
     if (!sessionId) return;
@@ -274,6 +295,16 @@ export default function OnboardingPage() {
     return (
       <Screen>
         <TopBar pct={Math.round((answered / totalSteps) * 100)} label="Your assessment" />
+        {assessmentHistory.length > 0 && (
+          <button
+            type="button"
+            onClick={handleAssessmentBack}
+            disabled={submitting}
+            style={{ alignSelf: "flex-start", marginBottom: 14, padding: "8px 12px", borderRadius: 999, border: "1px solid #e5e7eb", background: "rgba(255,255,255,0.8)", color: "#6b7280", fontSize: 12, fontWeight: 700, cursor: submitting ? "not-allowed" : "pointer", opacity: submitting ? 0.55 : 1 }}
+          >
+            ← Back to previous question
+          </button>
+        )}
         <AnimatePresence mode="wait">
           <motion.div key={String(q.id || q.key)}
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}

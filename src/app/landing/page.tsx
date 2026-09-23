@@ -1,16 +1,17 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   AiBrain01Icon, AiSparklesIcon, BookOpen01Icon, Analytics01Icon, SparklesIcon,
-  ShieldCheckIcon, ArrowRight01Icon, CheckmarkCircle02Icon,
+  ShieldCheckIcon, ArrowRight01Icon, CheckmarkCircle01Icon, CheckmarkCircle02Icon,
   UserCircleIcon, Target01Icon,
   EyeIcon, Activity01Icon, StarIcon, CompassIcon, LockIcon,
   Globe02Icon, TrendingUpIcon, Message02Icon,
 } from "@hugeicons/core-free-icons";
-import { getFoundingAvailability } from "@/lib/api";
+import { createCheckout, getFoundingAvailability, isLoggedIn } from "@/lib/api";
 import AdminPage from "../admin/page";
 
 const C = {
@@ -72,13 +73,18 @@ export default function LandingPage() {
 }
 
 function LandingExperience() {
+  const router = useRouter();
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [cursor, setCursor] = useState({ x: 0.5, y: 0.5 });
   const [foundingAvailability, setFoundingAvailability] = useState<{
     limit: number;
     spots_claimed: number;
+    spots_reserved?: number;
     spots_remaining: number;
+    available?: boolean;
   } | null>(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
   useEffect(() => {
     const onMove = (e: MouseEvent) => setCursor({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
     window.addEventListener("mousemove", onMove);
@@ -92,9 +98,21 @@ function LandingExperience() {
   const foundingProgress = foundingAvailability
     ? Math.min(100, (foundingAvailability.spots_claimed / foundingAvailability.limit) * 100)
     : 0;
-  const foundingRemainingStatus = foundingAvailability
-    ? `${foundingAvailability.spots_remaining} of ${foundingAvailability.limit} remaining`
-    : "500 of 500 remaining";
+  async function handleFoundingCheckout() {
+    if (!isLoggedIn()) {
+      router.push("/login?next=/upgrade");
+      return;
+    }
+    setCheckoutError("");
+    setCheckoutLoading(true);
+    try {
+      const result = await createCheckout("founding_500_monthly");
+      window.location.href = result.checkout_url;
+    } catch (error) {
+      setCheckoutError(error instanceof Error ? error.message : "Could not start checkout. Please try again.");
+      setCheckoutLoading(false);
+    }
+  }
 
   return (
     <div className="landing-page" style={{ fontFamily: "'Aeonik', system-ui, sans-serif", background: "#fff", color: C.ink, minHeight: "100dvh", overflowX: "clip" }}>
@@ -148,6 +166,10 @@ function LandingExperience() {
         body { margin: 0; }
         a { text-decoration: none; }
 
+        .landing-announcement { height: 38px; overflow: hidden; display: flex; align-items: center; background: #f5f4f2; border-bottom: 1px solid rgba(12,3,8,.05); color: rgba(12,3,8,.46); }
+        .landing-announcement-track { display: flex; width: max-content; animation: foundingTicker 30s linear infinite; }
+        .landing-announcement-group { display: flex; align-items: center; gap: 18px; padding: 0 24px; white-space: nowrap; }
+        .landing-announcement-copy { font-size: 11px; font-weight: 700; letter-spacing: .08em; }
         .founding-ticker { width: min(100%, 1120px); margin: 0 auto 44px; overflow: hidden; border: 1px solid rgba(201,168,76,.22); border-radius: 999px; background: linear-gradient(90deg, rgba(61,14,26,.04), rgba(201,168,76,.1), rgba(61,14,26,.04)); }
         .founding-ticker-track { display: flex; width: max-content; animation: foundingTicker 26s linear infinite; }
         .founding-ticker-group { display: flex; align-items: center; gap: 18px; padding: 10px 18px; white-space: nowrap; }
@@ -157,7 +179,7 @@ function LandingExperience() {
         .founding-ticker-cta { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; padding: 8px 15px; border-radius: 999px; background: ${C.wineMid}; color: #fff; font-size: 10px; font-weight: 800; letter-spacing: .01em; transition: background .18s, transform .18s; }
         .founding-ticker-cta:hover { background: ${C.wine}; transform: translateY(-1px); }
         @media (prefers-reduced-motion: reduce) {
-          .founding-ticker-track, .founding-ticker-dot { animation: none !important; }
+          .landing-announcement-track, .founding-ticker-track, .founding-ticker-dot { animation: none !important; }
         }
 
         @media (max-width: 860px) {
@@ -190,6 +212,7 @@ function LandingExperience() {
           .foot-brand { grid-column: span 2 !important; }
           .foot-bottom { flex-direction: column !important; gap: 10px !important; align-items: flex-start !important; }
           .landing-nav { padding-left: 16px !important; padding-right: 16px !important; }
+          .landing-nav { top: 34px !important; }
           .landing-nav-tagline { display: none !important; }
           .landing-nav-actions { gap: 3px !important; }
           .landing-nav-signin { padding-left: 6px !important; padding-right: 6px !important; }
@@ -211,10 +234,21 @@ function LandingExperience() {
         }
       `}</style>
 
+      {/* ══ SLIM FOUNDING ANNOUNCEMENT ══ */}
+      <div className="landing-announcement" aria-label="FOUNDING 500 · Lock in $19.99 per month while continuously subscribed · 500 places only">
+        <div className="landing-announcement-track">
+          {[0, 1].map(copy => (
+            <div className="landing-announcement-group" aria-hidden={copy === 1} key={copy}>
+              <span className="landing-announcement-copy">FOUNDING 500 · Lock in $19.99/mo while continuously subscribed · 500 places only →</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* NAV */}
       <motion.nav initial={{ y: -14, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
         className="landing-nav"
-        style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 200, height: 58,
+        style={{ position: "fixed", top: 38, left: 0, right: 0, zIndex: 200, height: 58,
           display: "flex", alignItems: "center", padding: "0 48px",
           background: "rgba(255,255,255,0.86)", backdropFilter: "blur(20px)",
           borderBottom: `1px solid ${C.border}` }}>
@@ -241,24 +275,6 @@ function LandingExperience() {
             onMouseLeave={e=>{ e.currentTarget.style.opacity="1"; e.currentTarget.style.transform=""; }}>Get started</Link>
         </div>
       </motion.nav>
-
-      {/* ══ FOUNDING 500 ANNOUNCEMENT ══ */}
-      <div style={{ padding: "70px 20px 12px", background: "#fff" }}>
-        <div className="founding-ticker" style={{ margin: "0 auto" }}
-          aria-label={`FOUNDING 500. Launching October 1. ${foundingRemainingStatus}. Lock in $19.99 per month while continuously subscribed. Join the Founding 500.`}>
-          <div className="founding-ticker-track">
-            {[0, 1].map(copy => (
-              <div className="founding-ticker-group" aria-hidden={copy === 1} key={copy}>
-                <span className="founding-ticker-item"><span className="founding-ticker-dot" />FOUNDING 500</span>
-                <span className="founding-ticker-item">Launching October 1</span>
-                <span className="founding-ticker-item"><strong>{foundingRemainingStatus}</strong></span>
-                <span className="founding-ticker-item">Lock in $19.99/mo <span aria-hidden="true">→</span></span>
-                <Link href="/upgrade" className="founding-ticker-cta">Join the Founding 500 <span aria-hidden="true">→</span></Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* ══ HERO ══ */}
       <section style={{ paddingTop: 24, background: "#fff", overflow: "hidden", position: "relative", minHeight: "92vh", display: "flex", alignItems: "center" }}>
@@ -361,8 +377,78 @@ function LandingExperience() {
               ))}
             </div>
             <div style={{ display: "flex", gap: 2 }}>{[1,2,3,4,5].map(i=><span key={i} style={{ color: C.gold, fontSize: 12 }}>★</span>)}</div>
-            <span style={{ fontSize: 13, color: C.muted }}>Loved by early users worldwide</span>
+            <span style={{ fontSize: 13, color: C.muted }}>Built with early users globally</span>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ══ FOUNDING 500 OFFER — immediately after the hero ══ */}
+      <section id="founding" style={{ padding: "32px 24px 72px", background: "#fff" }}>
+        <div style={{ maxWidth: 840, margin: "0 auto" }}>
+          <S>
+            <motion.div variants={up} style={{ position: "relative", overflow: "hidden", borderRadius: 24,
+              background: "linear-gradient(135deg,rgba(26,10,16,0.96) 0%,rgba(61,14,26,0.94) 100%)",
+              border: "1px solid rgba(201,168,76,0.18)", boxShadow: "0 8px 40px rgba(0,0,0,0.18), inset 0 1px 0 rgba(201,168,76,0.1)", padding: "28px 28px 24px" }}>
+              <div style={{ position: "absolute", top: -60, right: -40, width: 220, height: 220, borderRadius: "50%", background: "radial-gradient(circle,rgba(201,168,76,0.12) 0%,transparent 70%)", pointerEvents: "none" }} />
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 99, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.22)", marginBottom: 10 }}>
+                      <HugeiconsIcon icon={StarIcon} size={10} style={{ color: "rgba(201,168,76,0.8)" }} />
+                      <span style={{ fontSize: 8, fontWeight: 800, letterSpacing: "0.26em", textTransform: "uppercase", color: "rgba(201,168,76,0.85)" }}>The Founding 500</span>
+                    </div>
+                    <h2 style={{ fontSize: 22, fontWeight: 700, color: "#fff", letterSpacing: "-0.02em", lineHeight: 1.2, marginBottom: 4 }}>You&apos;re early. Make it count.</h2>
+                    <p style={{ fontSize: 12, color: "rgba(245,240,232,0.4)", lineHeight: 1.6 }}>
+                      Lock in <span style={{ color: "rgba(201,168,76,0.9)", fontWeight: 600 }}>$19.99/month</span> while continuously subscribed · Regular $24.99/month
+                    </p>
+                    <p style={{ fontSize: 12, color: "rgba(245,240,232,0.55)", lineHeight: 1.7, marginTop: 10 }}>
+                      Join the first 500 members of The Pull and lock in <span style={{ color: "rgba(201,168,76,0.9)", fontWeight: 600 }}>Understand Me at $19.99/month</span> for as long as you remain subscribed.
+                    </p>
+                    <p style={{ fontSize: 11, color: "rgba(245,240,232,0.28)", lineHeight: 1.6, marginTop: 8 }}>
+                      Regular price: $24.99/month. Founding Members also receive 7-day early access to Living Mastery when it launches.
+                    </p>
+                    <div style={{ display: "grid", gap: 8, marginTop: 16 }}>
+                      {["Permanent Founding 500 badge + numbered Founder identity", "Founder certificate", "Early access to selected new features"].map(benefit => (
+                        <div key={benefit} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <HugeiconsIcon icon={CheckmarkCircle01Icon} size={13} style={{ color: "rgba(201,168,76,0.8)", flexShrink: 0 }} />
+                          <span style={{ fontSize: 11, color: "rgba(245,240,232,0.62)" }}>{benefit}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <div style={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
+                      <span style={{ fontSize: 36, fontWeight: 800, color: "rgba(201,168,76,0.95)", lineHeight: 1, letterSpacing: "-0.03em" }}>$19</span>
+                      <span style={{ fontSize: 13, color: "rgba(201,168,76,0.55)", paddingBottom: 4 }}>.99/mo</span>
+                    </div>
+                    <p style={{ fontSize: 9, color: "rgba(245,240,232,0.25)", textAlign: "right", marginTop: 2 }}>founding rate</p>
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                    <span style={{ fontSize: 10, color: "rgba(245,240,232,0.3)" }}>{foundingAvailability ? `${foundingAvailability.spots_claimed} spots claimed` : "Checking availability…"}</span>
+                    <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(201,168,76,0.7)" }}>{foundingAvailability ? `${foundingAvailability.spots_remaining} remaining` : ""}</span>
+                  </div>
+                  <div style={{ height: 4, borderRadius: 99, background: "rgba(245,240,232,0.06)", overflow: "hidden" }}>
+                    <div style={{ height: "100%", width: `${foundingProgress}%`, borderRadius: 99, background: "linear-gradient(90deg,rgba(201,168,76,0.5),rgba(201,168,76,0.85))" }} />
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <HugeiconsIcon icon={LockIcon} size={10} style={{ color: "rgba(245,240,232,0.22)" }} />
+                    <span style={{ fontSize: 10, color: "rgba(245,240,232,0.28)", fontStyle: "italic" }}>Rate locked while continuously subscribed</span>
+                  </div>
+                  <button type="button" disabled={foundingAvailability?.available === false || checkoutLoading} onClick={() => void handleFoundingCheckout()} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 22px", borderRadius: 99, background: "linear-gradient(135deg,#b8922a,#c9a84c,#e2c36a)", border: "none", cursor: checkoutLoading ? "wait" : "pointer", fontSize: 12, fontWeight: 800, color: "#1a0a10", boxShadow: "0 4px 20px rgba(201,168,76,0.3)", flexShrink: 0, opacity: foundingAvailability?.available === false || checkoutLoading ? 0.55 : 1 }}>
+                    <HugeiconsIcon icon={AiSparklesIcon} size={12} />
+                    {foundingAvailability?.available === false ? "Founding 500 Sold Out" : checkoutLoading ? "Opening Checkout…" : "Claim Founding Membership"}
+                  </button>
+                </div>
+                {checkoutError && <p style={{ marginTop: 12, fontSize: 11, color: "#fca5a5" }}>{checkoutError}</p>}
+              </div>
+            </motion.div>
+          </S>
         </div>
       </section>
 
@@ -548,24 +634,6 @@ function LandingExperience() {
               { n: "04", title: "Your profile evolves", text: "Score, archetype, story, and next questions become more precise." },
             ].map((step, i) => <motion.div key={step.n} variants={up} style={{ padding: "28px 22px", borderRadius: 20, background: "rgba(255,255,255,0.045)", border: "1px solid rgba(255,255,255,0.08)" }}><div style={{ width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%", background: C.wineMid, color: "#fff", fontSize: 11, fontWeight: 900, marginBottom: 24 }}>{step.n}</div><h3 style={{ fontSize: 16, color: "#fff", marginBottom: 9 }}>{step.title}</h3><p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.42)", lineHeight: 1.7, margin: 0 }}>{step.text}</p>{i < 3 && <div style={{ display: "none" }} />}</motion.div>)}
           </div>
-        </div>
-      </section>
-
-      {/* ══ FOUNDING 500 OFFER ══ */}
-      <section id="founding" style={{ padding: "86px 64px", background: "#fff" }} className="pad">
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <S>
-            <motion.div variants={up} style={{ borderRadius: 28, padding: "46px 50px", background: "linear-gradient(135deg, #1a0a10 0%, #3d0e1a 62%, #210b12 100%)", border: "1px solid rgba(201,168,76,0.28)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 34, flexWrap: "wrap", position: "relative", overflow: "hidden" }}>
-              <div style={{ position: "absolute", right: "-8%", top: "-55%", width: 360, height: 360, borderRadius: "50%", background: `radial-gradient(circle, ${C.gold}22 0%, transparent 65%)`, pointerEvents: "none" }} />
-              <div style={{ position: "relative", maxWidth: 590 }}>
-                <p style={{ fontSize: 10, color: C.gold, fontWeight: 800, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 14 }}>Founding 500</p>
-                <h2 style={{ fontSize: "clamp(28px,4vw,46px)", color: "#fff", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, marginBottom: 14 }}>Get in early. Keep the rate.</h2>
-                <p style={{ fontSize: 14, color: "rgba(255,255,255,0.58)", lineHeight: 1.75, marginBottom: 18 }}>Founding members receive permanent founding identity, early access, and the locked <strong style={{ color: C.gold }}>$19.99/month</strong> rate while continuously subscribed.</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 9, color: "rgba(255,255,255,0.45)", fontSize: 11 }}><span className="founding-ticker-dot" />Launching October 1 · {foundingAvailability ? `${foundingAvailability.spots_remaining} spots remaining` : "500 seats available"}</div>
-              </div>
-              <Link href="/upgrade" style={{ position: "relative", display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 22px", borderRadius: 99, background: C.gold, color: C.ink, fontSize: 13, fontWeight: 900, whiteSpace: "nowrap" }}>Become a Founding Member <HugeiconsIcon icon={ArrowRight01Icon} size={14} /></Link>
-            </motion.div>
-          </S>
         </div>
       </section>
 
@@ -974,22 +1042,31 @@ function LandingExperience() {
                 animation: "morph 18s ease-in-out 4s infinite", pointerEvents: "none" }} />
               <div style={{ position: "relative" }}>
                 <p style={{ fontSize: 11, fontWeight: 700, color: C.gold,
-                  letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 20 }}>Start today — free</p>
+                  letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 20 }}>Keep discovering</p>
                 <h2 style={{ fontSize: "clamp(40px,6vw,76px)", fontWeight: 800, color: "#fff",
                   letterSpacing: "-0.05em", lineHeight: 0.97, marginBottom: 22 }}>
-                  Know yourself<br />at a deeper level.
+                  Your first result isn&apos;t the conclusion.<br />It&apos;s the beginning.
                 </h2>
                 <p style={{ fontSize: 16, color: "rgba(255,255,255,0.4)", lineHeight: 1.8,
-                  maxWidth: 400, margin: "0 auto 44px" }}>
-                  Build the most self-aware version of yourself — starting today.
+                  maxWidth: 520, margin: "0 auto 38px" }}>
+                  MyPullScore continues learning as evidence accumulates, revealing a clearer and more useful understanding of how you actually operate.
                 </p>
-                <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 9,
-                  padding: "15px 36px", borderRadius: 99, background: "#fff", color: C.ink,
-                  fontSize: 15, fontWeight: 800, transition: "transform .18s, box-shadow .18s" }}
-                  onMouseEnter={e=>{ e.currentTarget.style.transform="scale(1.05)"; e.currentTarget.style.boxShadow="0 12px 40px rgba(255,255,255,0.2)"; }}
-                  onMouseLeave={e=>{ e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; }}>
-                  Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
-                </Link>
+                <div className="hero-ctas" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap", marginBottom: 0 }}>
+                  <Link href="/register" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 9,
+                    minWidth: 170, padding: "15px 28px", borderRadius: 99, background: "#fff", color: C.ink,
+                    fontSize: 15, fontWeight: 800, transition: "transform .18s, box-shadow .18s" }}
+                    onMouseEnter={e=>{ e.currentTarget.style.transform="scale(1.05)"; e.currentTarget.style.boxShadow="0 12px 40px rgba(255,255,255,0.2)"; }}
+                    onMouseLeave={e=>{ e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; }}>
+                    Start Free <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
+                  </Link>
+                  <Link href="/upgrade" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 9,
+                    minWidth: 230, padding: "15px 28px", borderRadius: 99, background: C.wineMid, color: "#fff",
+                    fontSize: 15, fontWeight: 800, transition: "transform .18s, box-shadow .18s" }}
+                    onMouseEnter={e=>{ e.currentTarget.style.transform="scale(1.05)"; e.currentTarget.style.boxShadow="0 12px 40px rgba(124,26,46,0.32)"; }}
+                    onMouseLeave={e=>{ e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; }}>
+                    Become a Founding Member <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
+                  </Link>
+                </div>
                 <div className="landing-cta-meta" style={{ display: "flex", justifyContent: "center", gap: 28, marginTop: 32 }}>
                   {[{i: LockIcon, l: "Private by design"},{i: Globe02Icon, l: "Available worldwide"},{i: ShieldCheckIcon, l: "Encrypted end-to-end"}].map(x => (
                     <div key={x.l} style={{ display: "flex", alignItems: "center", gap: 6,
@@ -1014,14 +1091,14 @@ function LandingExperience() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.jpg" alt="MyPullScore" style={{ height: 32, width: "auto", borderRadius: 7, display: "block", marginBottom: 14 }} />
               <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.8, maxWidth: 200, marginBottom: 20 }}>
-                Your personal intelligence, finally under your control.
+                Your Personal Intelligence, that understands and grows with you.
               </p>
               <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: 6,
                 fontSize: 13, fontWeight: 700, color: "#fff", background: C.ink,
                 padding: "10px 18px", borderRadius: 99, transition: "opacity .18s, transform .18s" }}
                 onMouseEnter={e=>{ e.currentTarget.style.opacity="0.82"; e.currentTarget.style.transform="scale(1.04)"; }}
                 onMouseLeave={e=>{ e.currentTarget.style.opacity="1"; e.currentTarget.style.transform=""; }}>
-                Get started free <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
+                Start Free <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
               </Link>
             </div>
             {/* Link cols */}
