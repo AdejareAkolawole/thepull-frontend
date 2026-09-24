@@ -16,21 +16,32 @@ function getToken(): string | null {
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getToken();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 20000);
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(options.headers as Record<string, string>),
   };
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: res.statusText }));
-    const error = new Error(typeof err.detail === "string" ? err.detail : `HTTP ${res.status}`) as ApiError;
-    error.status = res.status;
-    error.detail = err.detail;
+  try {
+    const res = await fetch(`${BASE_URL}${path}`, { ...options, headers, signal: controller.signal });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: res.statusText }));
+      const error = new Error(typeof err.detail === "string" ? err.detail : `HTTP ${res.status}`) as ApiError;
+      error.status = res.status;
+      error.detail = err.detail;
+      throw error;
+    }
+    return res.json();
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new Error("The server took too long to respond. Please try again.");
+    }
     throw error;
+  } finally {
+    clearTimeout(timeout);
   }
-  return res.json();
 }
 
 // Auth

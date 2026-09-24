@@ -181,6 +181,7 @@ export default function OnboardingPage() {
   }, []);
 
   const handleIntroNext = useCallback(async () => {
+    if (submitting) return;
     setError("");
     const step = INTRO_STEPS[introStep];
     if (step.id === "birthplace" && !selectedLocation) {
@@ -203,10 +204,17 @@ export default function OnboardingPage() {
         await saveProfileFields(newValues, selectedLocation);
         const res = await startAssessment();
         setSessionId(res.session_id);
-        setCurrentQuestion(res.next_question as Record<string, unknown>);
-        setTotalQuestions(res.total_questions);
-        setAnsweredCount(Math.round((res.progress / 100) * res.total_questions));
+        const questionCount = Number(res.total_questions) || 12;
+        setTotalQuestions(questionCount);
+        setAnsweredCount(Math.round(((Number(res.progress) || 0) / 100) * questionCount));
         setAssessmentHistory([]);
+        if (res.complete) {
+          setCurrentQuestion(null);
+          setPhase("ending");
+          return;
+        }
+        if (!res.next_question) throw new Error("We could not load the first assessment question. Please try again.");
+        setCurrentQuestion(res.next_question as Record<string, unknown>);
         setPhase("questions");
       } catch (e: unknown) {
         setError(e instanceof Error ? e.message : "Something went wrong");
@@ -216,7 +224,7 @@ export default function OnboardingPage() {
     } else {
       setIntroStep(nextStep);
     }
-  }, [introStep, introValues, inputValue, selectedCard, selectedLocation, saveProfileFields]);
+  }, [introStep, introValues, inputValue, selectedCard, selectedLocation, saveProfileFields, submitting]);
 
   const handleAnswer = useCallback(async (answer: string) => {
     if (!sessionId || !currentQuestion) return;
@@ -479,7 +487,7 @@ export default function OnboardingPage() {
               !inputValue.trim() && !currentVal
             ) || (step.type === "card_select" && !selectedCard) || (step.id === "birthplace" && !selectedLocation)}
             label={isMessageOnly
-              ? introStep === 0 ? "I'm ready →" : "Let's continue →"
+              ? submitting ? "Starting your assessment…" : introStep === 0 ? "I'm ready →" : "Let's continue →"
               : submitting ? "Saving…" : step.optional && !inputValue.trim() && !currentVal ? "Skip for now →" : introStep === INTRO_STEPS.length - 1 ? "Begin the conversation →" : "Continue →"}
           />
         </motion.div>
